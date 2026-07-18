@@ -18,6 +18,12 @@ Status : Updated & Production Ready
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- PWA: makes VIKRAM installable as an app on Android (and iOS/desktop) -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0f1d">
+    <link rel="icon" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
 </head>
 <body>
 
@@ -389,4 +395,39 @@ Status : Updated & Production Ready
 <script src="js/newsEngine.js"></script>
 <script src="js/frameworkEngine.js"></script>
 <script src="js/engine.js"></script>
-<script src="js/ui.js"></script></html>
+<script src="js/ui.js"></script>
+<script>
+    // Register service worker - this is what makes Android/Chrome offer
+    // "Install App". Fails silently and harmlessly if opened as a plain
+    // local file (file://) instead of hosted on a real web server, since
+    // service workers require http/https to work.
+<script>
+    // Self-healing fix: automatically clear out any old/stuck cached version
+    // (from an earlier incomplete deploy) for every visitor, then register a
+    // clean service worker. This runs once per visitor and needs no manual
+    // DevTools steps from anyone.
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.protocol === 'http:')) {
+        window.addEventListener('load', async () => {
+            try {
+                // Unregister any existing service worker that may be serving a stale snapshot
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                for (const reg of registrations) {
+                    await reg.unregister();
+                }
+                // Clear any cached files from that old version
+                if (window.caches) {
+                    const cacheNames = await caches.keys();
+                    for (const name of cacheNames) {
+                        await caches.delete(name);
+                    }
+                }
+                // Register a fresh service worker
+                await navigator.serviceWorker.register('sw.js');
+                console.log('[VIKRAM] Cache cleared and service worker freshly registered');
+            } catch (err) {
+                console.log('[VIKRAM] Service worker setup failed (non-critical):', err);
+            }
+        });
+    }
+</script>
+</html>

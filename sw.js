@@ -11,7 +11,7 @@ other installed app.
 ==========================================================
 */
 
-const CACHE_NAME = 'vikram-cache-v1';
+const CACHE_NAME = 'vikram-cache-v2';
 
 const CORE_FILES = [
   './index.html',
