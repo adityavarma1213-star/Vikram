@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VIKRAM Stock Analysis</title>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ========================================= -->
+    <!-- SEARCH SECTION -->
+    <!-- ========================================= -->
+
+    <section class="search-section">
+        <div class="search-card">
+            <h2>🔍 Search Any Stock</h2>
+            <div class="search-box">
+                <input
+                    type="text"
+                    id="stockName"
+                    placeholder="Enter Company Name or Symbol">
+                <button id="btnAnalyze">Analyze</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================= -->
+    <!-- COMPANY OVERVIEW -->
+    <!-- ========================================= -->
+
+    <section class="company-overview">
+        <div class="company-card">
+            <div class="company-header">
+                <h1 id="companyName">Company Name</h1>
+                <p>
+                    <span id="industry">Industry</span> •
+                    <span id="sector">Sector</span>
+                </p>
+            </div>
+
+            <div class="vikram-score">
+                ⭐ <span>VIKRAM Score</span>
+                <strong id="vikramScore">-- / 100</strong>
+                <span id="rating" class="rating">--</span>
+            </div>
+
+            <h2>🏢 Company Overview</h2>
+
+            <div class="company-details">
+                <div class="detail-item"><span>Company</span><strong id="companyValue">-</strong></div>
+                <div class="detail-item"><span>Symbol</span><strong id="symbolValue">-</strong></div>
+                <div class="detail-item"><span>Exchange</span><strong id="exchangeValue">-</strong></div>
+                <div class="detail-item"><span>Sector</span><strong id="sectorValue">-</strong></div>
+                <div class="detail-item"><span>Industry</span><strong id="industryValue">-</strong></div>
+                <div class="detail-item"><span>Market Cap</span><strong id="marketCapValue">-</strong></div>
+                <div class="detail-item"><span>Website</span><a id="websiteValue" href="#" target="_blank">-</a></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================= -->
+    <!-- TECHNICAL DASHBOARD -->
+    <!-- ========================================= -->
+
+    <section class="company-overview">
+        <div class="company-card">
+            <h2>📈 Technical Dashboard</h2>
+            <div class="company-details">
+                <div class="detail-item"><span>RSI</span><strong id="rsiValue">-</strong></div>
+                <div class="detail-item"><span>MACD</span><strong id="macdValue">-</strong></div>
+                <div class="detail-item"><span>ADX</span><strong id="adxValue">-</strong></div>
+                <div class="detail-item"><span>EMA 20</span><strong id="ema20Value">-</strong></div>
+                <div class="detail-item"><span>EMA 50</span><strong id="ema50Value">-</strong></div>
+                <div class="detail-item"><span>EMA 200</span><strong id="ema200Value">-</strong></div>
+                <div class="detail-item"><span>Trend</span><strong id="trendValue">-</strong></div>
+                <div class="detail-item"><span>Support</span><strong id="supportValue">-</strong></div>
+                <div class="detail-item"><span>Resistance</span><strong id="resistanceValue">-</strong></div>
+                <div class="detail-item"><span>52 Week High</span><strong id="high52Value">-</strong></div>
+                <div class="detail-item"><span>52 Week Low</span><strong id="low52Value">-</strong></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================= -->
+    <!-- FINANCIAL DASHBOARD -->
+    <!-- ========================================= -->
+
+    <section class="company-overview">
+        <div class="company-card">
+            <h2>📊 Financial Dashboard</h2>
+            <div class="company-details">
+                <div class="detail-item"><span>Revenue Growth</span><strong id="revenueGrowthValue">-</strong></div>
+                <div class="detail-item"><span>Profit Growth</span><strong id="profitGrowthValue">-</strong></div>
+                <div class="detail-item"><span>EPS Growth</span><strong id="epsGrowthValue">-</strong></div>
+                <div class="detail-item"><span>ROE</span><strong id="roeValue">-</strong></div>
+                <div class="detail-item"><span>ROCE</span><strong id="roceValue">-</strong></div>
+                <div class="detail-item"><span>Debt / Equity</span><strong id="debtToEquityValue">-</strong></div>
+                <div class="detail-item"><span>Operating Margin</span><strong id="operatingMarginValue">-</strong></div>
+                <div class="detail-item"><span>Net Profit Margin</span><strong id="netProfitMarginValue">-</strong></div>
+                <div class="detail-item"><span>Free Cash Flow</span><strong id="freeCashFlowValue">-</strong></div>
+                <div class="detail-item"><span>Interest Coverage</span><strong id="interestCoverageValue">-</strong></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Full real pipeline - was previously missing 7 of 9 required engine files -->
+    <script src="js/companyDatabase.js"></script>
+    <script src="js/technicalData.js"></script>
+    <script src="js/financialData.js"></script>
+    <script src="js/scoreEngine.js"></script>
+    <script src="js/valuationEngine.js"></script>
+    <script src="js/riskEngine.js"></script>
+    <script src="js/institutionEngine.js"></script>
+    <script src="js/fundamentalEngine.js"></script>
+    <script src="js/newsEngine.js"></script>
+    <script src="js/frameworkEngine.js"></script>
+    <script src="js/engine.js"></script>
+
+    <script>
+        // This page uses its own simpler ID scheme (companyName, vikramScore, etc.)
+        // which is different from index.html's, so it needs its own small render
+        // function rather than reusing ui.js (which targets index.html's IDs).
+        function renderStock(ticker) {
+            const data = window.VIKRAM_ENGINE.analyzeAsset(ticker);
+            if (!data) {
+                alert('Ticker not found: ' + ticker);
+                return;
+            }
+
+            const setText = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val ?? '-';
+            };
+
+            setText('companyName', data.meta.name);
+            setText('industry', data.meta.industry);
+            setText('sector', data.meta.sector);
+            setText('vikramScore', (data.meta.vikramScore ?? '--') + ' / 100');
+            setText('rating', data.meta.rating);
+
+            setText('companyValue', data.meta.name);
+            setText('symbolValue', data.meta.ticker);
+            setText('exchangeValue', data.meta.exchange);
+            setText('sectorValue', data.meta.sector);
+            setText('industryValue', data.meta.industry);
+            setText('marketCapValue', data.meta.marketCap);
+            const websiteEl = document.getElementById('websiteValue');
+            if (websiteEl) { websiteEl.textContent = 'Visit Website'; websiteEl.href = data.meta.website || '#'; }
+
+            setText('rsiValue', data.technical.rsi);
+            setText('macdValue', data.technical.macd);
+            setText('adxValue', data.technical.adx);
+            setText('ema20Value', data.technical.ema20);
+            setText('ema50Value', data.technical.ema50);
+            setText('ema200Value', data.technical.ema200);
+            setText('trendValue', data.technical.trend);
+            setText('supportValue', data.technical.support);
+            setText('resistanceValue', data.technical.resistance);
+            setText('high52Value', data.technical.high52Week);
+            setText('low52Value', data.technical.low52Week);
+
+            setText('revenueGrowthValue', data.financial.revenueGrowth);
+            setText('profitGrowthValue', data.financial.profitGrowth);
+            setText('epsGrowthValue', data.financial.epsGrowth);
+            setText('roeValue', data.financial.roe);
+            setText('roceValue', data.financial.roce);
+            setText('debtToEquityValue', data.financial.debtToEquity);
+            setText('operatingMarginValue', data.financial.operatingMargin);
+            setText('netProfitMarginValue', data.financial.netMargin);
+            setText('freeCashFlowValue', data.financial.freeCashFlow);
+            setText('interestCoverageValue', data.financial.interestCoverage);
+        }
+
+        document.getElementById('btnAnalyze').addEventListener('click', () => {
+            const ticker = document.getElementById('stockName').value;
+            if (ticker.trim()) renderStock(ticker);
+        });
+
+        document.getElementById('stockName').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') document.getElementById('btnAnalyze').click();
+        });
+    </script>
+
+</body>
+
+</html>

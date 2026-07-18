@@ -1,0 +1,392 @@
+/*
+==========================================================
+VIKRAM Investor Operating System
+File : index.html
+Version : Alpha 1.2
+Author : Lead Frontend Engineer / Chief Architect
+Status : Updated & Production Ready
+==========================================================
+*/
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIKRAM Investor Operating System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div id="notificationBar"></div>
+
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand-identity">
+                <span class="brand-logo">🧠</span>
+                <span class="brand-name">VIKRAM</span>
+            </div>
+            <nav class="app-navigation" aria-label="Main Navigation">
+                <ul class="nav-list">
+                    <li><a href="#home" class="nav-link active">Home</a></li>
+                    <li><a href="#companyOverview" class="nav-link">Analysis</a></li>
+                    <li><a href="#hiddenGemsPreview" class="nav-link">Hidden Gems</a></li>
+                    <li><a href="#opportunityRadar" class="nav-link">Opportunity Radar</a></li>
+                    <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-container">
+        
+        <section id="home" class="hero-section" aria-labelledby="heroTitle">
+            <div class="hero-content">
+                <h1 id="heroTitle" class="hero-title">Invest with Clarity</h1>
+                <p class="hero-subtitle">Institutional Grade Stock Research Platform</p>
+                
+                <div class="search-subsystem">
+                    <div class="search-bar-group">
+                        <div class="search-input-container">
+                            <span class="search-icon">🔍</span>
+                            <input 
+                                type="text" 
+                                id="stockName" 
+                                placeholder="Search by company name or ticker symbol (e.g., CDSL, NEWGEN)..." 
+                                autocomplete="off"
+                                spellcheck="false"
+                                aria-label="Search Stock Database"
+                                aria-autocomplete="list"
+                                aria-expanded="false"
+                                aria-controls="searchSuggestions"
+                                role="combobox"
+                            >
+                        </div>
+                        <button type="button" id="btnAnalyze" class="btn btn-primary">Analyze</button>
+                    </div>
+                    <div id="searchSuggestions" class="suggestions-dropdown hidden" aria-live="polite" role="listbox"></div>
+                    <div class="sample-tickers" style="margin-top:12px; font-size:0.85rem; color:var(--text-muted);">
+                        Try:
+                        <a href="#" class="sample-ticker-chip" data-ticker="CDSL">CDSL</a>,
+                        <a href="#" class="sample-ticker-chip" data-ticker="NEWGEN">NEWGEN</a>,
+                        <a href="#" class="sample-ticker-chip" data-ticker="TCS">TCS</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="loadingContainer" class="hidden"></section>
+        <section id="errorContainer" class="hidden"></section>
+
+        <section id="companyOverview" class="workspace-section" aria-labelledby="overviewTitle">
+            <div class="dashboard-card overview-card">
+                <div class="overview-header">
+                    <div>
+                        <h2 id="overviewTitle" class="card-headline">Company Overview</h2>
+                        <h3 id="overviewCompanyName" class="company-main-name">—</h3>
+                    </div>
+                    <div class="score-container">
+                        <div class="score-block">
+                            <span class="score-label">VIKRAM SCORE</span>
+                            <span id="overviewVikramScore" class="score-value">—</span>
+                        </div>
+                        <div id="overviewRating" class="rating-badge">—</div>
+                    </div>
+                </div>
+                <div class="grid-layout cols-4">
+                    <div class="metric-group">
+                        <span class="metric-label">Sector</span>
+                        <span id="overviewSector" class="metric-value">—</span>
+                    </div>
+                    <div class="metric-group">
+                        <span class="metric-label">Industry</span>
+                        <span id="overviewIndustry" class="metric-value">—</span>
+                    </div>
+                    <div class="metric-group">
+                        <span class="metric-label">Exchange</span>
+                        <span id="overviewExchange" class="metric-value">—</span>
+                    </div>
+                    <div class="metric-group">
+                        <span class="metric-label">Market Cap</span>
+                        <span id="overviewMarketCap" class="metric-value">—</span>
+                    </div>
+                </div>
+                <div class="grid-layout cols-4 margin-top-md">
+                    <div class="metric-group">
+                        <span class="metric-label">Current Price</span>
+                        <span id="overviewCurrentPrice" class="metric-value font-numeric">—</span>
+                    </div>
+                    <div class="metric-group">
+                        <span class="metric-label">52-Week High</span>
+                        <span id="overview52WeekHigh" class="metric-value font-numeric color-green">—</span>
+                    </div>
+                    <div class="metric-group">
+                        <span class="metric-label">52-Week Low</span>
+                        <span id="overview52WeekLow" class="metric-value font-numeric color-red">—</span>
+                    </div>
+                    <div class="metric-group">
+                        <span class="metric-label">Corporate Website</span>
+                        <a id="overviewWebsite" href="#" target="_blank" rel="noopener noreferrer" class="metric-link">—</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="hiddenGemsPreview" class="workspace-section" aria-labelledby="hiddenGemsTitle">
+            <div class="dashboard-card">
+                <h2 id="hiddenGemsTitle" class="card-headline">💎 Hidden Gems Alpha Discovery</h2>
+                <div class="empty-placeholder-view">
+                    <p class="placeholder-text">Execute an asset analysis query to evaluate small-to-midcap strategic value acceleration criteria.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="watchlistPreview" class="workspace-section"></section>
+
+        <section id="technicalDashboard" class="workspace-section" data-module="technical" aria-labelledby="technicalTitle">
+            <div class="dashboard-card">
+                <h2 id="technicalTitle" class="card-headline">📈 Technical Strength (Pillar K)</h2>
+                <div class="table-container">
+                    <table class="metric-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Technical Indicator Metric</th>
+                                <th scope="col">Calculated Value</th>
+                                <th scope="col">System Technical Evaluation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Relative Strength Index (RSI - 14)</td>
+                                <td id="techRSI" class="font-numeric">—</td>
+                                <td id="techRSISignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>MACD Momentum Oscillator</td>
+                                <td id="techMACD" class="font-numeric">—</td>
+                                <td id="techMACDSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Average Directional Index (ADX - 14)</td>
+                                <td id="techADX" class="font-numeric">—</td>
+                                <td id="techADXSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Exponential Moving Average (EMA 20)</td>
+                                <td id="techEMA20" class="font-numeric">—</td>
+                                <td rowspan="3" class="cell-merge-valign">
+                                    <div class="trend-wrapper">
+                                        <span class="metric-label-inline">Structural Trend Alignment:</span>
+                                        <span id="techTrend" class="weight-bold">—</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Exponential Moving Average (EMA 50)</td>
+                                <td id="techEMA50" class="font-numeric">—</td>
+                            </tr>
+                            <tr>
+                                <td>Exponential Moving Average (EMA 200)</td>
+                                <td id="techEMA200" class="font-numeric">—</td>
+                            </tr>
+                            <tr>
+                                <td>Local Classical Support Floor</td>
+                                <td id="techSupport" class="font-numeric color-green">—</td>
+                                <td class="text-muted">Dynamic Pivot Floor</td>
+                            </tr>
+                            <tr>
+                                <td>Local Classical Resistance Ceiling</td>
+                                <td id="techResistance" class="font-numeric color-red">—</td>
+                                <td class="text-muted">Dynamic Breakout Target</td>
+                            </tr>
+                            <tr>
+                                <td>Accumulated Volume Baseline</td>
+                                <td id="techVolume" class="font-numeric">—</td>
+                                <td id="techVolumeSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>On-Balance Volume (OBV) Trend</td>
+                                <td id="techOBV" class="font-numeric">—</td>
+                                <td id="techOBVSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Deliverable Volume Percentage (Delivery %)</td>
+                                <td id="techDeliveryPct" class="font-numeric">—</td>
+                                <td id="techDeliverySignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>52-Week Structural High Target</td>
+                                <td id="tech52WeekHigh" class="font-numeric">—</td>
+                                <td class="text-muted">Yearly Resistance Ceiling</td>
+                            </tr>
+                            <tr>
+                                <td>52-Week Structural Low Base</td>
+                                <td id="tech52WeekLow" class="font-numeric">—</td>
+                                <td class="text-muted">Yearly Structural Floor</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="fundamentalScoreCard" class="workspace-section"></section>
+
+        <section id="financialDashboard" class="workspace-section" data-module="financial" aria-labelledby="financialTitle">
+            <div class="dashboard-card">
+                <h2 id="financialTitle" class="card-headline">📊 Financial & Business Dashboard (Pillar F)</h2>
+                <div class="table-container">
+                    <table class="metric-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Fundamental Parameter</th>
+                                <th scope="col">Reported Value</th>
+                                <th scope="col">Benchmark Analysis</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Compound Revenue Growth Rate (YoY)</td>
+                                <td id="finRevenueGrowth" class="font-numeric">—</td>
+                                <td id="finRevenueGrowthSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Net Profit Growth Rate (YoY)</td>
+                                <td id="finProfitGrowth" class="font-numeric">—</td>
+                                <td id="finProfitGrowthSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Earnings Per Share (EPS) Growth</td>
+                                <td id="finEPSGrowth" class="font-numeric">—</td>
+                                <td id="finEPSGrowthSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Return on Equity (ROE)</td>
+                                <td id="finROE" class="font-numeric">—</td>
+                                <td id="finROESignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Return on Capital Employed (ROCE)</td>
+                                <td id="finROCE" class="font-numeric">—</td>
+                                <td id="finROCESignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Operating Profit Margin (OPM %)</td>
+                                <td id="finOperatingMargin" class="font-numeric">—</td>
+                                <td id="finOperatingMarginSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Net Profit Margin (NPM %)</td>
+                                <td id="finNetMargin" class="font-numeric">—</td>
+                                <td id="finNetMarginSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Debt-to-Equity Capital Leverage Ratio</td>
+                                <td id="finDebtToEquity" class="font-numeric">—</td>
+                                <td id="finDebtToEquitySignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Free Cash Flow (FCF) Liquidity Position</td>
+                                <td id="finFreeCashFlow" class="font-numeric">—</td>
+                                <td id="finFreeCashFlowSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Interest Coverage Solvency Ratio</td>
+                                <td id="finInterestCoverage" class="font-numeric">—</td>
+                                <td id="finInterestCoverageSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Quarterly Financial Expansion Trend</td>
+                                <td id="finQuarterlyGrowth" class="font-numeric">—</td>
+                                <td id="finQuarterlyGrowthSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Annualized Financial Performance Compounding</td>
+                                <td id="finAnnualGrowth" class="font-numeric">—</td>
+                                <td id="finAnnualGrowthSignal" class="weight-bold">—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="institutionDashboard" class="workspace-section" data-module="institution"></section>
+        <section id="valuationDashboard" class="workspace-section" data-module="valuation"></section>
+        <section id="riskDashboard" class="workspace-section" data-module="risk"></section>
+        <section id="sectorDashboard" class="workspace-section" data-module="sector"></section>
+        <section id="businessDashboard" class="workspace-section" data-module="business"></section>
+        <section id="catalystDashboard" class="workspace-section" data-module="catalyst"></section>
+
+        <section id="opportunityRadar" class="workspace-section" aria-labelledby="radarTitle">
+            <div class="dashboard-card">
+                <h2 id="radarTitle" class="card-headline">🛰 VIKRAM Opportunity Radar</h2>
+                <div class="empty-placeholder-view">
+                    <p class="placeholder-text">Assembling multi-factor market signal models. Quantitative cross-sectional asset positioning scans will appear upon engine execution.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="masterVerdict" class="workspace-section" aria-labelledby="verdictTitle">
+            <div class="dashboard-card">
+                <h2 id="verdictTitle" class="card-headline">🏆 Master Verdict Subsystem</h2>
+                <div class="empty-placeholder-view">
+                    <p class="placeholder-text">Awaiting calculation. Analytical score processing pipeline requires execution verification to formulate definitive allocation guidance.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="explainabilityEngine" class="workspace-section" aria-labelledby="explainabilityTitle">
+            <div class="dashboard-card">
+                <h2 id="explainabilityTitle" class="card-headline">💎 Structured AI Explainability Engine</h2>
+                <div class="empty-placeholder-view">
+                    <p class="placeholder-text">Causal trace log trace targets are currently inactive. Complete a targeted instrument query scan to populate quantitative attribution timelines.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="portfolio" class="workspace-section" aria-labelledby="portfolioTitle">
+            <div class="dashboard-card">
+                <h2 id="portfolioTitle" class="card-headline">💼 Portfolio Tracker</h2>
+                <p class="text-muted" style="margin-bottom:16px;">Track your real holdings against live VIKRAM scores. Saved in this browser only — not sent anywhere.</p>
+
+                <div class="search-bar-group" style="margin-bottom: 20px; flex-wrap: wrap;">
+                    <input type="text" id="portfolioTicker" class="search-like-input" placeholder="Ticker (e.g. CDSL)" style="flex:1; min-width:140px; background:var(--bg-input); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px 16px; color:var(--text-primary);">
+                    <input type="number" id="portfolioBuyPrice" placeholder="Buy Price (₹)" style="flex:1; min-width:140px; background:var(--bg-input); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px 16px; color:var(--text-primary);">
+                    <input type="number" id="portfolioQty" placeholder="Quantity" style="flex:1; min-width:120px; background:var(--bg-input); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px 16px; color:var(--text-primary);">
+                    <button type="button" id="btnAddHolding" class="btn btn-primary">Add Holding</button>
+                </div>
+
+                <div id="portfolioSummary" class="grid-layout cols-4" style="margin-bottom:20px;"></div>
+                <div id="portfolioTable"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="app-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <p class="copyright-notice">&copy; 2026 VIKRAM Investor Operating System. All architectural rights reserved. <span class="footer-version">Version: Alpha 1.2</span></p>
+                <p class="disclaimer-text">Regulatory Risk Warning: System outputs generated by the VIKRAM analytical pipeline models run entirely on quantitative algorithms and historical data matrices. These are designed purely for informational research objectives and do not represent certified financial allocation advisory models or direct transactional recommendations.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/companyDatabase.js"></script>
+<script src="js/technicalData.js"></script>
+<script src="js/financialData.js"></script>
+<script src="js/scoreEngine.js"></script>
+<script src="js/gauge.js"></script>
+<script src="js/valuationEngine.js"></script>
+<script src="js/riskEngine.js"></script>
+<script src="js/institutionEngine.js"></script>
+<script src="js/fundamentalEngine.js"></script>
+<script src="js/newsEngine.js"></script>
+<script src="js/frameworkEngine.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/ui.js"></script></html>
