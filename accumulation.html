@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>VIKRAM — Accumulation Scanner</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/accumulation.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body class="accumulation-page">
+<header class="app-header"><div class="header-container"><div class="brand-identity"><span class="brand-logo">🧠</span><span class="brand-name">VIKRAM</span></div><nav class="app-navigation"><ul class="nav-list"><li><a class="nav-link" href="index.html">Analysis</a></li><li><a class="nav-link active" href="accumulation.html">Accumulation Scanner</a></li></ul></nav></div></header>
+<main class="app-container accumulation-shell">
+  <section class="scanner-hero"><div><p class="eyebrow">MARKET ACCUMULATION ENGINE</p><h1>Find accumulation before the crowd.</h1><p>One click scans verified EOD price, volume, delivery, OBV and futures OI history. Missing data stays N/A.</p></div><div class="scanner-actions"><button id="scanBtn" class="btn btn-primary">SCAN NOW</button><button id="allBtn" class="btn">ALL STOCKS</button></div></section>
+  <section class="dashboard-card scanner-controls"><div class="control-row"><label for="symbolsInput">Stocks</label><input id="symbolsInput" value="ONGC,VBL,BSE,NMDC" placeholder="ONGC,VBL,BSE,NMDC"><span id="health" class="status-pill">Checking data…</span></div><div class="quick-row"><button class="chip" data-symbol="ONGC">ONGC</button><button class="chip" data-symbol="VBL">VBL</button><button class="chip" data-symbol="BSE">BSE</button><button class="chip" data-symbol="NMDC">NMDC</button></div></section>
+  <section id="summary" class="grid-layout cols-4"></section>
+  <section class="dashboard-card"><div class="table-heading"><h2 class="card-headline">Accumulation Results</h2><span id="lastScan" class="text-muted">—</span></div><div class="table-container"><table class="metric-table"><thead><tr><th>Stock</th><th>Score</th><th>Verdict</th><th>Price %</th><th>Vol Ratio</th><th>Delivery %</th><th>OBV</th><th>Futures OI</th><th>Why</th></tr></thead><tbody id="results"><tr><td colspan="9" class="text-muted">Press SCAN NOW.</td></tr></tbody></table></div></section>
+  <section id="detail" class="dashboard-card hidden"></section>
+  <section class="dashboard-card scanner-rules"><h2 class="card-headline">How the score works</h2><div class="rules-grid"><div><b>Volume</b><span>Current volume vs prior 20 trading days.</span></div><div><b>Delivery</b><span>Delivery % plus its recent direction.</span></div><div><b>OBV</b><span>Actual cumulative OBV trend from stored history.</span></div><div><b>Futures OI</b><span>Exact-date OI + Change OI only. No stale backstep.</span></div></div></section>
+</main>
+<script src="accumulation/config.js"></script><script src="accumulation/engine.js"></script><script src="accumulation/api.js"></script><script>
+(() => {
+ const $=id=>document.getElementById(id);
+ function fmt(v,d=2){return v===null||v===undefined||Number.isNaN(Number(v))?'N/A':Number(v).toFixed(d)}
+ function badge(v){return `<span class="verdict verdict-${String(v).toLowerCase().replaceAll(' ','-').replaceAll('/','-')}">${v}</span>`}
+ function rows(data){return (data.results||[]).map(r=>`<tr><td><button class="stock-link" data-symbol="${r.symbol}">${r.symbol}</button></td><td><b>${r.score??'N/A'}</b></td><td>${badge(r.verdict)}</td><td>${fmt(r.metrics?.priceChangePct)}%</td><td>${fmt(r.metrics?.volumeRatio)}x</td><td>${fmt(r.metrics?.deliveryPct,1)}%</td><td>${r.metrics?.obv===null?'N/A':Math.round(r.metrics.obv).toLocaleString('en-IN')}</td><td>${r.metrics?.changeOi===null?'N/A':(r.metrics.changeOi>0?'+':'')+r.metrics.changeOi}</td><td class="why-cell">${(r.why||[]).slice(0,3).join(' ')}</td></tr>`).join('') || '<tr><td colspan="9">No results.</td></tr>'}
+ function render(data){$('results').innerHTML=rows(data);$('lastScan').textContent=data.asOf?`Data: ${data.asOf}`:'—';const rs=data.results||[];const counts={confirmed:rs.filter(x=>x.verdict==='ACCUMULATION CONFIRMED').length,starting:rs.filter(x=>x.verdict==='ACCUMULATION STARTING').length,mixed:rs.filter(x=>x.verdict==='UNCONFIRMED / MIXED').length,distribution:rs.filter(x=>x.verdict==='DISTRIBUTION').length};$('summary').innerHTML=[['Confirmed',counts.confirmed],['Starting',counts.starting],['Mixed',counts.mixed],['Distribution',counts.distribution]].map(x=>`<div class="dashboard-card summary-card"><span class="metric-label">${x[0]}</span><strong>${x[1]}</strong></div>`).join('');document.querySelectorAll('.stock-link').forEach(b=>b.onclick=()=>loadDetail(b.dataset.symbol))}
+ async function scan(all=false){$('scanBtn').disabled=true;$('scanBtn').textContent='SCANNING…';try{const symbols=all?null:$('symbolsInput').value.split(',').map(x=>x.trim().toUpperCase()).filter(Boolean);const data=all?await window.ACCUMULATION_API.all():await window.ACCUMULATION_API.scan(symbols);render(data)}catch(e){$('results').innerHTML=`<tr><td colspan="9">${e.message}</td></tr>`}finally{$('scanBtn').disabled=false;$('scanBtn').textContent='SCAN NOW'}}
+ async function loadDetail(symbol){try{const d=await window.ACCUMULATION_API.stock(symbol);const r=d.result;$('detail').classList.remove('hidden');$('detail').innerHTML=`<div class="table-heading"><h2 class="card-headline">${symbol} — ${r.verdict}</h2><span class="score-large">${r.score??'N/A'}</span></div><p>${(r.why||[]).join(' ')}</p><div class="detail-grid">${Object.entries(r.metrics||{}).map(([k,v])=>`<div><span>${k}</span><b>${typeof v==='number'?fmt(v):String(v??'N/A')}</b></div>`).join('')}</div>`;$('detail').scrollIntoView({behavior:'smooth'})}catch(e){alert(e.message)}}
+ $('scanBtn').onclick=()=>scan(false);$('allBtn').onclick=()=>scan(true);document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{const i=$('symbolsInput');const set=new Set(i.value.split(',').map(x=>x.trim()).filter(Boolean));set.add(c.dataset.symbol);i.value=[...set].join(',')});window.ACCUMULATION_API.health().then(h=>$('health').textContent=h.status==='ok'?`Data ${h.lastCmDate||'pending'}`:'Data unavailable').catch(()=>$('health').textContent='Backend not connected');
+})();
+</script>
+</body></html>
