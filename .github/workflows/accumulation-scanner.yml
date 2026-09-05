@@ -38,6 +38,7 @@ jobs:
       - run: node --check src/migrate.js
       - run: node --check src/istDate.js
       - run: node --check src/scanMaterializer.js
+      - run: node --check src/staticSnapshot.js
       - name: Unit tests
         run: npm test
       - name: Apply schema against CI Postgres
