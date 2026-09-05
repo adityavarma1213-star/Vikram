@@ -18,7 +18,7 @@
   <section id="detail" class="dashboard-card hidden"></section>
   <section class="dashboard-card scanner-rules"><h2 class="card-headline">How the score works</h2><div class="rules-grid"><div><b>Volume</b><span>Current volume vs prior 20 trading days.</span></div><div><b>Delivery</b><span>Delivery % plus its recent direction.</span></div><div><b>OBV</b><span>Actual cumulative OBV trend from stored history.</span></div><div><b>Futures OI</b><span>Exact-date OI + Change OI only. No stale backstep.</span></div></div></section>
 </main>
-<script src="accumulation/config.js"></script><script src="accumulation/engine.js"></script><script src="accumulation/api.js"></script><script>
+<script src="accumulation/api.js"></script><script>
 (() => {
  const $=id=>document.getElementById(id);
  function fmt(v,d=2){return v===null||v===undefined||Number.isNaN(Number(v))?'N/A':Number(v).toFixed(d)}
