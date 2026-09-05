@@ -190,4 +190,4 @@ async function main() {
 
 if (require.main === module) main().catch(error => { console.error(error); process.exit(1); });
 
-module.exports = { fetchCm, fetchFo, readHistory, materialize, ingestLatest };
+module.exports = { fetchCm, fetchFo, readHistory, writeHistory, materialize, ingestLatest };
