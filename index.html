@@ -38,6 +38,7 @@ Status : Updated & Production Ready
                 <ul class="nav-list">
                     <li><a href="#home" class="nav-link active">Home</a></li>
                     <li><a href="#companyOverview" class="nav-link">Analysis</a></li>
+                    <li><a href="accumulation.html" class="nav-link">Accumulation Scanner</a></li>
                     <li><a href="#hiddenGemsPreview" class="nav-link">Hidden Gems</a></li>
                     <li><a href="#opportunityRadar" class="nav-link">Opportunity Radar</a></li>
                     <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
@@ -260,14 +261,19 @@ Status : Updated & Production Ready
                                 <td id="finRevenueGrowthSignal" class="weight-bold">—</td>
                             </tr>
                             <tr>
-                                <td>Net Profit Growth Rate (YoY)</td>
-                                <td id="finProfitGrowth" class="font-numeric">—</td>
-                                <td id="finProfitGrowthSignal" class="weight-bold">—</td>
+                                <td>Revenue Stability & Consistency</td>
+                                <td id="finRevenueStability" class="font-numeric">—</td>
+                                <td id="finRevenueStabilitySignal" class="weight-bold">—</td>
                             </tr>
                             <tr>
-                                <td>Earnings Per Share (EPS) Growth</td>
-                                <td id="finEPSGrowth" class="font-numeric">—</td>
-                                <td id="finEPSGrowthSignal" class="weight-bold">—</td>
+                                <td>EBITDA Margin</td>
+                                <td id="finEbitdaMargin" class="font-numeric">—</td>
+                                <td id="finEbitdaMarginSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Net Profit Margin</td>
+                                <td id="finNetProfitMargin" class="font-numeric">—</td>
+                                <td id="finNetProfitMarginSignal" class="weight-bold">—</td>
                             </tr>
                             <tr>
                                 <td>Return on Equity (ROE)</td>
@@ -280,39 +286,44 @@ Status : Updated & Production Ready
                                 <td id="finROCESignal" class="weight-bold">—</td>
                             </tr>
                             <tr>
-                                <td>Operating Profit Margin (OPM %)</td>
-                                <td id="finOperatingMargin" class="font-numeric">—</td>
-                                <td id="finOperatingMarginSignal" class="weight-bold">—</td>
+                                <td>Debt-to-Equity Ratio</td>
+                                <td id="finDebtEquity" class="font-numeric">—</td>
+                                <td id="finDebtEquitySignal" class="weight-bold">—</td>
                             </tr>
                             <tr>
-                                <td>Net Profit Margin (NPM %)</td>
-                                <td id="finNetMargin" class="font-numeric">—</td>
-                                <td id="finNetMarginSignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Debt-to-Equity Capital Leverage Ratio</td>
-                                <td id="finDebtToEquity" class="font-numeric">—</td>
-                                <td id="finDebtToEquitySignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Free Cash Flow (FCF) Liquidity Position</td>
-                                <td id="finFreeCashFlow" class="font-numeric">—</td>
-                                <td id="finFreeCashFlowSignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Interest Coverage Solvency Ratio</td>
+                                <td>Interest Coverage Ratio</td>
                                 <td id="finInterestCoverage" class="font-numeric">—</td>
                                 <td id="finInterestCoverageSignal" class="weight-bold">—</td>
                             </tr>
                             <tr>
-                                <td>Quarterly Financial Expansion Trend</td>
-                                <td id="finQuarterlyGrowth" class="font-numeric">—</td>
-                                <td id="finQuarterlyGrowthSignal" class="weight-bold">—</td>
+                                <td>Operating Cash Flow</td>
+                                <td id="finOCF" class="font-numeric">—</td>
+                                <td id="finOCFSignal" class="weight-bold">—</td>
                             </tr>
                             <tr>
-                                <td>Annualized Financial Performance Compounding</td>
-                                <td id="finAnnualGrowth" class="font-numeric">—</td>
-                                <td id="finAnnualGrowthSignal" class="weight-bold">—</td>
+                                <td>Free Cash Flow</td>
+                                <td id="finFCF" class="font-numeric">—</td>
+                                <td id="finFCFSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>EPS Growth</td>
+                                <td id="finEPSGrowth" class="font-numeric">—</td>
+                                <td id="finEPSGrowthSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Promoter Holding</td>
+                                <td id="finPromoterHolding" class="font-numeric">—</td>
+                                <td id="finPromoterHoldingSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Promoter Pledging</td>
+                                <td id="finPromoterPledge" class="font-numeric">—</td>
+                                <td id="finPromoterPledgeSignal" class="weight-bold">—</td>
+                            </tr>
+                            <tr>
+                                <td>Institutional Holding Trend</td>
+                                <td id="finInstitutionalTrend" class="font-numeric">—</td>
+                                <td id="finInstitutionalTrendSignal" class="weight-bold">—</td>
                             </tr>
                         </tbody>
                     </table>
@@ -320,113 +331,15 @@ Status : Updated & Production Ready
             </div>
         </section>
 
-        <section id="institutionDashboard" class="workspace-section" data-module="institution"></section>
-        <section id="valuationDashboard" class="workspace-section" data-module="valuation"></section>
-        <section id="riskDashboard" class="workspace-section" data-module="risk"></section>
-        <section id="sectorDashboard" class="workspace-section" data-module="sector"></section>
-        <section id="businessDashboard" class="workspace-section" data-module="business"></section>
-        <section id="catalystDashboard" class="workspace-section" data-module="catalyst"></section>
-
-        <section id="opportunityRadar" class="workspace-section" aria-labelledby="radarTitle">
-            <div class="dashboard-card">
-                <h2 id="radarTitle" class="card-headline">🛰 VIKRAM Opportunity Radar</h2>
-                <div class="empty-placeholder-view">
-                    <p class="placeholder-text">Assembling multi-factor market signal models. Quantitative cross-sectional asset positioning scans will appear upon engine execution.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="masterVerdict" class="workspace-section" aria-labelledby="verdictTitle">
-            <div class="dashboard-card">
-                <h2 id="verdictTitle" class="card-headline">🏆 Master Verdict Subsystem</h2>
-                <div class="empty-placeholder-view">
-                    <p class="placeholder-text">Awaiting calculation. Analytical score processing pipeline requires execution verification to formulate definitive allocation guidance.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="explainabilityEngine" class="workspace-section" aria-labelledby="explainabilityTitle">
-            <div class="dashboard-card">
-                <h2 id="explainabilityTitle" class="card-headline">💎 Structured AI Explainability Engine</h2>
-                <div class="empty-placeholder-view">
-                    <p class="placeholder-text">Causal trace log trace targets are currently inactive. Complete a targeted instrument query scan to populate quantitative attribution timelines.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="portfolio" class="workspace-section" aria-labelledby="portfolioTitle">
-            <div class="dashboard-card">
-                <h2 id="portfolioTitle" class="card-headline">💼 Portfolio Tracker</h2>
-                <p class="text-muted" style="margin-bottom:16px;">Track your real holdings against live VIKRAM scores. Saved in this browser only — not sent anywhere.</p>
-
-                <div class="search-bar-group" style="margin-bottom: 20px; flex-wrap: wrap;">
-                    <input type="text" id="portfolioTicker" class="search-like-input" placeholder="Ticker (e.g. CDSL)" style="flex:1; min-width:140px; background:var(--bg-input); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px 16px; color:var(--text-primary);">
-                    <input type="number" id="portfolioBuyPrice" placeholder="Buy Price (₹)" style="flex:1; min-width:140px; background:var(--bg-input); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px 16px; color:var(--text-primary);">
-                    <input type="number" id="portfolioQty" placeholder="Quantity" style="flex:1; min-width:120px; background:var(--bg-input); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px 16px; color:var(--text-primary);">
-                    <button type="button" id="btnAddHolding" class="btn btn-primary">Add Holding</button>
-                </div>
-
-                <div id="portfolioSummary" class="grid-layout cols-4" style="margin-bottom:20px;"></div>
-                <div id="portfolioTable"></div>
-            </div>
-        </section>
-
+        <section id="opportunityRadar" class="workspace-section"></section>
+        <section id="portfolio" class="workspace-section"></section>
     </main>
 
-    <footer class="app-footer">
-        <div class="footer-container">
-            <div class="footer-content">
-                <p class="copyright-notice">&copy; 2026 VIKRAM Investor Operating System. All architectural rights reserved. <span class="footer-version">Version: Alpha 1.2</span></p>
-                <p class="disclaimer-text">Regulatory Risk Warning: System outputs generated by the VIKRAM analytical pipeline models run entirely on quantitative algorithms and historical data matrices. These are designed purely for informational research objectives and do not represent certified financial allocation advisory models or direct transactional recommendations.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="js/companyDatabase.js"></script>
-<script src="js/technicalData.js"></script>
-<script src="js/financialData.js"></script>
-<script src="js/scoreEngine.js"></script>
-<script src="js/gauge.js"></script>
-<script src="js/valuationEngine.js"></script>
-<script src="js/riskEngine.js"></script>
-<script src="js/institutionEngine.js"></script>
-<script src="js/fundamentalEngine.js"></script>
-<script src="js/newsEngine.js"></script>
-<script src="js/frameworkEngine.js"></script>
-<script src="js/engine.js"></script>
-<script src="js/ui.js"></script>
-<script>
-    // Register service worker - this is what makes Android/Chrome offer
-    // "Install App". Fails silently and harmlessly if opened as a plain
-    // local file (file://) instead of hosted on a real web server, since
-    // service workers require http/https to work.
-<script>
-    // Self-healing fix: automatically clear out any old/stuck cached version
-    // (from an earlier incomplete deploy) for every visitor, then register a
-    // clean service worker. This runs once per visitor and needs no manual
-    // DevTools steps from anyone.
-    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.protocol === 'http:')) {
-        window.addEventListener('load', async () => {
-            try {
-                // Unregister any existing service worker that may be serving a stale snapshot
-                const registrations = await navigator.serviceWorker.getRegistrations();
-                for (const reg of registrations) {
-                    await reg.unregister();
-                }
-                // Clear any cached files from that old version
-                if (window.caches) {
-                    const cacheNames = await caches.keys();
-                    for (const name of cacheNames) {
-                        await caches.delete(name);
-                    }
-                }
-                // Register a fresh service worker
-                await navigator.serviceWorker.register('sw.js');
-                console.log('[VIKRAM] Cache cleared and service worker freshly registered');
-            } catch (err) {
-                console.log('[VIKRAM] Service worker setup failed (non-critical):', err);
-            }
-        });
-    }
-</script>
+    <script src="js/app.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/technical.js"></script>
+    <script src="js/financial.js"></script>
+    <script src="js/portfolio.js"></script>
+    <script src="js/opportunity.js"></script>
+</body>
 </html>
