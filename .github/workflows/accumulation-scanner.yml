@@ -17,5 +17,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install
-      - run: npm test
+      - run: node --check src/scannerEngine.js
+      - run: node --check src/ingest.js
+      - run: node --check src/index.js
+      - run: node --check src/migrate.js
+      - run: node test/scanner.test.js
