@@ -3,7 +3,7 @@ const path = require('path');
 const { parse } = require('csv-parse/sync');
 const unzipper = require('unzipper');
 const { toIstCalendarDate, addDays, formatYmd, formatDdMmYyyy, formatYmdCompact } = require('./istDate');
-const { buildScannerResults, MATERIALIZE_LOOKBACK_DAYS } = require('./scanMaterializer');
+const { buildScannerResults, buildPeriodResults, MATERIALIZE_LOOKBACK_DAYS } = require('./scanMaterializer');
 
 const ROOT = path.resolve(__dirname, '../..');
 const DATA_DIR = path.join(ROOT, 'data');
@@ -95,7 +95,7 @@ async function fetchFo(date) {
   const file = zip.files.find(f => /\.csv$/i.test(f.path));
   if (!file) throw new Error('No CSV found in NSE F&O archive');
   return parseCsv(await file.buffer())
-    .filter(r => clean(r.Sgmt) === 'FO' && clean(r.FinInstrmTp) === 'STF' && clean(r.OptnTp) === 'XX')
+    .filter(r => clean(r.Sgmt) === 'FO' && clean(r.FinInstrmTp) === 'STF' && (clean(r.OptnTp) === 'XX' || !clean(r.OptnTp)))
     .map(r => ({
       symbol: clean(r.TckrSymb),
       trade_date: formatYmd(date),
@@ -140,7 +140,10 @@ function materialize(historySnapshots) {
     }
   }
   for (const rows of historyBySymbol.values()) rows.sort((a, b) => a.trade_date.localeCompare(b.trade_date));
-  return buildScannerResults(historyBySymbol, futuresBySymbolDate);
+  return {
+    results: buildScannerResults(historyBySymbol, futuresBySymbolDate),
+    periods: buildPeriodResults(historyBySymbol, futuresBySymbolDate)
+  };
 }
 
 async function ingestLatest() {
@@ -170,18 +173,19 @@ async function ingestLatest() {
 async function main() {
   const latest = await ingestLatest();
   const history = readHistory();
-  const results = materialize(history);
+  const materialized = materialize(history);
   const snapshot = {
     status: 'ok',
     asOf: latest.tradeDate,
     generatedAt: new Date().toISOString(),
     source: 'NSE EOD public archives',
     historyDays: history.length,
-    results
+    results: materialized.results,
+    periods: materialized.periods
   };
   fs.mkdirSync(DATA_DIR, { recursive: true });
   fs.writeFileSync(SNAPSHOT_FILE, `${JSON.stringify(snapshot)}\n`);
-  console.log(`SNAPSHOT ${latest.tradeDate}: ${results.length} symbols from ${history.length} stored trading-day snapshot(s)`);
+  console.log(`SNAPSHOT ${latest.tradeDate}: ${materialized.results.length} symbols from ${history.length} stored trading-day snapshot(s)`);
 }
 
 if (require.main === module) main().catch(error => { console.error(error); process.exit(1); });
