@@ -6,16 +6,11 @@ function row(date, close, prevClose, volume, delivery, deliveryQty) {
 }
 
 const history = [
-  row('2026-08-17', 100, 99, 1000, 40, 400),
-  row('2026-08-18', 101, 100, 1050, 41, 430),
-  row('2026-08-19', 101, 101, 1100, 42, 460),
-  row('2026-08-20', 102, 101, 1080, 43, 465),
-  row('2026-08-21', 102, 102, 1150, 44, 500),
-  row('2026-08-24', 103, 102, 1200, 45, 540),
-  row('2026-08-25', 103, 103, 1180, 46, 545),
-  row('2026-08-26', 104, 103, 1250, 47, 590),
-  row('2026-08-27', 104, 104, 1300, 48, 620),
-  row('2026-08-28', 105, 104, 1400, 50, 700),
+  row('2026-08-17', 100, 99, 1000, 40, 400), row('2026-08-18', 101, 100, 1050, 41, 430),
+  row('2026-08-19', 101, 101, 1100, 42, 460), row('2026-08-20', 102, 101, 1080, 43, 465),
+  row('2026-08-21', 102, 102, 1150, 44, 500), row('2026-08-24', 103, 102, 1200, 45, 540),
+  row('2026-08-25', 103, 103, 1180, 46, 545), row('2026-08-26', 104, 103, 1250, 47, 590),
+  row('2026-08-27', 104, 104, 1300, 48, 620), row('2026-08-28', 105, 104, 1400, 50, 700),
   row('2026-09-01', 106, 105, 2000, 58, 1160)
 ];
 
@@ -25,7 +20,7 @@ assert.equal(confirmed.metrics.oiExactDate, true);
 assert.equal(confirmed.metrics.deliveryQty, 1160);
 assert.ok(confirmed.score >= 75);
 
-const postgresDateCase = evaluate('TEST', history.map(r => ({ ...r, trade_date: new Date(`${r.trade_date}T00:00:00Z`) }),), { trade_date: new Date('2026-09-01T00:00:00Z'), oi: 100000, change_oi: 7000 });
+const postgresDateCase = evaluate(history.map(r => ({ ...r, trade_date: new Date(`${r.trade_date}T00:00:00Z`) })), history.map(r => ({ ...r, trade_date: new Date(`${r.trade_date}T00:00:00Z`) }),), { trade_date: new Date('2026-09-01T00:00:00Z'), oi: 100000, change_oi: 7000 });
 assert.equal(postgresDateCase.tradeDate, '2026-09-01');
 assert.equal(postgresDateCase.metrics.oiExactDate, true);
 assert.equal(postgresDateCase.metrics.futuresOi, 100000);
@@ -34,7 +29,7 @@ const stale = evaluate('TEST', history, { trade_date: '2026-08-28', oi: 95000, c
 assert.equal(stale.metrics.oiExactDate, false);
 assert.equal(stale.metrics.futuresOi, null);
 assert.equal(stale.metrics.changeOi, null);
-assert.match(stale.why.join(' '), /exact date/);
+assert.match(stale.why.join(' '), /exact trade date/);
 
 const missingDelivery = evaluate('TEST', history.map(r => ({ ...r, deliv_per: null, deliv_qty: null })), null);
 assert.equal(missingDelivery.metrics.deliveryPct, null);
