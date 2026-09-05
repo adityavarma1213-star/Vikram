@@ -13,3 +13,13 @@ CREATE TABLE IF NOT EXISTS ingestion_runs (
   id BIGSERIAL PRIMARY KEY, segment TEXT NOT NULL, trade_date DATE, status TEXT NOT NULL, row_count INTEGER, schema_version TEXT, error TEXT, created_at TIMESTAMPTZ DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS ingestion_runs_segment_date_idx ON ingestion_runs(segment, trade_date DESC);
+CREATE TABLE IF NOT EXISTS scanner_results (
+  symbol TEXT PRIMARY KEY,
+  trade_date DATE,
+  score INTEGER,
+  verdict TEXT NOT NULL,
+  metrics JSONB NOT NULL,
+  why JSONB NOT NULL,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS scanner_results_trade_date_idx ON scanner_results(trade_date);
