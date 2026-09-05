@@ -2,6 +2,12 @@ name: VIKRAM Free Scanner
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'server/**'
+      - 'accumulation.html'
+      - 'accumulation/**'
+      - '.github/workflows/static-scanner.yml'
   schedule:
     - cron: '30 13 * * 1-5'
 
@@ -33,14 +39,19 @@ jobs:
         working-directory: server
         run: npm install --no-audit --no-fund
 
-      - name: Fetch NSE EOD data and build static snapshot
+      - name: Backfill one year of NSE EOD history
+        run: node server/src/backfillHistory.js
+        env:
+          BACKFILL_CALENDAR_DAYS: 370
+
+      - name: Fetch latest NSE EOD data and build period snapshots
         run: node server/src/staticSnapshot.js
 
       - name: Verify scanner snapshot
         run: |
-          node -e "const fs=require('fs'); const p='data/scanner.json'; if(!fs.existsSync(p)) throw new Error('scanner.json was not generated'); const x=JSON.parse(fs.readFileSync(p,'utf8')); if(x.status!=='ok') throw new Error('Scanner snapshot status is not ok'); if(!x.asOf) throw new Error('Scanner snapshot has no asOf date'); if(!Array.isArray(x.results)) throw new Error('Scanner snapshot has no results array'); console.log('Scanner snapshot OK:', x.asOf, 'results:', x.results.length);"
+          node -e "const fs=require('fs'); const p='data/scanner.json'; if(!fs.existsSync(p)) throw new Error('scanner.json was not generated'); const x=JSON.parse(fs.readFileSync(p,'utf8')); if(x.status!=='ok') throw new Error('Scanner snapshot status is not ok'); if(!x.asOf) throw new Error('Scanner snapshot has no asOf date'); if(!Array.isArray(x.results)) throw new Error('Scanner snapshot has no results array'); for (const k of ['1D','1W','1M','3M','6M','1Y']) if(!Array.isArray(x.periods?.[k])) throw new Error('Missing period '+k); console.log('Scanner snapshot OK:', x.asOf, 'historyDays:', x.historyDays, 'results:', x.results.length, '1Y:', x.periods['1Y'].length);"
 
-      - name: Persist rolling market history
+      - name: Persist rolling market history and period snapshot
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
@@ -48,7 +59,7 @@ jobs:
           if git diff --cached --quiet; then
             echo 'No market-data changes to commit.'
           else
-            git commit -m 'chore: refresh NSE scanner data'
+            git commit -m 'chore: refresh NSE scanner history'
             git push
           fi
 
