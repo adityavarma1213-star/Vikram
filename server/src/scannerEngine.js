@@ -100,7 +100,11 @@ function evaluate(symbol, history, futures) {
       volumeRatio >= CFG.volumeStrong ? 20 : volumeRatio >= CFG.volumeElevated ? 14 : volumeRatio >= 0.8 ? 7 : 0,
       `Volume ratio is ${volumeRatio.toFixed(2)}x.`
     );
-  } else why.push('Volume data is unavailable.');
+  } else if (volume === null) {
+    why.push('Volume data is unavailable.');
+  } else {
+    why.push('Volume is available, but a volume ratio needs prior trading-day history.');
+  }
 
   if (deliveryPct !== null) {
     const base = deliveryPct >= CFG.deliveryStrong ? 20 : deliveryPct >= CFG.deliveryPositive ? 14 : 5;
