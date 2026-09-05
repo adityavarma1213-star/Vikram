@@ -20,7 +20,8 @@ assert.equal(confirmed.metrics.oiExactDate, true);
 assert.equal(confirmed.metrics.deliveryQty, 1160);
 assert.ok(confirmed.score >= 75);
 
-const postgresDateCase = evaluate(history.map(r => ({ ...r, trade_date: new Date(`${r.trade_date}T00:00:00Z`) })), history.map(r => ({ ...r, trade_date: new Date(`${r.trade_date}T00:00:00Z`) }),), { trade_date: new Date('2026-09-01T00:00:00Z'), oi: 100000, change_oi: 7000 });
+const postgresHistory = history.map(r => ({ ...r, trade_date: new Date(`${r.trade_date}T00:00:00Z`) }));
+const postgresDateCase = evaluate('TEST', postgresHistory, { trade_date: new Date('2026-09-01T00:00:00Z'), oi: 100000, change_oi: 7000 });
 assert.equal(postgresDateCase.tradeDate, '2026-09-01');
 assert.equal(postgresDateCase.metrics.oiExactDate, true);
 assert.equal(postgresDateCase.metrics.futuresOi, 100000);
