@@ -28,15 +28,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: server/package-lock.json
 
       - name: Install scanner dependencies
         working-directory: server
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Fetch NSE EOD data and build static snapshot
         run: node server/src/staticSnapshot.js
+
+      - name: Verify scanner snapshot
+        run: |
+          node -e "const fs=require('fs'); const p='data/scanner.json'; if(!fs.existsSync(p)) throw new Error('scanner.json was not generated'); const x=JSON.parse(fs.readFileSync(p,'utf8')); if(x.status!=='ok') throw new Error('Scanner snapshot status is not ok'); if(!x.asOf) throw new Error('Scanner snapshot has no asOf date'); if(!Array.isArray(x.results)) throw new Error('Scanner snapshot has no results array'); console.log('Scanner snapshot OK:', x.asOf, 'results:', x.results.length);"
 
       - name: Persist rolling market history
         run: |
