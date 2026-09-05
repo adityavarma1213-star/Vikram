@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: vikram-accumulation
+    runtime: node
+    buildCommand: npm install --prefix server
+    startCommand: node server/src/index.js
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vikram-market-data
+          property: connectionString
+  - type: cron
+    name: vikram-eod-ingestion
+    runtime: node
+    schedule: "30 13 * * 1-5"
+    buildCommand: npm install --prefix server
+    startCommand: node server/src/ingest.js
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vikram-market-data
+          property: connectionString
+
+databases:
+  - name: vikram-market-data
+    databaseName: vikram
+    user: vikram
