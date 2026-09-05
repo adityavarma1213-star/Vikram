@@ -27,66 +27,66 @@ function normalizeSymbols(value) {
   return [...new Set(String(value || '').split(',').map(s => s.trim().toUpperCase()).filter(s => /^[A-Z0-9&.-]{1,30}$/.test(s)))].slice(0, MAX_SYMBOLS);
 }
 
-async function loadScanData(symbols) {
-  if (!symbols.length) return new Map();
+function rowFromMaterialized(row) {
+  return {
+    symbol: row.symbol,
+    tradeDate: row.trade_date,
+    score: row.score,
+    verdict: row.verdict,
+    metrics: row.metrics,
+    why: row.why,
+    materialized: true,
+    updatedAt: row.updated_at
+  };
+}
 
-  const cm = await pool.query(`
+async function liveScan(symbols) {
+  if (!symbols.length) return [];
+  const q = await pool.query(`
     WITH ranked AS (
       SELECT c.*, ROW_NUMBER() OVER (PARTITION BY symbol ORDER BY trade_date DESC) AS rn
-      FROM cm_eod c
-      WHERE c.series = 'EQ' AND c.symbol = ANY($1)
+      FROM cm_eod c WHERE c.series='EQ' AND c.symbol=ANY($1)
     )
     SELECT * FROM ranked WHERE rn <= 21 ORDER BY symbol, trade_date
   `, [symbols]);
-
-  const bySymbol = new Map();
-  for (const row of cm.rows) {
-    if (!bySymbol.has(row.symbol)) bySymbol.set(row.symbol, []);
-    bySymbol.get(row.symbol).push(row);
+  const by = new Map();
+  for (const row of q.rows) {
+    if (!by.has(row.symbol)) by.set(row.symbol, []);
+    by.get(row.symbol).push(row);
   }
-
-  const latestDates = [...bySymbol.entries()].map(([symbol, rows]) => [symbol, rows[rows.length - 1].trade_date]);
-  if (!latestDates.length) return bySymbol;
-
-  const latestDate = latestDates.reduce((max, [, date]) => date > max ? date : max, latestDates[0][1]);
-  const futures = await pool.query(`
-    SELECT DISTINCT ON (f.symbol) f.symbol, f.trade_date, f.expiry, f.close, f.oi, f.change_oi,
-           f.instrument_type, f.contract_name
-    FROM futures_eod f
-    JOIN (
-      SELECT symbol, MAX(trade_date) AS trade_date
-      FROM cm_eod
-      WHERE series = 'EQ' AND symbol = ANY($1)
-      GROUP BY symbol
-    ) latest ON latest.symbol = f.symbol AND latest.trade_date = f.trade_date
-    WHERE f.expiry >= f.trade_date
-    ORDER BY f.symbol, f.expiry ASC
+  const f = await pool.query(`
+    SELECT DISTINCT ON (symbol) symbol, trade_date, expiry, close, oi, change_oi, instrument_type, contract_name
+    FROM futures_eod
+    WHERE symbol=ANY($1) AND expiry >= trade_date
+    ORDER BY symbol, trade_date DESC, expiry ASC
   `, [symbols]);
-
-  const futuresBySymbol = new Map(futures.rows.map(row => [row.symbol, row]));
-  return { bySymbol, futuresBySymbol, latestDate };
+  const fm = new Map(f.rows.map(row => [row.symbol, row]));
+  return symbols.map(symbol => evaluate(symbol, by.get(symbol) || [], fm.get(symbol) || null));
 }
 
 async function scan(symbols) {
-  const data = await loadScanData(symbols);
-  const bySymbol = data.bySymbol || new Map();
-  const futuresBySymbol = data.futuresBySymbol || new Map();
-  return symbols.map(symbol => evaluate(symbol, bySymbol.get(symbol) || [], futuresBySymbol.get(symbol) || null));
+  const q = await pool.query(`SELECT * FROM scanner_results WHERE symbol=ANY($1)`, [symbols]);
+  const found = new Map(q.rows.map(row => [row.symbol, rowFromMaterialized(row)]));
+  const missing = symbols.filter(symbol => !found.has(symbol));
+  const live = missing.length ? await liveScan(missing) : [];
+  const liveMap = new Map(live.map(row => [row.symbol, row]));
+  return symbols.map(symbol => found.get(symbol) || liveMap.get(symbol) || evaluate(symbol, [], null));
 }
 
 app.get('/api/health', async (_req, res) => {
   try {
-    const result = await pool.query(`
-      SELECT MAX(trade_date) AS last_cm_date,
-             (SELECT MAX(trade_date) FROM futures_eod) AS last_fo_date
-      FROM cm_eod
-    `);
-    const row = result.rows[0] || {};
+    const [cm, fo, materialized] = await Promise.all([
+      pool.query(`SELECT MAX(trade_date) AS last_cm_date FROM cm_eod`),
+      pool.query(`SELECT MAX(trade_date) AS last_fo_date FROM futures_eod`),
+      pool.query(`SELECT COUNT(*)::int AS count, MAX(updated_at) AS updated_at FROM scanner_results`)
+    ]);
     res.json({
       status: 'ok',
       database: 'connected',
-      lastCmDate: row.last_cm_date,
-      lastFoDate: row.last_fo_date
+      lastCmDate: cm.rows[0]?.last_cm_date || null,
+      lastFoDate: fo.rows[0]?.last_fo_date || null,
+      materializedSymbols: materialized.rows[0]?.count || 0,
+      materializedAt: materialized.rows[0]?.updated_at || null
     });
   } catch (error) {
     res.status(503).json({ status: 'error', database: 'unavailable', error: error.message });
@@ -99,8 +99,7 @@ app.get('/api/scanner/scan', async (req, res) => {
   try {
     const symbols = normalizeSymbols(req.query.symbols);
     if (!symbols.length) return res.status(400).json({ error: 'Provide at least one valid symbol.' });
-    const results = await scan(symbols);
-    res.json({ results, asOf: new Date().toISOString() });
+    res.json({ results: await scan(symbols), asOf: new Date().toISOString() });
   } catch (error) {
     console.error('Scan failed:', error);
     res.status(500).json({ error: 'Scanner failed. No market data was fabricated.', detail: error.message });
@@ -109,10 +108,13 @@ app.get('/api/scanner/scan', async (req, res) => {
 
 app.get('/api/scanner/all', async (_req, res) => {
   try {
-    const universe = await pool.query(`SELECT DISTINCT symbol FROM cm_eod WHERE series='EQ' ORDER BY symbol`);
-    const symbols = universe.rows.map(row => row.symbol).filter(Boolean);
-    const results = await scan(symbols);
-    res.json({ results, count: results.length, asOf: new Date().toISOString() });
+    const q = await pool.query(`SELECT * FROM scanner_results ORDER BY symbol`);
+    res.json({
+      results: q.rows.map(rowFromMaterialized),
+      count: q.rows.length,
+      asOf: new Date().toISOString(),
+      note: q.rows.length ? undefined : 'No materialized scanner results yet. Run ingestion first.'
+    });
   } catch (error) {
     console.error('All-stock scan failed:', error);
     res.status(500).json({ error: 'All-stock scanner failed. No market data was fabricated.', detail: error.message });
@@ -124,10 +126,11 @@ app.get('/api/stock/:symbol', async (req, res) => {
     const symbols = normalizeSymbols(req.params.symbol);
     if (symbols.length !== 1) return res.status(400).json({ error: 'Invalid symbol.' });
     const symbol = symbols[0];
-    const data = await loadScanData([symbol]);
-    const history = data.bySymbol.get(symbol) || [];
-    if (!history.length) return res.status(404).json({ error: `No verified EOD data for ${symbol}.` });
-    res.json({ result: evaluate(symbol, history, data.futuresBySymbol.get(symbol) || null) });
+    const q = await pool.query(`SELECT * FROM cm_eod WHERE symbol=$1 AND series='EQ' ORDER BY trade_date`, [symbol]);
+    if (!q.rows.length) return res.status(404).json({ error: `No verified EOD data for ${symbol}.` });
+    const last = q.rows[q.rows.length - 1];
+    const f = await pool.query(`SELECT symbol,trade_date,expiry,close,oi,change_oi,instrument_type,contract_name FROM futures_eod WHERE symbol=$1 AND trade_date=$2 AND expiry >= trade_date ORDER BY expiry LIMIT 1`, [symbol, last.trade_date]);
+    res.json({ result: evaluate(symbol, q.rows, f.rows[0] || null) });
   } catch (error) {
     console.error('Stock detail failed:', error);
     res.status(500).json({ error: 'Stock detail failed.', detail: error.message });
