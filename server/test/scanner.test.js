@@ -35,9 +35,46 @@ assert.equal(stale.metrics.futuresOi, null);
 assert.equal(stale.metrics.changeOi, null);
 assert.match(stale.why.join(' '), /exact date/);
 
-const missing = evaluate('TEST', history.map(r => ({ ...r, deliv_per: null, deliv_qty: null })), null);
-assert.equal(missing.metrics.deliveryPct, null);
-assert.equal(missing.metrics.deliveryQty, null);
-assert.match(missing.why.join(' '), /Delivery data is unavailable/);
+const missingDelivery = evaluate('TEST', history.map(r => ({ ...r, deliv_per: null, deliv_qty: null })), null);
+assert.equal(missingDelivery.metrics.deliveryPct, null);
+assert.equal(missingDelivery.metrics.deliveryQty, null);
+assert.match(missingDelivery.why.join(' '), /Delivery data is unavailable/);
 
-console.log('scanner tests passed');
+const missingOi = evaluate('TEST', history, null);
+assert.equal(missingOi.metrics.futuresOi, null);
+assert.equal(missingOi.metrics.changeOi, null);
+assert.match(missingOi.why.join(' '), /Futures OI confirmation is unavailable/);
+
+const negativeOi = evaluate('TEST', history, {
+  trade_date: '2026-09-01', oi: 100000, change_oi: -7000
+});
+assert.equal(negativeOi.metrics.changeOi, -7000);
+assert.ok(negativeOi.score < confirmed.score);
+assert.notEqual(negativeOi.verdict, 'ACCUMULATION CONFIRMED');
+
+const volumeHistory = history.map((r, i) => i === history.length - 1 ? { ...r, volume: 2100 } : r);
+const volumeCase = evaluate('TEST', volumeHistory, { trade_date: '2026-09-01', oi: 1, change_oi: 1 });
+const priorAverage = history.slice(0, -1).reduce((sum, r) => sum + r.volume, 0) / (history.length - 1);
+assert.ok(Math.abs(volumeCase.metrics.volumeRatio - (2100 / priorAverage)) < 1e-9);
+
+const obv = evaluate('TEST', history, { trade_date: '2026-09-01', oi: 1, change_oi: 1 });
+assert.equal(typeof obv.metrics.obv, 'number');
+assert.ok(obv.metrics.obvTrend > 0);
+
+const deliveryTrend = evaluate('TEST', history, { trade_date: '2026-09-01', oi: 1, change_oi: 1 });
+assert.ok(deliveryTrend.metrics.deliveryTrend > 0);
+
+const shortHistory = history.slice(-5);
+const insufficient = evaluate('TEST', shortHistory, { trade_date: '2026-09-01', oi: 100000, change_oi: 7000 });
+assert.notEqual(insufficient.verdict, 'ACCUMULATION CONFIRMED');
+assert.match(insufficient.why.join(' '), /requires at least 10/);
+
+const empty = evaluate('TEST', [], null);
+assert.equal(empty.score, null);
+assert.equal(empty.metrics.close, null);
+assert.equal(empty.metrics.volume, null);
+assert.equal(empty.metrics.deliveryPct, null);
+assert.equal(empty.metrics.futuresOi, null);
+assert.match(empty.why.join(' '), /No verified EOD history/);
+
+console.log('scanner tests passed (10/10 scenarios)');
