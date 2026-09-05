@@ -1,0 +1,8 @@
+{
+  "name":"vikram-accumulation-api",
+  "private":true,
+  "type":"commonjs",
+  "engines":{"node":">=20"},
+  "scripts":{"start":"node src/index.js","ingest":"node src/ingest.js"},
+  "dependencies":{"csv-parse":"^5.5.6","express":"^4.21.2","pg":"^8.13.1","unzipper":"^0.12.0"}
+}
