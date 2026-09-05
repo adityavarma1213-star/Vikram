@@ -1,0 +1,51 @@
+name: Accumulation Scanner Checks
+
+on:
+  push:
+    branches: [main, feature/accumulation-scanner-phase0]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: vikram
+          POSTGRES_PASSWORD: vikram
+          POSTGRES_DB: vikram_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U vikram"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: node --check src/scannerEngine.js
+      - run: node --check src/ingest.js
+      - run: node --check src/index.js
+      - run: node --check src/migrate.js
+      - run: node --check src/istDate.js
+      - run: node --check src/scanMaterializer.js
+      - run: node --check src/staticSnapshot.js
+      - name: Unit tests
+        run: npm test
+      - name: Apply schema against CI Postgres
+        run: node src/migrate.js
+        env:
+          DATABASE_URL: postgres://vikram:vikram@localhost:5432/vikram_ci
+      - name: Integration tests
+        run: npm run test:integration
+        env:
+          DATABASE_URL: postgres://vikram:vikram@localhost:5432/vikram_ci
