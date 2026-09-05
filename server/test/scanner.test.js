@@ -19,17 +19,18 @@ const history = [
   row('2026-09-01', 106, 105, 2000, 58, 1160)
 ];
 
-const confirmed = evaluate('TEST', history, {
-  trade_date: '2026-09-01', oi: 100000, change_oi: 7000
-});
+const confirmed = evaluate('TEST', history, { trade_date: '2026-09-01', oi: 100000, change_oi: 7000 });
 assert.equal(confirmed.verdict, 'ACCUMULATION CONFIRMED');
 assert.equal(confirmed.metrics.oiExactDate, true);
 assert.equal(confirmed.metrics.deliveryQty, 1160);
 assert.ok(confirmed.score >= 75);
 
-const stale = evaluate('TEST', history, {
-  trade_date: '2026-08-28', oi: 95000, change_oi: 5000
-});
+const postgresDateCase = evaluate('TEST', history.map(r => ({ ...r, trade_date: new Date(`${r.trade_date}T00:00:00Z`) }),), { trade_date: new Date('2026-09-01T00:00:00Z'), oi: 100000, change_oi: 7000 });
+assert.equal(postgresDateCase.tradeDate, '2026-09-01');
+assert.equal(postgresDateCase.metrics.oiExactDate, true);
+assert.equal(postgresDateCase.metrics.futuresOi, 100000);
+
+const stale = evaluate('TEST', history, { trade_date: '2026-08-28', oi: 95000, change_oi: 5000 });
 assert.equal(stale.metrics.oiExactDate, false);
 assert.equal(stale.metrics.futuresOi, null);
 assert.equal(stale.metrics.changeOi, null);
@@ -45,9 +46,7 @@ assert.equal(missingOi.metrics.futuresOi, null);
 assert.equal(missingOi.metrics.changeOi, null);
 assert.match(missingOi.why.join(' '), /Futures OI confirmation is unavailable/);
 
-const negativeOi = evaluate('TEST', history, {
-  trade_date: '2026-09-01', oi: 100000, change_oi: -7000
-});
+const negativeOi = evaluate('TEST', history, { trade_date: '2026-09-01', oi: 100000, change_oi: -7000 });
 assert.equal(negativeOi.metrics.changeOi, -7000);
 assert.ok(negativeOi.score < confirmed.score);
 assert.notEqual(negativeOi.verdict, 'ACCUMULATION CONFIRMED');
@@ -77,4 +76,4 @@ assert.equal(empty.metrics.deliveryPct, null);
 assert.equal(empty.metrics.futuresOi, null);
 assert.match(empty.why.join(' '), /No verified EOD history/);
 
-console.log('scanner tests passed (10/10 scenarios)');
+console.log('scanner tests passed (11 scenarios)');
