@@ -20,7 +20,18 @@ const num = value => {
   return Number.isFinite(n) ? n : null;
 };
 const average = values => values.length ? values.reduce((a, b) => a + b, 0) / values.length : null;
-const sortRows = rows => (rows || []).slice().sort((a, b) => String(a.trade_date).localeCompare(String(b.trade_date)));
+
+function dateKey(value) {
+  if (value === null || value === undefined) return null;
+  if (value instanceof Date) return value.toISOString().slice(0, 10);
+  return String(value).slice(0, 10);
+}
+
+const sortRows = rows => (rows || []).slice().sort((a, b) => {
+  const ad = dateKey(a.trade_date) || '';
+  const bd = dateKey(b.trade_date) || '';
+  return ad.localeCompare(bd);
+});
 
 function evaluate(symbol, history, futures) {
   const rows = sortRows(history);
@@ -63,7 +74,7 @@ function evaluate(symbol, history, futures) {
     : null;
   if (obvValues.length) obv = obvValues[obvValues.length - 1];
 
-  const exactFutures = futures && String(futures.trade_date).slice(0, 10) === String(current.trade_date).slice(0, 10)
+  const exactFutures = futures && dateKey(futures.trade_date) === dateKey(current.trade_date)
     ? futures : null;
   const futuresOi = exactFutures ? num(exactFutures.oi) : null;
   const changeOi = exactFutures ? num(exactFutures.change_oi) : null;
@@ -99,9 +110,7 @@ function evaluate(symbol, history, futures) {
         ? `Delivery is ${deliveryPct.toFixed(1)}% and trending higher.`
         : `Delivery is ${deliveryPct.toFixed(1)}%.`
     );
-  } else {
-    why.push('Delivery data is unavailable.');
-  }
+  } else why.push('Delivery data is unavailable.');
 
   if (obvTrend !== null) {
     add(CFG.weights.obv, obvTrend > 0 ? 15 : obvTrend === 0 ? 7.5 : 0,
@@ -113,6 +122,8 @@ function evaluate(symbol, history, futures) {
     add(CFG.weights.futuresOi, changeOi > 0 ? 30 : changeOi === 0 ? 12 : 0,
       changeOi > 0 ? `Futures OI increased by ${changeOi} on the exact date.` : `Futures OI change is ${changeOi}.`
     );
+  } else if (futures && dateKey(futures.trade_date) !== dateKey(current.trade_date)) {
+    why.push('Futures OI data exists but not for the exact trade date, so it was not scored.');
   } else {
     why.push('Futures OI confirmation is unavailable for the exact date.');
   }
@@ -138,7 +149,7 @@ function evaluate(symbol, history, futures) {
 
   return {
     symbol,
-    tradeDate: current.trade_date || null,
+    tradeDate: dateKey(current.trade_date),
     score: normalizedScore === null ? null : Math.round(normalizedScore),
     verdict,
     metrics: {
@@ -161,4 +172,4 @@ function evaluate(symbol, history, futures) {
   };
 }
 
-module.exports = { evaluate, CFG };
+module.exports = { evaluate, CFG, dateKey };
