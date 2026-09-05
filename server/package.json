@@ -3,6 +3,6 @@
   "private":true,
   "type":"commonjs",
   "engines":{"node":">=20"},
-  "scripts":{"start":"node src/index.js","ingest":"node src/ingest.js"},
+  "scripts":{"start":"node src/migrate.js && node src/index.js","ingest":"node src/migrate.js && node src/ingest.js","test":"node test/scanner.test.js"},
   "dependencies":{"csv-parse":"^5.5.6","express":"^4.21.2","pg":"^8.13.1","unzipper":"^0.12.0"}
 }
