@@ -1,0 +1,1 @@
+window.VIKRAM_TECHNICAL_UI={render(data){const t=data?.technical||{};return Object.fromEntries(['rsi','macd','adx','ema20','ema50','ema200','support','resistance','trend','volume','obv','deliveryPct','high52Week','low52Week'].map(k=>[k,t[k]??null]));}};
