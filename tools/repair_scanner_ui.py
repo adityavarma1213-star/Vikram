@@ -43,8 +43,14 @@ mobile_marker = '@media(max-width:760px){'
 if '@media(max-width:1100px)' not in text and mobile_marker in text:
     mobile = '@media(max-width:1100px){.scanner-table{min-width:760px;table-layout:auto}.scanner-table th,.scanner-table td{white-space:nowrap}.scanner-table-wrap{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable}}\n'
     text = text.replace(mobile_marker, mobile + mobile_marker, 1)
+# Deterministic fallback renderer for the two discovery surfaces. It runs after the page is built and
+# consumes only the same verified scanner snapshot; it does not change scanner scoring or the matrix.
+script_tag = '<script src="js/discoveryRepair.js"></script>'
+if script_tag not in text:
+    text = text.replace('</body>', f'{script_tag}\n</body>', 1)
 index.write_text(text, encoding='utf-8')
 (ROOT / 'accumulation.html').unlink(missing_ok=True)
 assert '.scanner-table{width:100%;min-width:0;table-layout:fixed' in text
 assert 'scanner-meta' in text
 assert "}).slice(0, 40);" not in text
+assert script_tag in text
