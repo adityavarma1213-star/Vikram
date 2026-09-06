@@ -1,0 +1,6 @@
+'use strict';
+const {indicator}=require('./indicators');
+function value(field,row,history){if(field.type==='indicator')return indicator(field.name,history);return row?.[field.name]??row?.[field.name?.toLowerCase()]??null;}
+function compare(a,op,b){if(a===null||a===undefined||b===null||b===undefined||!Number.isFinite(Number(a))||!Number.isFinite(Number(b)))return null;a=Number(a);b=Number(b);return {'>':a>b,'>=':a>=b,'<':a<b,'<=':a<=b,'==':a===b,'!=':a!==b}[op]??null;}
+function evaluateRule(rule,row,history){if(rule.type==='condition'){const a=value(rule.left,row,history),b=rule.right?.type?value(rule.right,row,history):rule.right;const result=compare(a,rule.operator,b);return{result,reason:`${rule.left.name||rule.left.field||rule.left} ${rule.operator} ${b??'N/A'} → ${result===null?'N/A':result}`};}if(rule.type==='group'){const results=(rule.rules||[]).map(r=>evaluateRule(r,row,history));const known=results.filter(x=>x.result!==null);if(!known.length)return{result:null,reason:'N/A: insufficient verified history'};let result=rule.operator==='OR'?known.some(x=>x.result):known.every(x=>x.result);if(rule.operator==='NOT')result=!known[0].result;return{result,reason:results.map(x=>x.reason).join(` ${rule.operator} `)};}return{result:null,reason:'N/A: unsupported rule'};}
+module.exports={evaluateRule};
