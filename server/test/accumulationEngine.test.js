@@ -54,7 +54,7 @@ assert.equal(fnoConfirmed.confirmation.pillars.total, 4);
 assert.equal(fnoConfirmed.confirmation.pillars.details.price, true);
 
 // F&O: falling OBV blocks confirmation even when price/volume/delivery/OI are strong.
-const fallingObvHistory = base.map((r, i) => i === base.length - 1 ? { ...r, close: 104, prev_close: 105, volume: 2000, deliv_per: 60 } : r);
+const fallingObvHistory = base.map((r, i) => { if (i < base.length - 5) return r; const closes = [104, 103, 102, 101, 100]; const prevs = [105, 104, 103, 102, 101]; return { ...r, close: closes[i - (base.length - 5)], prev_close: prevs[i - (base.length - 5)], volume: 2000, deliv_per: 60 }; });
 const fallingObv = evaluate({ symbol: 'HDFCLIFE_CASE', history: fallingObvHistory, current: fallingObvHistory.at(-1), futures: fno });
 assert.equal(fallingObv.confirmation.pillars.details.obv, false);
 assert.notEqual(fallingObv.verdict, 'ACCUMULATION CONFIRMED');
