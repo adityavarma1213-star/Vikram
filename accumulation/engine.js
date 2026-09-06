@@ -1,9 +1,8 @@
 /*
- * VIKRAM Accumulation Engine
- * No synthetic market values. Missing inputs remain N/A and cannot earn points.
- *
- * Important: the score is an evidence score, not the verdict by itself.
- * ACCUMULATION CONFIRMED also requires every hard confirmation gate below.
+ * VIKRAM Accumulation Engine v2
+ * Evidence score + safety floors + N-of-M confirmation.
+ * OI is used when F&O evidence exists; it is not a universal prerequisite.
+ * News remains a separate contextual intelligence layer.
  */
 (function (root) {
   const CFG = root.ACCUMULATION_CONFIG || (typeof require === 'function' ? require('./config') : null);
@@ -40,9 +39,7 @@
     });
   }
 
-  function scoreComponent(value, max) {
-    return Math.max(0, Math.min(max, value));
-  }
+  function scoreComponent(value, max) { return Math.max(0, Math.min(max, value)); }
 
   function evaluate(input) {
     const history = sortRows(input.history);
@@ -72,13 +69,15 @@
     const oiExactDate = !!f && dateKey(futuresDate) === current.trade_date;
     const oi = oiExactDate ? num(f.oi ?? f.open_interest) : null;
     const changeOi = oiExactDate ? num(f.change_oi ?? f.change_in_oi) : null;
-    const oiPct = oi !== null && finite(changeOi) && oi !== 0 ? (changeOi / Math.abs(oi - changeOi || oi)) * 100 : null;
     const oiConfirmed = oi !== null && changeOi !== null;
+    const isFno = oiConfirmed;
+    const weights = isFno ? CFG.weights.fno : CFG.weights.cash;
 
     let score = 0;
     let availableWeight = 0;
     const why = [];
     const components = [];
+    const pillars = { volume: false, delivery: false, obv: false, futuresOi: false };
 
     function add(name, weight, points, detail) {
       if (points === null) return;
@@ -89,62 +88,83 @@
     }
 
     if (priceChangePct !== null) {
-      const points = priceChangePct > CFG.flatPricePct ? CFG.weights.price : priceChangePct >= -CFG.flatPricePct ? CFG.weights.price * 0.65 : CFG.weights.price * 0.15;
-      add('Price action', CFG.weights.price, scoreComponent(points, CFG.weights.price), priceChangePct > CFG.flatPricePct ? 'Price is firm/positive.' : priceChangePct >= -CFG.flatPricePct ? 'Price is broadly flat.' : 'Price is falling; accumulation is not yet confirmed.');
+      let points;
+      if (priceChangePct > 0.50) points = weights.price;
+      else if (priceChangePct >= 0.10) points = weights.price * 0.80;
+      else if (priceChangePct >= -0.20) points = weights.price * 0.55;
+      else points = 0;
+      add('Price action', weights.price, scoreComponent(points, weights.price), priceChangePct >= -0.20 ? `Price change is ${priceChangePct.toFixed(2)}%.` : 'Price is below the accumulation safety floor.');
     }
+
     if (volumeRatio !== null) {
-      const points = volumeRatio >= CFG.volumeRatio.strong ? CFG.weights.volume : volumeRatio >= CFG.volumeRatio.elevated ? CFG.weights.volume * 0.7 : volumeRatio >= 0.8 ? CFG.weights.volume * 0.35 : 0;
-      add('Volume', CFG.weights.volume, points, volumeRatio >= CFG.volumeRatio.strong ? `Volume is ${volumeRatio.toFixed(2)}x the prior ${CFG.historyDays}-day average.` : `Volume ratio is ${volumeRatio.toFixed(2)}x.`);
+      let points = volumeRatio >= 1.30 ? weights.volume : volumeRatio >= 1.00 ? weights.volume * (10 / 15) : volumeRatio >= 0.65 ? weights.volume * 0.40 : 0;
+      add('Volume', weights.volume, points, `Volume ratio is ${volumeRatio.toFixed(2)}x.`);
+      pillars.volume = volumeRatio >= 1.00 || (volumeRatio >= 0.80 && deliveryPct !== null && deliveryPct >= 55);
     }
+
     if (deliveryPct !== null) {
-      let points = deliveryPct >= CFG.deliveryPct.strong ? CFG.weights.delivery : deliveryPct >= CFG.deliveryPct.positive ? CFG.weights.delivery * 0.7 : CFG.weights.delivery * 0.25;
-      if (deliveryTrend !== null && deliveryTrend > 0) points += CFG.weights.delivery * 0.15;
-      add('Delivery', CFG.weights.delivery, Math.min(CFG.weights.delivery, points), deliveryTrend !== null && deliveryTrend > 0 ? `Delivery is ${deliveryPct.toFixed(1)}% and trending higher.` : `Delivery is ${deliveryPct.toFixed(1)}%.`);
+      let points = deliveryPct >= 55 ? weights.delivery : deliveryPct >= 45 ? weights.delivery * 0.72 : deliveryPct >= 35 ? weights.delivery * 0.40 : 0;
+      if (deliveryTrend !== null && deliveryTrend > 0) points += weights.delivery * 0.08;
+      add('Delivery', weights.delivery, Math.min(weights.delivery, points), deliveryTrend !== null && deliveryTrend > 0 ? `Delivery is ${deliveryPct.toFixed(1)}% and trending higher.` : `Delivery is ${deliveryPct.toFixed(1)}%.`);
+      pillars.delivery = deliveryPct >= 45;
     }
+
     if (obvTrend !== null) {
-      add('OBV', CFG.weights.obv, obvTrend > 0 ? CFG.weights.obv : obvTrend === 0 ? CFG.weights.obv * 0.5 : 0, obvTrend > 0 ? 'OBV is rising over the lookback.' : obvTrend === 0 ? 'OBV is flat.' : 'OBV is falling.');
+      const points = obvTrend > 0 ? weights.obv : obvTrend === 0 ? weights.obv * 0.40 : 0;
+      add('OBV', weights.obv, points, obvTrend > 0 ? 'OBV is rising over the lookback.' : obvTrend === 0 ? 'OBV is flat.' : 'OBV is falling.');
+      pillars.obv = obvTrend > 0;
     }
-    if (oiConfirmed) {
-      const positiveOi = changeOi > 0;
-      let points = positiveOi ? CFG.weights.futuresOi : changeOi === 0 ? CFG.weights.futuresOi * 0.4 : 0;
-      if (priceChangePct !== null && Math.abs(priceChangePct) <= CFG.flatPricePct && positiveOi) points = Math.min(CFG.weights.futuresOi, points * 0.85);
-      add('Futures OI', CFG.weights.futuresOi, points, positiveOi ? `Futures OI increased on the exact trading date (${changeOi > 0 ? '+' : ''}${changeOi}).` : `Futures OI change is ${changeOi}.`);
+
+    if (isFno) {
+      let points = changeOi > 0 ? weights.futuresOi : changeOi === 0 ? weights.futuresOi * 0.40 : 0;
+      add('Futures OI', weights.futuresOi, points, changeOi > 0 ? `Futures OI increased on the exact trading date (+${changeOi}).` : `Futures OI change is ${changeOi}.`);
+      pillars.futuresOi = changeOi > 0;
     }
 
     const normalizedScore = availableWeight ? (score / availableWeight) * 100 : null;
     const enoughHistory = history.length >= CFG.minConfirmedHistory;
-    const flatWithOi = priceChangePct !== null && Math.abs(priceChangePct) <= CFG.flatPricePct && changeOi !== null && changeOi > 0;
-    const gates = CFG.confirmedGates;
-    const confirmedGateFailures = [];
-    if (gates.requirePositivePrice && !(priceChangePct !== null && priceChangePct > CFG.flatPricePct)) confirmedGateFailures.push('price is not positively moving');
-    if (!(volumeRatio !== null && volumeRatio >= gates.minVolumeRatio)) confirmedGateFailures.push(`volume ratio is below ${gates.minVolumeRatio.toFixed(1)}x`);
-    if (!(deliveryPct !== null && deliveryPct >= gates.minDeliveryPct)) confirmedGateFailures.push(`delivery is below ${gates.minDeliveryPct}%`);
-    if (gates.requireRisingObv && !(obvTrend !== null && obvTrend > 0)) confirmedGateFailures.push('OBV is not rising');
-    if (gates.requirePositiveExactDateOi && !(oiConfirmed && changeOi > 0)) confirmedGateFailures.push('exact-date futures OI is not increasing');
-    if (!enoughHistory) confirmedGateFailures.push(`history is shorter than ${CFG.minConfirmedHistory} sessions`);
+    const safetyFailures = [];
+    if (!(priceChangePct !== null && priceChangePct >= CFG.safety.minPriceChangePct)) safetyFailures.push(`price change is below ${CFG.safety.minPriceChangePct}%`);
+    if (!(deliveryPct !== null && deliveryPct >= CFG.safety.minDeliveryPct)) safetyFailures.push(`delivery is below ${CFG.safety.minDeliveryPct}%`);
+    if (!enoughHistory) safetyFailures.push(`history is shorter than ${CFG.minConfirmedHistory} sessions`);
+
+    const availablePillars = isFno ? 4 : 3;
+    const confirmedQuorum = isFno ? CFG.quorum.fno.confirmed : CFG.quorum.cash.confirmed;
+    const startingQuorum = isFno ? CFG.quorum.fno.starting : CFG.quorum.cash.starting;
+    const pillarCount = [pillars.volume, pillars.delivery, pillars.obv, isFno ? pillars.futuresOi : false].filter(Boolean).length;
+    const quietAbsorption = !safetyFailures.length && normalizedScore !== null && normalizedScore >= CFG.verdicts.quiet &&
+      volumeRatio !== null && volumeRatio >= CFG.volumeRatio.quietMin && volumeRatio <= CFG.volumeRatio.quietMax &&
+      deliveryPct >= 55 && obvTrend !== null && obvTrend > 0 && Math.abs(priceChangePct) <= CFG.flatPricePct;
 
     let verdict = 'UNCONFIRMED / MIXED';
-    if (normalizedScore !== null && normalizedScore >= CFG.verdicts.confirmed && confirmedGateFailures.length === 0) {
+    if (!safetyFailures.length && normalizedScore !== null && normalizedScore >= CFG.verdicts.confirmed && pillarCount >= confirmedQuorum) {
       verdict = 'ACCUMULATION CONFIRMED';
-    } else if (normalizedScore !== null && normalizedScore >= CFG.verdicts.starting && (flatWithOi || (volumeRatio !== null && volumeRatio >= CFG.volumeRatio.elevated))) {
+    } else if (quietAbsorption) {
+      verdict = 'QUIET ABSORPTION';
+    } else if (!safetyFailures.length && normalizedScore !== null && normalizedScore >= CFG.verdicts.starting && pillarCount >= startingQuorum) {
       verdict = 'ACCUMULATION STARTING';
     } else if (normalizedScore !== null && normalizedScore < CFG.verdicts.mixed) {
       verdict = 'DISTRIBUTION';
     }
 
-    if (confirmedGateFailures.length) why.push(`Confirmation gates not all satisfied: ${confirmedGateFailures.join('; ')}.`);
-    if (changeOi === null) why.push('Futures OI confirmation is unavailable for the exact date.');
+    const gateFailures = safetyFailures.slice();
+    if (!isFno && normalizedScore !== null && normalizedScore >= CFG.verdicts.confirmed && pillarCount < confirmedQuorum) gateFailures.push(`cash-equity quorum is ${pillarCount}/${availablePillars}, requires ${confirmedQuorum}/${availablePillars}`);
+    if (isFno && normalizedScore !== null && normalizedScore >= CFG.verdicts.confirmed && pillarCount < confirmedQuorum) gateFailures.push(`F&O quorum is ${pillarCount}/${availablePillars}, requires ${confirmedQuorum}/${availablePillars}`);
+    if (!isFno) why.push('Futures OI is unavailable; accumulation is evaluated on the three equity pillars.');
+    if (gateFailures.length) why.push(`Confirmation conditions not all satisfied: ${gateFailures.join('; ')}.`);
     if (deliveryPct === null) why.push('Delivery data is unavailable.');
     if (volumeRatio === null) why.push('Volume history is insufficient for a reliable ratio.');
-    if (!enoughHistory) why.push('Historical window is shorter than the preferred confirmation window.');
     if (!history.length) why.push('No verified EOD history is available.');
 
     return {
-      symbol: String(input.symbol || current.symbol || '').toUpperCase(), tradeDate: current.trade_date || null,
-      score: normalizedScore === null ? null : Math.round(normalizedScore), verdict,
-      metrics: { close, prevClose, priceChangePct, volume: currentVolume, avgVolume, volumeRatio, deliveryPct, deliveryQty, deliveryTrend, obv: obvCurrent, obvTrend, futuresOi: oi, changeOi, oiPct, oiExactDate },
-      components, why,
-      confirmation: { status: verdict === 'ACCUMULATION CONFIRMED' ? 'confirmed' : 'blocked', gateFailures: confirmedGateFailures }
+      symbol: String(input.symbol || current.symbol || '').toUpperCase(),
+      tradeDate: current.trade_date || null,
+      score: normalizedScore === null ? null : Math.round(normalizedScore),
+      verdict,
+      metrics: { close, prevClose, priceChangePct, volume: currentVolume, avgVolume, volumeRatio, deliveryPct, deliveryQty, deliveryTrend, obv: obvCurrent, obvTrend, futuresOi: oi, changeOi, oiExactDate, fnoAvailable: isFno, pillarCount, availablePillars },
+      components,
+      why,
+      confirmation: { status: verdict === 'ACCUMULATION CONFIRMED' ? 'confirmed' : 'blocked', gateFailures, quorum: { passed: pillarCount, required: confirmedQuorum, available: availablePillars } }
     };
   }
 
