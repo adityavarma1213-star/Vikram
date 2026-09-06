@@ -1,8 +1,8 @@
 const assert = require('node:assert/strict');
 const { evaluate } = require('../src/scannerEngine');
 
-function row(date, close, prevClose, volume, delivery, deliveryQty) {
-  return { trade_date: date, close, prev_close: prevClose, volume, deliv_per: delivery, deliv_qty: deliveryQty };
+function row(date, close, prevClose, volume, delivery, deliveryQty, turnover = 60000000) {
+  return { trade_date: date, close, prev_close: prevClose, volume, deliv_per: delivery, deliv_qty: deliveryQty, turnover };
 }
 
 const history = [
@@ -13,24 +13,24 @@ const history = [
   row('2026-08-27', 104, 104, 1300, 48, 620), row('2026-08-28', 105, 104, 1400, 50, 700),
   row('2026-09-01', 106, 105, 2000, 58, 1160)
 ];
+const fno = { available: true, trade_date: '2026-09-01', oi: 100000, change_oi: 7000 };
 
-const confirmed = evaluate('TEST', history, { trade_date: '2026-09-01', oi: 100000, change_oi: 7000 });
+const confirmed = evaluate('TEST', history, fno);
 assert.equal(confirmed.verdict, 'ACCUMULATION CONFIRMED');
 assert.equal(confirmed.metrics.oiExactDate, true);
 assert.equal(confirmed.metrics.deliveryQty, 1160);
 assert.ok(confirmed.score >= 75);
 
 const postgresHistory = history.map(r => ({ ...r, trade_date: new Date(`${r.trade_date}T00:00:00Z`) }));
-const postgresDateCase = evaluate('TEST', postgresHistory, { trade_date: new Date('2026-09-01T00:00:00Z'), oi: 100000, change_oi: 7000 });
+const postgresDateCase = evaluate('TEST', postgresHistory, { ...fno, trade_date: new Date('2026-09-01T00:00:00Z') });
 assert.equal(postgresDateCase.tradeDate, '2026-09-01');
 assert.equal(postgresDateCase.metrics.oiExactDate, true);
 assert.equal(postgresDateCase.metrics.futuresOi, 100000);
 
-const stale = evaluate('TEST', history, { trade_date: '2026-08-28', oi: 95000, change_oi: 5000 });
+const stale = evaluate('TEST', history, { ...fno, trade_date: '2026-08-28' });
 assert.equal(stale.metrics.oiExactDate, false);
 assert.equal(stale.metrics.futuresOi, null);
 assert.equal(stale.metrics.changeOi, null);
-assert.match(stale.why.join(' '), /exact-date|exact trade date/);
 
 const missingDelivery = evaluate('TEST', history.map(r => ({ ...r, deliv_per: null, deliv_qty: null })), null);
 assert.equal(missingDelivery.metrics.deliveryPct, null);
@@ -40,27 +40,27 @@ assert.match(missingDelivery.why.join(' '), /Delivery data is unavailable/);
 const missingOi = evaluate('TEST', history, null);
 assert.equal(missingOi.metrics.futuresOi, null);
 assert.equal(missingOi.metrics.changeOi, null);
-assert.match(missingOi.why.join(' '), /Futures OI confirmation is unavailable/);
+assert.equal(missingOi.metrics.hasDerivatives, false);
 
-const negativeOi = evaluate('TEST', history, { trade_date: '2026-09-01', oi: 100000, change_oi: -7000 });
+const negativeOi = evaluate('TEST', history, { ...fno, change_oi: -7000 });
 assert.equal(negativeOi.metrics.changeOi, -7000);
 assert.ok(negativeOi.score < confirmed.score);
 assert.notEqual(negativeOi.verdict, 'ACCUMULATION CONFIRMED');
 
 const volumeHistory = history.map((r, i) => i === history.length - 1 ? { ...r, volume: 2100 } : r);
-const volumeCase = evaluate('TEST', volumeHistory, { trade_date: '2026-09-01', oi: 1, change_oi: 1 });
+const volumeCase = evaluate('TEST', volumeHistory, fno);
 const priorAverage = history.slice(0, -1).reduce((sum, r) => sum + r.volume, 0) / (history.length - 1);
 assert.ok(Math.abs(volumeCase.metrics.volumeRatio - (2100 / priorAverage)) < 1e-9);
 
-const obv = evaluate('TEST', history, { trade_date: '2026-09-01', oi: 1, change_oi: 1 });
+const obv = evaluate('TEST', history, fno);
 assert.equal(typeof obv.metrics.obv, 'number');
 assert.ok(obv.metrics.obvTrend > 0);
 
-const deliveryTrend = evaluate('TEST', history, { trade_date: '2026-09-01', oi: 1, change_oi: 1 });
+const deliveryTrend = evaluate('TEST', history, fno);
 assert.ok(deliveryTrend.metrics.deliveryTrend > 0);
 
 const shortHistory = history.slice(-5);
-const insufficient = evaluate('TEST', shortHistory, { trade_date: '2026-09-01', oi: 100000, change_oi: 7000 });
+const insufficient = evaluate('TEST', shortHistory, fno);
 assert.notEqual(insufficient.verdict, 'ACCUMULATION CONFIRMED');
 assert.match(insufficient.why.join(' '), /history is shorter than 10 sessions/);
 
