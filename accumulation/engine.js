@@ -11,10 +11,19 @@
   const num = v => finite(v) ? Number(v) : null;
   const avg = xs => xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null;
   const pct = (a, b) => finite(a) && finite(b) && Number(b) !== 0 ? ((Number(a) / Number(b)) - 1) * 100 : null;
+  const dateKey = value => {
+    if (value === null || value === undefined || value === '') return null;
+    if (value instanceof Date) return value.toISOString().slice(0, 10);
+    const text = String(value);
+    const iso = text.match(/^(\d{4}-\d{2}-\d{2})/);
+    if (iso) return iso[1];
+    const parsed = new Date(text);
+    return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString().slice(0, 10);
+  };
 
   function sortRows(rows) {
-    return (rows || []).filter(Boolean).map(r => ({ ...r, trade_date: r.trade_date || r.date }))
-      .filter(r => r.trade_date).sort((a, b) => String(a.trade_date).localeCompare(String(b.trade_date)));
+    return (rows || []).filter(Boolean).map(r => ({ ...r, trade_date: dateKey(r.trade_date || r.date) }))
+      .filter(r => r.trade_date).sort((a, b) => a.trade_date.localeCompare(b.trade_date));
   }
 
   function calculateObv(rows) {
@@ -37,7 +46,8 @@
 
   function evaluate(input) {
     const history = sortRows(input.history);
-    const current = input.current || history[history.length - 1] || {};
+    const current = { ...(input.current || history[history.length - 1] || {}) };
+    current.trade_date = dateKey(current.trade_date || current.date);
     const f = input.futures || null;
     const previousRows = history.filter(r => r.trade_date !== current.trade_date);
     const volumeHistory = previousRows.slice(-CFG.historyDays).map(r => num(r.volume)).filter(finite);
@@ -59,7 +69,7 @@
     const obvTrend = finite(obvCurrent) && finite(obvStart) ? obvCurrent - obvStart : null;
 
     const futuresDate = f && (f.trade_date || f.date);
-    const oiExactDate = !!f && String(futuresDate) === String(current.trade_date);
+    const oiExactDate = !!f && dateKey(futuresDate) === current.trade_date;
     const oi = oiExactDate ? num(f.oi ?? f.open_interest) : null;
     const changeOi = oiExactDate ? num(f.change_oi ?? f.change_in_oi) : null;
     const oiPct = oi !== null && finite(changeOi) && oi !== 0 ? (changeOi / Math.abs(oi - changeOi || oi)) * 100 : null;
