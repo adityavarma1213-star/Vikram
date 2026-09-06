@@ -4,6 +4,7 @@ const { parse } = require('csv-parse/sync');
 const unzipper = require('unzipper');
 const { toIstCalendarDate, addDays, formatYmd, formatDdMmYyyy, formatYmdCompact } = require('./istDate');
 const { buildScannerResults, buildPeriodResults, MATERIALIZE_LOOKBACK_DAYS } = require('./scanMaterializer');
+const { fetchIndexUniverses, membershipFor } = require('./indexUniverses');
 
 const ROOT = path.resolve(__dirname, '../..');
 const accumulationEngine = require(path.join(ROOT, 'accumulation', 'engine'));
@@ -76,12 +77,14 @@ function buildCurrentDetection(historySnapshots, currentResults) {
 async function ingestLatest() { const anchor = toIstCalendarDate(); let lastError = null; for (let i = 0; i < SEARCH_WINDOW_DAYS; i += 1) { const date = addDays(anchor, -i); try { const cm = await fetchCm(date); let futures = []; try { futures = await fetchFo(date); } catch (error) { console.warn(`F&O unavailable for ${formatYmd(date)}: ${error.message}`); } const snapshot = { tradeDate: formatYmd(date), cm, futures, generatedAt: new Date().toISOString() }; writeHistory(snapshot); return snapshot; } catch (error) { lastError = error; console.log(`SKIP ${formatYmd(date)}: ${error.message}`); } } throw new Error(`No recent NSE CM file was available in the last ${SEARCH_WINDOW_DAYS} calendar days: ${lastError?.message || 'unknown error'}`); }
 async function main() {
   const latest = await ingestLatest(); const history = readHistory(); const materialized = materialize(history); let universe = new Map(); try { universe = await fetchUniverse(); } catch (error) { console.warn(`NSE company-name universe unavailable: ${error.message}`); }
+  let indexUniverses = null;
+  try { indexUniverses = await fetchIndexUniverses(get); } catch (error) { console.warn(`Nifty index constituent data unavailable: ${error.message}`); }
   const latestSymbols = new Set((latest.cm || []).map(row => String(row.symbol || '').toUpperCase()));
   const currentResults = materialized.results.filter(row => String(row.tradeDate || '') === latest.tradeDate && latestSymbols.has(String(row.symbol || '').toUpperCase()));
   const detection = buildCurrentDetection(history, currentResults);
-  const addNames = rows => rows.map(row => ({ ...row, companyName: universe.get(row.symbol) || null, detection: detection.get(String(row.symbol || '').toUpperCase()) || null }));
+  const addNames = rows => rows.map(row => ({ ...row, companyName: universe.get(row.symbol) || null, indexMembership: indexUniverses ? membershipFor(row.symbol, indexUniverses.memberships) : null, detection: detection.get(String(row.symbol || '').toUpperCase()) || null }));
   const tradingDays = history.map(day => day.tradeDate).filter(Boolean);
-  const snapshot = { status: 'ok', dataStatus: 'EOD VERIFIED', asOf: latest.tradeDate, generatedAt: new Date().toISOString(), source: 'NSE EOD public archives', universeSource: NSE_EQUITY_UNIVERSE, historyDays: history.length, tradingDays, results: addNames(currentResults), periods: Object.fromEntries(Object.entries(materialized.periods).map(([key, rows]) => [key, addNames(rows)])) };
+  const snapshot = { status: 'ok', dataStatus: 'EOD VERIFIED', asOf: latest.tradeDate, generatedAt: new Date().toISOString(), source: 'NSE EOD public archives', universeSource: NSE_EQUITY_UNIVERSE, indexUniverseStatus: indexUniverses?.status || 'DATA N/A', indexUniverseSources: indexUniverses?.sources || {}, historyDays: history.length, tradingDays, results: addNames(currentResults), periods: Object.fromEntries(Object.entries(materialized.periods).map(([key, rows]) => [key, addNames(rows)])) };
   fs.mkdirSync(DATA_DIR, { recursive: true }); fs.writeFileSync(SNAPSHOT_FILE, `${JSON.stringify(snapshot)}\n`); console.log(`SNAPSHOT ${latest.tradeDate}: ${currentResults.length} current-date symbols from ${history.length} stored trading-day snapshot(s); confirmed streaks: ${detection.size}`);
 }
 if (require.main === module) main().catch(error => { console.error(error); process.exit(1); });
