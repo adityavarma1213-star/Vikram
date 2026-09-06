@@ -3,15 +3,6 @@
   const isStaticPages = !API_BASE && /github\.io$/i.test(root.location.hostname);
   let snapshotPromise;
 
-  const whyLayoutStyle = document.createElement('style');
-  whyLayoutStyle.id = 'vikram-why-layout-fix';
-  whyLayoutStyle.textContent = `
-    .metric-table th:nth-child(11), .metric-table td:nth-child(11) { position:sticky!important; right:0!important; width:25%!important; min-width:0!important; max-width:25%!important; white-space:normal!important; overflow-wrap:anywhere!important; }
-    .metric-table thead th:nth-child(11) { z-index:1001!important; background:#182038!important; box-shadow:-6px 0 12px rgba(0,0,0,.25),0 2px 0 var(--border-color)!important; }
-    .metric-table tbody td:nth-child(11) { z-index:10!important; background:var(--bg-secondary)!important; line-height:1.3!important; padding:8px 10px!important; }
-  `;
-  document.head.appendChild(whyLayoutStyle);
-
   async function request(path, options) {
     const res = await fetch(`${API_BASE}${path}`, { headers: { Accept: 'application/json' }, ...options });
     const body = await res.json().catch(() => ({}));
@@ -37,7 +28,7 @@
   // Keep the filter interaction deliberately simple: one click, one choice, no Apply button.
   window.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{
     const table=document.querySelector('.metric-table'); if(!table) return;
-    const tbody=table.tBodies[0]; const buttons=[...document.querySelectorAll('.filter-trigger')]; let menu=null; let priceOrder=null; let verdict=null;
+    const tbody=table.tBodies[0]; const buttons=[...document.querySelectorAll('.filter-trigger')]; let menu=null; let priceOrder=null; let verdict='';
     const close=()=>{if(menu){menu.remove();menu=null;}};
     const sortPrice=dir=>{priceOrder=dir;const rows=[...tbody.rows];rows.sort((a,b)=>{const av=parseFloat((a.cells[1]?.textContent||'').replace(/,/g,'')),bv=parseFloat((b.cells[1]?.textContent||'').replace(/,/g,''));if(!Number.isFinite(av))return 1;if(!Number.isFinite(bv))return-1;return dir==='asc'?av-bv:bv-av;});rows.forEach(r=>tbody.appendChild(r));};
     const applyVerdict=value=>{verdict=value;[...tbody.rows].forEach(r=>{const text=(r.cells[5]?.textContent||'').trim();r.style.display=!value||text===value?'':'none';});};
@@ -47,7 +38,7 @@
       if(key==='price') options=[['All','all'],['Price: Low to High','asc'],['Price: High to Low','desc']];
       else if(key==='verdict') options=[['All','all'],['Accumulation Confirmed','ACCUMULATION CONFIRMED'],['Accumulation Starting','ACCUMULATION STARTING'],['Unconfirmed / Mixed','UNCONFIRMED / MIXED'],['Distribution','DISTRIBUTION']];
       else options=[['All','all']];
-      options.forEach(([label,value])=>{const item=document.createElement('button');item.type='button';item.textContent=label;item.addEventListener('click',()=>{close();if(key==='price'){if(value==='all')priceOrder=null;else sortPrice(value);}else if(key==='verdict'){if(value==='all')applyVerdict('');else applyVerdict(value);}});menu.appendChild(item);});
+      options.forEach(([label,value])=>{const item=document.createElement('button');item.type='button';item.textContent=label;item.addEventListener('click',()=>{close();if(key==='price'){if(value==='all'){priceOrder=null;}else sortPrice(value);}else if(key==='verdict'){applyVerdict(value==='all'?'':value);}});menu.appendChild(item);});
       const rect=button.getBoundingClientRect();menu.style.top=`${Math.min(rect.bottom+4,window.innerHeight-190)}px`;menu.style.left=`${Math.max(8,Math.min(rect.left,window.innerWidth-220))}px`;document.body.appendChild(menu);
     };
     buttons.forEach(button=>button.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();open(button,button.dataset.key);},true));
