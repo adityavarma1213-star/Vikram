@@ -1,0 +1,1 @@
+ACTIVE EXECUTION STANDARD: VIKRAM Extreme Strict Mode. Do not declare completion without end-to-end evidence. Continue all achievable implementation, testing, verification, deployment and audit work until mandatory release gates pass or a genuine external blocker remains. No fabricated market data, no sample production paths, and no intermediate confirmation requests.
