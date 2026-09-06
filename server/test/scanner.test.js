@@ -11,14 +11,14 @@ const history = [
   row('2026-08-21', 102, 102, 1150, 44, 500), row('2026-08-24', 103, 102, 1200, 45, 540),
   row('2026-08-25', 103, 103, 1180, 46, 545), row('2026-08-26', 104, 103, 1250, 47, 590),
   row('2026-08-27', 104, 104, 1300, 48, 620), row('2026-08-28', 105, 104, 1400, 50, 700),
-  row('2026-09-01', 106, 105, 2000, 58, 1160)
+  row('2026-09-01', 110, 105, 5000, 60, 3000, 600000000)
 ];
-const fno = { available: true, trade_date: '2026-09-01', oi: 100000, change_oi: 7000 };
+const fno = { available: true, trade_date: '2026-09-01', oi: 100000, change_oi: 7000, oiTrend3Day: 12000 };
 
 const confirmed = evaluate('TEST', history, fno);
 assert.equal(confirmed.verdict, 'ACCUMULATION CONFIRMED');
 assert.equal(confirmed.metrics.oiExactDate, true);
-assert.equal(confirmed.metrics.deliveryQty, 1160);
+assert.equal(confirmed.metrics.deliveryQty, 3000);
 assert.ok(confirmed.score >= 75);
 
 const postgresHistory = history.map(r => ({ ...r, trade_date: new Date(`${r.trade_date}T00:00:00Z`) }));
@@ -42,8 +42,7 @@ assert.equal(missingOi.metrics.futuresOi, null);
 assert.equal(missingOi.metrics.changeOi, null);
 assert.equal(missingOi.metrics.hasDerivatives, false);
 
-// Falling OI removes the OI pillar but 3/4 still qualifies under the statutory F&O quorum.
-const negativeOi = evaluate('TEST', history, { ...fno, change_oi: -7000 });
+const negativeOi = evaluate('TEST', history, { ...fno, change_oi: -7000, oiTrend3Day: -9000 });
 assert.equal(negativeOi.metrics.changeOi, -7000);
 assert.ok(negativeOi.score < confirmed.score);
 assert.equal(negativeOi.confirmation.pillars.passed, 3);
