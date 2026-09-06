@@ -1,5 +1,5 @@
-const CACHE='vikram-v10';
-const CORE=['./','./index.html','./accumulation.html','./scanner.html','./alerts.html','./about.html','./css/style.css','./css/accumulation.css','./css/scanner.css','./js/app.js','./js/search.js','./js/dataEngine.js','./js/ruleBuilderUI.js','./js/alertsUI.js','./accumulation/api.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
+const CACHE='vikram-v11';
+const CORE=['./','./index.html','./accumulation.html','./scanner.html','./alerts.html','./about.html','./css/style.css','./css/themes.css','./css/accumulation.css','./css/scanner.css','./js/app.js','./js/themeEngine.js','./js/search.js','./js/dataEngine.js','./js/ruleBuilderUI.js','./js/alertsUI.js','./accumulation/api.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==CACHE).map(x=>caches.delete(x)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(u.pathname.includes('/api/')||u.pathname.endsWith('/data/scanner.json'))return;if(e.request.method!=='GET')return;if(u.pathname.endsWith('.html')||u.pathname.endsWith('/')){e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return r}).catch(()=>caches.match(e.request)));return}e.respondWith(caches.match(e.request).then(c=>c||fetch(e.request)));});
