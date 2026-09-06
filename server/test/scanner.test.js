@@ -62,7 +62,7 @@ assert.ok(deliveryTrend.metrics.deliveryTrend > 0);
 const shortHistory = history.slice(-5);
 const insufficient = evaluate('TEST', shortHistory, { trade_date: '2026-09-01', oi: 100000, change_oi: 7000 });
 assert.notEqual(insufficient.verdict, 'ACCUMULATION CONFIRMED');
-assert.match(insufficient.why.join(' '), /requires at least 10/);
+assert.match(insufficient.why.join(' '), /history is shorter than 10 sessions/);
 
 const empty = evaluate('TEST', [], null);
 assert.equal(empty.score, null);
