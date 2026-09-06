@@ -37,6 +37,8 @@ if 'function renderScannerMeta' not in text:
     text = text.replace(marker, repl, 1)
 text = text.replace("rows = Array.isArray(snapshot.results) ? snapshot.results : []; render();", "rows = Array.isArray(snapshot.results) ? snapshot.results : []; renderScannerMeta(snapshot.asOf); render();", 1)
 text = text.replace("body.innerHTML = '<tr><td colspan=\"9\" class=\"empty-cell\">Verified scanner snapshot unavailable. No market values are being estimated.</td></tr>';", "body.innerHTML = '<tr><td colspan=\"9\" class=\"empty-cell\">Verified scanner snapshot unavailable. No market values are being estimated.</td></tr>'; renderScannerMeta(null);", 1)
+# Important: the scanner must expose the complete verified universe, not an arbitrary first-40 slice.
+text = text.replace("}).slice(0, 40);", "});", 1)
 mobile_marker = '@media(max-width:760px){'
 if '@media(max-width:1100px)' not in text and mobile_marker in text:
     mobile = '@media(max-width:1100px){.scanner-table{min-width:760px;table-layout:auto}.scanner-table th,.scanner-table td{white-space:nowrap}.scanner-table-wrap{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable}}\n'
@@ -45,3 +47,4 @@ index.write_text(text, encoding='utf-8')
 (ROOT / 'accumulation.html').unlink(missing_ok=True)
 assert '.scanner-table{width:100%;min-width:0;table-layout:fixed' in text
 assert 'scanner-meta' in text
+assert "}).slice(0, 40);" not in text
