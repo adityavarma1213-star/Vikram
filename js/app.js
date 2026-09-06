@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (document.getElementById('vikramSegmentFilterStyles')) return;
     const style = document.createElement('style');
     style.id = 'vikramSegmentFilterStyles';
-    style.textContent = '.vikram-segment-filters{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:13px 0 8px}.vikram-segment-pill{border:1px solid var(--border-subtle);background:var(--bg-card-2);color:var(--text-muted);border-radius:999px;padding:8px 12px;font-size:10px;font-weight:900;cursor:pointer}.vikram-segment-pill:hover,.vikram-segment-pill.active{border-color:var(--accent-cyan);color:var(--accent-cyan);background:var(--bg-card)}.vikram-market-news{padding:22px;border:1px dashed var(--border-subtle);border-radius:12px;color:var(--text-muted);line-height:1.6;font-size:11px}.vikram-tab-hidden{display:none!important}';
+    style.textContent = '.vikram-segment-filters{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:0}.vikram-segment-pill{border:1px solid var(--border-subtle);background:var(--bg-card-2);color:var(--text-muted);border-radius:9px;padding:8px 12px;font-size:10px;font-weight:900;cursor:pointer;height:34px;white-space:nowrap}.vikram-segment-pill:hover,.vikram-segment-pill.active{border-color:var(--accent-cyan);color:var(--accent-cyan);background:var(--bg-card)}.vikram-market-news{padding:22px;border:1px dashed var(--border-subtle);border-radius:12px;color:var(--text-muted);line-height:1.6;font-size:11px}.vikram-tab-hidden{display:none!important}';
     document.head.appendChild(style);
   };
 
@@ -107,6 +107,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const filterControls = surface.querySelector('.filter-controls');
     if (!filterControls) return;
+
+    const universeSelect = filterControls.querySelector('#universeFilter');
+    if (universeSelect) {
+      universeSelect.hidden = true;
+      universeSelect.setAttribute('aria-hidden', 'true');
+      universeSelect.tabIndex = -1;
+    }
 
     let segmentBar = surface.querySelector('.vikram-segment-filters');
     if (!segmentBar) {
@@ -120,21 +127,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         button.className = `vikram-segment-pill${value === 'ALL' ? ' active' : ''}`;
         button.dataset.segment = value;
         button.setAttribute('role', 'tab');
+        button.setAttribute('aria-selected', value === 'ALL' ? 'true' : 'false');
         button.textContent = label;
         segmentBar.appendChild(button);
       });
-      filterControls.parentNode.insertBefore(segmentBar, filterControls);
+      filterControls.insertBefore(segmentBar, filterControls.firstChild);
     }
 
     let snapshot = await getScannerSnapshot();
-    let rowsBySymbol = new Map();
-    const rebuildRowMap = () => {
-      rowsBySymbol = new Map();
-      surface.querySelectorAll('.scanner-table tbody tr').forEach(row => {
-        const symbol = normalizeSymbol(row.dataset.symbol || row.querySelector('td')?.textContent);
-        if (symbol) rowsBySymbol.set(symbol, row);
-      });
-    };
 
     const newsId = 'vikramMarketNewsSurface';
     let newsSurface = document.getElementById(newsId);
@@ -151,7 +151,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     let activeTab = 'Top Opportunities';
 
     const applyFilters = () => {
-      rebuildRowMap();
       const watchlist = readStoredSymbols('vikram_watchlist');
       const portfolio = readStoredSymbols('vikram_portfolio');
       const resultMap = new Map((snapshot?.results || []).map(item => [normalizeSymbol(item.symbol || item.ticker || item.stock), item]));
@@ -184,7 +183,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       const button = event.target.closest('.vikram-segment-pill');
       if (!button) return;
       activeSegment = button.dataset.segment || 'ALL';
-      segmentBar.querySelectorAll('.vikram-segment-pill').forEach(pill => pill.classList.toggle('active', pill === button));
+      segmentBar.querySelectorAll('.vikram-segment-pill').forEach(pill => {
+        const active = pill === button;
+        pill.classList.toggle('active', active);
+        pill.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      if (universeSelect) {
+        universeSelect.value = activeSegment;
+        universeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      }
       applyFilters();
     });
 
