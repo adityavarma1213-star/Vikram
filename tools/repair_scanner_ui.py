@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 ROOT = Path(__file__).resolve().parents[1]
 index = ROOT / 'index.html'
@@ -36,15 +37,13 @@ if 'function renderScannerMeta' not in text:
     repl = marker + "\n  const dataDateEl = document.getElementById('scannerDataDate');\n  const dataAgeEl = document.getElementById('scannerDataAge');\n  function renderScannerMeta(asOf) {\n    if (!dataDateEl || !dataAgeEl) return;\n    if (!asOf) { dataDateEl.textContent = 'N/A'; dataAgeEl.textContent = 'N/A'; return; }\n    const asOfDate = new Date(`${asOf}T00:00:00Z`);\n    if (Number.isNaN(asOfDate.getTime())) { dataDateEl.textContent = 'N/A'; dataAgeEl.textContent = 'N/A'; return; }\n    dataDateEl.textContent = asOfDate.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' });\n    const diffDays = Math.floor((Date.now() - asOfDate.getTime()) / 86400000);\n    dataAgeEl.textContent = diffDays <= 0 ? 'Today (EOD verified)' : diffDays === 1 ? '1 day old' : `${diffDays} days old`;\n  }"
     text = text.replace(marker, repl, 1)
 text = text.replace("rows = Array.isArray(snapshot.results) ? snapshot.results : []; render();", "rows = Array.isArray(snapshot.results) ? snapshot.results : []; renderScannerMeta(snapshot.asOf); render();", 1)
-text = text.replace("body.innerHTML = '<tr><td colspan=\"9\" class=\"empty-cell\">Verified scanner snapshot unavailable. No market values are being estimated.</td></tr>';", "body.innerHTML = '<tr><td colspan=\"9\" class=\"empty-cell\">Verified scanner snapshot unavailable. No market values are being estimated.</td></tr>'; renderScannerMeta(null);", 1)
-# Important: the scanner must expose the complete verified universe, not an arbitrary first-40 slice.
+# Normalize the error branch so repeated repair runs cannot duplicate the metadata call.
+text = re.sub(r'(body\.innerHTML = \'<tr><td colspan=\\"9\\" class=\\"empty-cell\\">Verified scanner snapshot unavailable\. No market values are being estimated\.</td></tr>\';)(?:\s*renderScannerMeta\(null\);)+', r'\1 renderScannerMeta(null);', text)
 text = text.replace("}).slice(0, 40);", "});", 1)
 mobile_marker = '@media(max-width:760px){'
 if '@media(max-width:1100px)' not in text and mobile_marker in text:
     mobile = '@media(max-width:1100px){.scanner-table{min-width:760px;table-layout:auto}.scanner-table th,.scanner-table td{white-space:nowrap}.scanner-table-wrap{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable}}\n'
     text = text.replace(mobile_marker, mobile + mobile_marker, 1)
-# Deterministic fallback renderer for the two discovery surfaces. It runs after the page is built and
-# consumes only the same verified scanner snapshot; it does not change scanner scoring or the matrix.
 script_tag = '<script src="js/discoveryRepair.js"></script>'
 if script_tag not in text:
     text = text.replace('</body>', f'{script_tag}\n</body>', 1)
