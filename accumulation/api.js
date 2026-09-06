@@ -49,11 +49,6 @@
       });
       rows.forEach(r=>tbody.appendChild(r));
     }
-    function sortSymbols(direction){
-      const rows=[...tbody.rows];
-      rows.sort((a,b)=>direction==='asc'?symbol(a).localeCompare(symbol(b)):symbol(b).localeCompare(symbol(a)));
-      rows.forEach(r=>tbody.appendChild(r));
-    }
     function apply(){
       [...tbody.rows].forEach(row=>{
         let visible=true;
@@ -80,12 +75,44 @@
       return [['All','all']];
     }
     function open(button,key){
-      close();menu=document.createElement('div');menu.className='simple-filter-menu';
-      optionsFor(key).forEach(([label,value])=>{const item=document.createElement('button');item.type='button';item.textContent=label;item.addEventListener('click',()=>{close();if(value==='all'){delete state[key];apply();return;}if(value==='sort-asc'||value==='sort-desc'){delete state[key];apply();sortRows(1,value==='sort-asc'?'asc':'desc');return;}state[key]=value;apply();});menu.appendChild(item);});
-      const rect=button.getBoundingClientRect();document.body.appendChild(menu);const width=menu.offsetWidth||210,height=menu.offsetHeight||180;menu.style.left=`${Math.max(8,Math.min(rect.left,window.innerWidth-width-8))}px`;menu.style.top=`${Math.max(8,Math.min(rect.bottom+4,window.innerHeight-height-8))}px`;
+      close();
+      menu=document.createElement('div');
+      menu.className='simple-filter-menu';
+      optionsFor(key).forEach(([label,value])=>{
+        const item=document.createElement('button');
+        item.type='button';
+        item.textContent=label;
+        item.addEventListener('click',()=>{
+          if(value==='all') delete state[key];
+          else if(value==='sort-asc'||value==='sort-desc') delete state[key];
+          else state[key]=value;
+          close();
+          if(value==='sort-asc'||value==='sort-desc') sortRows(1,value==='sort-asc'?'asc':'desc');
+          apply();
+        });
+        menu.appendChild(item);
+      });
+      document.body.appendChild(menu);
+      const rect=button.getBoundingClientRect();
+      const width=menu.offsetWidth||210;
+      const height=menu.offsetHeight||180;
+      menu.style.left=`${Math.max(8,Math.min(rect.left,window.innerWidth-width-8))}px`;
+      menu.style.top=`${Math.max(8,Math.min(rect.bottom+4,window.innerHeight-height-8))}px`;
     }
-    buttons.forEach(button=>button.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();open(button,button.dataset.key);},true));
-    document.addEventListener('click',close,true);
+
+    // Capture only on the filter buttons so the old inline filter handlers cannot replace this simple menu.
+    buttons.forEach(button=>button.addEventListener('click',e=>{
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      open(button,button.dataset.key);
+    },true));
+
+    // Bubble-phase outside-click handler. Capture-phase here would immediately close a menu
+    // after a button opens it because the document receives the event before the target.
+    document.addEventListener('click',e=>{
+      if(menu && !e.target.closest('.simple-filter-menu') && !e.target.closest('.filter-trigger')) close();
+    });
+
     document.getElementById('clearFilters')?.addEventListener('click',reset);
   },0));
 })(window);
