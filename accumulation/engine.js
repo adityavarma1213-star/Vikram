@@ -127,6 +127,7 @@
     if (deliveryPct === null) why.push('Delivery data is unavailable.');
     if (volumeRatio === null) why.push('Volume history is insufficient for a reliable ratio.');
     if (!enoughHistory) why.push('Historical window is shorter than the preferred confirmation window.');
+    if (!history.length) why.push('No verified EOD history is available.');
 
     return {
       symbol: String(input.symbol || current.symbol || '').toUpperCase(), tradeDate: current.trade_date || null,
