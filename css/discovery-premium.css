@@ -1,0 +1,163 @@
+/* VIKRAM Discovery UI — Hidden Gems + Opportunity Radar */
+:root{
+  --discovery-bg:#f7f9fc;
+  --discovery-card:#ffffff;
+  --discovery-ink:#152033;
+  --discovery-muted:#718096;
+  --discovery-line:#e7ebf2;
+  --discovery-accent:#315efb;
+  --discovery-soft:#eef3ff;
+  --discovery-positive:#138a5b;
+  --discovery-negative:#c93b3b;
+  --discovery-warn:#b97800;
+}
+
+/* Only the two discovery modules are redesigned; the rest of VIKRAM is untouched. */
+#hiddenGemsPreview,
+#opportunityRadar{
+  max-width:1480px;
+  margin:0 auto;
+  padding:26px 28px 54px;
+  color:var(--discovery-ink);
+}
+#hiddenGemsPreview .dashboard-card,
+#opportunityRadar .dashboard-card{
+  background:var(--discovery-bg);
+  border:0;
+  border-radius:22px;
+  box-shadow:none;
+  padding:0;
+}
+#hiddenGemsPreview .card-headline,
+#opportunityRadar .card-headline{
+  font-size:30px;
+  line-height:1.15;
+  letter-spacing:-.7px;
+  margin:0 0 7px;
+  color:var(--discovery-ink);
+}
+#hiddenGemsPreview .text-muted,
+#opportunityRadar .text-muted{
+  color:var(--discovery-muted);
+  font-size:14px;
+  margin:0 0 18px;
+}
+
+/* Give the generated table a premium app-like frame. */
+#hiddenGemsPreview .hidden-gems-table-container,
+#opportunityRadar .table-container{
+  background:var(--discovery-card);
+  border:1px solid var(--discovery-line);
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(35,50,80,.07);
+  overflow:auto;
+  max-height:calc(100vh - 190px);
+}
+#hiddenGemsPreview .hidden-gems-table,
+#opportunityRadar .metric-table{
+  border-collapse:separate;
+  border-spacing:0;
+  width:100%;
+  min-width:1040px;
+  color:var(--discovery-ink);
+  font-size:14px;
+}
+#hiddenGemsPreview .hidden-gems-table thead th,
+#opportunityRadar .metric-table thead th{
+  position:sticky!important;
+  top:0!important;
+  z-index:30!important;
+  background:#f5f7fb!important;
+  color:#647089!important;
+  border-bottom:1px solid var(--discovery-line)!important;
+  padding:0!important;
+  height:50px;
+  font-size:11px;
+  letter-spacing:.7px;
+  font-weight:800;
+  text-transform:uppercase;
+}
+#hiddenGemsPreview .hidden-gems-table tbody td,
+#opportunityRadar .metric-table tbody td{
+  background:#fff!important;
+  color:var(--discovery-ink);
+  border-bottom:1px solid #edf0f5;
+  padding:13px 14px;
+  height:50px;
+  line-height:1.25;
+  vertical-align:middle;
+}
+#hiddenGemsPreview .hidden-gems-table tbody tr:hover td,
+#opportunityRadar .metric-table tbody tr:hover td{
+  background:#f8faff!important;
+}
+#hiddenGemsPreview .hidden-gems-table tbody tr:last-child td,
+#opportunityRadar .metric-table tbody tr:last-child td{border-bottom:0}
+
+/* Make the primary stock identifier visually obvious. */
+#hiddenGemsPreview .hidden-gems-table tbody td:nth-child(2),
+#opportunityRadar .metric-table tbody td:nth-child(2){font-weight:800;font-size:14px}
+#hiddenGemsPreview .hidden-gems-table tbody td:nth-child(3),
+#opportunityRadar .metric-table tbody td:nth-child(3){font-weight:750}
+
+/* Simple, quiet filter controls — no intimidating forms. */
+#hiddenGemsPreview .hg-filter,
+#opportunityRadar .filter-trigger{
+  appearance:none;
+  width:100%;
+  min-height:50px;
+  border:0!important;
+  background:transparent!important;
+  color:#647089!important;
+  padding:0 12px!important;
+  font-size:11px!important;
+  font-weight:800!important;
+  letter-spacing:.6px;
+  text-align:left;
+  cursor:pointer;
+}
+#hiddenGemsPreview .hg-filter:hover,
+#hiddenGemsPreview .hg-filter.active,
+#opportunityRadar .filter-trigger:hover{
+  background:var(--discovery-soft)!important;
+  color:var(--discovery-accent)!important;
+}
+#hiddenGemsPreview .hg-filter::after,
+#opportunityRadar .filter-trigger::after{
+  content:'⌄';
+  float:right;
+  font-size:14px;
+  color:#98a2b3;
+}
+#hiddenGemsPreview .hg-menu,
+#opportunityRadar .simple-filter-menu{
+  background:#fff!important;
+  color:var(--discovery-ink)!important;
+  border:1px solid var(--discovery-line)!important;
+  border-radius:12px!important;
+  box-shadow:0 18px 40px rgba(25,40,70,.16)!important;
+  padding:6px!important;
+}
+#hiddenGemsPreview .hg-menu button,
+#opportunityRadar .simple-filter-menu button{
+  color:var(--discovery-ink)!important;
+  border-radius:8px!important;
+  padding:10px 12px!important;
+  font-size:13px!important;
+  background:#fff!important;
+}
+#hiddenGemsPreview .hg-menu button:hover,
+#opportunityRadar .simple-filter-menu button:hover{background:#f1f5ff!important;color:var(--discovery-accent)!important}
+
+/* Friendly verdict pills. */
+#hiddenGemsPreview .hidden-gems-table tbody td:last-child,
+#opportunityRadar .metric-table tbody td:nth-last-child(2){font-weight:750}
+#hiddenGemsPreview .hidden-gems-table tbody td:last-child,
+#opportunityRadar .metric-table tbody td:nth-last-child(2){color:var(--discovery-positive)}
+
+@media(max-width:800px){
+  #hiddenGemsPreview,#opportunityRadar{padding:18px 12px 36px}
+  #hiddenGemsPreview .card-headline,#opportunityRadar .card-headline{font-size:24px}
+  #hiddenGemsPreview .hidden-gems-table-container,#opportunityRadar .table-container{max-height:calc(100vh - 170px);border-radius:13px}
+  #hiddenGemsPreview .hidden-gems-table tbody td,#opportunityRadar .metric-table tbody td{padding:11px 10px;height:46px}
+}
