@@ -1,0 +1,1 @@
+document.addEventListener('DOMContentLoaded',()=>{const box=document.getElementById('portfolio');if(!box)return;box.innerHTML='<div class="dashboard-card"><h2 class="card-headline">Portfolio</h2><p class="text-muted">Portfolio tracking is browser-local. Current market value will remain N/A until a verified market snapshot is available.</p></div>';});
