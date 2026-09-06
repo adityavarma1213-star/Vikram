@@ -45,6 +45,7 @@ function evaluate(symbol, history, futures) {
   const normalizedScore = availableWeight ? (score / availableWeight) * 100 : null; const hasConfirmedInputs = volumeRatio !== null && deliveryPct !== null && futuresOi !== null && changeOi !== null; const sufficientHistory = rows.length >= CFG.minConfirmedHistory;
   let verdict = 'UNCONFIRMED / MIXED'; if (normalizedScore !== null && normalizedScore >= CFG.confirmed && sufficientHistory && hasConfirmedInputs) verdict = 'ACCUMULATION CONFIRMED'; else if (normalizedScore !== null && normalizedScore >= CFG.starting && ((priceChangePct !== null && Math.abs(priceChangePct) <= CFG.flatPricePct && changeOi !== null && changeOi > 0) || (volumeRatio !== null && volumeRatio >= CFG.volumeElevated))) verdict = 'ACCUMULATION STARTING'; else if (normalizedScore !== null && normalizedScore < CFG.mixed) verdict = 'DISTRIBUTION';
   if (!sufficientHistory) why.push(`Only ${rows.length} historical rows are available; confirmed accumulation requires at least ${CFG.minConfirmedHistory}.`);
+  if (!rows.length) why.push('No verified EOD history is available.');
   return { symbol, tradeDate: dateKey(current.trade_date), score: normalizedScore === null ? null : Math.round(normalizedScore), verdict, metrics: { close, prevClose, priceChangePct, volume, avgVolume, volumeRatio, deliveryPct, deliveryQty, deliveryTrend, obv: obvValues.length ? obv : null, obvTrend, futuresOi, changeOi, oiExactDate: !!exactFutures }, technical: technical(rows), financial: null, why };
 }
 module.exports = { evaluate, CFG, dateKey, technical };
