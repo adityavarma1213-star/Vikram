@@ -1,63 +1,118 @@
 # VIKRAM Improvement Roadmap
 
-_Last updated: 16 July 2026_
+_Last updated: 06 September 2026_
 
-This is the real, honest state of VIKRAM — not aspirational. Every item below reflects what's actually true in the codebase today.
+This is the real, honest state of VIKRAM — not aspirational. Every item below reflects what is actually true in the codebase or what is explicitly required for the next development gate.
 
 ---
 
 ## ✅ Done and Working
 
-- Search → 5 pillars → honest verdict pipeline (engine.js → frameworkEngine.js → scoreEngine.js → ui.js)
-- Five pillars, all real formulas: Technical, Fundamental, Institutional, Valuation, Risk, News
-- 80% confidence governance rule — a pillar with no real data is excluded from the score, not faked
-- Technical/Institutional correlation dampening — stops one signal being counted twice
-- Real FII/DII institutional data for 5 stocks (sourced, dated, confidence-labeled)
-- Opportunity Radar — ranks all stocks in the database by real score
-- Hidden Gems — smaller-cap stocks with strong scores (honest about "relative to your database" limit)
-- Explainability Engine — plain-language reasoning naming strongest/weakest pillar
-- Master Verdict Subsystem — Long-Term vs Short-Term score split
-- `analysis.html` fixed (was broken, unused, now working if needed)
+- Search → honest research pipeline
+- Modern VIKRAM UI foundation
+- Accumulation Scanner foundation with price, volume, delivery, OBV and Futures OI where applicable
+- Data freshness/status handling
+- Opportunity Radar and Hidden Gems UI/data-engine integration work
+- VIKRAM Lite official-file workflow foundation
+- Detection-history requirement defined for Accumulation, Hidden Gems and Opportunity Radar
 
 ---
 
-## 🔧 Needs Real Coding (not started)
+## 🔧 Current Development Priorities
 
-| Task | Notes |
-|---|---|
-| Sector-specific Fundamental rules | Banks/IT/Auto likely need different ROE/growth benchmarks than one flat rule |
-| Portfolio Tracker | Buy price, quantity, live P/L, VIKRAM grade per holding — proposed, never built |
-| Kite Connect live data wiring | Requires the ₹500/month paid plan first |
-| `about.html`, `portfolio.html`, `scanner.html` | Currently empty (0 KB) |
-
----
-
-## 📊 Needs Your Data, Not Code
-
-| Task | What's needed |
-|---|---|
-| Real Fundamental thresholds | Your actual Excel ROE/D-E/growth cutoffs (currently using reasonable industry defaults) |
-| More stocks in database | Currently only 5 (CDSL, NEWGEN, TCS, RELIANCE, INFY) |
-| FII/DII change direction | Real quarter-over-quarter data (currently neutral/unknown) |
+| Priority | Task | Requirement |
+|---|---|---|
+| 1 | Full NSE universe | Prove genuine full supported universe and historical coverage |
+| 2 | Index universe selector | Add Nifty 50 / Nifty 200 / Nifty 500 / All Stocks selection to scanners |
+| 3 | Detection history | Calculate and display Caught for X trading days + Since date |
+| 4 | Hidden Gems | Full-universe proof + independent detection streak |
+| 5 | Opportunity Radar | Full-universe proof + independent detection streak |
+| 6 | Option B | Independently verify rule builder and scanner API |
+| 7 | VIKRAM Lite | Complete official-file download/import/update workflow |
+| 8 | Automation | Automate EOD ingestion, scans and detection history |
 
 ---
 
-## Core Principle (do not compromise on this)
+## 📊 Index Universe Selection — NEW
 
-VIKRAM says "I don't know" when it doesn't know, instead of guessing. Every future feature should follow this same rule — no fake confidence, no invented numbers presented as real.
+All major stock-scanning pages must have a simple beginner-friendly universe selector.
+
+### User-selectable universes
+
+- **ALL STOCKS** — all stocks in VIKRAM's validated supported universe
+- **NIFTY 50** — scan only current/effective Nifty 50 constituents for the selected EOD date
+- **NIFTY 200** — scan only Nifty 200 constituents
+- **NIFTY 500** — scan only Nifty 500 constituents
+
+The user should be able to click the choice directly, for example:
+
+`ALL STOCKS | NIFTY 50 | NIFTY 200 | NIFTY 500`
+
+No Apply button should be required for this simple selector; changing the selection should immediately refresh the displayed scan results.
+
+### Applies to
+
+- Accumulation Scanner
+- Hidden Gems
+- Opportunity Radar
+- Option B Rule Builder / Scanner
+- Future scanner presets and alerts where a universe is part of the saved scan
+
+### Data integrity rule
+
+Index membership must come from a validated constituent dataset. Historical scans must use the constituent set effective on the relevant historical EOD date; VIKRAM must not silently use today's constituents to create false historical results.
+
+The selected universe must be stored with scan results and saved scans so that a result can always be understood in context.
+
+Example:
+
+> NIFTY 200 • EOD VERIFIED • 05 Sep 2026 • 200 constituents checked
+
+If a constituent list is unavailable or unverified, the selector must not pretend the universe was scanned. Show `DATA N/A` instead.
 
 ---
 
-## Single Canonical Rating Scale (do not duplicate elsewhere)
+## 🕒 Detection History / Streaks
 
-This is the ONLY rating scale VIKRAM uses, as implemented in `scoreEngine.js`. Any other document (including old pasted blueprints from past chats) showing a different scale is outdated — this is the real one:
+For Accumulation, Hidden Gems and Opportunity Radar:
 
-| Score | Rating |
-|---|---|
-| 90-100 | STRONG BUY |
-| 75-89 | BUY |
-| 60-74 | HOLD |
-| 40-59 | REDUCE |
-| 0-39 | AVOID |
+- first detected date
+- latest detected date
+- consecutive detected trading days
+- New Today state
+- streak reset after a failed qualifying session
+- re-qualification starts a new streak
+- trading sessions, not calendar days
+- missing/invalid data cannot extend a streak
 
-If a score cannot be computed (no pillar meets the confidence threshold), rating is `INSUFFICIENT DATA` — never a guessed grade.
+---
+
+## 🛡️ Core Principle
+
+VIKRAM says "I don't know" when it does not know, instead of guessing. No fake confidence, invented numbers, fabricated history, or synthetic scanner matches.
+
+---
+
+## 🚀 Later Gates
+
+### Automated alerts
+
+Scanner → new match/streak change → alert engine → preferences → email/push.
+
+### Subscriptions
+
+Free / PRO / PRO+ access control with real server-side payment verification before charging users.
+
+### Live infrastructure
+
+Authorized live provider → secure backend → timestamped live data → live scans/alerts.
+
+### Strategy Lab
+
+No-code strategy builder and validated backtesting after sufficient historical data exists.
+
+---
+
+## Final Release Rule
+
+Do not declare VIKRAM complete from code existence alone. A release requires validated data, tests, automation, deployment and production verification.
