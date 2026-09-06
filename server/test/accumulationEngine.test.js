@@ -37,8 +37,10 @@ assert.notEqual(negativeOiResult.verdict, 'ACCUMULATION CONFIRMED');
 assert.ok(negativeOiResult.confirmation.gateFailures.includes('exact-date futures OI is not increasing'));
 
 const fallingObvHistory = base.map((r, i) => {
-  if (i === base.length - 2) return { ...r, close: 110, prev_close: 105, volume: 5000 };
-  if (i === base.length - 1) return { ...r, close: 111, prev_close: 110, volume: 2000, deliv_per: 58 };
+  // The engine derives OBV direction from each row's close versus the prior row's
+  // actual close. These final rows therefore need genuinely falling closes.
+  if (i === base.length - 2) return { ...r, close: 108, prev_close: r.close, volume: 4000 };
+  if (i === base.length - 1) return { ...r, close: 100, prev_close: 108, volume: 6000, deliv_per: 58 };
   return r;
 });
 const fallingObvResult = evaluate({ symbol: 'OBVFAIL', history: fallingObvHistory, current: fallingObvHistory.at(-1), futures });
