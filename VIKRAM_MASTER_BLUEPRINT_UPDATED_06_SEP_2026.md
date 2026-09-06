@@ -2,7 +2,7 @@
 
 ## 1. Product Vision
 
-VIKRAM is an Indian stock-market intelligence platform built around trustworthy NSE data, explainable research, rule-based scanning, accumulation intelligence, hidden-gem discovery, opportunity discovery, VIKRAM Lite official-file workflows, subscriptions, and future live-market/alert infrastructure.
+VIKRAM is an Indian stock-market intelligence platform built around trustworthy NSE data, explainable research, rule-based scanning, accumulation intelligence, hidden-gem discovery, opportunity discovery, VIKRAM Lite official-file workflows, subscriptions, themes, detection-history intelligence, and future live-market/alert infrastructure.
 
 ### Governing principle
 
@@ -68,9 +68,64 @@ Rules:
 
 ---
 
-## 4. Historical Detection / Streak Intelligence — NEW
+## 4. Scanner Universe Selection — ALL STOCKS / NIFTY 50 / NIFTY 200 / NIFTY 500
 
-VIKRAM must not only say that a stock currently qualifies. It must show **how long the stock has continuously qualified** for each discovery engine.
+Every major scanner must support one simple, beginner-friendly universe selector:
+
+`ALL STOCKS | NIFTY 50 | NIFTY 200 | NIFTY 500`
+
+### Meaning
+
+- **ALL STOCKS** — all stocks in VIKRAM's validated supported universe.
+- **NIFTY 50** — constituents effective for the selected EOD date.
+- **NIFTY 200** — constituents effective for the selected EOD date.
+- **NIFTY 500** — constituents effective for the selected EOD date.
+
+### UX rule
+
+- Click/tap a universe directly.
+- No Apply button.
+- Selection immediately refreshes results.
+- Clearly show the selected universe, data status, EOD date, and number of constituents checked.
+- Example: `NIFTY 200 • EOD VERIFIED • 05 Sep 2026 • 200 constituents checked`.
+- If membership data is unavailable/unverified, show `DATA N/A`; never imply that the universe was successfully scanned.
+
+### Scope
+
+The selector applies to:
+
+- Accumulation Scanner
+- Hidden Gems
+- Opportunity Radar
+- Option B Rule Builder / Scanner
+- future saved scanner presets
+- alerts generated from saved scans
+
+### Historical integrity
+
+Index membership is time-dependent. Historical scans must use the constituent set effective on the historical EOD date. Today's membership must not be substituted for historical membership.
+
+A validated constituent record should contain:
+
+```text
+indexName
+symbol
+effectiveFrom
+effectiveTo
+source
+sourceDate
+status
+```
+
+The selected universe must be stored with scan results, saved scans, and alerts so the result remains interpretable.
+
+Detection streaks are scoped by engine and universe context; changing from All Stocks to an index must not merge unrelated streaks.
+
+---
+
+## 5. Historical Detection / Streak Intelligence
+
+VIKRAM must not only say that a stock currently qualifies. It must show **how long the stock has continuously qualified** for each discovery engine and relevant saved scan.
 
 This applies independently to:
 
@@ -87,6 +142,7 @@ Every eligible discovery result should support:
 - `latestDetectedDate` — latest verified trading date on which it qualified
 - `detectedTradingDays` — number of consecutive verified trading sessions in the current streak
 - `detectionStatus` — Active / New / N/A as appropriate
+- selected `universe`
 
 ### User-facing presentation
 
@@ -109,7 +165,9 @@ For a newly qualifying stock:
 - A later re-qualification starts a new streak.
 - Missing/invalid source data must not silently extend a streak.
 - Historical VIKRAM scores must be calculated only from genuine historical data; never fabricate retroactive matches.
-- Each engine has its own qualification definition. An Accumulation streak is not automatically an Opportunity Radar or Hidden Gems streak.
+- Each engine has its own qualification definition.
+- Universe context is part of the streak context.
+- Rule-version changes must be handled explicitly and must not create false continuity.
 
 ### Required storage model
 
@@ -123,6 +181,7 @@ qualifies
 score (when applicable)
 verdict (when applicable)
 dataStatus
+universe
 reason/version of rule
 ```
 
@@ -130,7 +189,7 @@ The UI may derive the current streak from verified historical detection records,
 
 ---
 
-## 5. Historical Data Foundation
+## 6. Historical Data Foundation
 
 Required analytical periods:
 
@@ -147,7 +206,7 @@ Never fabricate retroactive history or VIKRAM scores.
 
 ---
 
-## 6. Accumulation Scanner
+## 7. Accumulation Scanner
 
 The EOD Accumulation Scanner uses genuine evidence:
 
@@ -165,9 +224,11 @@ Outputs:
 - verdict
 - Why explanation
 - data status
+- selected universe
 - **Caught for X trading days**
 - **Caught since DATE**
 - latest detection date
+- New Today when the current streak is one trading day
 
 The streak is based on the Accumulation Scanner's own qualifying rule, not merely whether the stock appeared in a previous snapshot.
 
@@ -175,9 +236,9 @@ Unavailable metrics remain N/A.
 
 ---
 
-## 7. Hidden Gems
+## 8. Hidden Gems
 
-Hidden Gems operates on the full supported NSE universe.
+Hidden Gems operates on the full supported NSE universe or the selected index universe.
 
 Evidence can include:
 
@@ -199,12 +260,13 @@ Hidden Gems must also show:
 - **Caught since DATE**
 - latest detected date
 - New today when the current streak is one trading day
+- selected universe
 
 Hidden Gems streaks are independent from Accumulation and Radar streaks.
 
 ---
 
-## 8. Opportunity Radar
+## 9. Opportunity Radar
 
 Filters:
 
@@ -226,12 +288,14 @@ Opportunity Radar must show:
 - **Caught since DATE**
 - latest detected date
 - current radar category
+- selected universe
+- New Today state where applicable
 
 The streak must follow the Radar qualification rule/category and must reset when the stock stops qualifying.
 
 ---
 
-## 9. Option B — Visual Rule Builder
+## 10. Option B — Visual Rule Builder
 
 Option B is the Chartink-style inbuilt scanner.
 
@@ -248,16 +312,19 @@ Expected capabilities:
 - delivery conditions
 - supported fundamental/ownership fields
 - VIKRAM-native conditions
+- universe selector: All Stocks / Nifty 50 / Nifty 200 / Nifty 500
 - presets
 - saved scans
+- selected universe stored with saved scans
 - match explanations
+- historical match tracking when enabled
 - proper N/A and insufficient-history behavior
 
 Option B remains independent of notification infrastructure.
 
 ---
 
-## 10. VIKRAM Lite
+## 11. VIKRAM Lite
 
 VIKRAM Lite is the offline-friendly official-file workflow.
 
@@ -288,11 +355,13 @@ The Lite control panel should provide:
 - News / Announcements
 - **Update VIKRAM**
 
+The workflow must validate file date, schema, source and completeness before importing data. Unsupported/unavailable sources must be marked unavailable rather than replaced with invented values.
+
 Browser-only GitHub Pages cannot write arbitrary local folders; true automatic folder placement requires a local process/desktop/local server.
 
 ---
 
-## 11. Themes and UX
+## 12. Themes and UX
 
 VIKRAM has one shared engine with selectable themes:
 
@@ -309,11 +378,13 @@ Every theme supports:
 - Dark
 - System
 
-The UI should be beautiful, pleasant, readable, beginner-friendly, and not excessively white. Theme selection must not change the underlying data/scoring engine.
+Theme selection changes presentation only; the underlying data, scoring, scanner rules, detection history and trust model remain shared.
+
+The UI should be beautiful, pleasant, readable, beginner-friendly, and not excessively white. Tables, filters, subscription controls and detection-history labels must remain understandable across themes and mobile layouts.
 
 ---
 
-## 12. Subscription / Plans
+## 13. Subscription / Plans
 
 VIKRAM may provide a free tier and paid plans. Subscription state belongs to the account/billing layer, not the scanner engine.
 
@@ -351,9 +422,11 @@ Required production billing controls:
 - billing history
 - failure handling
 
+Plan entitlements must be enforced server-side for protected capabilities; the frontend must not be the sole authority for paid access.
+
 ---
 
-## 13. Portfolio / Search / Stock Analysis
+## 14. Portfolio / Search / Stock Analysis
 
 Search must work beyond any legacy five-stock sample.
 
@@ -365,7 +438,7 @@ No fake values.
 
 ---
 
-## 14. Alert Architecture
+## 15. Alert Architecture
 
 ```text
 SCANNER / OPTION B
@@ -388,13 +461,15 @@ Alerts may distinguish:
 - Streak ended
 - Important verdict/category change
 
+Alert records should retain the relevant engine, symbol, selected universe, detection date/streak context, and rule version where applicable.
+
 Required: deduplication, once-per-stock-per-day, preferences, history, PENDING/SENT/FAILED, provider failure isolation, deep links, and multiple users where accounts exist.
 
 Scanner success must not depend on notification success.
 
 ---
 
-## 15. Automated Execution
+## 16. Automated Execution
 
 Target:
 
@@ -415,7 +490,7 @@ Do not require the user to manually open the website for scheduled processing.
 
 ---
 
-## 16. Security
+## 17. Security
 
 - no provider secrets in frontend
 - no private keys in GitHub
@@ -428,7 +503,7 @@ Do not require the user to manually open the website for scheduled processing.
 
 ---
 
-## 17. Testing
+## 18. Testing
 
 Add explicit tests for detection history:
 
@@ -440,27 +515,36 @@ Add explicit tests for detection history:
 - re-qualification starts a new streak
 - missing data does not extend a streak
 - separate engine streaks remain independent
+- separate universe streaks remain independent
 - exact `Caught Since` date
 - latest detection date
 - one-day `New today` state
 - historical rule-version changes handled explicitly
+- historical index membership uses effective-date constituents
+- unavailable/unverified constituent lists produce DATA N/A
+- saved scans retain universe context
 
 Also retain existing tests for data, exact-date OI, scoring, Option B, alerts, security, cache freshness, and UI.
 
 ---
 
-## 18. Production Release Gate
+## 19. Production Release Gate
 
 Production release requires physical evidence for:
 
 - source of truth
 - full supported NSE universe
+- validated index constituent datasets
 - historical data
 - six periods
 - scanner
 - Hidden Gems
 - Opportunity Radar
 - detection streaks/dates
+- universe selector
+- VIKRAM Lite where enabled
+- subscription access control before billing
+- theme switching and responsive UX
 - validation
 - tests
 - automation
@@ -487,7 +571,7 @@ These states must remain distinct.
 
 ---
 
-## 19. Future Expansion
+## 20. Future Expansion
 
 After the production foundation is proven:
 
