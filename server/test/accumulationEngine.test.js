@@ -14,9 +14,9 @@ const base = [
 ];
 
 const fno = { available: true, trade_date: '2026-09-01', oi: 100000, change_oi: 7000 };
-const cash = { available: false, trade_date: '2026-09-01', oi: 100000, change_oi: 7000 };
+const cash = { available: false, trade_date: '2026-09-01' };
 
-// Cash-only: approved normalized 100-point weights and strict 3/3 equity quorum.
+// Cash-only: OI is irrelevant, but all three core equity pillars plus the confirmation price threshold are mandatory.
 const cashConfirmed = evaluate({ symbol: 'CASHGOOD', history: base, current: base.at(-1), futures: cash });
 assert.equal(cashConfirmed.verdict, 'ACCUMULATION CONFIRMED');
 assert.equal(cashConfirmed.metrics.hasDerivatives, false);
@@ -26,28 +26,44 @@ assert.equal(cashConfirmed.confirmation.pillars.passed, 3);
 assert.equal(cashConfirmed.confirmation.pillars.required, 3);
 assert.equal(cashConfirmed.confirmation.pillars.total, 3);
 assert.equal(cashConfirmed.score, 100);
-assert.deepEqual(cashConfirmed.components.map(c => [c.name, c.weight]), [
-  ['Price stability', 20], ['Volume expansion', 20], ['Delivery quality', 35], ['OBV structure', 25]
-]);
 
-// Cash-only: 2/3 is NOT enough for the latest statutory CONFIRMED rule.
-const cashTwoOfThreeHistory = base.map((r, i) => i === base.length - 1 ? { ...r, volume: 700 } : r);
-const cashTwoOfThree = evaluate({ symbol: 'CASH2OF3', history: cashTwoOfThreeHistory, current: cashTwoOfThreeHistory.at(-1), futures: cash });
-assert.notEqual(cashTwoOfThree.verdict, 'ACCUMULATION CONFIRMED');
-assert.equal(cashTwoOfThree.confirmation.pillars.passed, 2);
-assert.equal(cashTwoOfThree.confirmation.pillars.required, 3);
-assert.equal(cashTwoOfThree.confirmation.pillars.total, 3);
-assert.equal(cashTwoOfThree.confirmation.pillars.details.volume, false);
+// Cash-only: weak volume cannot be rescued by delivery; 3/3 is mandatory for CONFIRMED.
+const cashWeakVolumeHistory = base.map((r, i) => i === base.length - 1 ? { ...r, volume: 700 } : r);
+const cashWeakVolume = evaluate({ symbol: 'CASH2OF3', history: cashWeakVolumeHistory, current: cashWeakVolumeHistory.at(-1), futures: cash });
+assert.notEqual(cashWeakVolume.verdict, 'ACCUMULATION CONFIRMED');
+assert.equal(cashWeakVolume.confirmation.pillars.passed, 2);
+assert.equal(cashWeakVolume.confirmation.pillars.required, 3);
+assert.equal(cashWeakVolume.confirmation.pillars.details.volume, false);
 
-// F&O Equity: 3/4 is sufficient; volume intentionally fails while Delivery/OBV/OI pass.
-const fnoThreeOfFourHistory = base.map((r, i) => i === base.length - 1 ? { ...r, volume: 800 } : r);
-const fnoThreeOfFour = evaluate({ symbol: 'FNO3OF4', history: fnoThreeOfFourHistory, current: fnoThreeOfFourHistory.at(-1), futures: fno });
-assert.equal(fnoThreeOfFour.verdict, 'ACCUMULATION CONFIRMED');
-assert.equal(fnoThreeOfFour.metrics.derivativesState, 'OI_SUPPORTED_WITH_EVIDENCE');
-assert.equal(fnoThreeOfFour.confirmation.pillars.passed, 3);
-assert.equal(fnoThreeOfFour.confirmation.pillars.required, 3);
-assert.equal(fnoThreeOfFour.confirmation.pillars.total, 4);
-assert.equal(fnoThreeOfFour.confirmation.pillars.details.volume, false);
+// F&O: all four pillars are mandatory. Weak volume cannot be rescued by Delivery/OBV/OI.
+const fnoWeakVolumeHistory = base.map((r, i) => i === base.length - 1 ? { ...r, volume: 800 } : r);
+const fnoWeakVolume = evaluate({ symbol: 'FNO_WEAK_VOLUME', history: fnoWeakVolumeHistory, current: fnoWeakVolumeHistory.at(-1), futures: fno });
+assert.notEqual(fnoWeakVolume.verdict, 'ACCUMULATION CONFIRMED');
+assert.equal(fnoWeakVolume.confirmation.pillars.passed, 3);
+assert.equal(fnoWeakVolume.confirmation.pillars.required, 4);
+assert.equal(fnoWeakVolume.confirmation.pillars.total, 4);
+assert.equal(fnoWeakVolume.confirmation.pillars.details.volume, false);
+
+// F&O: a genuinely strong setup with every core pillar and positive price confirmation is CONFIRMED.
+const fnoConfirmed = evaluate({ symbol: 'FNO_GOOD', history: base, current: base.at(-1), futures: fno });
+assert.equal(fnoConfirmed.verdict, 'ACCUMULATION CONFIRMED');
+assert.equal(fnoConfirmed.metrics.derivativesState, 'OI_SUPPORTED_WITH_EVIDENCE');
+assert.equal(fnoConfirmed.confirmation.pillars.passed, 4);
+assert.equal(fnoConfirmed.confirmation.pillars.required, 4);
+assert.equal(fnoConfirmed.confirmation.pillars.total, 4);
+assert.equal(fnoConfirmed.confirmation.pillars.details.price, true);
+
+// F&O: falling OBV blocks confirmation even when price/volume/delivery/OI are strong.
+const fallingObvHistory = base.map((r, i) => i === base.length - 1 ? { ...r, close: 104, prev_close: 105, volume: 2000, deliv_per: 60 } : r);
+const fallingObv = evaluate({ symbol: 'HDFCLIFE_CASE', history: fallingObvHistory, current: fallingObvHistory.at(-1), futures: fno });
+assert.equal(fallingObv.confirmation.pillars.details.obv, false);
+assert.notEqual(fallingObv.verdict, 'ACCUMULATION CONFIRMED');
+
+// Flat/weak positive price cannot be called CONFIRMED merely because the other evidence is strong.
+const flatPriceHistory = base.map((r, i) => i === base.length - 1 ? { ...r, close: 105.05, prev_close: 105, volume: 2000, deliv_per: 60 } : r);
+const flatPrice = evaluate({ symbol: 'DABUR_CASE', history: flatPriceHistory, current: flatPriceHistory.at(-1), futures: fno });
+assert.equal(flatPrice.confirmation.pillars.details.price, false);
+assert.notEqual(flatPrice.verdict, 'ACCUMULATION CONFIRMED');
 
 // F&O-capable but missing current OI: never silently falls back to cash-only scoring.
 const fnoMissingOi = evaluate({ symbol: 'FNOMISSINGOI', history: base, current: base.at(-1), futures: { available: false, derivativesSupported: true, trade_date: '2026-09-01' } });
@@ -56,7 +72,7 @@ assert.equal(fnoMissingOi.score, null);
 assert.notEqual(fnoMissingOi.verdict, 'ACCUMULATION CONFIRMED');
 assert.ok(fnoMissingOi.confirmation.gateFailures.some(x => x.includes('F&O OI data is missing unexpectedly')));
 
-// Quiet Absorption: high delivery + rising OBV + tight price with subdued volume.
+// Quiet Absorption remains a separate early-state detector and does not require CONFIRMED volume.
 const quiet = base.map((r, i) => i === base.length - 1 ? { ...r, close: 105.2, prev_close: 105.0, volume: 1050, deliv_per: 60 } : r);
 const quietResult = evaluate({ symbol: 'QUIET', history: quiet, current: quiet.at(-1), futures: cash });
 assert.equal(quietResult.verdict, 'QUIET ABSORPTION');
@@ -73,6 +89,12 @@ const lowDelivery = { ...base.at(-1), deliv_per: 34.9 };
 const deliveryResult = evaluate({ symbol: 'DELIVERYFAIL', history: base, current: lowDelivery, futures: cash });
 assert.notEqual(deliveryResult.verdict, 'ACCUMULATION CONFIRMED');
 assert.ok(deliveryResult.confirmation.gateFailures.some(x => x.includes('delivery is below 35.0%')));
+
+// Cash-only confirmation uses the higher 55% delivery requirement, not merely the universal 35% floor.
+const cashLowConfirmedDelivery = { ...base.at(-1), deliv_per: 50 };
+const cashLowConfirmedDeliveryResult = evaluate({ symbol: 'CASH_DELIVERY_50', history: base, current: cashLowConfirmedDelivery, futures: cash });
+assert.equal(cashLowConfirmedDeliveryResult.confirmation.pillars.details.delivery, false);
+assert.notEqual(cashLowConfirmedDeliveryResult.verdict, 'ACCUMULATION CONFIRMED');
 
 // Distribution breakdown: falling price + high volume + falling OBV/OI must never be confirmation.
 const distributionHistory = base.map((r, i) => i === base.length - 1 ? { ...r, close: 90, prev_close: 100, volume: 5000, deliv_per: 25 } : r);
@@ -91,4 +113,4 @@ const dirtyResult = evaluate({ symbol: 'DIRTY', history: dirtyHistory, current: 
 assert.ok(Number.isFinite(dirtyResult.metrics.avgVolume));
 assert.ok(Number.isFinite(dirtyResult.metrics.avgDelivery));
 
-console.log('accumulation engine tests passed (11 statutory scenarios)');
+console.log('accumulation engine tests passed (14 statutory scenarios)');
