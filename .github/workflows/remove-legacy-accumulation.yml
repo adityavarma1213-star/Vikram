@@ -1,0 +1,44 @@
+name: Remove legacy accumulation UI
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Point all accumulation navigation to the canonical scanner surface
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          index = Path('index.html')
+          text = index.read_text(encoding='utf-8')
+          text = text.replace('href="accumulation.html"', 'href="index.html#scannerSurface"')
+          index.write_text(text, encoding='utf-8')
+
+          Path('accumulation.html').write_text('''<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1">\n<title>VIKRAM — Accumulation Scanner</title>\n<meta http-equiv="refresh" content="0; url=index.html#scannerSurface">\n<script>location.replace("index.html#scannerSurface");</script>\n</head>\n<body><p>Opening the VIKRAM Accumulation Scanner…</p><p><a href="index.html#scannerSurface">Open Accumulation Scanner</a></p></body>\n</html>\n''', encoding='utf-8')
+          PY
+
+      - name: Commit repair
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html accumulation.html
+          if git diff --cached --quiet; then
+            echo "No legacy accumulation navigation changes needed."
+            exit 0
+          fi
+          git commit -m "fix(ui): remove legacy accumulation scanner navigation"
+          git push
