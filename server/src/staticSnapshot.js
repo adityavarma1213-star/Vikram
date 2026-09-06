@@ -50,12 +50,20 @@ async function fetchFo(date) {
 }
 function readHistory() { fs.mkdirSync(HISTORY_DIR, { recursive: true }); return fs.readdirSync(HISTORY_DIR).filter(name => /^\d{4}-\d{2}-\d{2}\.json$/.test(name)).sort().slice(-MATERIALIZE_LOOKBACK_DAYS).map(name => JSON.parse(fs.readFileSync(path.join(HISTORY_DIR, name), 'utf8'))); }
 function writeHistory(snapshot) { fs.mkdirSync(HISTORY_DIR, { recursive: true }); fs.writeFileSync(path.join(HISTORY_DIR, `${snapshot.tradeDate}.json`), `${JSON.stringify(snapshot)}\n`); const files = fs.readdirSync(HISTORY_DIR).filter(name => /^\d{4}-\d{2}-\d{2}\.json$/.test(name)).sort(); for (const name of files.slice(0, -MATERIALIZE_LOOKBACK_DAYS)) fs.unlinkSync(path.join(HISTORY_DIR, name)); }
-function materialize(historySnapshots) { const historyBySymbol = new Map(); const futuresBySymbolDate = new Map(); for (const day of historySnapshots) { for (const row of day.cm || []) { if (!historyBySymbol.has(row.symbol)) historyBySymbol.set(row.symbol, []); historyBySymbol.get(row.symbol).push(row); } for (const row of day.futures || []) { const key = `${row.symbol}|${row.trade_date}`; const existing = futuresBySymbolDate.get(key); if (!existing || String(row.expiry) < String(existing.expiry)) futuresBySymbolDate.set(key, row); } } for (const rows of historyBySymbol.values()) rows.sort((a, b) => a.trade_date.localeCompare(b.trade_date)); return { results: buildScannerResults(historyBySymbol, futuresBySymbolDate), periods: buildPeriodResults(historyBySymbol, futuresBySymbolDate) }; }
+function materialize(historySnapshots) {
+  const historyBySymbol = new Map(); const futuresBySymbolDate = new Map(); const derivativesSymbols = new Set();
+  for (const day of historySnapshots) {
+    for (const row of day.cm || []) { if (!historyBySymbol.has(row.symbol)) historyBySymbol.set(row.symbol, []); historyBySymbol.get(row.symbol).push(row); }
+    for (const row of day.futures || []) { const key = `${row.symbol}|${row.trade_date}`; derivativesSymbols.add(String(row.symbol || '').toUpperCase()); const existing = futuresBySymbolDate.get(key); if (!existing || String(row.expiry) < String(existing.expiry)) futuresBySymbolDate.set(key, row); }
+  }
+  for (const rows of historyBySymbol.values()) rows.sort((a, b) => a.trade_date.localeCompare(b.trade_date));
+  return { results: buildScannerResults(historyBySymbol, futuresBySymbolDate, derivativesSymbols), periods: buildPeriodResults(historyBySymbol, futuresBySymbolDate, derivativesSymbols), derivativesSymbols };
+}
 function buildCurrentDetection(historySnapshots, currentResults) {
-  const bySymbol = new Map(); const futures = new Map();
+  const bySymbol = new Map(); const futures = new Map(); const derivativesSymbols = new Set();
   for (const day of historySnapshots) {
     for (const row of day.cm || []) { const symbol = String(row.symbol || '').toUpperCase(); if (!symbol) continue; if (!bySymbol.has(symbol)) bySymbol.set(symbol, []); bySymbol.get(symbol).push(row); }
-    for (const row of day.futures || []) { const key = `${String(row.symbol || '').toUpperCase()}|${row.trade_date}`; const existing = futures.get(key); if (!existing || String(row.expiry) < String(existing.expiry)) futures.set(key, row); }
+    for (const row of day.futures || []) { const symbol = String(row.symbol || '').toUpperCase(); derivativesSymbols.add(symbol); const key = `${symbol}|${row.trade_date}`; const existing = futures.get(key); if (!existing || String(row.expiry) < String(existing.expiry)) futures.set(key, row); }
   }
   for (const rows of bySymbol.values()) rows.sort((a, b) => String(a.trade_date).localeCompare(String(b.trade_date)));
   const out = new Map();
@@ -65,8 +73,8 @@ function buildCurrentDetection(historySnapshots, currentResults) {
     const latestDate = String(result.tradeDate || rows[rows.length - 1].trade_date); const latestIndex = rows.findIndex(r => String(r.trade_date) === latestDate); if (latestIndex < 0) continue;
     let detectedTradingDays = 0; let firstDetectedDate = null;
     for (let i = latestIndex; i >= 0; i -= 1) {
-      const current = rows[i]; const history = rows.slice(0, i + 1);
-      const evaluated = accumulationEngine.evaluate({ symbol, history, current, futures: futures.get(`${symbol}|${current.trade_date}`) || null });
+      const current = rows[i]; const history = rows.slice(0, i + 1); const exact = futures.get(`${symbol}|${current.trade_date}`); const futureState = exact || { available: false, derivativesSupported: derivativesSymbols.has(symbol), trade_date: current.trade_date };
+      const evaluated = accumulationEngine.evaluate({ symbol, history, current, futures: futureState });
       if (evaluated.verdict !== 'ACCUMULATION CONFIRMED') break;
       detectedTradingDays += 1; firstDetectedDate = current.trade_date;
     }
