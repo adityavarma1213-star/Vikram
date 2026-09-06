@@ -182,7 +182,7 @@
     const diffDays = Math.floor((Date.now() - asOfDate.getTime()) / 86400000);
     dataAgeEl.textContent = diffDays <= 0 ? 'Today (EOD verified)' : diffDays === 1 ? '1 day old' : `${diffDays} days old`;
   }
-  fetch('data/scanner.json',{cache:'no-store'}).then(r => r.json()).then(snapshot => { if (snapshot.dataStatus !== 'EOD VERIFIED') throw new Error('SNAPSHOT_NOT_VERIFIED'); rows = Array.isArray(snapshot.results) ? snapshot.results : []; renderScannerMeta(snapshot.asOf); render(); }).catch(() => { body.innerHTML = '<tr><td colspan="9" class="empty-cell">Verified scanner snapshot unavailable. No market values are being estimated.</td></tr>'; renderScannerMeta(null); renderScannerMeta(null); renderScannerMeta(null); renderScannerMeta(null); renderScannerMeta(null); renderScannerMeta(null); renderScannerMeta(null); renderScannerMeta(null); renderScannerMeta(null); renderScannerMeta(null); });
+  fetch('data/scanner.json',{cache:'no-store'}).then(r => r.json()).then(snapshot => { if (snapshot.dataStatus !== 'EOD VERIFIED') throw new Error('SNAPSHOT_NOT_VERIFIED'); rows = Array.isArray(snapshot.results) ? snapshot.results : []; renderScannerMeta(snapshot.asOf); render(); }).catch(() => { body.innerHTML = '<tr><td colspan="9" class="empty-cell">Verified scanner snapshot unavailable. No market values are being estimated.</td></tr>'; renderScannerMeta(null); });
 })();
 </script>
 <script src="js/discoveryRepair.js"></script>
