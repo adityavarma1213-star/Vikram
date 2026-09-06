@@ -174,12 +174,15 @@ async function main() {
   const latest = await ingestLatest();
   const history = readHistory();
   const materialized = materialize(history);
+  const tradingDays = history.map(day => day.tradeDate).filter(Boolean);
   const snapshot = {
     status: 'ok',
+    dataStatus: 'EOD VERIFIED',
     asOf: latest.tradeDate,
     generatedAt: new Date().toISOString(),
     source: 'NSE EOD public archives',
     historyDays: history.length,
+    tradingDays,
     results: materialized.results,
     periods: materialized.periods
   };
