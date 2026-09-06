@@ -1,57 +1,58 @@
 /* VIKRAM Discovery UI — Hidden Gems + Opportunity Radar */
 :root{
-  --discovery-bg:#f7f9fc;
-  --discovery-card:#ffffff;
-  --discovery-ink:#152033;
-  --discovery-muted:#718096;
-  --discovery-line:#e7ebf2;
-  --discovery-accent:#315efb;
-  --discovery-soft:#eef3ff;
-  --discovery-positive:#138a5b;
-  --discovery-negative:#c93b3b;
-  --discovery-warn:#b97800;
+  --discovery-bg:#0b1020;
+  --discovery-card:#11182b;
+  --discovery-ink:#f4f7ff;
+  --discovery-muted:#93a0b8;
+  --discovery-line:#26324d;
+  --discovery-accent:#6ea8ff;
+  --discovery-soft:#17233d;
+  --discovery-positive:#36c98f;
+  --discovery-negative:#ff6b7a;
+  --discovery-warn:#f3bd5b;
 }
 
-/* Only the two discovery modules are redesigned; the rest of VIKRAM is untouched. */
+/* Discovery modules use the same visual language as the VIKRAM shell. */
 #hiddenGemsPreview,
 #opportunityRadar{
+  width:100%;
   max-width:1480px;
   margin:0 auto;
-  padding:26px 28px 54px;
+  padding:42px 28px 58px;
   color:var(--discovery-ink);
 }
 #hiddenGemsPreview .dashboard-card,
 #opportunityRadar .dashboard-card{
-  background:var(--discovery-bg);
-  border:0;
-  border-radius:22px;
-  box-shadow:none;
-  padding:0;
+  background:linear-gradient(180deg,#11182b 0%,#0e1527 100%)!important;
+  border:1px solid #26324d!important;
+  border-radius:18px!important;
+  box-shadow:0 18px 55px rgba(0,0,0,.28)!important;
+  padding:28px!important;
 }
 #hiddenGemsPreview .card-headline,
 #opportunityRadar .card-headline{
-  font-size:30px;
-  line-height:1.15;
-  letter-spacing:-.7px;
-  margin:0 0 7px;
-  color:var(--discovery-ink);
+  font-size:26px!important;
+  line-height:1.2;
+  letter-spacing:-.5px;
+  margin:0 0 7px!important;
+  color:#f7f9ff!important;
 }
 #hiddenGemsPreview .text-muted,
 #opportunityRadar .text-muted{
-  color:var(--discovery-muted);
-  font-size:14px;
-  margin:0 0 18px;
+  color:var(--discovery-muted)!important;
+  font-size:13px;
 }
 
-/* Give the generated table a premium app-like frame. */
+/* Premium table frame. */
 #hiddenGemsPreview .hidden-gems-table-container,
 #opportunityRadar .table-container{
-  background:var(--discovery-card);
-  border:1px solid var(--discovery-line);
-  border-radius:16px;
-  box-shadow:0 10px 30px rgba(35,50,80,.07);
-  overflow:auto;
-  max-height:calc(100vh - 190px);
+  background:#0d1424!important;
+  border:1px solid #26324d!important;
+  border-radius:14px!important;
+  box-shadow:none!important;
+  overflow:auto!important;
+  max-height:calc(100vh - 285px)!important;
+  min-height:500px;
 }
 #hiddenGemsPreview .hidden-gems-table,
 #opportunityRadar .metric-table{
@@ -59,105 +60,129 @@
   border-spacing:0;
   width:100%;
   min-width:1040px;
-  color:var(--discovery-ink);
-  font-size:14px;
+  color:#e9eef8!important;
+  font-size:13px;
 }
 #hiddenGemsPreview .hidden-gems-table thead th,
 #opportunityRadar .metric-table thead th{
   position:sticky!important;
   top:0!important;
   z-index:30!important;
-  background:#f5f7fb!important;
-  color:#647089!important;
-  border-bottom:1px solid var(--discovery-line)!important;
+  background:#151e33!important;
+  color:#9aa8c1!important;
+  border-bottom:1px solid #2b3854!important;
   padding:0!important;
-  height:50px;
-  font-size:11px;
-  letter-spacing:.7px;
-  font-weight:800;
+  height:48px!important;
+  font-size:10px!important;
+  letter-spacing:.8px;
+  font-weight:800!important;
   text-transform:uppercase;
 }
 #hiddenGemsPreview .hidden-gems-table tbody td,
 #opportunityRadar .metric-table tbody td{
-  background:#fff!important;
-  color:var(--discovery-ink);
-  border-bottom:1px solid #edf0f5;
-  padding:13px 14px;
-  height:50px;
-  line-height:1.25;
+  background:#0f1729!important;
+  color:#e8edf7!important;
+  border-bottom:1px solid #202b43!important;
+  padding:9px 12px!important;
+  height:44px!important;
+  line-height:1.2;
   vertical-align:middle;
 }
 #hiddenGemsPreview .hidden-gems-table tbody tr:hover td,
 #opportunityRadar .metric-table tbody tr:hover td{
-  background:#f8faff!important;
+  background:#15213a!important;
 }
 #hiddenGemsPreview .hidden-gems-table tbody tr:last-child td,
 #opportunityRadar .metric-table tbody tr:last-child td{border-bottom:0}
 
-/* Make the primary stock identifier visually obvious. */
+/* Stock and numeric hierarchy. */
 #hiddenGemsPreview .hidden-gems-table tbody td:nth-child(2),
-#opportunityRadar .metric-table tbody td:nth-child(2){font-weight:800;font-size:14px}
+#opportunityRadar .metric-table tbody td:nth-child(2){font-weight:800!important;color:#ffffff!important;font-size:13px!important}
 #hiddenGemsPreview .hidden-gems-table tbody td:nth-child(3),
-#opportunityRadar .metric-table tbody td:nth-child(3){font-weight:750}
+#opportunityRadar .metric-table tbody td:nth-child(3){font-weight:750!important;color:#dfe8ff!important}
+#hiddenGemsPreview .hidden-gems-table tbody td:first-child{color:#8190aa!important;font-weight:700}
 
-/* Simple, quiet filter controls — no intimidating forms. */
+/* Simple filter arrows. */
 #hiddenGemsPreview .hg-filter,
 #opportunityRadar .filter-trigger{
   appearance:none;
   width:100%;
-  min-height:50px;
+  min-height:48px!important;
   border:0!important;
   background:transparent!important;
-  color:#647089!important;
-  padding:0 12px!important;
-  font-size:11px!important;
+  color:#9aa8c1!important;
+  padding:0 11px!important;
+  font-size:10px!important;
   font-weight:800!important;
-  letter-spacing:.6px;
+  letter-spacing:.7px;
   text-align:left;
   cursor:pointer;
 }
 #hiddenGemsPreview .hg-filter:hover,
 #hiddenGemsPreview .hg-filter.active,
 #opportunityRadar .filter-trigger:hover{
-  background:var(--discovery-soft)!important;
-  color:var(--discovery-accent)!important;
+  background:#1b2945!important;
+  color:#78adff!important;
 }
 #hiddenGemsPreview .hg-filter::after,
 #opportunityRadar .filter-trigger::after{
   content:'⌄';
   float:right;
-  font-size:14px;
-  color:#98a2b3;
+  font-size:12px;
+  color:#71809b;
 }
 #hiddenGemsPreview .hg-menu,
 #opportunityRadar .simple-filter-menu{
-  background:#fff!important;
-  color:var(--discovery-ink)!important;
-  border:1px solid var(--discovery-line)!important;
-  border-radius:12px!important;
-  box-shadow:0 18px 40px rgba(25,40,70,.16)!important;
-  padding:6px!important;
+  background:#151e33!important;
+  color:#eef3fc!important;
+  border:1px solid #34425f!important;
+  border-radius:10px!important;
+  box-shadow:0 18px 45px rgba(0,0,0,.45)!important;
+  padding:5px!important;
 }
 #hiddenGemsPreview .hg-menu button,
 #opportunityRadar .simple-filter-menu button{
-  color:var(--discovery-ink)!important;
-  border-radius:8px!important;
-  padding:10px 12px!important;
-  font-size:13px!important;
-  background:#fff!important;
+  color:#e9eef8!important;
+  border-radius:7px!important;
+  padding:9px 11px!important;
+  font-size:12px!important;
+  background:#151e33!important;
 }
 #hiddenGemsPreview .hg-menu button:hover,
-#opportunityRadar .simple-filter-menu button:hover{background:#f1f5ff!important;color:var(--discovery-accent)!important}
+#opportunityRadar .simple-filter-menu button:hover{background:#1e2d4a!important;color:#78adff!important}
 
-/* Friendly verdict pills. */
+/* Verdict is an action-oriented status, not a giant colored block. */
 #hiddenGemsPreview .hidden-gems-table tbody td:last-child,
-#opportunityRadar .metric-table tbody td:nth-last-child(2){font-weight:750}
-#hiddenGemsPreview .hidden-gems-table tbody td:last-child,
-#opportunityRadar .metric-table tbody td:nth-last-child(2){color:var(--discovery-positive)}
+#opportunityRadar .metric-table tbody td:nth-last-child(2){
+  font-weight:800!important;
+  color:#42d29a!important;
+  font-size:12px!important;
+}
+
+/* Override the older inline discovery sizing so the page stays compact. */
+#hiddenGemsPreview .hidden-gems-table-container{
+  width:100%!important;
+  height:calc(100vh - 315px)!important;
+  min-height:500px!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:auto!important;
+  position:relative!important;
+  border-radius:14px!important;
+  background:#0d1424!important;
+}
+#hiddenGemsPreview .hidden-gems-table{table-layout:fixed!important}
+#hiddenGemsPreview .hidden-gems-table tbody tr{height:44px!important}
+#hiddenGemsPreview .hidden-gems-table tbody td{padding:8px 11px!important}
+
+/* Small helper strip can be added by future discovery modules without changing the shell. */
+.discovery-helper-strip{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 18px}
+.discovery-helper-strip span{border:1px solid #293650;background:#151e33;color:#aebbd0;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700}
 
 @media(max-width:800px){
-  #hiddenGemsPreview,#opportunityRadar{padding:18px 12px 36px}
-  #hiddenGemsPreview .card-headline,#opportunityRadar .card-headline{font-size:24px}
-  #hiddenGemsPreview .hidden-gems-table-container,#opportunityRadar .table-container{max-height:calc(100vh - 170px);border-radius:13px}
-  #hiddenGemsPreview .hidden-gems-table tbody td,#opportunityRadar .metric-table tbody td{padding:11px 10px;height:46px}
+  #hiddenGemsPreview,#opportunityRadar{padding:22px 12px 36px}
+  #hiddenGemsPreview .dashboard-card,#opportunityRadar .dashboard-card{padding:18px!important;border-radius:14px!important}
+  #hiddenGemsPreview .card-headline,#opportunityRadar .card-headline{font-size:22px!important}
+  #hiddenGemsPreview .hidden-gems-table-container,#opportunityRadar .table-container{height:calc(100vh - 235px)!important;min-height:460px!important;border-radius:11px!important}
+  #hiddenGemsPreview .hidden-gems-table tbody td,#opportunityRadar .metric-table tbody td{padding:8px 8px!important;height:42px!important}
 }
