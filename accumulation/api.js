@@ -3,8 +3,7 @@
   const isStaticPages = !API_BASE && /github\.io$/i.test(root.location.hostname);
   let snapshotPromise;
 
-  // Keep the explanation column readable while the wide metrics table scrolls.
-  // The Why column stays pinned to the right edge instead of being squeezed off-screen.
+  // Keep the explanation column readable without forcing a horizontal scrollbar.
   const whyLayoutStyle = document.createElement('style');
   whyLayoutStyle.id = 'vikram-why-layout-fix';
   whyLayoutStyle.textContent = `
@@ -12,11 +11,11 @@
     .metric-table td:nth-child(11) {
       position: sticky !important;
       right: 0 !important;
-      width: 420px !important;
-      min-width: 420px !important;
-      max-width: 420px !important;
+      width: 25% !important;
+      min-width: 0 !important;
+      max-width: 25% !important;
       white-space: normal !important;
-      overflow-wrap: break-word !important;
+      overflow-wrap: anywhere !important;
       word-break: normal !important;
     }
     .metric-table thead th:nth-child(11) {
@@ -30,22 +29,14 @@
       background: var(--bg-secondary) !important;
       background-color: var(--bg-secondary) !important;
       vertical-align: top !important;
-      line-height: 1.5 !important;
-      padding: 14px 18px !important;
+      line-height: 1.4 !important;
+      padding: 10px 10px !important;
       box-shadow: -8px 0 14px rgba(0,0,0,.18) !important;
     }
     .metric-table tbody td:nth-child(11) .why-cell {
       width: auto !important;
       min-width: 0 !important;
       max-width: none !important;
-    }
-    @media (max-width: 800px) {
-      .metric-table th:nth-child(11),
-      .metric-table td:nth-child(11) {
-        width: 340px !important;
-        min-width: 340px !important;
-        max-width: 340px !important;
-      }
     }
   `;
   document.head.appendChild(whyLayoutStyle);
