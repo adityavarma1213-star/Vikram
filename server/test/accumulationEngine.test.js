@@ -16,13 +16,23 @@ const base = [
 const fno = { available: true, trade_date: '2026-09-01', oi: 100000, change_oi: 7000 };
 const cash = { available: false, trade_date: '2026-09-01', oi: 100000, change_oi: 7000 };
 
-// Cash Equity: normalized score excludes the unavailable OI weight and requires 3/3 pillars.
+// Cash Equity: normalized score excludes unavailable OI weight and requires 2/3 equity pillars.
 const cashConfirmed = evaluate({ symbol: 'CASHGOOD', history: base, current: base.at(-1), futures: cash });
 assert.equal(cashConfirmed.verdict, 'ACCUMULATION CONFIRMED');
 assert.equal(cashConfirmed.metrics.hasDerivatives, false);
 assert.equal(cashConfirmed.confirmation.pillars.passed, 3);
-assert.equal(cashConfirmed.confirmation.pillars.required, 3);
+assert.equal(cashConfirmed.confirmation.pillars.required, 2);
+assert.equal(cashConfirmed.confirmation.pillars.total, 3);
 assert.equal(cashConfirmed.score, 100);
+
+// Cash Equity: 2/3 quorum is intentional; one weak equity pillar must not erase strong evidence.
+const cashTwoOfThreeHistory = base.map((r, i) => i === base.length - 1 ? { ...r, volume: 700 } : r);
+const cashTwoOfThree = evaluate({ symbol: 'CASH2OF3', history: cashTwoOfThreeHistory, current: cashTwoOfThreeHistory.at(-1), futures: cash });
+assert.equal(cashTwoOfThree.verdict, 'ACCUMULATION CONFIRMED');
+assert.equal(cashTwoOfThree.confirmation.pillars.passed, 2);
+assert.equal(cashTwoOfThree.confirmation.pillars.required, 2);
+assert.equal(cashTwoOfThree.confirmation.pillars.total, 3);
+assert.equal(cashTwoOfThree.confirmation.pillars.details.volume, false);
 
 // F&O Equity: 3/4 is sufficient; volume intentionally fails while Delivery/OBV/OI pass.
 const fnoThreeOfFour = base.map((r, i) => i === base.length - 1 ? { ...r, volume: 800 } : r);
@@ -68,4 +78,4 @@ const dirtyResult = evaluate({ symbol: 'DIRTY', history: dirtyHistory, current: 
 assert.ok(Number.isFinite(dirtyResult.metrics.avgVolume));
 assert.ok(Number.isFinite(dirtyResult.metrics.avgDelivery));
 
-console.log('accumulation engine tests passed (8 statutory scenarios)');
+console.log('accumulation engine tests passed (9 statutory scenarios)');
