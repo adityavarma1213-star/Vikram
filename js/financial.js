@@ -1,0 +1,1 @@
+window.VIKRAM_FINANCIAL_UI={render(data){const f=data?.financial||{};return Object.fromEntries(['revenueGrowth','profitGrowth','epsGrowth','roe','roce','debtToEquity','operatingMargin','netMargin','freeCashFlow','interestCoverage'].map(k=>[k,f[k]??null]));}};
