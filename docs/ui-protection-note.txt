@@ -1,0 +1,1 @@
+Protected UI-fix branch created from the current main baseline. UI changes must be validated before promotion to main. Do not alter scanner formula/data engine in this branch.
