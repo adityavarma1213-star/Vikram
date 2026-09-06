@@ -18,25 +18,27 @@ function sortHistory(historyAll) {
   );
 }
 
-function buildResult(symbol, rows, futuresBySymbolDate) {
+function buildResult(symbol, rows, futuresBySymbolDate, derivativesSymbols = new Set()) {
   const bounded = rows.slice(-MATERIALIZE_LOOKBACK_DAYS);
   const current = bounded[bounded.length - 1];
   if (!current) return null;
-  const futures = futuresBySymbolDate.get(`${symbol}|${dateKey(current.trade_date)}`) || null;
+  const key = `${symbol}|${dateKey(current.trade_date)}`;
+  const exactFutures = futuresBySymbolDate.get(key) || null;
+  const futures = exactFutures || (derivativesSymbols.has(symbol) ? { available: false, derivativesSupported: true, trade_date: dateKey(current.trade_date) } : { available: false, derivativesSupported: false, trade_date: dateKey(current.trade_date) });
   return evaluate(symbol, bounded, futures);
 }
 
-function buildScannerResults(historyBySymbol, futuresBySymbolDate) {
+function buildScannerResults(historyBySymbol, futuresBySymbolDate, derivativesSymbols = new Set()) {
   const results = [];
   for (const [symbol, historyAll] of historyBySymbol.entries()) {
     const sorted = sortHistory(historyAll);
-    const result = buildResult(symbol, sorted, futuresBySymbolDate);
+    const result = buildResult(symbol, sorted, futuresBySymbolDate, derivativesSymbols);
     if (result) results.push(result);
   }
   return results;
 }
 
-function buildPeriodResults(historyBySymbol, futuresBySymbolDate) {
+function buildPeriodResults(historyBySymbol, futuresBySymbolDate, derivativesSymbols = new Set()) {
   const periods = Object.fromEntries(PERIODS.map(p => [p.key, []]));
 
   for (const [symbol, historyAll] of historyBySymbol.entries()) {
@@ -48,7 +50,7 @@ function buildPeriodResults(historyBySymbol, futuresBySymbolDate) {
       // and OBV remain mathematically meaningful even for 1D/1W selections.
       const warmup = Math.max(CFG.historyDays, CFG.obvLookback, CFG.deliveryTrendLookback);
       const rows = sorted.slice(-(period.rows + warmup));
-      const result = buildResult(symbol, rows, futuresBySymbolDate);
+      const result = buildResult(symbol, rows, futuresBySymbolDate, derivativesSymbols);
       if (result) {
         result.period = period.key;
         result.periodLabel = period.label;
