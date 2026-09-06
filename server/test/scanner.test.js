@@ -30,7 +30,7 @@ const stale = evaluate('TEST', history, { trade_date: '2026-08-28', oi: 95000, c
 assert.equal(stale.metrics.oiExactDate, false);
 assert.equal(stale.metrics.futuresOi, null);
 assert.equal(stale.metrics.changeOi, null);
-assert.match(stale.why.join(' '), /exact trade date/);
+assert.match(stale.why.join(' '), /exact-date futures OI/);
 
 const missingDelivery = evaluate('TEST', history.map(r => ({ ...r, deliv_per: null, deliv_qty: null })), null);
 assert.equal(missingDelivery.metrics.deliveryPct, null);
