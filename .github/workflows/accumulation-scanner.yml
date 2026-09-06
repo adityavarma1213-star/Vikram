@@ -39,6 +39,9 @@ jobs:
       - run: node --check src/istDate.js
       - run: node --check src/scanMaterializer.js
       - run: node --check src/staticSnapshot.js
+      - run: node --check src/ruleEngine/indicators.js
+      - run: node --check src/ruleEngine/ruleEvaluator.js
+      - run: node --check src/ruleEngine/query.js
       - name: Unit tests
         run: npm test
       - name: Apply schema against CI Postgres
