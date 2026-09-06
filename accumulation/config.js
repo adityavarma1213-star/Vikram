@@ -1,6 +1,7 @@
 /* VIKRAM Accumulation Scanner configuration. Pure data; safe to import in browser or Node. */
 const ACCUMULATION_CONFIG = Object.freeze({
   historyDays: 20,
+  minConfirmedHistory: 10,
   freshnessDays: 1,
   flatPricePct: 0.25,
   volumeRatio: { strong: 1.5, elevated: 1.2 },
@@ -13,6 +14,13 @@ const ACCUMULATION_CONFIG = Object.freeze({
     confirmed: 75,
     starting: 55,
     mixed: 35
+  },
+  confirmedGates: {
+    minVolumeRatio: 1.2,
+    minDeliveryPct: 45,
+    requirePositivePrice: true,
+    requireRisingObv: true,
+    requirePositiveExactDateOi: true
   },
   watchlist: ['ONGC', 'VBL', 'BSE', 'NMDC']
 });
