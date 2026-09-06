@@ -46,7 +46,7 @@ function buildPeriodResults(historyBySymbol, futuresBySymbolDate) {
     for (const period of PERIODS) {
       // Keep the period plus a warm-up buffer so relative volume, delivery trend,
       // and OBV remain mathematically meaningful even for 1D/1W selections.
-      const warmup = Math.max(CFG.historyDays, CFG.obvLookback, CFG.deliveryLookback);
+      const warmup = Math.max(CFG.historyDays, CFG.obvLookback, CFG.deliveryTrendLookback);
       const rows = sorted.slice(-(period.rows + warmup));
       const result = buildResult(symbol, rows, futuresBySymbolDate);
       if (result) {
