@@ -1,6 +1,9 @@
 /*
  * VIKRAM Accumulation Engine
  * No synthetic market values. Missing inputs remain N/A and cannot earn points.
+ *
+ * Important: the score is an evidence score, not the verdict by itself.
+ * ACCUMULATION CONFIRMED also requires every hard confirmation gate below.
  */
 (function (root) {
   const CFG = root.ACCUMULATION_CONFIG || (typeof require === 'function' ? require('./config') : null);
@@ -76,11 +79,11 @@
     }
 
     if (priceChangePct !== null) {
-      let points = priceChangePct > CFG.flatPricePct ? CFG.weights.price : priceChangePct >= -CFG.flatPricePct ? CFG.weights.price * 0.65 : CFG.weights.price * 0.15;
+      const points = priceChangePct > CFG.flatPricePct ? CFG.weights.price : priceChangePct >= -CFG.flatPricePct ? CFG.weights.price * 0.65 : CFG.weights.price * 0.15;
       add('Price action', CFG.weights.price, scoreComponent(points, CFG.weights.price), priceChangePct > CFG.flatPricePct ? 'Price is firm/positive.' : priceChangePct >= -CFG.flatPricePct ? 'Price is broadly flat.' : 'Price is falling; accumulation is not yet confirmed.');
     }
     if (volumeRatio !== null) {
-      let points = volumeRatio >= CFG.volumeRatio.strong ? CFG.weights.volume : volumeRatio >= CFG.volumeRatio.elevated ? CFG.weights.volume * 0.7 : volumeRatio >= 0.8 ? CFG.weights.volume * 0.35 : 0;
+      const points = volumeRatio >= CFG.volumeRatio.strong ? CFG.weights.volume : volumeRatio >= CFG.volumeRatio.elevated ? CFG.weights.volume * 0.7 : volumeRatio >= 0.8 ? CFG.weights.volume * 0.35 : 0;
       add('Volume', CFG.weights.volume, points, volumeRatio >= CFG.volumeRatio.strong ? `Volume is ${volumeRatio.toFixed(2)}x the prior ${CFG.historyDays}-day average.` : `Volume ratio is ${volumeRatio.toFixed(2)}x.`);
     }
     if (deliveryPct !== null) {
@@ -99,13 +102,27 @@
     }
 
     const normalizedScore = availableWeight ? (score / availableWeight) * 100 : null;
-    const enoughHistory = history.length >= Math.min(CFG.historyDays + 1, 10);
+    const enoughHistory = history.length >= CFG.minConfirmedHistory;
     const flatWithOi = priceChangePct !== null && Math.abs(priceChangePct) <= CFG.flatPricePct && changeOi !== null && changeOi > 0;
-    let verdict = 'UNCONFIRMED / MIXED';
-    if (normalizedScore !== null && normalizedScore >= CFG.verdicts.confirmed && enoughHistory && deliveryPct !== null && volumeRatio !== null && oiConfirmed) verdict = 'ACCUMULATION CONFIRMED';
-    else if (normalizedScore !== null && normalizedScore >= CFG.verdicts.starting && (flatWithOi || (volumeRatio !== null && volumeRatio >= CFG.volumeRatio.elevated))) verdict = 'ACCUMULATION STARTING';
-    else if (normalizedScore !== null && normalizedScore < CFG.verdicts.mixed) verdict = 'DISTRIBUTION';
+    const gates = CFG.confirmedGates;
+    const confirmedGateFailures = [];
+    if (gates.requirePositivePrice && !(priceChangePct !== null && priceChangePct > CFG.flatPricePct)) confirmedGateFailures.push('price is not positively moving');
+    if (!(volumeRatio !== null && volumeRatio >= gates.minVolumeRatio)) confirmedGateFailures.push(`volume ratio is below ${gates.minVolumeRatio.toFixed(1)}x`);
+    if (!(deliveryPct !== null && deliveryPct >= gates.minDeliveryPct)) confirmedGateFailures.push(`delivery is below ${gates.minDeliveryPct}%`);
+    if (gates.requireRisingObv && !(obvTrend !== null && obvTrend > 0)) confirmedGateFailures.push('OBV is not rising');
+    if (gates.requirePositiveExactDateOi && !(oiConfirmed && changeOi > 0)) confirmedGateFailures.push('exact-date futures OI is not increasing');
+    if (!enoughHistory) confirmedGateFailures.push(`history is shorter than ${CFG.minConfirmedHistory} sessions`);
 
+    let verdict = 'UNCONFIRMED / MIXED';
+    if (normalizedScore !== null && normalizedScore >= CFG.verdicts.confirmed && confirmedGateFailures.length === 0) {
+      verdict = 'ACCUMULATION CONFIRMED';
+    } else if (normalizedScore !== null && normalizedScore >= CFG.verdicts.starting && (flatWithOi || (volumeRatio !== null && volumeRatio >= CFG.volumeRatio.elevated))) {
+      verdict = 'ACCUMULATION STARTING';
+    } else if (normalizedScore !== null && normalizedScore < CFG.verdicts.mixed) {
+      verdict = 'DISTRIBUTION';
+    }
+
+    if (confirmedGateFailures.length) why.push(`Confirmation gates not all satisfied: ${confirmedGateFailures.join('; ')}.`);
     if (changeOi === null) why.push('Futures OI confirmation is unavailable for the exact date.');
     if (deliveryPct === null) why.push('Delivery data is unavailable.');
     if (volumeRatio === null) why.push('Volume history is insufficient for a reliable ratio.');
@@ -115,7 +132,8 @@
       symbol: String(input.symbol || current.symbol || '').toUpperCase(), tradeDate: current.trade_date || null,
       score: normalizedScore === null ? null : Math.round(normalizedScore), verdict,
       metrics: { close, prevClose, priceChangePct, volume: currentVolume, avgVolume, volumeRatio, deliveryPct, deliveryQty, deliveryTrend, obv: obvCurrent, obvTrend, futuresOi: oi, changeOi, oiPct, oiExactDate },
-      components, why
+      components, why,
+      confirmation: { status: verdict === 'ACCUMULATION CONFIRMED' ? 'confirmed' : 'blocked', gateFailures: confirmedGateFailures }
     };
   }
 
