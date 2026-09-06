@@ -1,1 +1,38 @@
-document.addEventListener('DOMContentLoaded',()=>{const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v===null||v===undefined||v===''?'N/A':v;};const show=(id)=>document.getElementById(id)?.classList.remove('hidden');const render=async(ticker)=>{show('companyOverview');try{const data=window.VIKRAM_ENGINE?.analyzeAsset(ticker);if(!data)throw new Error('Ticker not found');let snap=null;try{snap=window.VIKRAM_DATA_ENGINE?.find(ticker)||null;}catch(_){}const m=data.meta||{};const t=data.technical||{};const f=data.financial||{};set('overviewCompanyName',m.name||ticker);set('overviewSector',m.sector);set('overviewIndustry',m.industry);set('overviewExchange',m.exchange||'NSE');set('overviewMarketCap',m.marketCap);set('overviewCurrentPrice',snap?.close??snap?.price??null);set('overview52WeekHigh',t.high52Week);set('overview52WeekLow',t.low52Week);set('overviewVikramScore',m.vikramScore);set('overviewRating',m.rating);set('techRSI',t.rsi);set('techRSISignal',t.rsiSignal);set('techMACD',t.macd);set('techMACDSignal',t.macdSignal);set('techADX',t.adx);set('techADXSignal',t.adxSignal);set('techEMA20',t.ema20);set('techEMA50',t.ema50);set('techEMA200',t.ema200);set('techTrend',t.trend);set('techSupport',t.support);set('techResistance',t.resistance);set('techVolume',t.volume);set('techVolumeSignal',t.volumeSignal);set('techOBV',t.obv);set('techOBVSignal',t.obvSignal);set('techDeliveryPct',t.deliveryPct);set('techDeliverySignal',t.deliverySignal);set('tech52WeekHigh',t.high52Week);set('tech52WeekLow',t.low52Week);set('finRevenueGrowth',f.revenueGrowth);set('finProfitGrowth',f.profitGrowth);set('finEPSGrowth',f.epsGrowth);set('finROE',f.roe);set('finROCE',f.roce);set('finDebtEquity',f.debtToEquity);set('finOperatingMargin',f.operatingMargin);set('finNetMargin',f.netMargin);set('finFreeCashFlow',f.freeCashFlow);set('finInterestCoverage',f.interestCoverage);}catch(e){const err=document.getElementById('errorContainer');if(err){err.textContent=e.message;err.classList.remove('hidden');}}};window.addEventListener('vikram:analyze',e=>render(e.detail.ticker));window.VIKRAM_DATA_ENGINE?.loadSnapshot().catch(()=>{});});
+document.addEventListener('DOMContentLoaded', async () => {
+  const set = (id, value) => { const element = document.getElementById(id); if (element) element.textContent = value === null || value === undefined || value === '' ? 'N/A' : value; };
+  const show = id => document.getElementById(id)?.classList.remove('hidden');
+  const hide = id => document.getElementById(id)?.classList.add('hidden');
+  const render = async ticker => {
+    show('companyOverview');
+    hide('errorContainer');
+    try {
+      await window.VIKRAM_DATA_ENGINE.loadSnapshot();
+      const data = window.VIKRAM_DATA_ENGINE.analyzeAsset(ticker);
+      if (!data) throw new Error(`Ticker ${String(ticker).toUpperCase()} was not found in the verified NSE universe.`);
+      const m = data.meta || {}; const t = data.technical || {};
+      set('overviewCompanyName', `${m.name || ticker} · NSE`);
+      set('overviewSector', m.sector); set('overviewIndustry', m.industry); set('overviewExchange', m.exchange || 'NSE'); set('overviewMarketCap', m.marketCap);
+      const row = window.VIKRAM_DATA_ENGINE.find(ticker); const metrics = row?.metrics || {};
+      set('overviewCurrentPrice', metrics.close === null || metrics.close === undefined ? null : `₹${Number(metrics.close).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+      set('overview52WeekHigh', t.high52Week === null ? null : `₹${Number(t.high52Week).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`);
+      set('overview52WeekLow', t.low52Week === null ? null : `₹${Number(t.low52Week).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`);
+      set('overviewVikramScore', m.vikramScore); set('overviewRating', m.rating);
+
+      set('techRSI', t.rsi); set('techRSISignal', t.rsiSignal); set('techMACD', t.macd); set('techMACDSignal', t.macdSignal); set('techADX', t.adx); set('techADXSignal', t.adxSignal);
+      set('techEMA20', t.ema20); set('techEMA50', t.ema50); set('techEMA200', t.ema200); set('techTrend', t.trend); set('techSupport', t.support); set('techResistance', t.resistance);
+      set('techVolume', t.volume); set('techVolumeSignal', t.volumeSignal); set('techOBV', t.obv); set('techOBVSignal', t.obvSignal); set('techDeliveryPct', t.deliveryPct); set('techDeliverySignal', t.deliverySignal); set('tech52WeekHigh', t.high52Week); set('tech52WeekLow', t.low52Week);
+
+      const financialIds = ['finRevenueGrowth','finRevenueStability','finEbitdaMargin','finNetProfitMargin','finROE','finROCE','finDebtEquity','finInterestCoverage','finOCF','finFCF','finEPSGrowth','finPromoterHolding','finPromoterPledge','finInstitutionalTrend'];
+      const signalIds = ['finRevenueGrowthSignal','finRevenueStabilitySignal','finEbitdaMarginSignal','finNetProfitMarginSignal','finROESignal','finROCESignal','finDebtEquitySignal','finInterestCoverageSignal','finOCFSignal','finFCFSignal','finEPSGrowthSignal','finPromoterHoldingSignal','finPromoterPledgeSignal','finInstitutionalTrendSignal'];
+      [...financialIds, ...signalIds].forEach(id => set(id, 'N/A'));
+      set('finRevenueGrowth', null); set('finProfitGrowth', null); set('finEPSGrowth', null); set('finROE', null); set('finROCE', null); set('finDebtEquity', null); set('finOperatingMargin', null); set('finNetMargin', null); set('finFreeCashFlow', null); set('finInterestCoverage', null);
+      const financialCard = document.getElementById('financialDashboard');
+      if (financialCard) financialCard.setAttribute('data-data-status', 'Financial statement dataset unavailable — no values substituted');
+    } catch (error) {
+      const err = document.getElementById('errorContainer');
+      if (err) { err.textContent = error.message; err.classList.remove('hidden'); }
+    }
+  };
+  window.addEventListener('vikram:analyze', event => render(event.detail?.ticker));
+  try { await window.VIKRAM_DATA_ENGINE.loadSnapshot(); } catch (_) {}
+});
