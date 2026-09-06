@@ -1,6 +1,74 @@
 'use strict';
-const crypto=require('crypto');
-function base32Decode(input){const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';let bits='',out=[];for(const c of String(input).replace(/=+$/,'').replace(/\s+/g,'').toUpperCase()){const v=alphabet.indexOf(c);if(v<0)continue;bits+=v.toString(2).padStart(5,'0');while(bits.length>=8){out.push(parseInt(bits.slice(0,8),2));bits=bits.slice(8);}}return Buffer.from(out);}
-function totp(secret,time=Date.now()){const key=base32Decode(secret);const counter=Math.floor(time/1000/30);const b=Buffer.alloc(8);b.writeBigUInt64BE(BigInt(counter));const h=crypto.createHmac('sha1',key).update(b).digest();const off=h[h.length-1]&15;const n=(h.readUInt32BE(off)&0x7fffffff)%1000000;return String(n).padStart(6,'0');}
-class TokenManager{constructor({fetchImpl=global.fetch,now=()=>Date.now()}={}){this.fetch=fetchImpl;this.now=now;this.token=null;this.expiresAt=0;}get configured(){return !!(process.env.INDSTOCKS_API_KEY&&process.env.INDSTOCKS_MPIN&&process.env.INDSTOCKS_TOTP_SECRET);}async getToken(){if(this.token&&this.expiresAt-this.now()>15*60*1000)return this.token;if(!this.configured)throw new Error('INDSTOCKS_NOT_CONFIGURED');const url=process.env.INDSTOCKS_TOKEN_URL||'https://api-docs.indstocks.com/generate/token';const r=await this.fetch(url,{method:'POST',headers:{'Content-Type':'application/json','x-api-key':process.env.INDSTOCKS_API_KEY},body:JSON.stringify({mpin:process.env.INDSTOCKS_MPIN,totp:totp(process.env.INDSTOCKS_TOTP_SECRET,this.now())})});if(!r.ok)throw new Error(`INDSTOCKS_AUTH_HTTP_${r.status}`);const j=await r.json();const token=j.access_token||j.token||j.data?.access_token;if(!token)throw new Error('INDSTOCKS_AUTH_NO_TOKEN');this.token=token;this.expiresAt=this.now()+24*60*60*1000;return token;}clear(){this.token=null;this.expiresAt=0;}}
-module.exports={TokenManager,totp};
+const crypto = require('crypto');
+
+function base32Decode(input) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+  let bits = '';
+  const out = [];
+  for (const c of String(input).replace(/=+$/, '').replace(/\s+/g, '').toUpperCase()) {
+    const v = alphabet.indexOf(c);
+    if (v < 0) continue;
+    bits += v.toString(2).padStart(5, '0');
+    while (bits.length >= 8) {
+      out.push(parseInt(bits.slice(0, 8), 2));
+      bits = bits.slice(8);
+    }
+  }
+  return Buffer.from(out);
+}
+
+function totp(secret, time = Date.now()) {
+  const key = base32Decode(secret);
+  const counter = Math.floor(time / 1000 / 30);
+  const b = Buffer.alloc(8);
+  b.writeBigUInt64BE(BigInt(counter));
+  const h = crypto.createHmac('sha1', key).update(b).digest();
+  const off = h[h.length - 1] & 15;
+  const n = (h.readUInt32BE(off) & 0x7fffffff) % 1000000;
+  return String(n).padStart(6, '0');
+}
+
+class TokenManager {
+  constructor({ fetchImpl = global.fetch, now = () => Date.now() } = {}) {
+    this.fetch = fetchImpl;
+    this.now = now;
+    this.token = null;
+    this.expiresAt = 0;
+  }
+
+  get configured() {
+    return !!(process.env.INDSTOCKS_API_KEY && process.env.INDSTOCKS_MPIN && process.env.INDSTOCKS_TOTP_SECRET);
+  }
+
+  async getToken() {
+    if (this.token && this.expiresAt - this.now() > 15 * 60 * 1000) return this.token;
+    if (!this.configured) throw new Error('INDSTOCKS_NOT_CONFIGURED');
+
+    const url = process.env.INDSTOCKS_TOKEN_URL || 'https://api.indstocks.com/generate/token';
+    const r = await this.fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.INDSTOCKS_API_KEY
+      },
+      body: JSON.stringify({
+        mpin: process.env.INDSTOCKS_MPIN,
+        totp: totp(process.env.INDSTOCKS_TOTP_SECRET, this.now())
+      })
+    });
+    if (!r.ok) throw new Error(`INDSTOCKS_AUTH_HTTP_${r.status}`);
+    const j = await r.json();
+    const token = j.access_token || j.token || j.data?.access_token;
+    if (!token) throw new Error('INDSTOCKS_AUTH_NO_TOKEN');
+    this.token = token;
+    this.expiresAt = this.now() + 24 * 60 * 60 * 1000;
+    return token;
+  }
+
+  clear() {
+    this.token = null;
+    this.expiresAt = 0;
+  }
+}
+
+module.exports = { TokenManager, totp };
