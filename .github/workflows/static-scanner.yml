@@ -36,7 +36,7 @@ jobs:
           node-version: 20
       - name: Install scanner dependencies
         working-directory: server
-        run: npm ci --no-audit --no-fund
+        run: npm install --no-audit --no-fund
       - name: Validate source
         run: |
           node --check server/src/staticSnapshot.js
