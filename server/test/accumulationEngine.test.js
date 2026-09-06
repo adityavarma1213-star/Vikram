@@ -1,8 +1,8 @@
 const assert = require('node:assert/strict');
 const { evaluate } = require('../../accumulation/engine');
 
-function row(date, close, prevClose, volume, delivery) {
-  return { trade_date: date, close, prev_close: prevClose, volume, deliv_per: delivery, deliv_qty: Math.round(volume * delivery / 100) };
+function row(date, close, prevClose, volume, delivery, turnover = 60000000) {
+  return { trade_date: date, close, prev_close: prevClose, volume, deliv_per: delivery, turnover, deliv_qty: Math.round((Number(volume) || 0) * (Number(delivery) || 0) / 100) };
 }
 
 const base = [
@@ -13,38 +13,59 @@ const base = [
   row('2026-08-28', 105, 104, 1400, 50), row('2026-09-01', 106, 105, 2000, 58)
 ];
 
-const futures = { trade_date: '2026-09-01', oi: 100000, change_oi: 7000 };
-const confirmed = evaluate({ symbol: 'GOOD', history: base, current: base.at(-1), futures });
-assert.equal(confirmed.verdict, 'ACCUMULATION CONFIRMED');
-assert.deepEqual(confirmed.confirmation.gateFailures, []);
+const fno = { available: true, trade_date: '2026-09-01', oi: 100000, change_oi: 7000 };
+const cash = { available: false, trade_date: '2026-09-01', oi: 100000, change_oi: 7000 };
 
-const lowVolume = base.map((r, i) => i === base.length - 1 ? { ...r, volume: 1200 } : r);
-const lowVolumeResult = evaluate({ symbol: 'LOWVOL', history: lowVolume, current: lowVolume.at(-1), futures });
-assert.notEqual(lowVolumeResult.verdict, 'ACCUMULATION CONFIRMED');
-assert.ok(lowVolumeResult.confirmation.gateFailures.includes('volume ratio is below 1.2x'));
+// Cash Equity: normalized score excludes the unavailable OI weight and requires 3/3 pillars.
+const cashConfirmed = evaluate({ symbol: 'CASHGOOD', history: base, current: base.at(-1), futures: cash });
+assert.equal(cashConfirmed.verdict, 'ACCUMULATION CONFIRMED');
+assert.equal(cashConfirmed.metrics.hasDerivatives, false);
+assert.equal(cashConfirmed.confirmation.pillars.passed, 3);
+assert.equal(cashConfirmed.confirmation.pillars.required, 3);
+assert.equal(cashConfirmed.score, 100);
 
-const lowDelivery = base.map((r, i) => i === base.length - 1 ? { ...r, deliv_per: 30.3 } : r);
-const lowDeliveryResult = evaluate({ symbol: 'LOWDEL', history: lowDelivery, current: lowDelivery.at(-1), futures });
-assert.notEqual(lowDeliveryResult.verdict, 'ACCUMULATION CONFIRMED');
-assert.ok(lowDeliveryResult.confirmation.gateFailures.includes('delivery is below 45%'));
+// F&O Equity: 3/4 is sufficient; volume intentionally fails while Delivery/OBV/OI pass.
+const fnoThreeOfFour = base.map((r, i) => i === base.length - 1 ? { ...r, volume: 800 } : r);
+const fnoConfirmed = evaluate({ symbol: 'FNO3OF4', history: fnoThreeOfFour, current: fnoThreeOfFour.at(-1), futures: fno });
+assert.equal(fnoConfirmed.verdict, 'ACCUMULATION CONFIRMED');
+assert.equal(fnoConfirmed.confirmation.pillars.passed, 3);
+assert.equal(fnoConfirmed.confirmation.pillars.required, 3);
+assert.equal(fnoConfirmed.confirmation.pillars.total, 4);
+assert.equal(fnoConfirmed.confirmation.pillars.details.volume, false);
 
-const noOiResult = evaluate({ symbol: 'NOOI', history: base, current: base.at(-1), futures: null });
-assert.notEqual(noOiResult.verdict, 'ACCUMULATION CONFIRMED');
-assert.ok(noOiResult.confirmation.gateFailures.includes('exact-date futures OI is not increasing'));
+// Quiet Absorption: high delivery + rising OBV + tight price with subdued volume.
+const quiet = base.map((r, i) => i === base.length - 1 ? { ...r, close: 105.2, prev_close: 105.0, volume: 1050, deliv_per: 60 } : r);
+const quietResult = evaluate({ symbol: 'QUIET', history: quiet, current: quiet.at(-1), futures: cash });
+assert.equal(quietResult.verdict, 'QUIET ABSORPTION');
+assert.ok(quietResult.metrics.volumeRatio >= 0.65 && quietResult.metrics.volumeRatio <= 1.05);
 
-const negativeOiResult = evaluate({ symbol: 'NEGOI', history: base, current: base.at(-1), futures: { ...futures, change_oi: -7000 } });
-assert.notEqual(negativeOiResult.verdict, 'ACCUMULATION CONFIRMED');
-assert.ok(negativeOiResult.confirmation.gateFailures.includes('exact-date futures OI is not increasing'));
+// Turnover floor: everything else can be strong, but < ₹5 Cr is an absolute safety failure.
+const lowTurnover = { ...base.at(-1), turnover: 49999999 };
+const turnoverResult = evaluate({ symbol: 'TURNOVERFAIL', history: base, current: lowTurnover, futures: cash });
+assert.notEqual(turnoverResult.verdict, 'ACCUMULATION CONFIRMED');
+assert.ok(turnoverResult.confirmation.gateFailures.some(x => x.includes('turnover is below ₹5 Cr')));
 
-const fallingObvHistory = base.map((r, i) => {
-  // The engine derives OBV direction from each row's close versus the prior row's
-  // actual close. These final rows therefore need genuinely falling closes.
-  if (i === base.length - 2) return { ...r, close: 108, prev_close: r.close, volume: 4000 };
-  if (i === base.length - 1) return { ...r, close: 100, prev_close: 108, volume: 6000, deliv_per: 58 };
-  return r;
-});
-const fallingObvResult = evaluate({ symbol: 'OBVFAIL', history: fallingObvHistory, current: fallingObvHistory.at(-1), futures });
-assert.notEqual(fallingObvResult.verdict, 'ACCUMULATION CONFIRMED');
-assert.ok(fallingObvResult.confirmation.gateFailures.includes('OBV is not rising'));
+// Delivery floor: <35% is an absolute safety failure.
+const lowDelivery = { ...base.at(-1), deliv_per: 34.9 };
+const deliveryResult = evaluate({ symbol: 'DELIVERYFAIL', history: base, current: lowDelivery, futures: cash });
+assert.notEqual(deliveryResult.verdict, 'ACCUMULATION CONFIRMED');
+assert.ok(deliveryResult.confirmation.gateFailures.some(x => x.includes('delivery is below 35.0%')));
 
-console.log('accumulation engine tests passed (6 scenarios)');
+// Distribution breakdown: falling price + high volume + falling OBV/OI must never be confirmation.
+const distributionHistory = base.map((r, i) => i === base.length - 1 ? { ...r, close: 90, prev_close: 100, volume: 5000, deliv_per: 25 } : r);
+const distributionResult = evaluate({ symbol: 'DISTRIBUTION', history: distributionHistory, current: distributionHistory.at(-1), futures: { ...fno, change_oi: -12000 } });
+assert.equal(distributionResult.verdict, 'DISTRIBUTION');
+
+// History <10 sessions: insufficient confirmation history blocks confirmation.
+const shortHistory = base.slice(0, 9);
+const shortResult = evaluate({ symbol: 'SHORT', history: shortHistory, current: shortHistory.at(-1), futures: null });
+assert.notEqual(shortResult.verdict, 'ACCUMULATION CONFIRMED');
+assert.ok(shortResult.confirmation.gateFailures.some(x => x.includes('history is shorter than 10 sessions')));
+
+// Runtime sanitization: null/NaN samples must not poison the moving averages.
+const dirtyHistory = base.map((r, i) => i === 2 ? { ...r, volume: NaN, deliv_per: NaN } : r);
+const dirtyResult = evaluate({ symbol: 'DIRTY', history: dirtyHistory, current: dirtyHistory.at(-1), futures: cash });
+assert.ok(Number.isFinite(dirtyResult.metrics.avgVolume));
+assert.ok(Number.isFinite(dirtyResult.metrics.avgDelivery));
+
+console.log('accumulation engine tests passed (8 statutory scenarios)');
