@@ -1,5 +1,6 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
+const path = require('node:path');
 const vm = require('node:vm');
 
 let loadedSnapshot = null;
@@ -7,7 +8,7 @@ const context = {
   window: {},
   fetch: async () => ({ ok: true, json: async () => loadedSnapshot })
 };
-vm.runInNewContext(fs.readFileSync('js/dataEngine.js', 'utf8'), context, { filename: 'js/dataEngine.js' });
+vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../../js/dataEngine.js'), 'utf8'), context, { filename: 'js/dataEngine.js' });
 
 loadedSnapshot = {
   status: 'ok',
@@ -27,7 +28,7 @@ loadedSnapshot = {
   await context.window.VIKRAM_DATA_ENGINE.loadSnapshot();
   const data = context.window.VIKRAM_DATA_ENGINE.analyzeAsset('SWIGGY');
 
-  // Accumulation score may be 100 when the accumulation evidence supports it,
+  // Accumulation score may be 100 when accumulation evidence supports it,
   // but it must never masquerade as the broader Research VIKRAM Score.
   assert.equal(data.meta.accumulationScore, 100);
   assert.equal(data.meta.accumulationVerdict, 'ACCUMULATION CONFIRMED');
