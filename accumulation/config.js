@@ -12,7 +12,7 @@ const ACCUMULATION_CONFIG = Object.freeze({
   weights: { price: 15, volume: 15, delivery: 25, obv: 20, futuresOi: 25 },
   verdicts: { confirmed: 75, starting: 55, mixed: 35 },
   safetyFloors: { minTurnoverRupees: 50000000, minPriceChangePct: -0.20, minDeliveryPct: 35.0 },
-  quorum: { fno: { total: 4, required: 3 }, cash: { total: 3, required: 3 } },
+  quorum: { fno: { total: 4, required: 3 }, cash: { total: 3, required: 2 } },
   watchlist: ['ONGC', 'VBL', 'BSE', 'NMDC']
 });
 
