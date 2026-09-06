@@ -13,3 +13,11 @@ html[data-mode="system"]{color-scheme:light dark} @media(prefers-color-scheme:da
 html[data-theme="neoglass"] .ng-card,html[data-theme="neoglass"] .ng-hero-card{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 html[data-theme="duology"] .ng-hero-card{border-radius:24px}html[data-theme="academic"] .ng-hero h1{letter-spacing:-.025em}
 @media(max-width:900px){.vikram-theme-label{display:none}.vikram-theme-control{margin-left:4px}.vikram-theme-control select{max-width:105px}}
+
+/* Search suggestions must remain above the benchmark cards and scanner. */
+.ng-hero{position:relative;z-index:20}
+.ng-hero-card:first-child{position:relative;z-index:30;overflow:visible}
+.ng-search{position:relative;z-index:50}
+.suggestions-dropdown{z-index:9999!important}
+.ng-benchmarks{position:relative;z-index:1}
+.ng-scanner{position:relative;z-index:1}
