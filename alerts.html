@@ -1,4 +1,38 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VIKRAM — Alerts</title><link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/accumulation.css"><link rel="stylesheet" href="css/scanner.css"><link rel="manifest" href="manifest.json"></head>
-<body class="accumulation-page"><header class="app-header"><div class="header-container"><div class="brand-identity"><span class="brand-logo">🧠</span><span class="brand-name">VIKRAM</span></div><nav class="app-navigation"><ul class="nav-list"><li><a class="nav-link" href="index.html">Analysis</a></li><li><a class="nav-link" href="accumulation.html">Accumulation Scanner</a></li><li><a class="nav-link" href="scanner.html">Option B</a></li><li><a class="nav-link active" href="alerts.html">Alerts</a></li></ul></nav></div></header>
-<main class="app-container accumulation-shell"><section class="scanner-hero"><div><p class="eyebrow">NEW-MATCH NOTIFICATIONS</p><h1>Get notified only about new matches.</h1><p>Alert preferences and delivery history are backed by the VIKRAM server. Nothing is marked sent unless the provider reports success.</p></div></section><div id="backendNotice" class="dashboard-card hidden"></div><section class="dashboard-card"><div class="table-heading"><h2 class="card-headline">Preferences</h2><span class="text-muted">Accumulation Scanner</span></div><div class="control-row"><label><input type="checkbox" id="emailToggle"> Email me new accumulation matches</label><label><input type="checkbox" id="pushToggle"> Push-notify me new accumulation matches</label></div><div class="control-row"><input id="emailInput" placeholder="you@example.com"><button id="savePrefBtn" class="btn btn-primary">Save Preferences</button><button id="enablePushBtn" class="btn">Enable Browser Push</button></div><p id="pushStatus" class="text-muted">Push: checking…</p></section><section class="dashboard-card"><div class="table-heading"><h2 class="card-headline">Alert History</h2><span id="historyMeta" class="text-muted">—</span></div><div class="table-container"><table class="metric-table"><thead><tr><th>Stock</th><th>Scanner</th><th>Channel</th><th>Status</th><th>Detail</th><th>When</th></tr></thead><tbody id="historyRows"><tr><td colspan="6" class="text-muted">No alerts yet.</td></tr></tbody></table></div></section></main><script src="accumulation/api.js"></script><script src="js/alertsUI.js"></script></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VIKRAM — Alerts</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/accumulation.css">
+<link rel="stylesheet" href="css/scanner.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body class="accumulation-page">
+<header class="app-header">
+  <div class="header-container">
+    <div class="brand-identity"><span class="brand-logo">🧠</span><span class="brand-name">VIKRAM</span></div>
+    <nav class="app-navigation" aria-label="Main Navigation">
+      <ul class="nav-list">
+        <li><a class="nav-link" href="index.html#home">Home</a></li>
+        <li><a class="nav-link" href="index.html#companyOverview">Analysis</a></li>
+        <li><a class="nav-link" href="accumulation.html">Accumulation Scanner</a></li>
+        <li><a class="nav-link" href="index.html#hiddenGemsPreview">Hidden Gems</a></li>
+        <li><a class="nav-link" href="index.html#opportunityRadar">Opportunity Radar</a></li>
+        <li><a class="nav-link" href="index.html#portfolio">Portfolio</a></li>
+        <li><a class="nav-link" href="about.html">About</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main class="app-container accumulation-shell">
+  <section class="scanner-hero"><div><p class="eyebrow">NEW-MATCH NOTIFICATIONS</p><h1>Get notified only about new matches.</h1><p>Alert preferences and delivery history are backed by the VIKRAM server. Nothing is marked sent unless the provider reports success.</p></div></section>
+  <div id="backendNotice" class="dashboard-card hidden"></div>
+  <section class="dashboard-card"><div class="table-heading"><h2 class="card-headline">Preferences</h2><span class="text-muted">Accumulation Scanner</span></div><div class="control-row"><label><input type="checkbox" id="emailToggle"> Email me new accumulation matches</label><label><input type="checkbox" id="pushToggle"> Push-notify me new accumulation matches</label></div><div class="control-row"><input id="emailInput" placeholder="you@example.com"><button id="savePrefBtn" class="btn btn-primary">Save Preferences</button><button id="enablePushBtn" class="btn">Enable Browser Push</button></div><p id="pushStatus" class="text-muted">Push: checking…</p></section>
+  <section class="dashboard-card"><div class="table-heading"><h2 class="card-headline">Alert History</h2><span id="historyMeta" class="text-muted">—</span></div><div class="table-container"><table class="metric-table"><thead><tr><th>Stock</th><th>Scanner</th><th>Channel</th><th>Status</th><th>Detail</th><th>When</th></tr></thead><tbody id="historyRows"><tr><td colspan="6" class="text-muted">No alerts yet.</td></tr></tbody></table></div></section>
+</main>
+<script src="accumulation/api.js"></script>
+<script src="js/alertsUI.js"></script>
+</body>
+</html>
