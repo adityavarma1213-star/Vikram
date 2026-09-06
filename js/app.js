@@ -62,7 +62,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try { await window.VIKRAM_DATA_ENGINE.loadSnapshot(); } catch (_) {}
 
-  // Alert/deep links can now open the canonical Analysis workspace and select the requested stock.
   const params = new URLSearchParams(window.location.search);
   const initialSymbol = params.get('symbol');
   if (initialSymbol) {
@@ -70,3 +69,43 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('companyOverview')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 });
+
+/* VIKRAM dual-theme bootstrap: Aurora and Misty only. */
+(function () {
+  const KEY = 'vikram-theme';
+  const themes = { aurora: { icon: '☾', label: 'Aurora' }, misty: { icon: '☀', label: 'Misty' } };
+  const link = document.createElement('link');
+  link.rel = 'stylesheet'; link.href = 'css/themes.css';
+  document.head.appendChild(link);
+
+  function apply(theme) {
+    if (!themes[theme]) theme = 'aurora';
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme === 'misty' ? 'light' : 'dark';
+    localStorage.setItem(KEY, theme);
+    document.querySelectorAll('.vikram-theme-control button').forEach(b => b.setAttribute('aria-pressed', b.dataset.theme === theme));
+  }
+
+  function build() {
+    const host = document.querySelector('.header-container');
+    if (!host || document.querySelector('.vikram-theme-control')) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'vikram-theme-control';
+    wrap.setAttribute('role', 'group');
+    wrap.setAttribute('aria-label', 'Choose VIKRAM theme');
+    Object.entries(themes).forEach(([key, item]) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.dataset.theme = key;
+      b.setAttribute('aria-label', `${item.label} theme`);
+      b.innerHTML = `${item.icon} <span class="vikram-theme-label">${item.label}</span>`;
+      b.addEventListener('click', () => apply(key));
+      wrap.appendChild(b);
+    });
+    host.appendChild(wrap);
+    apply(localStorage.getItem(KEY) || 'aurora');
+  }
+
+  apply(localStorage.getItem(KEY) || 'aurora');
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', build);
+  else build();
+})();
