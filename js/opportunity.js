@@ -1,32 +1,106 @@
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
   const box = document.getElementById('opportunityRadar');
-  if (!box || !window.VIKRAM_DATA_ENGINE) return;
-  const num=v=>{const n=Number(v);return Number.isFinite(n)?n:null};
-  const money=v=>{const n=num(v);return n===null?'N/A':`₹${n.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}`};
-  const fmt=(v,s='')=>{const n=num(v);return n===null?'N/A':`${n.toFixed(1)}${s}`};
-  const oi=v=>{const n=num(v);return n===null?'N/A':n.toLocaleString('en-IN')};
-  const esc=v=>String(v??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]||c));
-  const status=s=>s?.dataStatus||(s?.status==='ok'?'EOD VERIFIED':'DATA N/A');
-  const verdict=r=>r.verdict||'UNCONFIRMED / MIXED';
-  const rankScore=r=>(num(r.score)??-1)+(verdict(r)==='ACCUMULATION CONFIRMED'?20:verdict(r)==='ACCUMULATION STARTING'?10:0);
-  try{
-    const snapshot=await window.VIKRAM_DATA_ENGINE.loadSnapshot();
-    const rows=Array.isArray(snapshot.results)?snapshot.results:[];
-    const ranked=rows.filter(r=>num(r.score)!==null&&verdict(r)!=='DISTRIBUTION').sort((a,b)=>rankScore(b)-rankScore(a)||num(b.score)-num(a.score)).slice(0,100);
-    box.innerHTML=`<div class="dashboard-card opportunity-card discovery-card">
-      <div class="discovery-intro"><div><div class="discovery-kicker">VIKRAM DISCOVERY</div><h2 class="card-headline">Opportunity Radar</h2><p class="text-muted">A simple shortlist of stocks showing stronger accumulation evidence today.</p></div><div class="discovery-status"><span class="status-dot"></span>${status(snapshot)}<small>${esc(snapshot.asOf||'N/A')}</small></div></div>
-      <div class="discovery-guide"><span><b>Confirmed</b> stronger evidence</span><span><b>Starting</b> early evidence</span><span><b>Why</b> explains the numbers</span></div>
-      <div class="opportunity-table-container"><table class="metric-table opportunity-table"><thead><tr>${['Rank','Stock','Price','Score','Today','Volume','Delivery','OI Change','Verdict','Why'].map((h,i)=>i<9?`<th><button type="button" class="op-filter" data-key="${i}">${h}</button></th>`:`<th>${h}</th>`).join('')}</tr></thead><tbody>${ranked.map((row,i)=>{const m=row.metrics||{},v=verdict(row),why=Array.isArray(row.why)?row.why.slice(0,3).join(' '):'Evidence available in scanner data.';return `<tr data-symbol="${esc(row.symbol||row.ticker||'')}" data-price="${num(m.close??m.last_price)??''}" data-score="${num(row.score)??''}" data-pricepct="${num(m.priceChangePct)??''}" data-volume="${num(m.volumeRatio)??''}" data-delivery="${num(m.deliveryPct)??''}" data-oi="${num(m.changeOi)??''}" data-verdict="${esc(v)}"><td>${i+1}</td><td><strong>${esc(row.symbol||row.ticker||'N/A')}</strong></td><td class="price-cell">${money(m.close??m.last_price)}</td><td><strong>${row.score}</strong></td><td>${fmt(m.priceChangePct,'%')}</td><td>${fmt(m.volumeRatio,'x')}</td><td>${fmt(m.deliveryPct,'%')}</td><td>${oi(m.changeOi)}</td><td><span class="verdict-pill">${esc(v)}</span></td><td class="why-cell">${esc(why)}</td></tr>`}).join('')}</tbody></table></div>
-    </div>`;
-    const style=document.createElement('style');style.textContent=`#opportunityRadar .discovery-card{padding:0;background:transparent;border:0;box-shadow:none}#opportunityRadar .discovery-intro{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:14px}#opportunityRadar .discovery-kicker{font-size:11px;font-weight:800;letter-spacing:1.4px;color:var(--discovery-accent);margin-bottom:6px}#opportunityRadar .discovery-intro .card-headline{margin:0 0 5px}#opportunityRadar .discovery-status{display:flex;align-items:center;gap:8px;color:#516078;font-size:12px;font-weight:800;white-space:nowrap}#opportunityRadar .discovery-status small{color:#8792a5;font-weight:600}.status-dot{width:8px;height:8px;border-radius:50%;background:#138a5b;box-shadow:0 0 0 4px #e2f5ed}.discovery-guide{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.discovery-guide span{background:#fff;border:1px solid var(--discovery-line);border-radius:999px;padding:7px 11px;color:#718096;font-size:12px}.discovery-guide b{color:#25324a}.opportunity-table-container{height:calc(100vh - 245px);min-height:560px;max-height:none;overflow:auto;border:1px solid var(--discovery-line);border-radius:16px;background:#fff;box-shadow:0 10px 30px rgba(35,50,80,.07)}.opportunity-table{min-width:1120px}.opportunity-table thead th{position:sticky!important;top:0!important;z-index:30!important;background:#f5f7fb!important;padding:0!important;height:50px}.opportunity-table tbody td{background:#fff!important;padding:11px 13px;height:49px;color:var(--discovery-ink);border-bottom:1px solid #edf0f5}.opportunity-table tbody tr:hover td{background:#f8faff!important}.opportunity-table .price-cell{font-weight:800}.opportunity-table .why-cell{font-size:12px;color:#657188;line-height:1.35}.op-filter{width:100%;height:50px;border:0;background:transparent;color:#647089;font-size:11px;font-weight:800;letter-spacing:.7px;text-align:left;padding:0 13px;cursor:pointer}.op-filter::after{content:'⌄';float:right;color:#98a2b3}.op-filter:hover{background:#eef3ff;color:var(--discovery-accent)}.op-menu{position:fixed;z-index:10000;min-width:190px;padding:6px;background:#fff;border:1px solid var(--discovery-line);border-radius:12px;box-shadow:0 18px 40px rgba(25,40,70,.16)}.op-menu button{display:block;width:100%;border:0;background:#fff;color:#152033;text-align:left;border-radius:8px;padding:10px 12px;font-size:13px;font-weight:650;cursor:pointer}.op-menu button:hover{background:#f1f5ff;color:var(--discovery-accent)}@media(max-width:800px){#opportunityRadar .discovery-intro{align-items:flex-start;flex-direction:column}#opportunityRadar .opportunity-table-container{height:calc(100vh - 220px);min-height:500px}}`;document.head.appendChild(style);
-    const table=box.querySelector('.opportunity-table'),tbody=table.tBodies[0],buttons=[...table.querySelectorAll('.op-filter')];let menu=null,active={};
-    const close=()=>{menu?.remove();menu=null;buttons.forEach(b=>b.classList.remove('active'))};
-    const n=(r,k)=>num(r.dataset[k]);
-    const apply=()=>[...tbody.rows].forEach(r=>{let show=true;for(const[k,v]of Object.entries(active)){const key=Number(k);if(key===1&&!r.dataset.symbol.toUpperCase().includes(v))show=false;if(key===3&&v==='high'&&!(n(r,'score')>=70))show=false;if(key===3&&v==='low'&&!(n(r,'score')<70))show=false;if(key===4&&v==='pos'&&!(n(r,'pricepct')>=0))show=false;if(key===4&&v==='neg'&&!(n(r,'pricepct')<0))show=false;if(key===5&&v==='strong'&&!(n(r,'volume')>=1.2))show=false;if(key===6&&v==='strong'&&!(n(r,'delivery')>=50))show=false;if(key===7&&v==='up'&&!(n(r,'oi')>0))show=false;if(key===7&&v==='down'&&!(n(r,'oi')<0))show=false;if(key===8&&r.dataset.verdict!==v)show=false}r.style.display=show?'':'none'});
-    const field={2:'price',3:'score',4:'pricepct',5:'volume',6:'delivery',7:'oi'};
-    const sort=(key,dir)=>{const rs=[...tbody.rows],f=field[key];rs.sort((a,b)=>{if(key===1)return dir==='asc'?a.dataset.symbol.localeCompare(b.dataset.symbol):b.dataset.symbol.localeCompare(a.dataset.symbol);const av=n(a,f),bv=n(b,f);if(av===null&&bv===null)return 0;if(av===null)return 1;if(bv===null)return-1;return dir==='asc'?av-bv:bv-av});rs.forEach(r=>tbody.appendChild(r))};
-    const options={0:[['All','all'],['Best First','best']],1:[['All','all'],['A–Z','az'],['Z–A','za']],2:[['All','all'],['Low to High','asc'],['High to Low','desc']],3:[['All','all'],['Highest First','desc'],['Lowest First','asc'],['70+ Strong','high'],['Below 70','low']],4:[['All','all'],['Positive Today','pos'],['Negative Today','neg']],5:[['All','all'],['Highest First','desc'],['Lowest First','asc'],['1.2x+ Strong','strong']],6:[['All','all'],['Highest First','desc'],['Lowest First','asc'],['50%+ Strong','strong']],7:[['All','all'],['Highest First','desc'],['Lowest First','asc'],['OI Increasing','up'],['OI Decreasing','down']],8:[['All','all'],['Accumulation Confirmed','ACCUMULATION CONFIRMED'],['Accumulation Starting','ACCUMULATION STARTING'],['Unconfirmed / Mixed','UNCONFIRMED / MIXED']]};
-    buttons.forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();close();const key=Number(btn.dataset.key);menu=document.createElement('div');menu.className='op-menu';(options[key]||[['All','all']]).forEach(([label,v])=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=()=>{if(v==='all')delete active[key];else if(v==='best'){sort(3,'desc');delete active[key]}else if(v==='az'||v==='za')sort(1,v==='az'?'asc':'desc');else if(v==='asc'||v==='desc')sort(key,v);else active[key]=v;close();apply()};menu.appendChild(b)});document.body.appendChild(menu);const r=btn.getBoundingClientRect(),w=Math.min(menu.offsetWidth||210,innerWidth-16),h=menu.offsetHeight||190;menu.style.left=`${Math.max(8,Math.min(r.left,innerWidth-w-8))}px`;menu.style.top=`${Math.max(8,Math.min(r.bottom+4,innerHeight-h-8))}px`)} ,true));
-    document.addEventListener('click',e=>{if(menu&&!e.target.closest('.op-menu')&&!e.target.closest('.op-filter'))close()});table.closest('.opportunity-table-container')?.addEventListener('scroll',close,{passive:true});window.addEventListener('resize',close);
-  }catch(error){box.innerHTML='<div class="dashboard-card"><h2 class="card-headline">Opportunity Radar</h2><p class="text-muted">Data N/A — a verified scanner snapshot is required.</p></div>'}
+  if (!box) return;
+
+  const number = (value) => {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  };
+  const money = (value) => {
+    const n = number(value);
+    return n === null ? 'N/A' : `₹${n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
+  const percent = (value) => {
+    const n = number(value);
+    return n === null ? 'N/A' : `${n.toFixed(1)}%`;
+  };
+  const multiple = (value) => {
+    const n = number(value);
+    return n === null ? 'N/A' : `${n.toFixed(1)}x`;
+  };
+  const safe = (value) => String(value ?? '').replace(/[&<>\"]/g, (c) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '\"':'&quot;' }[c] || c));
+
+  const render = (snapshot) => {
+    const rows = Array.isArray(snapshot?.results) ? snapshot.results : [];
+    const candidates = rows
+      .filter((row) => number(row?.score) !== null && String(row?.verdict || '').toUpperCase() !== 'DISTRIBUTION')
+      .sort((a, b) => (number(b.score) || 0) - (number(a.score) || 0))
+      .slice(0, 50);
+
+    const status = snapshot?.dataStatus || (snapshot?.status === 'ok' ? 'EOD VERIFIED' : 'DATA N/A');
+    const asOf = snapshot?.asOf || 'N/A';
+
+    box.innerHTML = `
+      <div class="dashboard-card opportunity-card">
+        <div class="opportunity-heading">
+          <div>
+            <div class="opportunity-kicker">VIKRAM DISCOVERY</div>
+            <h2 class="card-headline">Opportunity Radar</h2>
+            <p class="opportunity-subtitle">Stocks with stronger accumulation evidence, ranked for further research.</p>
+          </div>
+          <div class="opportunity-status"><span></span><strong>${safe(status)}</strong><small>As of ${safe(asOf)}</small></div>
+        </div>
+
+        <div class="opportunity-guide">
+          <div><b>CONFIRMED</b><span>Stronger evidence</span></div>
+          <div><b>STARTING</b><span>Early evidence</span></div>
+          <div><b>SCORE</b><span>Scanner strength</span></div>
+        </div>
+
+        ${candidates.length ? `
+        <div class="opportunity-table-wrap">
+          <table class="opportunity-table">
+            <thead><tr>
+              <th>Rank</th><th>Stock</th><th>Price</th><th>Score</th><th>Today</th>
+              <th>Volume</th><th>Delivery</th><th>OI Change</th><th>Verdict</th><th>Why</th>
+            </tr></thead>
+            <tbody>
+              ${candidates.map((row, index) => {
+                const m = row.metrics || {};
+                const verdict = String(row.verdict || 'UNCONFIRMED / MIXED');
+                const why = Array.isArray(row.why) && row.why.length ? row.why.slice(0, 2).join(' · ') : 'Scanner evidence available';
+                const verdictClass = verdict.toUpperCase().includes('CONFIRMED') ? 'confirmed' : verdict.toUpperCase().includes('STARTING') ? 'starting' : 'mixed';
+                return `<tr>
+                  <td class="rank">${index + 1}</td>
+                  <td class="stock"><strong>${safe(row.symbol || row.ticker || 'N/A')}</strong></td>
+                  <td class="price">${money(m.close ?? m.last_price)}</td>
+                  <td class="score">${number(row.score)}</td>
+                  <td>${percent(m.priceChangePct)}</td>
+                  <td>${multiple(m.volumeRatio)}</td>
+                  <td>${percent(m.deliveryPct)}</td>
+                  <td>${number(m.changeOi) === null ? 'N/A' : number(m.changeOi).toLocaleString('en-IN')}</td>
+                  <td><span class="verdict ${verdictClass}">${safe(verdict)}</span></td>
+                  <td class="why">${safe(why)}</td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>` : `
+          <div class="opportunity-empty">
+            <div class="empty-icon">◌</div>
+            <h3>No Opportunity Radar candidates yet</h3>
+            <p>The verified scanner has no qualifying opportunities in the current snapshot.</p>
+            <small>Data status: ${safe(status)} · ${safe(asOf)}</small>
+          </div>`}
+      </div>`;
+  };
+
+  const showError = (message) => {
+    box.innerHTML = `<div class="dashboard-card opportunity-card opportunity-error"><div class="opportunity-kicker">VIKRAM DISCOVERY</div><h2 class="card-headline">Opportunity Radar</h2><p>${safe(message)}</p><small>Check the verified scanner snapshot and refresh the page.</small></div>`;
+  };
+
+  const boot = async () => {
+    try {
+      if (!window.VIKRAM_DATA_ENGINE || typeof window.VIKRAM_DATA_ENGINE.loadSnapshot !== 'function') {
+        throw new Error('VIKRAM data engine is unavailable');
+      }
+      const snapshot = await window.VIKRAM_DATA_ENGINE.loadSnapshot();
+      render(snapshot);
+    } catch (error) {
+      console.error('VIKRAM Opportunity Radar:', error);
+      showError('The Opportunity Radar could not load the verified scanner snapshot.');
+    }
+  };
+
+  boot();
 });
