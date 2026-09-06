@@ -1,1 +1,69 @@
-document.addEventListener('DOMContentLoaded',async()=>{const box=document.getElementById('opportunityRadar');if(!box)return;try{const snap=await window.VIKRAM_DATA_ENGINE.loadSnapshot();const rows=Array.isArray(snap.results)?snap.results:[];rows.sort((a,b)=>(Number(b.score??-1)-Number(a.score??-1)));box.innerHTML=`<div class="dashboard-card"><h2 class="card-headline">🛰 Opportunity Radar</h2><p class="text-muted">${snap.dataStatus||'DATA N/A'} · As of ${snap.asOf||'N/A'} · ${rows.length} verified rows</p><div class="table-container"><table class="metric-table"><thead><tr><th>Rank</th><th>Symbol</th><th>Score</th><th>Status</th></tr></thead><tbody>${rows.slice(0,100).map((r,i)=>`<tr><td>${i+1}</td><td>${r.symbol||r.ticker||'N/A'}</td><td>${Number.isFinite(Number(r.score))?r.score:'N/A'}</td><td>${r.dataStatus||snap.dataStatus||'N/A'}</td></tr>`).join('')}</tbody></table></div></div>`;}catch(e){box.innerHTML='<div class="dashboard-card"><h2 class="card-headline">🛰 Opportunity Radar</h2><p class="text-muted">Data N/A — a verified scanner snapshot is required.</p></div>';}});
+document.addEventListener('DOMContentLoaded', async () => {
+  const box = document.getElementById('opportunityRadar');
+  if (!box) return;
+
+  const num = (value) => {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  };
+
+  const fmt = (value, suffix = '') => {
+    const n = num(value);
+    return n === null ? 'N/A' : `${n.toFixed(1)}${suffix}`;
+  };
+
+  const statusText = (snapshot) => {
+    if (snapshot?.dataStatus) return snapshot.dataStatus;
+    return snapshot?.status === 'ok' ? 'EOD VERIFIED' : 'DATA N/A';
+  };
+
+  try {
+    const snapshot = await window.VIKRAM_DATA_ENGINE.loadSnapshot();
+    const rows = Array.isArray(snapshot.results) ? snapshot.results : [];
+
+    const ranked = rows
+      .filter((row) => num(row.score) !== null)
+      .sort((a, b) => num(b.score) - num(a.score))
+      .slice(0, 100);
+
+    box.innerHTML = `
+      <div class="dashboard-card">
+        <h2 class="card-headline">🛰 Opportunity Radar</h2>
+        <p class="text-muted">${statusText(snapshot)} · As of ${snapshot.asOf || 'N/A'} · ${rows.length} verified rows</p>
+        <div class="table-container">
+          <table class="metric-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Symbol</th>
+                <th>Score</th>
+                <th>Price %</th>
+                <th>Volume</th>
+                <th>Delivery</th>
+                <th>OI Change</th>
+                <th>Verdict</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${ranked.map((row, index) => {
+                const m = row.metrics || {};
+                return `<tr>
+                  <td>${index + 1}</td>
+                  <td><strong>${row.symbol || row.ticker || 'N/A'}</strong></td>
+                  <td>${num(row.score) === null ? 'N/A' : row.score}</td>
+                  <td>${fmt(m.priceChangePct, '%')}</td>
+                  <td>${fmt(m.volumeRatio, 'x')}</td>
+                  <td>${fmt(m.deliveryPct, '%')}</td>
+                  <td>${m.changeOi == null ? 'N/A' : Number(m.changeOi).toLocaleString('en-IN')}</td>
+                  <td>${row.verdict || 'N/A'}</td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  } catch (error) {
+    box.innerHTML = '<div class="dashboard-card"><h2 class="card-headline">🛰 Opportunity Radar</h2><p class="text-muted">Data N/A — a verified scanner snapshot is required.</p></div>';
+  }
+});
