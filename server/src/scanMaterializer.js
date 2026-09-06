@@ -24,7 +24,13 @@ function buildResult(symbol, rows, futuresBySymbolDate, derivativesSymbols = new
   if (!current) return null;
   const key = `${symbol}|${dateKey(current.trade_date)}`;
   const exactFutures = futuresBySymbolDate.get(key) || null;
-  const futures = exactFutures || (derivativesSymbols.has(symbol) ? { available: false, derivativesSupported: true, trade_date: dateKey(current.trade_date) } : { available: false, derivativesSupported: false, trade_date: dateKey(current.trade_date) });
+  // Database futures rows are already verified evidence; explicitly mark them as available
+  // for the canonical engine so exact-date OI is not silently treated as cash-only.
+  const futures = exactFutures
+    ? { ...exactFutures, available: true, derivativesSupported: true }
+    : (derivativesSymbols.has(symbol)
+      ? { available: false, derivativesSupported: true, trade_date: dateKey(current.trade_date) }
+      : { available: false, derivativesSupported: false, trade_date: dateKey(current.trade_date) });
   return evaluate(symbol, bounded, futures);
 }
 
