@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/migrate.js && node src/index.js",
     "ingest": "node src/migrate.js && node src/ingest.js",
-    "test": "node test/scanner.test.js && node test/accumulationEngine.test.js && node test/istDate.test.js && node test/scanMaterializer.test.js && node test/ruleEngine.test.js && node test/alertEngine.test.js",
+    "test": "node test/scanner.test.js && node test/accumulationEngine.test.js && node test/researchDataIntegrity.test.js && node test/istDate.test.js && node test/scanMaterializer.test.js && node test/ruleEngine.test.js && node test/alertEngine.test.js",
     "test:integration": "node test/integration.test.js",
     "validate:snapshot": "node ../scripts/validateStaticSnapshot.js",
     "test:live": "node test/liveData.test.js"
