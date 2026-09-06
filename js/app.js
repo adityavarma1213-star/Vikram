@@ -60,7 +60,156 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   window.addEventListener('vikram:analyze', event => render(event.detail?.ticker));
 
+  const normalizeSymbol = value => String(value || '').trim().toUpperCase().replace(/\.(NS|NSE)$/i, '');
+
+  const readStoredSymbols = key => {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(key) || '[]');
+      if (!Array.isArray(parsed)) return new Set();
+      return new Set(parsed.map(item => normalizeSymbol(typeof item === 'string' ? item : item?.symbol || item?.ticker)).filter(Boolean));
+    } catch (_) {
+      return new Set();
+    }
+  };
+
+  const getScannerSnapshot = async () => {
+    try {
+      const response = await fetch('data/scanner.json', { cache: 'no-store' });
+      if (!response.ok) return null;
+      const snapshot = await response.json();
+      return snapshot?.dataStatus === 'EOD VERIFIED' && Array.isArray(snapshot.results) ? snapshot : null;
+    } catch (_) {
+      return null;
+    }
+  };
+
+  const getIndexMembership = item => {
+    const raw = item?.indices ?? item?.indexMembership ?? item?.indexMemberships ?? {};
+    if (Array.isArray(raw)) return new Set(raw.map(value => String(value).toUpperCase().replace(/^NIFTY\s*/,'NIFTY ')));
+    if (raw && typeof raw === 'object') {
+      return new Set(Object.entries(raw).filter(([, value]) => Boolean(value)).map(([key]) => String(key).toUpperCase().replace(/_/g, ' ')));
+    }
+    return new Set();
+  };
+
+  const ensureSegmentStyles = () => {
+    if (document.getElementById('vikramSegmentFilterStyles')) return;
+    const style = document.createElement('style');
+    style.id = 'vikramSegmentFilterStyles';
+    style.textContent = '.vikram-segment-filters{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:13px 0 8px}.vikram-segment-pill{border:1px solid var(--border-subtle);background:var(--bg-card-2);color:var(--text-muted);border-radius:999px;padding:8px 12px;font-size:10px;font-weight:900;cursor:pointer}.vikram-segment-pill:hover,.vikram-segment-pill.active{border-color:var(--accent-cyan);color:var(--accent-cyan);background:var(--bg-card)}.vikram-market-news{padding:22px;border:1px dashed var(--border-subtle);border-radius:12px;color:var(--text-muted);line-height:1.6;font-size:11px}.vikram-tab-hidden{display:none!important}';
+    document.head.appendChild(style);
+  };
+
+  const setupScannerSurface = async () => {
+    const surface = document.querySelector('.scanner-container-surface');
+    if (!surface) return;
+    ensureSegmentStyles();
+
+    const filterControls = surface.querySelector('.filter-controls');
+    if (!filterControls) return;
+
+    let segmentBar = surface.querySelector('.vikram-segment-filters');
+    if (!segmentBar) {
+      segmentBar = document.createElement('div');
+      segmentBar.className = 'vikram-segment-filters';
+      segmentBar.setAttribute('role', 'tablist');
+      segmentBar.setAttribute('aria-label', 'Index universe');
+      [['ALL','All Stocks'],['NIFTY 50','NIFTY 50'],['NIFTY 200','NIFTY 200'],['NIFTY 500','NIFTY 500']].forEach(([value,label]) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = `vikram-segment-pill${value === 'ALL' ? ' active' : ''}`;
+        button.dataset.segment = value;
+        button.setAttribute('role', 'tab');
+        button.textContent = label;
+        segmentBar.appendChild(button);
+      });
+      filterControls.parentNode.insertBefore(segmentBar, filterControls);
+    }
+
+    let snapshot = await getScannerSnapshot();
+    let rowsBySymbol = new Map();
+    const rebuildRowMap = () => {
+      rowsBySymbol = new Map();
+      surface.querySelectorAll('.scanner-table tbody tr').forEach(row => {
+        const symbol = normalizeSymbol(row.dataset.symbol || row.querySelector('td')?.textContent);
+        if (symbol) rowsBySymbol.set(symbol, row);
+      });
+    };
+
+    const newsId = 'vikramMarketNewsSurface';
+    let newsSurface = document.getElementById(newsId);
+    if (!newsSurface) {
+      newsSurface = document.createElement('div');
+      newsSurface.id = newsId;
+      newsSurface.className = 'vikram-market-news vikram-tab-hidden';
+      newsSurface.textContent = 'Market News is contextual only. No live news provider is configured in this static EOD build, so no news values are fabricated.';
+      const tableWrap = surface.querySelector('.scanner-table-wrap');
+      tableWrap?.parentNode.insertBefore(newsSurface, tableWrap);
+    }
+
+    let activeSegment = 'ALL';
+    let activeTab = 'Top Opportunities';
+
+    const applyFilters = () => {
+      rebuildRowMap();
+      const watchlist = readStoredSymbols('vikram_watchlist');
+      const portfolio = readStoredSymbols('vikram_portfolio');
+      const resultMap = new Map((snapshot?.results || []).map(item => [normalizeSymbol(item.symbol || item.ticker || item.stock), item]));
+      const segmentMap = new Map();
+      (snapshot?.results || []).forEach(item => segmentMap.set(normalizeSymbol(item.symbol || item.ticker || item.stock), getIndexMembership(item)));
+
+      surface.querySelectorAll('.scanner-table tbody tr').forEach(row => {
+        const symbol = normalizeSymbol(row.dataset.symbol || row.querySelector('td')?.textContent);
+        const item = resultMap.get(symbol);
+        const memberships = segmentMap.get(symbol) || new Set();
+        let visible = true;
+        if (activeSegment !== 'ALL') visible = memberships.has(activeSegment);
+        if (visible && activeTab === 'Watchlist') visible = watchlist.has(symbol);
+        if (visible && activeTab === 'My Portfolio') visible = portfolio.has(symbol);
+        if (visible && activeTab === 'Top Opportunities') {
+          const verdict = String(item?.verdict || '').toUpperCase();
+          const score = Number(item?.score);
+          visible = verdict.includes('CONFIRMED') || (Number.isFinite(score) && score >= 75);
+        }
+        row.classList.toggle('vikram-tab-hidden', !visible);
+      });
+
+      const tableWrap = surface.querySelector('.scanner-table-wrap');
+      const showNews = activeTab === 'Market News';
+      tableWrap?.classList.toggle('vikram-tab-hidden', showNews);
+      newsSurface.classList.toggle('vikram-tab-hidden', !showNews);
+    };
+
+    segmentBar.addEventListener('click', event => {
+      const button = event.target.closest('.vikram-segment-pill');
+      if (!button) return;
+      activeSegment = button.dataset.segment || 'ALL';
+      segmentBar.querySelectorAll('.vikram-segment-pill').forEach(pill => pill.classList.toggle('active', pill === button));
+      applyFilters();
+    });
+
+    surface.querySelectorAll('.surface-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        activeTab = tab.textContent.trim();
+        surface.querySelectorAll('.surface-tab').forEach(other => other.classList.toggle('active', other === tab));
+        applyFilters();
+      });
+    });
+
+    surface.querySelectorAll('.filter-controls select').forEach(select => select.addEventListener('change', () => setTimeout(applyFilters, 0)));
+    window.addEventListener('storage', event => {
+      if (event.key === 'vikram_watchlist' || event.key === 'vikram_portfolio') applyFilters();
+    });
+    new MutationObserver(() => applyFilters()).observe(surface.querySelector('.scanner-table-wrap') || surface, { childList: true, subtree: true });
+    setInterval(async () => {
+      const next = await getScannerSnapshot();
+      if (next) { snapshot = next; applyFilters(); }
+    }, 60000);
+    applyFilters();
+  };
+
   try { await window.VIKRAM_DATA_ENGINE.loadSnapshot(); } catch (_) {}
+  await setupScannerSurface();
 
   const params = new URLSearchParams(window.location.search);
   const initialSymbol = params.get('symbol');
