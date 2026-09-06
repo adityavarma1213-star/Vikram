@@ -101,3 +101,67 @@
     watchlist: (period = '1D') => isStaticPages ? staticScan(['ONGC', 'VBL', 'BSE', 'NMDC'], period) : request(`/api/scanner/watchlist?period=${encodeURIComponent(period)}`)
   };
 })(window);
+
+/* Score ordering enhancement. Runs independently of the scanner's filtering code. */
+(() => {
+  let direction = null;
+  let observer = null;
+  let sorting = false;
+
+  function getScore(row) {
+    const cell = row?.children?.[4];
+    if (!cell) return NaN;
+    const value = Number(String(cell.textContent || '').replace(/[^0-9.-]/g, ''));
+    return Number.isFinite(value) ? value : NaN;
+  }
+
+  function sortRows() {
+    const tbody = document.getElementById('results');
+    if (!tbody || !direction || sorting) return;
+    const rows = Array.from(tbody.querySelectorAll('tr')).filter(row => row.children.length === 11);
+    if (rows.length < 2) return;
+    sorting = true;
+    observer?.disconnect();
+    rows.sort((a, b) => {
+      const av = getScore(a), bv = getScore(b);
+      if (!Number.isFinite(av) && !Number.isFinite(bv)) return 0;
+      if (!Number.isFinite(av)) return 1;
+      if (!Number.isFinite(bv)) return -1;
+      return direction === 'asc' ? av - bv : bv - av;
+    });
+    const fragment = document.createDocumentFragment();
+    rows.forEach(row => fragment.appendChild(row));
+    tbody.appendChild(fragment);
+    sorting = false;
+    observer?.observe(tbody, { childList: true });
+  }
+
+  function setDirection(next) {
+    direction = next;
+    document.querySelectorAll('.score-sort-controls button').forEach(button => {
+      button.classList.toggle('active', button.dataset.sort === direction);
+      button.setAttribute('aria-pressed', button.dataset.sort === direction ? 'true' : 'false');
+    });
+    sortRows();
+  }
+
+  function install() {
+    const tbody = document.getElementById('results');
+    const scoreTrigger = document.querySelector('.filter-trigger[data-key="score"]');
+    if (!tbody || !scoreTrigger || document.querySelector('.score-sort-controls')) return;
+
+    const controls = document.createElement('span');
+    controls.className = 'score-sort-controls';
+    controls.setAttribute('aria-label', 'Score sort order');
+    controls.innerHTML = '<button type="button" data-sort="asc" aria-label="Sort Score ascending" title="Score: lowest to highest">↑</button><button type="button" data-sort="desc" aria-label="Sort Score descending" title="Score: highest to lowest">↓</button>';
+    scoreTrigger.insertAdjacentElement('afterend', controls);
+    controls.querySelector('[data-sort="asc"]').addEventListener('click', () => setDirection('asc'));
+    controls.querySelector('[data-sort="desc"]').addEventListener('click', () => setDirection('desc'));
+
+    observer = new MutationObserver(() => sortRows());
+    observer.observe(tbody, { childList: true });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true });
+  else install();
+})();
