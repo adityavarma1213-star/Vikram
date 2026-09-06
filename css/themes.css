@@ -1,0 +1,102 @@
+/* VIKRAM Dual Theme System — Aurora (Dark) + Misty (Light)
+   Both themes use the same component structure and data. Only presentation changes. */
+
+:root,
+html[data-theme="aurora"] {
+  --bg-primary: #0f1a2e;
+  --bg-secondary: #14243b;
+  --bg-card: #19304a;
+  --bg-input: #1d3855;
+  --accent-color: #3b82f6;
+  --accent-hover: #60a5fa;
+  --text-primary: #f3f7ff;
+  --text-secondary: #b8c7da;
+  --text-muted: #8295ad;
+  --color-green: #20d391;
+  --color-red: #ff6672;
+  --color-orange: #f7b955;
+  --border-color: #304b6b;
+  --shadow-sm: 0 2px 6px rgba(4, 12, 25, .20);
+  --shadow-md: 0 6px 18px rgba(4, 12, 25, .24);
+  --shadow-lg: 0 12px 32px rgba(4, 12, 25, .30);
+}
+
+html[data-theme="misty"] {
+  --bg-primary: #dfe8f2;
+  --bg-secondary: #edf3f8;
+  --bg-card: #f4f7fa;
+  --bg-input: #e7eef5;
+  --accent-color: #2563c7;
+  --accent-hover: #1d4fa3;
+  --text-primary: #18304f;
+  --text-secondary: #536b84;
+  --text-muted: #71869b;
+  --color-green: #159a69;
+  --color-red: #d64a56;
+  --color-orange: #c88716;
+  --border-color: #c5d4e3;
+  --shadow-sm: 0 2px 6px rgba(43, 67, 91, .08);
+  --shadow-md: 0 6px 18px rgba(43, 67, 91, .10);
+  --shadow-lg: 0 12px 32px rgba(43, 67, 91, .14);
+}
+
+/* Theme-aware surfaces that otherwise contain hard-coded dark/light colors. */
+html[data-theme="misty"] .suggestion-item,
+html[data-theme="misty"] .metric-table tbody tr:hover,
+html[data-theme="misty"] .filter-menu button:hover,
+html[data-theme="misty"] .metric-group:hover {
+  background-color: rgba(37, 99, 199, .07);
+}
+html[data-theme="misty"] .empty-placeholder-view {
+  border-color: rgba(83, 107, 132, .16);
+  background-color: rgba(83, 107, 132, .04);
+}
+html[data-theme="misty"] .metric-table th:first-child,
+html[data-theme="misty"] .metric-table td:first-child,
+html[data-theme="misty"] .metric-table tbody tr:hover td:first-child,
+html[data-theme="misty"] .metric-table th {
+  background-color: var(--bg-card);
+}
+
+.vikram-theme-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  margin-left: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  box-shadow: var(--shadow-sm);
+}
+.vikram-theme-control button {
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 7px 11px;
+  border-radius: 999px;
+  cursor: pointer;
+  font: 600 12px/1 var(--font-sans, Inter, sans-serif);
+  transition: all .2s ease;
+}
+.vikram-theme-control button:hover { color: var(--text-primary); }
+.vikram-theme-control button[aria-pressed="true"] {
+  background: var(--accent-color);
+  color: #fff;
+}
+.vikram-theme-label { white-space: nowrap; }
+
+html[data-theme="misty"] .app-header {
+  background-color: rgba(237, 243, 248, .96);
+}
+html[data-theme="aurora"] .hero-section {
+  background: radial-gradient(circle at top right, rgba(70, 145, 255, .12), transparent 52%), var(--bg-secondary);
+}
+html[data-theme="misty"] .hero-section {
+  background: radial-gradient(circle at top right, rgba(78, 146, 218, .16), transparent 52%), var(--bg-secondary);
+}
+
+@media (max-width: 900px) {
+  .vikram-theme-control { margin-left: 6px; }
+  .vikram-theme-label { display: none; }
+}
