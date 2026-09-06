@@ -1,0 +1,118 @@
+name: Fix scanner column filters
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  repair:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch scanner filters
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('js/app.js')
+          s = p.read_text(encoding='utf-8')
+          if 'VIKRAM_SIMPLE_FILTER_OVERRIDE_V2' in s:
+              print('override already present')
+              raise SystemExit(0)
+          marker = '\n});'
+          if not s.rstrip().endswith('});'):
+              raise SystemExit('unexpected app.js ending')
+          override = r'''
+
+  /* VIKRAM_SIMPLE_FILTER_OVERRIDE_V2: repository website column filters */
+  (() => {
+    const install = () => {
+      const surface = document.querySelector('.scanner-container-surface');
+      if (!surface) return;
+      const buttons = [...surface.querySelectorAll('.scanner-table thead .vikram-column-filter')];
+      if (!buttons.length) return;
+
+      const configs = [
+        ['Stock','stock',['','All Stocks']],
+        ['Price','price',[['','All Prices'],['0-100','Below ₹100'],['100-500','₹100–₹500'],['500-1000','₹500–₹1,000'],['1000-5000','₹1,000–₹5,000'],['5000+','Above ₹5,000']]],
+        ['Change','change',[['','All Changes'],['positive','Positive'],['negative','Negative'],['0-1','0% to +1%'],['1+','Above +1%'],['-1-0','0% to -1%'],['-1+','Below -1%']]],
+        ['Score','score',[['','All Scores'],['75+','75–100'],['60-74','60–74'],['40-59','40–59'],['0-39','0–39']]],
+        ['Volume','volume',[['','All Volume'],['1.2+','≥ 1.20x'],['1-1.19','1.00x–1.19x'],['0.8-0.99','0.80x–0.99x'],['0-0.79','Below 0.80x']]],
+        ['Delivery','delivery',[['','All Delivery'],['55+','≥ 55%'],['45-54','45%–54%'],['35-44','35%–44%'],['0-34','Below 35%']]],
+        ['OBV Trend','trend',[['','All Trends'],['Rising','Rising'],['Flat','Flat'],['Falling','Falling'],['N/A','N/A']]],
+        ['Futures OI','oi',[['','All Futures OI'],['positive','Positive'],['negative','Negative'],['na','N/A']]],
+        ['Verdict','verdict',[['','All Verdicts'],['ACCUMULATION CONFIRMED','Accumulation Confirmed'],['ACCUMULATION STARTING','Accumulation Starting'],['QUIET ABSORPTION','Quiet Absorption'],['DISTRIBUTION','Distribution'],['UNCONFIRMED / MIXED','Unconfirmed / Mixed']]]
+      ];
+      const state = {};
+      let menu;
+      const close = () => { if (menu) { menu.remove(); menu = null; } };
+      const results = () => window.__VIKRAM_SCANNER_SNAPSHOT?.results || [];
+      const num = v => { const n = Number(v); return Number.isFinite(n) ? n : null; };
+      const symbol = row => String(row.querySelector('td div')?.textContent || row.dataset.symbol || row.querySelector('td')?.textContent || '').trim().toUpperCase();
+      const dataFor = (sym,key) => {
+        const r = results().find(x => String(x.symbol || x.ticker || x.stock || '').toUpperCase() === sym);
+        const m = r?.metrics || {};
+        return key==='stock'?sym:key==='price'?num(m.close):key==='change'?num(m.priceChangePct):key==='score'?num(r?.score):key==='volume'?num(m.volumeRatio):key==='delivery'?num(m.deliveryPct):key==='trend'?num(m.obvTrend):key==='oi'?num(m.changeOi):String(r?.verdict || '');
+      };
+      const matches = (raw,type,v) => {
+        if (!v) return true;
+        if (type==='stock') return String(raw).includes(String(v).toUpperCase());
+        if (type==='trend') { const n=num(raw); return (!Number.isFinite(n)?'N/A':n>0?'Rising':n<0?'Falling':'Flat')===v; }
+        if (type==='verdict') return String(raw).toUpperCase()===v.toUpperCase();
+        if (type==='oi') { const n=num(raw); return v==='na'?!Number.isFinite(n):v==='positive'?n>0:n<0; }
+        const n=num(raw); if(n===null)return false;
+        if(type==='price')return v==='5000+'?n>5000:v.endsWith('+')?n>=Number(v.slice(0,-1)):n>=Number(v.split('-')[0])&&n<=Number(v.split('-')[1]);
+        if(type==='change')return v==='positive'?n>0:v==='negative'?n<0:v==='1+'?n>1:v==='-1+'?n<-1:n>=Number(v.split('-')[0])&&n<=Number(v.split('-')[1]);
+        if(type==='score')return v==='75+'?n>=75:n>=Number(v.split('-')[0])&&n<=Number(v.split('-')[1]);
+        if(type==='volume')return v==='1.2+'?n>=1.2:n>=Number(v.split('-')[0])&&n<=Number(v.split('-')[1]);
+        if(type==='delivery')return v==='55+'?n>=55:n>=Number(v.split('-')[0])&&n<=Number(v.split('-')[1]);
+        return true;
+      };
+      const apply = () => {
+        const rows = surface.querySelectorAll('.scanner-table tbody tr');
+        rows.forEach(row => {
+          const sym=symbol(row); let show=true;
+          for(const c of configs){ const key=c[1]; if(state[key] && !matches(dataFor(sym,key),key,state[key])) { show=false; break; } }
+          row.style.display=show?'':'none';
+        });
+        buttons.forEach(b=>b.classList.toggle('active',!!state[b.dataset.filterKey]));
+      };
+      const open = (button,label,key,options) => {
+        close();
+        menu=document.createElement('div'); menu.className='vikram-simple-filter-menu';
+        menu.innerHTML=`<div class="simple-filter-title">Filter ${label}</div><select aria-label="Filter ${label}">${options.map(([v,t])=>`<option value="${v}">${t}</option>`).join('')}</select>`;
+        document.body.appendChild(menu);
+        const r=button.getBoundingClientRect(); const w=menu.offsetWidth||220; const h=menu.offsetHeight||120;
+        menu.style.left=`${Math.max(8,Math.min(r.left,window.innerWidth-w-8))}px`; menu.style.top=`${Math.max(8,Math.min(r.bottom+5,window.innerHeight-h-8))}px`;
+        const select=menu.querySelector('select'); select.value=state[key]||'';
+        select.addEventListener('change',()=>{if(select.value)state[key]=select.value;else delete state[key];close();apply();}); select.focus();
+      };
+      const optionMap = new Map(configs.map(c=>[c[1],c[2]]));
+      buttons.forEach(button=>{
+        button.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();open(button,button.parentElement.firstChild?.textContent?.trim()||button.title.replace(/^Filter /,''),button.dataset.filterKey,optionMap.get(button.dataset.filterKey)||[['','All']]);},true);
+      });
+      document.addEventListener('click',e=>{if(menu&&!e.target.closest('.vikram-simple-filter-menu')&&!e.target.closest('.vikram-column-filter'))close();});
+      window.addEventListener('scroll',close,true); window.addEventListener('resize',close);
+      const style=document.createElement('style'); style.id='vikramSimpleFilterOverrideStyles'; style.textContent=`
+        .vikram-simple-filter-menu{position:fixed;z-index:99999;min-width:220px;padding:10px;background:var(--bg-card,#17122f);border:1px solid var(--border-subtle,#40356d);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45)}
+        .vikram-simple-filter-menu .simple-filter-title{font-size:12px;font-weight:800;color:var(--text-main,#fff);margin-bottom:7px}
+        .vikram-simple-filter-menu select{width:100%;padding:9px 10px;border:1px solid var(--border-subtle,#40356d);border-radius:8px;background:var(--bg-card-2,#211a42);color:var(--text-main,#fff);font-weight:700}
+        .vikram-column-filter.active{color:var(--accent-cyan,#8b7cff)}
+      `; if(!document.getElementById(style.id))document.head.appendChild(style);
+      const reset=surface.querySelector('.vikram-filter-reset'); if(reset) reset.onclick=()=>{Object.keys(state).forEach(k=>delete state[k]);close();apply();};
+      new MutationObserver(apply).observe(surface.querySelector('.scanner-table-wrap')||surface,{childList:true,subtree:true});
+      apply();
+    };
+    setTimeout(install,50); setTimeout(install,500); setTimeout(install,1500);
+  })();
+'''
+          s = s.rstrip()
+          s = s[:-3] + override + '\n});\n'
+          p.write_text(s,encoding='utf-8')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add js/app.js
+          git commit -m 'fix(ui): replace scanner filters with simple instant menus'
+          git push
