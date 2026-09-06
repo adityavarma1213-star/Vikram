@@ -1,0 +1,3 @@
+'use strict';
+class EmailNotifier{constructor({fetchImpl=global.fetch}={}){this.fetch=fetchImpl;this.apiKey=process.env.RESEND_API_KEY||'';this.sender=process.env.ALERT_EMAIL_FROM||'';}async send(to,subject,html){if(!this.apiKey||!this.sender)return{success:false,error:'EMAIL_NOT_CONFIGURED'};try{const r=await this.fetch('https://api.resend.com/emails',{method:'POST',headers:{Authorization:`Bearer ${this.apiKey}`,'Content-Type':'application/json'},body:JSON.stringify({from:this.sender,to:[to],subject,html})});if(!r.ok)return{success:false,error:`HTTP ${r.status}`};return{success:true};}catch(e){return{success:false,error:e.message};}}}
+module.exports={EmailNotifier};
