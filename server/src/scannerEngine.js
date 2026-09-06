@@ -1,8 +1,10 @@
 const CFG = require('../../accumulation/config');
-const { evaluate: evaluateAccumulation, dateKey: accumulationDateKey } = require('../../accumulation/engine');
+const { evaluate: evaluateAccumulation } = require('../../accumulation/engine');
 
 function dateKey(value) {
-  return accumulationDateKey(value);
+  if (value === null || value === undefined) return null;
+  if (value instanceof Date) return value.toISOString().slice(0, 10);
+  return String(value).slice(0, 10);
 }
 
 const num = value => { if (value === null || value === undefined || value === '') return null; const n = Number(value); return Number.isFinite(n) ? n : null; };
