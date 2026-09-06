@@ -14,37 +14,45 @@ const base = [
 ];
 
 const futures = { trade_date: '2026-09-01', oi: 100000, change_oi: 7000 };
+
 const confirmed = evaluate({ symbol: 'GOOD', history: base, current: base.at(-1), futures });
 assert.equal(confirmed.verdict, 'ACCUMULATION CONFIRMED');
-assert.deepEqual(confirmed.confirmation.gateFailures, []);
+assert.equal(confirmed.metrics.pillarCount, 4);
+assert.equal(confirmed.confirmation.quorum.passed, 4);
 
-const lowVolume = base.map((r, i) => i === base.length - 1 ? { ...r, volume: 1200 } : r);
-const lowVolumeResult = evaluate({ symbol: 'LOWVOL', history: lowVolume, current: lowVolume.at(-1), futures });
-assert.notEqual(lowVolumeResult.verdict, 'ACCUMULATION CONFIRMED');
-assert.ok(lowVolumeResult.confirmation.gateFailures.includes('volume ratio is below 1.2x'));
+// Quiet/modest volume is no longer a universal veto when the other institutional pillars are strong.
+const modestVolume = base.map((r, i) => i === base.length - 1 ? { ...r, volume: 1200 } : r);
+const modestVolumeResult = evaluate({ symbol: 'MODESTVOL', history: modestVolume, current: modestVolume.at(-1), futures });
+assert.equal(modestVolumeResult.verdict, 'ACCUMULATION CONFIRMED');
+assert.equal(modestVolumeResult.metrics.pillarCount, 3); // Delivery + OBV + OI
 
+// Delivery below the safety floor blocks accumulation confirmation.
 const lowDelivery = base.map((r, i) => i === base.length - 1 ? { ...r, deliv_per: 30.3 } : r);
 const lowDeliveryResult = evaluate({ symbol: 'LOWDEL', history: lowDelivery, current: lowDelivery.at(-1), futures });
 assert.notEqual(lowDeliveryResult.verdict, 'ACCUMULATION CONFIRMED');
-assert.ok(lowDeliveryResult.confirmation.gateFailures.includes('delivery is below 45%'));
+assert.ok(lowDeliveryResult.confirmation.gateFailures.includes('delivery is below 35%'));
 
-const noOiResult = evaluate({ symbol: 'NOOI', history: base, current: base.at(-1), futures: null });
-assert.notEqual(noOiResult.verdict, 'ACCUMULATION CONFIRMED');
-assert.ok(noOiResult.confirmation.gateFailures.includes('exact-date futures OI is not increasing'));
+// Cash-only stocks are evaluated on the three equity pillars; OI is not a prerequisite.
+const cashResult = evaluate({ symbol: 'CASH', history: base, current: base.at(-1), futures: null });
+assert.equal(cashResult.verdict, 'ACCUMULATION CONFIRMED');
+assert.equal(cashResult.metrics.fnoAvailable, false);
+assert.equal(cashResult.metrics.availablePillars, 3);
+assert.equal(cashResult.metrics.pillarCount, 3);
 
+// Falling OI is not an accumulation pillar, but absence of OI must not automatically reject cash-equity evidence.
 const negativeOiResult = evaluate({ symbol: 'NEGOI', history: base, current: base.at(-1), futures: { ...futures, change_oi: -7000 } });
-assert.notEqual(negativeOiResult.verdict, 'ACCUMULATION CONFIRMED');
-assert.ok(negativeOiResult.confirmation.gateFailures.includes('exact-date futures OI is not increasing'));
+assert.equal(negativeOiResult.verdict, 'ACCUMULATION CONFIRMED');
+assert.equal(negativeOiResult.metrics.fnoAvailable, true);
+assert.equal(negativeOiResult.metrics.pillarCount, 3);
 
 const fallingObvHistory = base.map((r, i) => {
-  // The engine derives OBV direction from each row's close versus the prior row's
-  // actual close. These final rows therefore need genuinely falling closes.
+  // The engine derives OBV direction from each row's close versus the prior row's actual close.
   if (i === base.length - 2) return { ...r, close: 108, prev_close: r.close, volume: 4000 };
   if (i === base.length - 1) return { ...r, close: 100, prev_close: 108, volume: 6000, deliv_per: 58 };
   return r;
 });
 const fallingObvResult = evaluate({ symbol: 'OBVFAIL', history: fallingObvHistory, current: fallingObvHistory.at(-1), futures });
 assert.notEqual(fallingObvResult.verdict, 'ACCUMULATION CONFIRMED');
-assert.ok(fallingObvResult.confirmation.gateFailures.includes('OBV is not rising'));
+assert.ok(fallingObvResult.confirmation.gateFailures.some(x => x.includes('quorum') || x.includes('price')));
 
 console.log('accumulation engine tests passed (6 scenarios)');
