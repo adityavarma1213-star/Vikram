@@ -59,18 +59,7 @@ Status : Updated & Production Ready
                     <div class="search-bar-group">
                         <div class="search-input-container">
                             <span class="search-icon">🔍</span>
-                            <input 
-                                type="text" 
-                                id="stockName" 
-                                placeholder="Search by company name or ticker symbol (e.g., CDSL, NEWGEN)..." 
-                                autocomplete="off"
-                                spellcheck="false"
-                                aria-label="Search Stock Database"
-                                aria-autocomplete="list"
-                                aria-expanded="false"
-                                aria-controls="searchSuggestions"
-                                role="combobox"
-                            >
+                            <input type="text" id="stockName" placeholder="Search by company name or ticker symbol (e.g., CDSL, NEWGEN)..." autocomplete="off" spellcheck="false" aria-label="Search Stock Database" aria-autocomplete="list" aria-expanded="false" aria-controls="searchSuggestions" role="combobox">
                         </div>
                         <button type="button" id="btnAnalyze" class="btn btn-primary">Analyze</button>
                     </div>
@@ -104,40 +93,16 @@ Status : Updated & Production Ready
                     </div>
                 </div>
                 <div class="grid-layout cols-4">
-                    <div class="metric-group">
-                        <span class="metric-label">Sector</span>
-                        <span id="overviewSector" class="metric-value">—</span>
-                    </div>
-                    <div class="metric-group">
-                        <span class="metric-label">Industry</span>
-                        <span id="overviewIndustry" class="metric-value">—</span>
-                    </div>
-                    <div class="metric-group">
-                        <span class="metric-label">Exchange</span>
-                        <span id="overviewExchange" class="metric-value">—</span>
-                    </div>
-                    <div class="metric-group">
-                        <span class="metric-label">Market Cap</span>
-                        <span id="overviewMarketCap" class="metric-value">—</span>
-                    </div>
+                    <div class="metric-group"><span class="metric-label">Sector</span><span id="overviewSector" class="metric-value">—</span></div>
+                    <div class="metric-group"><span class="metric-label">Industry</span><span id="overviewIndustry" class="metric-value">—</span></div>
+                    <div class="metric-group"><span class="metric-label">Exchange</span><span id="overviewExchange" class="metric-value">—</span></div>
+                    <div class="metric-group"><span class="metric-label">Market Cap</span><span id="overviewMarketCap" class="metric-value">—</span></div>
                 </div>
                 <div class="grid-layout cols-4 margin-top-md">
-                    <div class="metric-group">
-                        <span class="metric-label">Current Price</span>
-                        <span id="overviewCurrentPrice" class="metric-value font-numeric">—</span>
-                    </div>
-                    <div class="metric-group">
-                        <span class="metric-label">52-Week High</span>
-                        <span id="overview52WeekHigh" class="metric-value font-numeric color-green">—</span>
-                    </div>
-                    <div class="metric-group">
-                        <span class="metric-label">52-Week Low</span>
-                        <span id="overview52WeekLow" class="metric-value font-numeric color-red">—</span>
-                    </div>
-                    <div class="metric-group">
-                        <span class="metric-label">Corporate Website</span>
-                        <a id="overviewWebsite" href="#" target="_blank" rel="noopener noreferrer" class="metric-link">—</a>
-                    </div>
+                    <div class="metric-group"><span class="metric-label">Current Price</span><span id="overviewCurrentPrice" class="metric-value font-numeric">—</span></div>
+                    <div class="metric-group"><span class="metric-label">52-Week High</span><span id="overview52WeekHigh" class="metric-value font-numeric color-green">—</span></div>
+                    <div class="metric-group"><span class="metric-label">52-Week Low</span><span id="overview52WeekLow" class="metric-value font-numeric color-red">—</span></div>
+                    <div class="metric-group"><span class="metric-label">Corporate Website</span><a id="overviewWebsite" href="#" target="_blank" rel="noopener noreferrer" class="metric-link">—</a></div>
                 </div>
             </div>
         </section>
@@ -146,7 +111,7 @@ Status : Updated & Production Ready
             <div class="dashboard-card">
                 <h2 id="hiddenGemsTitle" class="card-headline">💎 Hidden Gems Alpha Discovery</h2>
                 <div class="empty-placeholder-view">
-                    <p class="placeholder-text">Execute an asset analysis query to evaluate small-to-midcap strategic value acceleration criteria.</p>
+                    <p class="placeholder-text">Loading verified scanner candidates…</p>
                 </div>
             </div>
         </section>
@@ -158,82 +123,21 @@ Status : Updated & Production Ready
                 <h2 id="technicalTitle" class="card-headline">📈 Technical Strength (Pillar K)</h2>
                 <div class="table-container">
                     <table class="metric-table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Technical Indicator Metric</th>
-                                <th scope="col">Calculated Value</th>
-                                <th scope="col">System Technical Evaluation</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th scope="col">Technical Indicator Metric</th><th scope="col">Calculated Value</th><th scope="col">System Technical Evaluation</th></tr></thead>
                         <tbody>
-                            <tr>
-                                <td>Relative Strength Index (RSI - 14)</td>
-                                <td id="techRSI" class="font-numeric">—</td>
-                                <td id="techRSISignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>MACD Momentum Oscillator</td>
-                                <td id="techMACD" class="font-numeric">—</td>
-                                <td id="techMACDSignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Average Directional Index (ADX - 14)</td>
-                                <td id="techADX" class="font-numeric">—</td>
-                                <td id="techADXSignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Exponential Moving Average (EMA 20)</td>
-                                <td id="techEMA20" class="font-numeric">—</td>
-                                <td rowspan="3" class="cell-merge-valign">
-                                    <div class="trend-wrapper">
-                                        <span class="metric-label-inline">Structural Trend Alignment:</span>
-                                        <span id="techTrend" class="weight-bold">—</span>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Exponential Moving Average (EMA 50)</td>
-                                <td id="techEMA50" class="font-numeric">—</td>
-                            </tr>
-                            <tr>
-                                <td>Exponential Moving Average (EMA 200)</td>
-                                <td id="techEMA200" class="font-numeric">—</td>
-                            </tr>
-                            <tr>
-                                <td>Local Classical Support Floor</td>
-                                <td id="techSupport" class="font-numeric color-green">—</td>
-                                <td class="text-muted">Dynamic Pivot Floor</td>
-                            </tr>
-                            <tr>
-                                <td>Local Classical Resistance Ceiling</td>
-                                <td id="techResistance" class="font-numeric color-red">—</td>
-                                <td class="text-muted">Dynamic Breakout Target</td>
-                            </tr>
-                            <tr>
-                                <td>Accumulated Volume Baseline</td>
-                                <td id="techVolume" class="font-numeric">—</td>
-                                <td id="techVolumeSignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>On-Balance Volume (OBV) Trend</td>
-                                <td id="techOBV" class="font-numeric">—</td>
-                                <td id="techOBVSignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Deliverable Volume Percentage (Delivery %)</td>
-                                <td id="techDeliveryPct" class="font-numeric">—</td>
-                                <td id="techDeliverySignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>52-Week Structural High Target</td>
-                                <td id="tech52WeekHigh" class="font-numeric">—</td>
-                                <td class="text-muted">Yearly Resistance Ceiling</td>
-                            </tr>
-                            <tr>
-                                <td>52-Week Structural Low Base</td>
-                                <td id="tech52WeekLow" class="font-numeric">—</td>
-                                <td class="text-muted">Yearly Structural Floor</td>
-                            </tr>
+                            <tr><td>Relative Strength Index (RSI - 14)</td><td id="techRSI" class="font-numeric">—</td><td id="techRSISignal" class="weight-bold">—</td></tr>
+                            <tr><td>MACD Momentum Oscillator</td><td id="techMACD" class="font-numeric">—</td><td id="techMACDSignal" class="weight-bold">—</td></tr>
+                            <tr><td>Average Directional Index (ADX - 14)</td><td id="techADX" class="font-numeric">—</td><td id="techADXSignal" class="weight-bold">—</td></tr>
+                            <tr><td>Exponential Moving Average (EMA 20)</td><td id="techEMA20" class="font-numeric">—</td><td rowspan="3" class="cell-merge-valign"><div class="trend-wrapper"><span class="metric-label-inline">Structural Trend Alignment:</span><span id="techTrend" class="weight-bold">—</span></div></td></tr>
+                            <tr><td>Exponential Moving Average (EMA 50)</td><td id="techEMA50" class="font-numeric">—</td></tr>
+                            <tr><td>Exponential Moving Average (EMA 200)</td><td id="techEMA200" class="font-numeric">—</td></tr>
+                            <tr><td>Local Classical Support Floor</td><td id="techSupport" class="font-numeric color-green">—</td><td class="text-muted">Dynamic Pivot Floor</td></tr>
+                            <tr><td>Local Classical Resistance Ceiling</td><td id="techResistance" class="font-numeric color-red">—</td><td class="text-muted">Dynamic Breakout Target</td></tr>
+                            <tr><td>Accumulated Volume Baseline</td><td id="techVolume" class="font-numeric">—</td><td id="techVolumeSignal" class="weight-bold">—</td></tr>
+                            <tr><td>On-Balance Volume (OBV) Trend</td><td id="techOBV" class="font-numeric">—</td><td id="techOBVSignal" class="weight-bold">—</td></tr>
+                            <tr><td>Deliverable Volume Percentage (Delivery %)</td><td id="techDeliveryPct" class="font-numeric">—</td><td id="techDeliverySignal" class="weight-bold">—</td></tr>
+                            <tr><td>52-Week Structural High Target</td><td id="tech52WeekHigh" class="font-numeric">—</td><td class="text-muted">Yearly Resistance Ceiling</td></tr>
+                            <tr><td>52-Week Structural Low Base</td><td id="tech52WeekLow" class="font-numeric">—</td><td class="text-muted">Yearly Structural Floor</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -247,84 +151,22 @@ Status : Updated & Production Ready
                 <h2 id="financialTitle" class="card-headline">📊 Financial & Business Dashboard (Pillar F)</h2>
                 <div class="table-container">
                     <table class="metric-table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Fundamental Parameter</th>
-                                <th scope="col">Reported Value</th>
-                                <th scope="col">Benchmark Analysis</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th scope="col">Fundamental Parameter</th><th scope="col">Reported Value</th><th scope="col">Benchmark Analysis</th></tr></thead>
                         <tbody>
-                            <tr>
-                                <td>Compound Revenue Growth Rate (YoY)</td>
-                                <td id="finRevenueGrowth" class="font-numeric">—</td>
-                                <td id="finRevenueGrowthSignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Revenue Stability & Consistency</td>
-                                <td id="finRevenueStability" class="font-numeric">—</td>
-                                <td id="finRevenueStabilitySignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>EBITDA Margin</td>
-                                <td id="finEbitdaMargin" class="font-numeric">—</td>
-                                <td id="finEbitdaMarginSignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Net Profit Margin</td>
-                                <td id="finNetProfitMargin" class="font-numeric">—</td>
-                                <td id="finNetProfitMarginSignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Return on Equity (ROE)</td>
-                                <td id="finROE" class="font-numeric">—</td>
-                                <td id="finROESignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Return on Capital Employed (ROCE)</td>
-                                <td id="finROCE" class="font-numeric">—</td>
-                                <td id="finROCESignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Debt-to-Equity Ratio</td>
-                                <td id="finDebtEquity" class="font-numeric">—</td>
-                                <td id="finDebtEquitySignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Interest Coverage Ratio</td>
-                                <td id="finInterestCoverage" class="font-numeric">—</td>
-                                <td id="finInterestCoverageSignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Operating Cash Flow</td>
-                                <td id="finOCF" class="font-numeric">—</td>
-                                <td id="finOCFSignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Free Cash Flow</td>
-                                <td id="finFCF" class="font-numeric">—</td>
-                                <td id="finFCFSignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>EPS Growth</td>
-                                <td id="finEPSGrowth" class="font-numeric">—</td>
-                                <td id="finEPSGrowthSignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Promoter Holding</td>
-                                <td id="finPromoterHolding" class="font-numeric">—</td>
-                                <td id="finPromoterHoldingSignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Promoter Pledging</td>
-                                <td id="finPromoterPledge" class="font-numeric">—</td>
-                                <td id="finPromoterPledgeSignal" class="weight-bold">—</td>
-                            </tr>
-                            <tr>
-                                <td>Institutional Holding Trend</td>
-                                <td id="finInstitutionalTrend" class="font-numeric">—</td>
-                                <td id="finInstitutionalTrendSignal" class="weight-bold">—</td>
-                            </tr>
+                            <tr><td>Compound Revenue Growth Rate (YoY)</td><td id="finRevenueGrowth" class="font-numeric">—</td><td id="finRevenueGrowthSignal" class="weight-bold">—</td></tr>
+                            <tr><td>Revenue Stability & Consistency</td><td id="finRevenueStability" class="font-numeric">—</td><td id="finRevenueStabilitySignal" class="weight-bold">—</td></tr>
+                            <tr><td>EBITDA Margin</td><td id="finEbitdaMargin" class="font-numeric">—</td><td id="finEbitdaMarginSignal" class="weight-bold">—</td></tr>
+                            <tr><td>Net Profit Margin</td><td id="finNetProfitMargin" class="font-numeric">—</td><td id="finNetProfitMarginSignal" class="weight-bold">—</td></tr>
+                            <tr><td>Return on Equity (ROE)</td><td id="finROE" class="font-numeric">—</td><td id="finROESignal" class="weight-bold">—</td></tr>
+                            <tr><td>Return on Capital Employed (ROCE)</td><td id="finROCE" class="font-numeric">—</td><td id="finROCESignal" class="weight-bold">—</td></tr>
+                            <tr><td>Debt-to-Equity Ratio</td><td id="finDebtEquity" class="font-numeric">—</td><td id="finDebtEquitySignal" class="weight-bold">—</td></tr>
+                            <tr><td>Interest Coverage Ratio</td><td id="finInterestCoverage" class="font-numeric">—</td><td id="finInterestCoverageSignal" class="weight-bold">—</td></tr>
+                            <tr><td>Operating Cash Flow</td><td id="finOCF" class="font-numeric">—</td><td id="finOCFSignal" class="weight-bold">—</td></tr>
+                            <tr><td>Free Cash Flow</td><td id="finFCF" class="font-numeric">—</td><td id="finFCFSignal" class="weight-bold">—</td></tr>
+                            <tr><td>EPS Growth</td><td id="finEPSGrowth" class="font-numeric">—</td><td id="finEPSGrowthSignal" class="weight-bold">—</td></tr>
+                            <tr><td>Promoter Holding</td><td id="finPromoterHolding" class="font-numeric">—</td><td id="finPromoterHoldingSignal" class="weight-bold">—</td></tr>
+                            <tr><td>Promoter Pledging</td><td id="finPromoterPledge" class="font-numeric">—</td><td id="finPromoterPledgeSignal" class="weight-bold">—</td></tr>
+                            <tr><td>Institutional Holding Trend</td><td id="finInstitutionalTrend" class="font-numeric">—</td><td id="finInstitutionalTrendSignal" class="weight-bold">—</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -335,11 +177,13 @@ Status : Updated & Production Ready
         <section id="portfolio" class="workspace-section"></section>
     </main>
 
+    <script src="js/dataEngine.js"></script>
     <script src="js/app.js"></script>
     <script src="js/search.js"></script>
     <script src="js/technical.js"></script>
     <script src="js/financial.js"></script>
     <script src="js/portfolio.js"></script>
     <script src="js/opportunity.js"></script>
+    <script src="js/hiddenGems.js"></script>
 </body>
 </html>
