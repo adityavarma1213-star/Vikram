@@ -27,7 +27,24 @@
       const row = this.find(symbol); if (!row) return null;
       const t = row.technical || {}; const m = row.metrics || {};
       return {
-        meta: { name: row.companyName || row.symbol, ticker: row.symbol, exchange: 'NSE', marketCap: null, sector: null, industry: null, vikramScore: row.score, rating: row.verdict, tradeDate: row.tradeDate, dataStatus: this.status() },
+        meta: {
+          name: row.companyName || row.symbol,
+          ticker: row.symbol,
+          exchange: 'NSE',
+          marketCap: null,
+          sector: null,
+          industry: null,
+          // The accumulation score is intentionally separate from the broader Research VIKRAM Score.
+          // No verified Research scoring dataset exists in this EOD snapshot, so Research score is N/A.
+          vikramScore: null,
+          researchScore: null,
+          accumulationScore: row.score,
+          rating: row.verdict,
+          accumulationVerdict: row.verdict,
+          tradeDate: row.tradeDate,
+          dataStatus: this.status(),
+          researchDataStatus: 'INSUFFICIENT DATA'
+        },
         technical: {
           rsi: label(t.rsi14), rsiSignal: finite(t.rsi14) === null ? null : (t.rsi14 >= 70 ? 'Overbought' : t.rsi14 <= 30 ? 'Oversold' : 'Neutral'),
           macd: label(t.macd), macdSignal: label(t.macdSignal), adx: null, adxSignal: 'N/A — high/low fields unavailable in current NSE CM feed',
