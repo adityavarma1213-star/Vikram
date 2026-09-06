@@ -26,26 +26,34 @@ assert.equal(postgresDateCase.tradeDate, '2026-09-01');
 assert.equal(postgresDateCase.metrics.oiExactDate, true);
 assert.equal(postgresDateCase.metrics.futuresOi, 100000);
 
+// A stale futures row is treated as unavailable evidence and falls back to the three equity pillars.
 const stale = evaluate('TEST', history, { trade_date: '2026-08-28', oi: 95000, change_oi: 5000 });
 assert.equal(stale.metrics.oiExactDate, false);
 assert.equal(stale.metrics.futuresOi, null);
 assert.equal(stale.metrics.changeOi, null);
-assert.match(stale.why.join(' '), /exact-date|exact trade date/);
+assert.match(stale.why.join(' '), /Futures OI is unavailable/);
 
 const missingDelivery = evaluate('TEST', history.map(r => ({ ...r, deliv_per: null, deliv_qty: null })), null);
 assert.equal(missingDelivery.metrics.deliveryPct, null);
 assert.equal(missingDelivery.metrics.deliveryQty, null);
 assert.match(missingDelivery.why.join(' '), /Delivery data is unavailable/);
 
+// Cash-only stocks are evaluated on the three equity pillars; OI is not a prerequisite.
 const missingOi = evaluate('TEST', history, null);
 assert.equal(missingOi.metrics.futuresOi, null);
 assert.equal(missingOi.metrics.changeOi, null);
-assert.match(missingOi.why.join(' '), /Futures OI confirmation is unavailable/);
+assert.equal(missingOi.metrics.fnoAvailable, false);
+assert.equal(missingOi.verdict, 'ACCUMULATION CONFIRMED');
+assert.equal(missingOi.metrics.pillarCount, 3);
+assert.match(missingOi.why.join(' '), /Futures OI is unavailable/);
 
+// Negative exact-date OI does not pass the OI pillar, but strong equity evidence can still confirm under the F&O 3-of-4 quorum.
 const negativeOi = evaluate('TEST', history, { trade_date: '2026-09-01', oi: 100000, change_oi: -7000 });
 assert.equal(negativeOi.metrics.changeOi, -7000);
+assert.equal(negativeOi.metrics.fnoAvailable, true);
+assert.equal(negativeOi.metrics.pillarCount, 3);
+assert.equal(negativeOi.verdict, 'ACCUMULATION CONFIRMED');
 assert.ok(negativeOi.score < confirmed.score);
-assert.notEqual(negativeOi.verdict, 'ACCUMULATION CONFIRMED');
 
 const volumeHistory = history.map((r, i) => i === history.length - 1 ? { ...r, volume: 2100 } : r);
 const volumeCase = evaluate('TEST', volumeHistory, { trade_date: '2026-09-01', oi: 1, change_oi: 1 });
