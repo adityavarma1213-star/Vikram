@@ -42,10 +42,12 @@ assert.equal(missingOi.metrics.futuresOi, null);
 assert.equal(missingOi.metrics.changeOi, null);
 assert.equal(missingOi.metrics.hasDerivatives, false);
 
+// Falling OI removes the OI pillar but 3/4 still qualifies under the statutory F&O quorum.
 const negativeOi = evaluate('TEST', history, { ...fno, change_oi: -7000 });
 assert.equal(negativeOi.metrics.changeOi, -7000);
 assert.ok(negativeOi.score < confirmed.score);
-assert.notEqual(negativeOi.verdict, 'ACCUMULATION CONFIRMED');
+assert.equal(negativeOi.confirmation.pillars.passed, 3);
+assert.equal(negativeOi.verdict, 'ACCUMULATION CONFIRMED');
 
 const volumeHistory = history.map((r, i) => i === history.length - 1 ? { ...r, volume: 2100 } : r);
 const volumeCase = evaluate('TEST', volumeHistory, fno);
