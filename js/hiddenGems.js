@@ -17,6 +17,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     return n === null ? 'N/A' : `${n.toFixed(1)}${suffix}`;
   };
 
+  const fmtPrice = (value) => {
+    const n = num(value);
+    return n === null ? 'N/A' : `₹${n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
+
   try {
     const snapshot = await window.VIKRAM_DATA_ENGINE.loadSnapshot();
     const rows = Array.isArray(snapshot.results) ? snapshot.results : [];
@@ -59,6 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <tr>
                   <th>Rank</th>
                   <th>Symbol</th>
+                  <th>Price</th>
                   <th>Score</th>
                   <th>Price %</th>
                   <th>Volume</th>
@@ -73,6 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                   <tr>
                     <td>${index + 1}</td>
                     <td><strong>${row.symbol || 'N/A'}</strong></td>
+                    <td>${fmtPrice(m.close ?? m.last_price)}</td>
                     <td>${score}</td>
                     <td>${fmt(m.priceChangePct, '%')}</td>
                     <td>${fmt(m.volumeRatio, 'x')}</td>
