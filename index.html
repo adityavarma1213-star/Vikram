@@ -151,7 +151,7 @@
     const visible = rows.filter(r => {
       const memberships = [r.universe,r.index,r.indexName,r.indexMembership,r.universeName].filter(Boolean).join('|').toUpperCase();
       return (u === 'ALL' || memberships.includes(u)) && (v === 'ALL' || r.verdict === v) && (Number(r.score) || 0) >= min;
-    }).slice(0, 40);
+    });
     body.innerHTML = visible.length ? visible.map(r => `<tr><td><strong>${text(r.companyName || r.symbol)}</strong><div style="color:var(--text-muted)">${text(r.symbol)}</div></td><td>${text(r.metrics?.close)}</td><td>${r.metrics?.priceChangePct == null ? 'N/A' : `${Number(r.metrics.priceChangePct).toFixed(2)}%`}</td><td><strong>${text(r.score)}</strong></td><td>${r.metrics?.volumeRatio == null ? 'N/A' : `${Number(r.metrics.volumeRatio).toFixed(2)}x`}</td><td>${r.metrics?.deliveryPct == null ? 'N/A' : `${Number(r.metrics.deliveryPct).toFixed(1)}%`}</td><td>${r.metrics?.obvTrend == null ? 'N/A' : (Number(r.metrics.obvTrend) > 0 ? 'Rising' : Number(r.metrics.obvTrend) < 0 ? 'Falling' : 'Flat')}</td><td>${r.metrics?.hasDerivatives ? (r.metrics?.changeOi == null ? 'N/A' : Number(r.metrics.changeOi).toLocaleString('en-IN')) : 'N/A'}</td><td class="${verdictClass(r.verdict)}">${text(r.verdict)}</td></tr>`).join('') : '<tr><td colspan="9" class="empty-cell">No verified rows match these filters.</td></tr>';
   }
   function go(symbol) { const q = String(symbol || '').trim().toUpperCase(); if (q) window.location.href = `index.html?symbol=${encodeURIComponent(q)}#companyOverview`; }
@@ -182,7 +182,7 @@
     const diffDays = Math.floor((Date.now() - asOfDate.getTime()) / 86400000);
     dataAgeEl.textContent = diffDays <= 0 ? 'Today (EOD verified)' : diffDays === 1 ? '1 day old' : `${diffDays} days old`;
   }
-  fetch('data/scanner.json',{cache:'no-store'}).then(r => r.json()).then(snapshot => { if (snapshot.dataStatus !== 'EOD VERIFIED') throw new Error('SNAPSHOT_NOT_VERIFIED'); rows = Array.isArray(snapshot.results) ? snapshot.results : []; renderScannerMeta(snapshot.asOf); render(); }).catch(() => { body.innerHTML = '<tr><td colspan="9" class="empty-cell">Verified scanner snapshot unavailable. No market values are being estimated.</td></tr>'; renderScannerMeta(null); renderScannerMeta(null); });
+  fetch('data/scanner.json',{cache:'no-store'}).then(r => r.json()).then(snapshot => { if (snapshot.dataStatus !== 'EOD VERIFIED') throw new Error('SNAPSHOT_NOT_VERIFIED'); rows = Array.isArray(snapshot.results) ? snapshot.results : []; renderScannerMeta(snapshot.asOf); render(); }).catch(() => { body.innerHTML = '<tr><td colspan="9" class="empty-cell">Verified scanner snapshot unavailable. No market values are being estimated.</td></tr>'; renderScannerMeta(null); renderScannerMeta(null); renderScannerMeta(null); });
 })();
 </script>
 </body>
