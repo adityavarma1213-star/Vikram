@@ -53,10 +53,10 @@ assert.equal(negativeOi.confirmation.pillars.required, 4);
 assert.equal(negativeOi.verdict, 'ACCUMULATION STARTING');
 
 // Weak volume blocks CONFIRMED even when Delivery, OBV and OI are positive.
-const volumeHistory = history.map((r, i) => i === history.length - 1 ? { ...r, volume: 2100 } : r);
+const volumeHistory = history.map((r, i) => i === history.length - 1 ? { ...r, volume: 1300 } : r);
 const volumeCase = evaluate('TEST', volumeHistory, fno);
 const priorAverage = history.slice(0, -1).reduce((sum, r) => sum + r.volume, 0) / (history.length - 1);
-assert.ok(Math.abs(volumeCase.metrics.volumeRatio - (2100 / priorAverage)) < 1e-9);
+assert.ok(Math.abs(volumeCase.metrics.volumeRatio - (1300 / priorAverage)) < 1e-9);
 assert.equal(volumeCase.confirmation.pillars.details.volume, false);
 assert.notEqual(volumeCase.verdict, 'ACCUMULATION CONFIRMED');
 
