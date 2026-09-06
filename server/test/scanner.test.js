@@ -20,6 +20,8 @@ assert.equal(confirmed.verdict, 'ACCUMULATION CONFIRMED');
 assert.equal(confirmed.metrics.oiExactDate, true);
 assert.equal(confirmed.metrics.deliveryQty, 3000);
 assert.ok(confirmed.score >= 75);
+assert.equal(confirmed.confirmation.pillars.passed, 4);
+assert.equal(confirmed.confirmation.pillars.required, 4);
 
 const postgresHistory = history.map(r => ({ ...r, trade_date: new Date(`${r.trade_date}T00:00:00Z`) }));
 const postgresDateCase = evaluate('TEST', postgresHistory, { ...fno, trade_date: new Date('2026-09-01T00:00:00Z') });
@@ -42,16 +44,21 @@ assert.equal(missingOi.metrics.futuresOi, null);
 assert.equal(missingOi.metrics.changeOi, null);
 assert.equal(missingOi.metrics.hasDerivatives, false);
 
+// Negative OI cannot be used as a substitute for positive derivatives confirmation.
 const negativeOi = evaluate('TEST', history, { ...fno, change_oi: -7000, oiTrend3Day: -9000 });
 assert.equal(negativeOi.metrics.changeOi, -7000);
 assert.ok(negativeOi.score < confirmed.score);
 assert.equal(negativeOi.confirmation.pillars.passed, 3);
-assert.equal(negativeOi.verdict, 'ACCUMULATION CONFIRMED');
+assert.equal(negativeOi.confirmation.pillars.required, 4);
+assert.equal(negativeOi.verdict, 'ACCUMULATION STARTING');
 
+// Weak volume blocks CONFIRMED even when Delivery, OBV and OI are positive.
 const volumeHistory = history.map((r, i) => i === history.length - 1 ? { ...r, volume: 2100 } : r);
 const volumeCase = evaluate('TEST', volumeHistory, fno);
 const priorAverage = history.slice(0, -1).reduce((sum, r) => sum + r.volume, 0) / (history.length - 1);
 assert.ok(Math.abs(volumeCase.metrics.volumeRatio - (2100 / priorAverage)) < 1e-9);
+assert.equal(volumeCase.confirmation.pillars.details.volume, false);
+assert.notEqual(volumeCase.verdict, 'ACCUMULATION CONFIRMED');
 
 const obv = evaluate('TEST', history, fno);
 assert.equal(typeof obv.metrics.obv, 'number');
@@ -73,4 +80,4 @@ assert.equal(empty.metrics.deliveryPct, null);
 assert.equal(empty.metrics.futuresOi, null);
 assert.match(empty.why.join(' '), /No verified EOD history/);
 
-console.log('scanner tests passed (11 scenarios)');
+console.log('scanner tests passed (13 scenarios)');
