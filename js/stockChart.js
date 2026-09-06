@@ -6,7 +6,33 @@
   const num = (value) => { const n = Number(value); return Number.isFinite(n) ? n : null; };
   const dateOnly = (value) => String(value || '').slice(0, 10);
 
+  function injectStyles() {
+    if (document.getElementById('vikram-stock-chart-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'vikram-stock-chart-styles';
+    style.textContent = `
+      #${modalId}{display:none;position:fixed;inset:0;z-index:20000}
+      #${modalId}.open{display:block}
+      .vikram-chart-backdrop{position:absolute;inset:0;background:rgba(3,7,18,.78);backdrop-filter:blur(5px)}
+      .vikram-chart-dialog{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(1080px,94vw);max-height:90vh;overflow:auto;background:#0f172a;border:1px solid #2b3a5f;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.55);color:#f8fafc;padding:24px}
+      .vikram-chart-close{position:absolute;right:14px;top:10px;width:38px;height:38px;border:0;border-radius:50%;background:#18243f;color:#fff;font-size:25px;cursor:pointer}
+      .vikram-chart-close:hover{background:#26385f}
+      .vikram-chart-kicker{font-size:.72rem;letter-spacing:.12em;font-weight:800;color:#8ea8d9;margin-bottom:4px}
+      .vikram-chart-header h2{margin:0;font-size:1.45rem}.vikram-chart-header p{margin:.4rem 0 0;color:#9fb0cc;font-size:.85rem}
+      .vikram-chart-body{margin-top:20px}.vikram-chart-loading,.vikram-chart-empty{min-height:300px;display:grid;place-items:center;text-align:center;color:#9fb0cc;padding:30px}
+      .vikram-chart-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+      .vikram-chart-stats div{background:#151f36;border:1px solid #263654;border-radius:10px;padding:11px 13px}.vikram-chart-stats span{display:block;font-size:.7rem;color:#8ea0bd;text-transform:uppercase;letter-spacing:.06em}.vikram-chart-stats strong{display:block;margin-top:5px;font-size:1rem}
+      .vikram-chart-scroll{width:100%;overflow:hidden;background:#0b1324;border:1px solid #223252;border-radius:12px;padding:8px}.vikram-chart-scroll svg{display:block;width:100%;height:390px}.chart-grid{stroke:#263654;stroke-width:1}.chart-axis{fill:#8090aa;font-size:12px}.chart-line{stroke:#64a8ff;stroke-width:3}.chart-point{fill:#fff;stroke:#64a8ff;stroke-width:3}
+      .vikram-chart-footnote{font-size:.72rem;line-height:1.5;color:#7f8ea8;margin:10px 2px 0}.vikram-chart-empty strong{font-size:1.05rem;color:#fff}.vikram-chart-empty p{max-width:620px;margin:.5rem auto 0}
+      .hidden-gems-table tbody tr[data-symbol],#opportunityRadar tr[data-symbol]{cursor:pointer}.hidden-gems-table tbody tr[data-symbol]:hover td,#opportunityRadar tr[data-symbol]:hover td{background:#172542!important}
+      body.vikram-chart-open{overflow:hidden}
+      @media(max-width:700px){.vikram-chart-dialog{width:96vw;padding:17px}.vikram-chart-stats{grid-template-columns:repeat(2,1fr)}.vikram-chart-scroll svg{height:280px}.chart-axis{font-size:10px}}
+    `;
+    document.head.appendChild(style);
+  }
+
   function ensureModal() {
+    injectStyles();
     if (document.getElementById(modalId)) return document.getElementById(modalId);
     const modal = document.createElement('div');
     modal.id = modalId;
@@ -28,9 +54,6 @@
     document.body.appendChild(modal);
     modal.addEventListener('click', event => {
       if (event.target.closest('[data-chart-close]')) close();
-    });
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape') close();
     });
     return modal;
   }
@@ -140,5 +163,19 @@
     }
   }
 
+  document.addEventListener('click', event => {
+    const row = event.target.closest('tr[data-symbol]');
+    if (!row || event.target.closest('button,a,input,select')) return;
+    const symbol = row.dataset.symbol;
+    if (!symbol || !window.VIKRAM_DATA_ENGINE) return;
+    event.preventDefault();
+    const asOf = window.VIKRAM_DATA_ENGINE.snapshot?.asOf || document.querySelector('.hidden-gems-meta')?.textContent?.match(/As of (\d{4}-\d{2}-\d{2})/)?.[1];
+    if (asOf) open(symbol, asOf);
+  });
+
+  window.addEventListener('load', injectStyles);
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') close();
+  });
   window.VIKRAM_STOCK_CHART = { open, close };
 })();
