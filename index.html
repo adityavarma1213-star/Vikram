@@ -3,35 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VIKRAM — Discover Analyse Invest Grow</title>
+<title>VIKRAM — Calm Focus & Wellbeing</title>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/discovery-premium.css">
 <link rel="stylesheet" href="css/themes.css">
+<link rel="stylesheet" href="css/home-calm.css">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icons/icon-192.png">
-<style>
-:root{--page-max:1640px}body{background:var(--bg-page);color:var(--text-main)}
-.navbar{height:60px;position:sticky;top:0;z-index:900;display:flex;align-items:center;gap:18px;padding:0 22px;background:color-mix(in srgb,var(--bg-card) 92%,transparent);border-bottom:1px solid var(--border-subtle);backdrop-filter:blur(18px)}
-.brand-lockup{display:flex;align-items:center;gap:10px;min-width:250px}.brand-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:var(--accent-cyan);color:var(--bg-page);font-weight:900}.brand-name{font-size:19px;font-weight:900;letter-spacing:.16em}.nav-tagline{font-size:9px;letter-spacing:.16em;color:var(--text-muted);font-weight:800}
-.nav-spacer{flex:1}.theme-wrap{position:relative}.theme-menu-btn{border:1px solid var(--border-subtle);background:var(--bg-card);color:var(--text-main);border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}.theme-menu{display:none}.theme-menu.open{display:grid;gap:4px}.theme-option{width:100%;border:0;background:transparent;color:var(--text-main);padding:9px 10px;text-align:left;border-radius:9px;cursor:pointer}.theme-option:hover,.theme-option.active{background:var(--bg-card-2);color:var(--accent-cyan)}.mode-row{display:flex;align-items:center;justify-content:space-between;padding:9px 10px;border-top:1px solid var(--border-subtle);margin-top:5px;color:var(--text-muted);font-size:12px}.switch{position:relative;width:42px;height:23px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;border-radius:999px;background:var(--bg-card-2);border:1px solid var(--border-subtle);cursor:pointer}.slider:before{content:"";position:absolute;width:17px;height:17px;left:2px;top:2px;border-radius:50%;background:var(--text-muted);transition:.18s}.switch input:checked+.slider:before{transform:translateX(19px);background:var(--accent-cyan)}
-.profile-badge{display:flex;align-items:center;gap:8px;border:1px solid var(--border-subtle);background:var(--bg-card);border-radius:999px;padding:5px 10px 5px 5px;font-size:12px;font-weight:800}.avatar{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent-cyan);color:var(--bg-page)}
-.sidebar{padding:22px 12px;border-right:1px solid var(--border-subtle);background:color-mix(in srgb,var(--bg-card) 58%,transparent)}.side-section{margin-bottom:22px}.side-label{padding:0 11px 8px;color:var(--text-muted);font-size:9px;letter-spacing:.14em;font-weight:900}.side-link{display:flex;align-items:center;gap:9px;padding:10px 11px;border-radius:10px;color:var(--text-muted);text-decoration:none;font-size:12px;font-weight:800}.side-link:hover,.side-link.active{background:var(--bg-card-2);color:var(--text-main)}.side-link.active{box-shadow:inset 3px 0 var(--accent-cyan)}.new-pill{margin-left:auto;border-radius:999px;padding:2px 6px;background:var(--accent-cyan);color:var(--bg-page);font-size:8px}.quote-card{margin:32px 2px 0;padding:14px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card)}.quote-card p{margin:0;font-size:11px;line-height:1.5;color:var(--text-muted)}.quote-card strong{display:block;margin-top:8px;font-size:9px;color:var(--accent-cyan)}
-.main-content{padding:20px 22px 50px;min-width:0;max-width:var(--page-max)}.hero-panoramic{position:relative;overflow:visible;min-height:300px;padding:28px;border:1px solid var(--border-subtle);border-radius:22px;background:var(--hero-bg);box-shadow:var(--shadow-lg)}.hero-panoramic:after{content:"";position:absolute;inset:auto 0 0;height:105px;opacity:.22;background:linear-gradient(135deg,transparent 0 16%,#061018 16% 33%,transparent 33% 47%,#061018 47% 68%,transparent 68% 79%,#061018 79%);clip-path:polygon(0 100%,0 62%,13% 76%,25% 43%,36% 70%,49% 31%,62% 66%,76% 40%,88% 72%,100% 50%,100% 100%);pointer-events:none}.hero-content{position:relative;z-index:2;max-width:850px}.eyebrow{font-size:9px;letter-spacing:.18em;color:var(--accent-cyan);font-weight:900}.hero-panoramic h1{margin:10px 0 7px;font-size:clamp(34px,5vw,60px);line-height:1;letter-spacing:-.055em}.hero-panoramic p{margin:0;color:var(--text-muted);max-width:700px}.hero-search{display:flex;gap:8px;margin-top:22px;position:relative;z-index:20}.hero-search input{flex:1;height:50px;min-width:0;border:1px solid var(--border-subtle);border-radius:12px;background:rgba(0,0,0,.13);color:var(--text-main);padding:0 15px;outline:none}.hero-search button{height:50px;border:0;border-radius:12px;padding:0 20px;background:var(--accent-cyan);color:var(--bg-page);font-weight:900;cursor:pointer}.popular{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}.ticker-pill{border:1px solid var(--border-subtle);border-radius:999px;background:rgba(255,255,255,.04);color:var(--text-main);padding:6px 9px;font-size:10px;font-weight:800;cursor:pointer}.ticker-pill:hover{border-color:var(--accent-cyan);color:var(--accent-cyan)}.hero-slogan{position:absolute;right:26px;bottom:28px;z-index:2;max-width:300px;text-align:right;font-family:cursive;font-size:22px;color:var(--text-main);opacity:.82}
-.suggestions-dropdown{position:absolute;left:0;right:88px;top:58px;z-index:9999;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;box-shadow:var(--shadow-lg);overflow:hidden}.suggestion{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;cursor:pointer}.suggestion:hover{background:var(--bg-card-2)}.suggestion small{color:var(--text-muted)}
-.indices-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-top:16px}.index-card{padding:15px;border:1px solid var(--border-subtle);border-radius:15px;background:var(--bg-card)}.index-card span{display:block;color:var(--text-muted);font-size:9px;letter-spacing:.08em;font-weight:900}.index-card strong{display:block;margin:6px 0 3px;font-size:19px}.delta{font-size:10px;font-weight:900}.delta.na{color:var(--text-muted)}
-.action-modules-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-top:16px}.action-card{padding:17px;border-radius:16px;color:#fff;text-decoration:none;min-height:125px;box-shadow:var(--shadow-md)}.action-card h3{margin:0 0 8px;font-size:14px}.action-card p{margin:0;font-size:10px;line-height:1.5;opacity:.85}.module-blue{background:linear-gradient(135deg,#2563eb,#0ea5e9)}.module-purple{background:linear-gradient(135deg,#7c3aed,#a855f7)}.module-orange{background:linear-gradient(135deg,#ea580c,#f59e0b)}.module-green{background:linear-gradient(135deg,#059669,#22c55e)}
-.scanner-container-surface{margin-top:18px;padding:18px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);box-shadow:var(--shadow-md)}.surface-tabs{display:flex;gap:7px;flex-wrap:wrap;border-bottom:1px solid var(--border-subtle);padding-bottom:12px}.surface-tab{border:0;background:transparent;color:var(--text-muted);padding:8px 10px;border-radius:8px;font-size:11px;font-weight:900;cursor:pointer}.surface-tab.active,.surface-tab:hover{background:var(--bg-card-2);color:var(--accent-cyan)}.filter-controls{display:flex;gap:8px;flex-wrap:wrap;margin:13px 0}.filter-controls select{border:1px solid var(--border-subtle);background:var(--bg-card-2);color:var(--text-main);border-radius:9px;padding:8px 10px;font-size:10px;font-weight:800}.scanner-table-wrap{overflow:auto;border:1px solid var(--border-subtle);border-radius:12px}.scanner-table{width:100%;min-width:0;table-layout:fixed;border-collapse:collapse}.scanner-table th:nth-child(1),.scanner-table td:nth-child(1){width:20%}.scanner-table th:nth-child(2),.scanner-table td:nth-child(2){width:9%}.scanner-table th:nth-child(3),.scanner-table td:nth-child(3){width:8%}.scanner-table th:nth-child(4),.scanner-table td:nth-child(4){width:8%}.scanner-table th:nth-child(5),.scanner-table td:nth-child(5){width:9%}.scanner-table th:nth-child(6),.scanner-table td:nth-child(6){width:10%}.scanner-table th:nth-child(7),.scanner-table td:nth-child(7){width:10%}.scanner-table th:nth-child(8),.scanner-table td:nth-child(8){width:9%}.scanner-table th:nth-child(9),.scanner-table td:nth-child(9){width:17%}.scanner-table th,.scanner-table td{padding:9px 8px;white-space:normal;overflow-wrap:anywhere}.scanner-table td:first-child,.scanner-table td:last-child{word-break:break-word}.scanner-table th,.scanner-table td{padding:11px;border-bottom:1px solid var(--border-subtle);text-align:left;font-size:10px}.scanner-table th{color:var(--text-muted);font-size:10px;letter-spacing:.08em;text-transform:uppercase;background:var(--bg-card-2);position:sticky;top:0;z-index:3;font-weight:800}.scanner-meta{margin:0 0 11px;color:var(--text-muted);font-size:10px;font-weight:700;display:flex;gap:14px;flex-wrap:wrap}.scanner-meta strong{color:var(--text-main);font-weight:800}.scanner-table td{color:var(--text-main);font-size:12.5px}.scanner-table td:nth-child(1) strong{font-size:13px;font-weight:800}.scanner-table td:nth-child(4) strong{font-size:13px}.scanner-table tr:last-child td{border-bottom:0}.status-confirmed{color:var(--green);font-weight:800;font-size:12.5px}.status-starting,.status-quiet{color:var(--accent-cyan);font-weight:800;font-size:12.5px}.status-distribution{color:var(--red);font-weight:800;font-size:12.5px}.empty-cell{text-align:center!important;color:var(--text-muted)!important;padding:26px!important}
-.company-overview{margin-top:18px}.overview-card{padding:18px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card)}.overview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.metric{padding:12px;border:1px solid var(--border-subtle);border-radius:11px;background:var(--bg-card-2)}.metric span{display:block;color:var(--text-muted);font-size:9px}.metric strong{display:block;margin-top:4px;font-size:13px}.hidden{display:none!important}
-.right-feed{padding:20px 12px;border-left:1px solid var(--border-subtle);background:color-mix(in srgb,var(--bg-card) 42%,transparent)}.feed-card{padding:16px;margin-bottom:12px;border:1px solid var(--border-subtle);border-radius:16px;background:var(--bg-card)}.feed-card h3{margin:0 0 10px;font-size:11px}.market-closed{display:inline-block;padding:5px 8px;border-radius:999px;background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--green);font-size:9px;font-weight:900}.date-big{font-size:22px;font-weight:900;margin:7px 0}.buffett{font-family:Georgia,serif;font-size:17px;line-height:1.35}.buffett small{display:block;margin-top:9px;font-family:Inter,sans-serif;color:var(--text-muted);font-size:9px}.breadth{display:grid;place-items:center;gap:9px}.donut{width:126px;height:126px;border-radius:50%;background:conic-gradient(var(--green) 0 57.7%,var(--red) 57.7% 96.5%,#94a3b8 96.5% 100%);display:grid;place-items:center}.donut:after{content:"3,190";width:82px;height:82px;border-radius:50%;display:grid;place-items:center;background:var(--bg-card);font-size:19px;font-weight:900}.breadth-stats{width:100%;display:grid;gap:6px}.breadth-stats div{display:flex;justify-content:space-between;font-size:10px}.breadth-stats b{font-weight:900}.adv{color:var(--green)}.dec{color:var(--red)}
-@media(max-width:1250px){.brand-lockup{min-width:210px}.indices-grid,.action-modules-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:1050px){.workspace-layout{grid-template-columns:190px 1fr}.right-feed{display:none}.hero-slogan{display:none}}
-@media(max-width:1100px){.scanner-table{min-width:760px;table-layout:auto}.scanner-table th,.scanner-table td{white-space:nowrap}.scanner-table-wrap{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable}}
-@media(max-width:760px){.workspace-layout{display:block}.sidebar{display:none}.navbar{height:auto;min-height:60px;flex-wrap:wrap;padding:9px 12px}.brand-lockup{min-width:auto}.nav-tagline{display:none}.profile-badge{margin-left:auto}.main-content{padding:12px}.indices-grid,.action-modules-grid,.overview-grid{grid-template-columns:1fr}.hero-panoramic{padding:21px}.hero-panoramic h1{font-size:39px}.suggestions-dropdown{right:0}.hero-search{flex-direction:column}.hero-search button{width:100%}}
-</style>
 </head>
-<body>
+<body class="vikram-home">
 <header class="navbar">
-  <div class="brand-lockup"><span class="brand-icon">V</span><span class="brand-name">VIKRAM</span><span class="nav-tagline">DISCOVER ANALYSE INVEST GROW</span></div>
   <div class="nav-spacer"></div>
   <div class="theme-wrap">
     <button id="themeMenuBtn" class="theme-menu-btn" type="button" aria-haspopup="true" aria-expanded="false">Theme ▾</button>
@@ -42,7 +23,7 @@
       <button class="theme-option" data-theme-name="academic" type="button">Academic</button>
       <button class="theme-option" data-theme-name="neoglass" type="button">NeoGlass</button>
       <button class="theme-option" data-theme-name="duology" type="button">Duology</button>
-      <div class="mode-row"><span>Dark <strong id="modeLabel">System</strong></span><label class="switch"><input id="modeCheckbox" type="checkbox" aria-label="Dark mode"><span class="slider"></span></label></div>
+      <div class="mode-row"><span>Mode <strong id="modeLabel">System</strong></span><label class="switch"><input id="modeCheckbox" type="checkbox" aria-label="Dark mode"><span class="slider"></span></label></div>
     </div>
   </div>
   <div class="profile-badge"><span class="avatar">A</span><span>Aditya Varma</span></div>
@@ -50,142 +31,111 @@
 
 <div class="workspace-layout">
   <aside class="sidebar">
+    <div class="calm-brand"><span class="calm-brand-mark">V</span><div><div class="calm-brand-name">VIKRAM</div><small>CALM • FOCUSED INTELLIGENCE</small></div></div>
     <section class="side-section">
       <div class="side-label">WORKSPACE</div>
-      <a class="side-link active" href="index.html">⌂ Home</a>
-      <a class="side-link" href="#companyOverview">◉ Analysis</a>
-      <a class="side-link" href="index.html#scannerSurface">◒ Accumulation Scanner</a>
-      <a class="side-link" href="#hiddenGems">◆ Hidden Gems</a>
-      <a class="side-link" href="#opportunityRadar">◈ Opportunity Radar</a>
-      <a class="side-link" href="#portfolio">▣ Portfolio</a>
-    </section>
-    <section class="side-section">
-      <div class="side-label">DISCOVER</div>
-      <a class="side-link" href="#vikramLite">VIKRAM Lite <span class="new-pill">NEW</span></a>
-      <a class="side-link" href="#marketInsights">Market Insights</a>
-      <a class="side-link" href="#learningHub">Learning Hub</a>
-      <a class="side-link" href="#settings">Settings</a>
+      <a class="side-link active" href="#home">⌂ Dashboard</a>
+      <a class="side-link" href="#scannerSurface">◌ Accumulation Scanner</a>
+      <a class="side-link" href="#opportunityRadar">◉ Opportunity Radar</a>
+      <a class="side-link" href="#hiddenGemsPreview">◇ Hidden Gems</a>
+      <a class="side-link" href="#companyOverview">▤ Market Overview</a>
+      <a class="side-link" href="#watchlist">☆ Watchlist</a>
+      <a class="side-link" href="#analytics">◫ Analytics</a>
+      <a class="side-link" href="#settings">⚙ Settings</a>
     </section>
     <div class="quote-card"><p>“Better Information Brings Better Decisions.”</p><strong>— VIKRAM</strong></div>
   </aside>
 
   <main class="main-content">
+    <div class="calm-mainbar">
+      <form class="hero-search" id="heroSearchForm">
+        <input id="symbolSearchInput" type="text" autocomplete="off" placeholder="Search symbol or company...">
+        <button id="searchSubmitBtn" type="submit">Search</button>
+        <div id="searchSuggestions" class="suggestions-dropdown" hidden></div>
+      </form>
+      <button class="utility-btn" type="button" aria-label="Market status">◉</button>
+      <button class="utility-btn" type="button" aria-label="Notifications">♧</button>
+      <button class="utility-btn" type="button" aria-label="Alerts">♧</button>
+      <button class="utility-btn" type="button" aria-label="Profile">A</button>
+    </div>
+
     <section class="hero-panoramic" id="home">
       <div class="hero-content">
-        <span class="eyebrow">NSE MARKET INTELLIGENCE</span>
-        <h1>Good Morning, Aditya!</h1>
-        <p>Discover verified market evidence, research signals and accumulation intelligence without synthetic market values.</p>
-        <form class="hero-search" id="heroSearchForm">
-          <input id="symbolSearchInput" type="text" autocomplete="off" placeholder="Search NSE symbol or company name">
-          <button id="searchSubmitBtn" type="submit">Search</button>
-          <div id="searchSuggestions" class="suggestions-dropdown" hidden></div>
-        </form>
-        <div class="popular" aria-label="Popular tickers">
-          <button class="ticker-pill" data-symbol="TCS">TCS</button><button class="ticker-pill" data-symbol="RELIANCE">RELIANCE</button><button class="ticker-pill" data-symbol="HDFCBANK">HDFCBANK</button><button class="ticker-pill" data-symbol="INFY">INFY</button><button class="ticker-pill" data-symbol="ICICIBANK">ICICIBANK</button><button class="ticker-pill" data-symbol="LT">LT</button><button class="ticker-pill" data-symbol="SBIN">SBIN</button><button class="ticker-pill" data-symbol="BHARTIARTL">BHARTIARTL</button>
-        </div>
+        <span class="eyebrow">CALM • MINIMAL • FOCUSED • DISTRACTION FREE</span>
+        <h1>Accumulation Scanner</h1>
+        <p>Find high-probability accumulation setups in the Indian market.</p>
       </div>
-      <div class="hero-slogan">Discipline Today, Wealth Tomorrow</div>
-    </section>
-
-    <section class="indices-grid" id="marketInsights">
-      <article class="index-card"><span>NIFTY 50</span><strong>N/A</strong><div class="delta na">Verified index feed unavailable</div></article>
-      <article class="index-card"><span>SENSEX</span><strong>N/A</strong><div class="delta na">Verified index feed unavailable</div></article>
-      <article class="index-card"><span>NIFTY BANK</span><strong>N/A</strong><div class="delta na">Verified index feed unavailable</div></article>
-      <article class="index-card"><span>NIFTY MIDCAP 100</span><strong>N/A</strong><div class="delta na">Verified index feed unavailable</div></article>
-    </section>
-
-    <section class="action-modules-grid">
-      <a class="action-card module-blue" href="index.html#scannerSurface"><h3>Accumulation Scanner</h3><p>Find verified early and confirmed accumulation evidence across the supported NSE universe.</p></a>
-      <a class="action-card module-purple" href="#hiddenGems"><h3>Hidden Gems</h3><p>Explore discovery candidates from the common verified research layer.</p></a>
-      <a class="action-card module-orange" href="#opportunityRadar"><h3>Opportunity Radar</h3><p>Review cross-factor opportunities with transparent evidence.</p></a>
-      <a class="action-card module-green" href="#vikramLite"><h3>VIKRAM Lite</h3><p>A lightweight market view for fast, disciplined decisions.</p></a>
     </section>
 
     <section class="scanner-container-surface" id="scannerSurface">
-      <div class="surface-tabs" role="tablist"><button class="surface-tab active" type="button">★ Top Opportunities</button><button class="surface-tab" type="button">Watchlist</button><button class="surface-tab" type="button">My Portfolio</button><button class="surface-tab" type="button">Market News</button></div>
-      <div class="scanner-meta" id="scannerMeta"><span>Scanner Data Date: <strong id="scannerDataDate">—</strong></span><span>Data Age: <strong id="scannerDataAge">—</strong></span></div>
+      <div class="surface-tabs" role="tablist" aria-label="VIKRAM intelligence surfaces">
+        <button class="surface-tab active" type="button">Scanner Results</button>
+        <button class="surface-tab" type="button" data-scroll-target="opportunityRadar">Opportunity Radar</button>
+        <button class="surface-tab" type="button" data-scroll-target="hiddenGemsPreview">Hidden Gems</button>
+      </div>
       <div class="filter-controls" aria-label="Scanner filters">
         <select id="universeFilter"><option value="ALL">All Stocks</option><option value="NIFTY 50">Nifty 50</option><option value="NIFTY 200">Nifty 200</option><option value="NIFTY 500">Nifty 500</option></select>
         <select id="verdictFilter"><option value="ALL">All Verdicts</option><option value="ACCUMULATION CONFIRMED">Confirmed</option><option value="ACCUMULATION STARTING">Starting</option><option value="QUIET ABSORPTION">Quiet Absorption</option><option value="DISTRIBUTION">Distribution</option></select>
         <select id="scoreFilter"><option value="0">Any Score</option><option value="75">Score ≥ 75</option><option value="55">Score ≥ 55</option><option value="50">Score ≥ 50</option></select>
       </div>
-      <div class="scanner-table-wrap"><table class="scanner-table"><thead><tr><th>Stock</th><th>Price</th><th>Change</th><th>Score</th><th>Volume</th><th>Delivery</th><th>OBV Trend</th><th>Futures OI</th><th>Verdict</th></tr></thead><tbody id="tableBody" class="accumulation-table-body"><tr><td colspan="9" class="empty-cell">Loading verified scanner snapshot…</td></tr></tbody></table></div>
+      <div class="scanner-meta" id="scannerMeta"><span>Scanner Data Date: <strong id="scannerDataDate">—</strong></span><span>Data Age: <strong id="scannerDataAge">—</strong></span></div>
+      <div class="scanner-table-wrap">
+        <table class="scanner-table">
+          <thead><tr>
+            <th data-sort="symbol" tabindex="0">Stock <span class="scanner-sort">↕</span></th>
+            <th data-sort="price" tabindex="0">LTP <span class="scanner-sort">↕</span></th>
+            <th data-sort="change" tabindex="0">Change % <span class="scanner-sort">↕</span></th>
+            <th data-sort="score" tabindex="0">Accumulation Score <span class="scanner-sort">↕</span></th>
+            <th data-sort="volume" tabindex="0">Volume <span class="scanner-sort">↕</span></th>
+            <th data-sort="delivery" tabindex="0">Delivery % <span class="scanner-sort">↕</span></th>
+            <th data-sort="obv" tabindex="0">OBV Trend <span class="scanner-sort">↕</span></th>
+            <th data-sort="oi" tabindex="0">Futures OI <span class="scanner-sort">↕</span></th>
+            <th data-sort="verdict" tabindex="0">Status <span class="scanner-sort">↕</span></th>
+          </tr></thead>
+          <tbody id="tableBody" class="accumulation-table-body"><tr><td colspan="9" class="empty-cell">Loading verified scanner snapshot…</td></tr></tbody>
+        </table>
+      </div>
     </section>
 
-    <section id="companyOverview" class="company-overview">
-      <div class="overview-card"><div style="display:flex;justify-content:space-between;gap:12px;align-items:end"><div><span class="eyebrow">RESEARCH</span><h2 id="overviewCompanyName" style="margin:6px 0">Company Overview</h2></div><strong id="overviewRating">N/A</strong></div><div class="overview-grid" style="margin-top:14px"><div class="metric"><span>VIKRAM SCORE</span><strong id="overviewVikramScore">N/A</strong></div><div class="metric"><span>Current Price</span><strong id="overviewCurrentPrice">N/A</strong></div><div class="metric"><span>Sector</span><strong id="overviewSector">N/A</strong></div><div class="metric"><span>Industry</span><strong id="overviewIndustry">N/A</strong></div><div class="metric"><span>Exchange</span><strong id="overviewExchange">NSE</strong></div><div class="metric"><span>Market Cap</span><strong id="overviewMarketCap">N/A</strong></div><div class="metric"><span>52W High</span><strong id="overview52WeekHigh">N/A</strong></div><div class="metric"><span>52W Low</span><strong id="overview52WeekLow">N/A</strong></div></div></div>
+    <section id="companyOverview" class="support-card" hidden>
+      <span class="eyebrow">RESEARCH</span><h2 id="overviewCompanyName">Company Overview</h2>
+      <p id="overviewRating">N/A</p>
+      <div class="overview-grid">
+        <div class="metric"><span>VIKRAM SCORE</span><strong id="overviewVikramScore">N/A</strong></div>
+        <div class="metric"><span>Current Price</span><strong id="overviewCurrentPrice">N/A</strong></div>
+        <div class="metric"><span>Sector</span><strong id="overviewSector">N/A</strong></div>
+        <div class="metric"><span>Industry</span><strong id="overviewIndustry">N/A</strong></div>
+        <div class="metric"><span>Exchange</span><strong id="overviewExchange">NSE</strong></div>
+        <div class="metric"><span>Market Cap</span><strong id="overviewMarketCap">N/A</strong></div>
+        <div class="metric"><span>52W High</span><strong id="overview52WeekHigh">N/A</strong></div>
+        <div class="metric"><span>52W Low</span><strong id="overview52WeekLow">N/A</strong></div>
+      </div>
     </section>
-    <section id="hiddenGems" class="overview-card" style="margin-top:18px"><h2>Hidden Gems</h2><p style="color:var(--text-muted)">Verified discovery surface.</p></section>
-    <section id="opportunityRadar" class="overview-card" style="margin-top:18px"><h2>Opportunity Radar</h2><p style="color:var(--text-muted)">Cross-factor opportunity surface.</p></section>
-    <section id="portfolio" class="overview-card" style="margin-top:18px"><h2>Portfolio</h2><p style="color:var(--text-muted)">Verified values only; unavailable data remains N/A.</p></section>
-    <section id="vikramLite" class="overview-card" style="margin-top:18px"><h2>VIKRAM Lite</h2><p style="color:var(--text-muted)">Lightweight verified market view.</p></section>
-    <section id="learningHub" class="overview-card" style="margin-top:18px"><h2>Learning Hub</h2><p style="color:var(--text-muted)">Research education surface.</p></section>
-    <section id="settings" class="overview-card" style="margin-top:18px"><h2>Settings</h2><p style="color:var(--text-muted)">Use the Theme menu above to change the VIKRAM experience.</p></section>
+
+    <div class="support-grid">
+      <section id="hiddenGemsPreview" class="support-card"><h2>Hidden Gems</h2><p>Verified discovery candidates from the common research layer.</p></section>
+      <section id="opportunityRadar" class="support-card"><h2>Opportunity Radar</h2><p>Cross-factor opportunities from verified scanner evidence.</p></section>
+    </div>
+
+    <section id="watchlist" class="support-card" style="margin-top:12px"><h2>Watchlist</h2><p>Watchlist values remain tied to the user's stored selections and verified data layer.</p></section>
+    <section id="analytics" class="support-card" style="margin-top:12px"><h2>Analytics</h2><p>Analytics surfaces use existing VIKRAM engines and verified inputs.</p></section>
+    <section id="settings" class="support-card" style="margin-top:12px"><h2>Settings</h2><p>Use the Theme control to switch among VIKRAM's six experiences and Light, Dark, or System mode.</p></section>
+
+    <div class="calm-footer-art" aria-hidden="true"><div class="calm-footer-copy">A Calm Mind<br>Invests Better.</div><div class="leaf-cluster"><span class="leaf-stem"></span><span class="leaf"></span><span class="leaf"></span><span class="leaf"></span><span class="leaf"></span><span class="leaf"></span></div></div>
     <div id="loadingContainer" class="hidden"></div><div id="errorContainer" class="hidden"></div>
   </main>
-
-  <aside class="right-feed">
-    <div class="feed-card"><h3>TODAY</h3><div class="date-big" id="feedDate">—</div><span class="market-closed">Market Closed</span></div>
-    <div class="feed-card"><div class="buffett">“Invest in what you understand.”<small>— Warren Buffett</small></div></div>
-    <div class="feed-card"><h3>MARKET BREADTH</h3><div class="breadth"><div class="donut" aria-label="Market breadth donut"></div><div class="breadth-stats"><div><span>Advances</span><b class="adv">1,842</b></div><div><span>Declines</span><b class="dec">1,236</b></div><div><span>Unchanged</span><b>112</b></div></div></div></div>
-  </aside>
 </div>
 
 <script src="js/dataEngine.js"></script>
 <script type="module" src="js/themeEngine.js"></script>
 <script type="module" src="js/app.js"></script>
-<script>
-(() => {
-  const body = document.getElementById('tableBody');
-  const search = document.getElementById('symbolSearchInput');
-  const suggestions = document.getElementById('searchSuggestions');
-  const universe = document.getElementById('universeFilter');
-  const verdict = document.getElementById('verdictFilter');
-  const score = document.getElementById('scoreFilter');
-  let rows = [];
-  const esc = value => String(value ?? '').replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const text = value => value == null || value === '' ? 'N/A' : esc(value);
-  const verdictClass = value => String(value || '').toLowerCase().includes('distribution') ? 'status-distribution' : String(value || '').toLowerCase().includes('confirmed') ? 'status-confirmed' : 'status-starting';
-  function render() {
-    const u = universe.value, v = verdict.value, min = Number(score.value || 0);
-    const visible = rows.filter(r => {
-      const memberships = [r.universe,r.index,r.indexName,r.indexMembership,r.universeName].filter(Boolean).join('|').toUpperCase();
-      return (u === 'ALL' || memberships.includes(u)) && (v === 'ALL' || r.verdict === v) && (Number(r.score) || 0) >= min;
-    });
-    body.innerHTML = visible.length ? visible.map(r => `<tr><td><strong>${text(r.companyName || r.symbol)}</strong><div style="color:var(--text-muted)">${text(r.symbol)}</div></td><td>${text(r.metrics?.close)}</td><td>${r.metrics?.priceChangePct == null ? 'N/A' : `${Number(r.metrics.priceChangePct).toFixed(2)}%`}</td><td><strong>${text(r.score)}</strong></td><td>${r.metrics?.volumeRatio == null ? 'N/A' : `${Number(r.metrics.volumeRatio).toFixed(2)}x`}</td><td>${r.metrics?.deliveryPct == null ? 'N/A' : `${Number(r.metrics.deliveryPct).toFixed(1)}%`}</td><td>${r.metrics?.obvTrend == null ? 'N/A' : (Number(r.metrics.obvTrend) > 0 ? 'Rising' : Number(r.metrics.obvTrend) < 0 ? 'Falling' : 'Flat')}</td><td>${r.metrics?.hasDerivatives ? (r.metrics?.changeOi == null ? 'N/A' : Number(r.metrics.changeOi).toLocaleString('en-IN')) : 'N/A'}</td><td class="${verdictClass(r.verdict)}">${text(r.verdict)}</td></tr>`).join('') : '<tr><td colspan="9" class="empty-cell">No verified rows match these filters.</td></tr>';
-  }
-  function go(symbol) { const q = String(symbol || '').trim().toUpperCase(); if (q) window.location.href = `index.html?symbol=${encodeURIComponent(q)}#companyOverview`; }
-  function showSuggestions() {
-    const q = search.value.trim();
-    const hits = window.VIKRAM_DATA_ENGINE?.searchSuggestions(q) || [];
-    if (!q || !hits.length) { suggestions.hidden = true; suggestions.innerHTML = ''; return; }
-    suggestions.innerHTML = hits.map(h => `<div class="suggestion" data-symbol="${esc(h.ticker)}"><strong>${esc(h.ticker)}</strong><small>${esc(h.name)}</small></div>`).join('');
-    suggestions.hidden = false;
-    suggestions.querySelectorAll('.suggestion').forEach(el => el.addEventListener('click', () => go(el.dataset.symbol)));
-  }
-  document.getElementById('heroSearchForm').addEventListener('submit', e => { e.preventDefault(); const q = search.value.trim().toUpperCase(); const exact = rows.find(r => String(r.symbol || '').toUpperCase() === q); go(exact?.symbol || q); });
-  search.addEventListener('input', showSuggestions);
-  search.addEventListener('focus', showSuggestions);
-  document.addEventListener('click', e => { if (!e.target.closest('.hero-search')) suggestions.hidden = true; });
-  document.querySelectorAll('.ticker-pill').forEach(btn => btn.addEventListener('click', () => { search.value = btn.dataset.symbol; go(btn.dataset.symbol); }));
-  [universe,verdict,score].forEach(el => el.addEventListener('change', render));
-  document.querySelectorAll('.surface-tab').forEach(tab => tab.addEventListener('click', () => { document.querySelectorAll('.surface-tab').forEach(x => x.classList.remove('active')); tab.classList.add('active'); }));
-  const d = new Date(); document.getElementById('feedDate').textContent = d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
-  const dataDateEl = document.getElementById('scannerDataDate');
-  const dataAgeEl = document.getElementById('scannerDataAge');
-  function renderScannerMeta(asOf) {
-    if (!dataDateEl || !dataAgeEl) return;
-    if (!asOf) { dataDateEl.textContent = 'N/A'; dataAgeEl.textContent = 'N/A'; return; }
-    const asOfDate = new Date(`${asOf}T00:00:00Z`);
-    if (Number.isNaN(asOfDate.getTime())) { dataDateEl.textContent = 'N/A'; dataAgeEl.textContent = 'N/A'; return; }
-    dataDateEl.textContent = asOfDate.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' });
-    const diffDays = Math.floor((Date.now() - asOfDate.getTime()) / 86400000);
-    dataAgeEl.textContent = diffDays <= 0 ? 'Today (EOD verified)' : diffDays === 1 ? '1 day old' : `${diffDays} days old`;
-  }
-  fetch('data/scanner.json',{cache:'no-store'}).then(r => r.json()).then(snapshot => { if (snapshot.dataStatus !== 'EOD VERIFIED') throw new Error('SNAPSHOT_NOT_VERIFIED'); rows = Array.isArray(snapshot.results) ? snapshot.results : []; renderScannerMeta(snapshot.asOf); render(); }).catch(() => { body.innerHTML = '<tr><td colspan="9" class="empty-cell">Verified scanner snapshot unavailable. No market values are being estimated.</td></tr>'; renderScannerMeta(null); });
-})();
-</script>
 <script src="js/researchRepair.js"></script>
 <script src="js/discoveryRepair.js"></script>
+<script src="js/scannerUiRepair.js"></script>
+<script>
+(() => {
+  document.querySelectorAll('.surface-tab[data-scroll-target]').forEach(tab => tab.addEventListener('click', () => document.getElementById(tab.dataset.scrollTarget)?.scrollIntoView({behavior:'smooth',block:'start'})));
+})();
+</script>
 </body>
 </html>
