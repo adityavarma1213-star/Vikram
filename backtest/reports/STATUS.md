@@ -1,0 +1,8 @@
+# Current Package Status
+
+REAL NSE DATA: NOT EXECUTED
+REAL VIKRAM ENGINE: NOT INTEGRATED
+REAL VIKRAM BACKTEST: NOT EXECUTED
+SYNTHETIC SOFTWARE TESTS: SUPPORTED
+
+Do not quote synthetic returns, win rates, or signal counts as VIKRAM results.
