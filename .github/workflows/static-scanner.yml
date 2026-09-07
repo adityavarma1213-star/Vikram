@@ -1,6 +1,7 @@
 name: VIKRAM Free NSE EOD Scanner
 
 # Regeneration guard: scanner output must be rebuilt from the current canonical engine before Pages deployment.
+# Canonical Pages trigger marker: force regeneration after deployment-workflow consolidation.
 
 on:
   workflow_dispatch:
