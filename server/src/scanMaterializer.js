@@ -18,33 +18,58 @@ function sortHistory(historyAll) {
   );
 }
 
-function buildResult(symbol, rows, futuresBySymbolDate, derivativesSymbols = new Set()) {
+function buildOiTrendBySymbolDate(futuresRows) {
+  const grouped = new Map();
+  for (const row of futuresRows || []) {
+    const symbol = String(row.symbol || '').trim().toUpperCase();
+    const date = dateKey(row.trade_date);
+    const oi = Number(row.oi);
+    if (!symbol || !date || !Number.isFinite(oi)) continue;
+    if (!grouped.has(symbol)) grouped.set(symbol, []);
+    grouped.get(symbol).push({ date, oi });
+  }
+
+  const trends = new Map();
+  for (const [symbol, rows] of grouped.entries()) {
+    const deduped = new Map(rows.map(r => [r.date, r]));
+    const ordered = [...deduped.values()].sort((a, b) => a.date.localeCompare(b.date));
+    for (let i = 2; i < ordered.length; i += 1) {
+      const current = ordered[i];
+      const prior = ordered[i - 2];
+      trends.set(`${symbol}|${current.date}`, current.oi - prior.oi);
+    }
+  }
+  return trends;
+}
+
+function buildResult(symbol, rows, futuresBySymbolDate, derivativesSymbols = new Set(), oiTrendBySymbolDate = new Map()) {
   const bounded = rows.slice(-MATERIALIZE_LOOKBACK_DAYS);
   const current = bounded[bounded.length - 1];
   if (!current) return null;
   const key = `${symbol}|${dateKey(current.trade_date)}`;
   const exactFutures = futuresBySymbolDate.get(key) || null;
+  const trend = oiTrendBySymbolDate.get(key);
   // Database futures rows are already verified evidence; explicitly mark them as available
   // for the canonical engine so exact-date OI is not silently treated as cash-only.
   const futures = exactFutures
-    ? { ...exactFutures, available: true, derivativesSupported: true }
+    ? { ...exactFutures, available: true, derivativesSupported: true, oiTrend3Day: Number.isFinite(trend) ? trend : null }
     : (derivativesSymbols.has(symbol)
-      ? { available: false, derivativesSupported: true, trade_date: dateKey(current.trade_date) }
-      : { available: false, derivativesSupported: false, trade_date: dateKey(current.trade_date) });
+      ? { available: false, derivativesSupported: true, trade_date: dateKey(current.trade_date), oiTrend3Day: null }
+      : { available: false, derivativesSupported: false, trade_date: dateKey(current.trade_date), oiTrend3Day: null });
   return evaluate(symbol, bounded, futures);
 }
 
-function buildScannerResults(historyBySymbol, futuresBySymbolDate, derivativesSymbols = new Set()) {
+function buildScannerResults(historyBySymbol, futuresBySymbolDate, derivativesSymbols = new Set(), oiTrendBySymbolDate = new Map()) {
   const results = [];
   for (const [symbol, historyAll] of historyBySymbol.entries()) {
     const sorted = sortHistory(historyAll);
-    const result = buildResult(symbol, sorted, futuresBySymbolDate, derivativesSymbols);
+    const result = buildResult(symbol, sorted, futuresBySymbolDate, derivativesSymbols, oiTrendBySymbolDate);
     if (result) results.push(result);
   }
   return results;
 }
 
-function buildPeriodResults(historyBySymbol, futuresBySymbolDate, derivativesSymbols = new Set()) {
+function buildPeriodResults(historyBySymbol, futuresBySymbolDate, derivativesSymbols = new Set(), oiTrendBySymbolDate = new Map()) {
   const periods = Object.fromEntries(PERIODS.map(p => [p.key, []]));
 
   for (const [symbol, historyAll] of historyBySymbol.entries()) {
@@ -52,11 +77,9 @@ function buildPeriodResults(historyBySymbol, futuresBySymbolDate, derivativesSym
     if (!sorted.length) continue;
 
     for (const period of PERIODS) {
-      // Keep the period plus a warm-up buffer so relative volume, delivery trend,
-      // and OBV remain mathematically meaningful even for 1D/1W selections.
       const warmup = Math.max(CFG.historyDays, CFG.obvLookback, CFG.deliveryTrendLookback);
       const rows = sorted.slice(-(period.rows + warmup));
-      const result = buildResult(symbol, rows, futuresBySymbolDate, derivativesSymbols);
+      const result = buildResult(symbol, rows, futuresBySymbolDate, derivativesSymbols, oiTrendBySymbolDate);
       if (result) {
         result.period = period.key;
         result.periodLabel = period.label;
@@ -72,6 +95,7 @@ function buildPeriodResults(historyBySymbol, futuresBySymbolDate, derivativesSym
 module.exports = {
   buildScannerResults,
   buildPeriodResults,
+  buildOiTrendBySymbolDate,
   MATERIALIZE_LOOKBACK_DAYS,
   PERIODS
 };
