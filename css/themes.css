@@ -66,6 +66,9 @@ html[data-mode="system"]{color-scheme:light dark}
 .sidebar{padding:14px 9px!important}.side-section{margin-bottom:14px!important}.side-link{padding:8px 9px!important;font-size:11px!important}
 .right-feed{padding:14px 9px!important}.feed-card{padding:12px!important;margin-bottom:8px!important}
 
+/* The approved Sample A scanner surface intentionally has no legacy filter row. */
+.filter-controls{display:none!important}
+
 /* Avoid empty-page feeling when a discovery surface has no candidates. */
 #hiddenGemsPreview .opportunity-empty,#opportunityRadar .opportunity-empty{min-height:180px!important}
 
