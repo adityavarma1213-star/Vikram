@@ -134,7 +134,16 @@
 <script src="js/scannerUiRepair.js"></script>
 <script>
 (() => {
-  document.querySelectorAll('.surface-tab[data-scroll-target]').forEach(tab => tab.addEventListener('click', () => document.getElementById(tab.dataset.scrollTarget)?.scrollIntoView({behavior:'smooth',block:'start'})));
+  const search=document.getElementById('symbolSearchInput');
+  const form=document.getElementById('heroSearchForm');
+  const suggestions=document.getElementById('searchSuggestions');
+  const esc=v=>String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const go=symbol=>{const q=String(symbol||'').trim().toUpperCase();if(q)window.location.href=`index.html?symbol=${encodeURIComponent(q)}#companyOverview`;};
+  const show=()=>{const q=search?.value.trim();const hits=window.VIKRAM_DATA_ENGINE?.searchSuggestions(q)||[];if(!q||!hits.length){if(suggestions)suggestions.hidden=true;return;}if(suggestions){suggestions.innerHTML=hits.map(h=>`<div class="suggestion" data-symbol="${esc(h.ticker)}"><strong>${esc(h.ticker)}</strong><small>${esc(h.name)}</small></div>`).join('');suggestions.hidden=false;suggestions.querySelectorAll('.suggestion').forEach(el=>el.addEventListener('click',()=>go(el.dataset.symbol)));}};
+  form?.addEventListener('submit',e=>{e.preventDefault();go(search?.value);});
+  search?.addEventListener('input',show);search?.addEventListener('focus',show);
+  document.addEventListener('click',e=>{if(!e.target.closest('.hero-search')&&suggestions)suggestions.hidden=true;});
+  document.querySelectorAll('.surface-tab[data-scroll-target]').forEach(tab=>tab.addEventListener('click',()=>document.getElementById(tab.dataset.scrollTarget)?.scrollIntoView({behavior:'smooth',block:'start'})));
 })();
 </script>
 </body>
