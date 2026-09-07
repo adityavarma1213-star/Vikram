@@ -46,16 +46,44 @@ function buildResult(symbol, rows, futuresBySymbolDate, derivativesSymbols = new
   const bounded = rows.slice(-MATERIALIZE_LOOKBACK_DAYS);
   const current = bounded[bounded.length - 1];
   if (!current) return null;
-  const key = `${symbol}|${dateKey(current.trade_date)}`;
+  const date = dateKey(current.trade_date);
+  const key = `${symbol}|${date}`;
   const exactFutures = futuresBySymbolDate.get(key) || null;
+  const derivativesSupported = derivativesSymbols.has(String(symbol).trim().toUpperCase());
   const trend = oiTrendBySymbolDate.get(key);
+
   // Only pass a futures object when an exact-date verified contract exists.
   // A derivatives-supported symbol with no exact-date row must remain OI-unavailable,
-  // not masquerade as exact-date evidence.
+  // not masquerade as exact-date evidence or cash-only evidence.
   const futures = exactFutures
     ? { ...exactFutures, available: true, derivativesSupported: true, oiTrend3Day: Number.isFinite(trend) ? trend : null }
     : null;
-  return evaluate(symbol, bounded, futures);
+  const result = evaluate(symbol, bounded, futures);
+  if (!result) return null;
+
+  result.metrics = {
+    ...result.metrics,
+    derivativesSupported,
+    derivativesState: exactFutures
+      ? 'OI_AVAILABLE'
+      : derivativesSupported
+        ? 'OI_MISSING_UNEXPECTEDLY'
+        : 'OI_NOT_SUPPORTED'
+  };
+
+  // A stock with verified recent F&O support but no exact-date OI cannot be
+  // scored as cash-only. Keep the evidence state explicit and score N/A.
+  if (derivativesSupported && !exactFutures) {
+    result.score = null;
+    result.verdict = 'DATA N/A';
+    result.confirmation = { status: 'blocked', gateFailures: ['exact-date futures OI is unavailable for a derivatives-supported symbol'] };
+    result.why = [
+      ...(Array.isArray(result.why) ? result.why : []),
+      'F&O support exists in the recent evidence window, but exact-date futures OI is missing; result is DATA N/A rather than cash-only fallback.'
+    ];
+  }
+
+  return result;
 }
 
 function buildScannerResults(historyBySymbol, futuresBySymbolDate, derivativesSymbols = new Set(), oiTrendBySymbolDate = new Map()) {
