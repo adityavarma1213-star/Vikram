@@ -1,45 +1,153 @@
-const CFG = require('./config');
-const n = v => v == null || v === '' || !Number.isFinite(Number(v)) ? null : Number(v);
-const dk = v => v instanceof Date ? v.toISOString().slice(0,10) : v == null ? null : String(v).slice(0,10);
-const rowsOf = rows => (Array.isArray(rows) ? rows.slice() : []).sort((a,b)=>(dk(a.trade_date||a.date)||'').localeCompare(dk(b.trade_date||b.date)||''));
-function calculateObv(rows){ let obv=0; const out=[]; const rs=rowsOf(rows); for(let i=0;i<rs.length;i++){const c=n(rs[i].close??rs[i].last_price),p=n(i?rs[i-1].close??rs[i-1].last_price:rs[i].prev_close),v=n(rs[i].volume)||0;if(c!==null&&p!==null){if(c>p)obv+=v;else if(c<p)obv-=v}out.push({...rs[i],obv})}return out }
-function evaluate({symbol,history=[],current=null,futures=null}={}){
- const rows=rowsOf(history),latest={...(current||rows.at(-1)||{})},date=dk(latest.trade_date||latest.date),hasDerivatives=Boolean(futures&&futures.available),derivativesSupported=Boolean(hasDerivatives||(futures&&futures.derivativesSupported===true));
- const prior=rows.filter(r=>dk(r.trade_date||r.date)!==date);
- const volumeSample=prior.slice(-CFG.historyDays).map(r=>n(r.volume)).filter(v=>typeof v==='number'&&!isNaN(v));
- const avgVolume=volumeSample.length?volumeSample.reduce((a,b)=>a+b,0)/volumeSample.length:0,volume=n(latest.volume),volumeRatio=volume!==null&&avgVolume>0?volume/avgVolume:null;
- const sample=rows.slice(-CFG.deliveryTrendLookback).map(r=>r.deliv_per??r.delivery_pct),validDeliverySamples=sample.filter(r=>typeof r==='number'&&!isNaN(r));
- const avgDelivery=validDeliverySamples.length>0?validDeliverySamples.reduce((a,b)=>a+b,0)/validDeliverySamples.length:0;
- const deliveryPct=n(latest.deliv_per??latest.delivery_pct),deliveryQty=n(latest.deliv_qty??latest.delivery_qty),prevDel=validDeliverySamples.length>1?validDeliverySamples.slice(0,-1):[],prevDelAvg=prevDel.length?prevDel.reduce((a,b)=>a+b,0)/prevDel.length:null,deliveryTrend=deliveryPct!==null&&prevDelAvg!==null?deliveryPct-prevDelAvg:null;
- const close=n(latest.close??latest.last_price),prevClose=n(latest.prev_close),priceChangePct=close!==null&&prevClose!==null&&prevClose!==0?((close/prevClose)-1)*100:null;
- const obvRows=calculateObv(rows),obv=obvRows.length?obvRows.at(-1).obv:null,obvBase=obvRows.length>CFG.obvLookback?obvRows.at(-1-CFG.obvLookback).obv:null,obvTrend=obv!==null&&obvBase!==null?obv-obvBase:null;
- const oiDate=dk(futures?.trade_date||futures?.date),oiExactDate=hasDerivatives&&oiDate===date,futuresOi=oiExactDate?n(futures.oi??futures.open_interest):null,changeOi=oiExactDate?n(futures.change_oi??futures.change_in_oi):null,oiTrend3Day=n(futures?.oiTrend3Day);
- const oiEvidence=hasDerivatives&&((oiExactDate&&(futuresOi!==null||changeOi!==null))||oiTrend3Day!==null);
- const derivativesState=derivativesSupported?(oiEvidence?'OI_SUPPORTED_WITH_EVIDENCE':'OI_MISSING_UNEXPECTEDLY'):'OI_NOT_SUPPORTED';
- const weights=derivativesSupported?CFG.weights:CFG.cashWeights;
- let rawScore=0,availableWeight=0;const components=[],why=[];const add=(name,w,p,detail)=>{if(p===null)return;rawScore+=p;availableWeight+=w;components.push({name,weight:w,points:Math.round(p*100)/100});if(detail)why.push(detail)};
- if(priceChangePct!==null){const p=priceChangePct>0.5?weights.price:priceChangePct>=0.1?weights.price*0.8:priceChangePct>=-0.2?weights.price*(8/15):0;add('Price stability',weights.price,p,priceChangePct>=-0.2?'Price is stable/tightly based.':'Price is breaking down.')}
- if(volumeRatio!==null){const p=volumeRatio>=1.3?weights.volume:volumeRatio>=1?weights.volume*(2/3):volumeRatio>=0.7?weights.volume*0.4:0;add('Volume expansion',weights.volume,p,`Volume ratio is ${volumeRatio.toFixed(2)}x.`)}
- if(deliveryPct!==null){let p=deliveryPct>=55?weights.delivery:deliveryPct>=45?weights.delivery*(18/25):deliveryPct>=35?weights.delivery*0.4:0;if(deliveryTrend!==null&&deliveryTrend>0)p=Math.min(weights.delivery,p+weights.delivery*0.15);add('Delivery quality',weights.delivery,p,deliveryTrend!==null&&deliveryTrend>0?`Delivery is ${deliveryPct.toFixed(1)}% and trending higher.`:`Delivery is ${deliveryPct.toFixed(1)}%.`)}
- if(obvTrend!==null)add('OBV structure',weights.obv,obvTrend>0?weights.obv:obvTrend===0?weights.obv*0.4:0,obvTrend>0?'OBV trend is rising.':obvTrend===0?'OBV trend is neutral.':'OBV trend is falling.');
- if(hasDerivatives&&(oiExactDate||oiTrend3Day!==null)){const today=changeOi!==null&&changeOi>0,trend=oiTrend3Day!==null&&oiTrend3Day>0,p=today&&trend?CFG.weights.futuresOi:today?CFG.weights.futuresOi*(18/25):trend?CFG.weights.futuresOi*(12/25):changeOi===0?CFG.weights.futuresOi*0.1:0;add('Futures OI action',CFG.weights.futuresOi,p,today?`Futures OI increased on the exact trading date (+${changeOi}).`:trend?'Futures OI trend is positive over three sessions.':`Futures OI change is ${changeOi??'N/A'}.`)}
- const requiredComponents=derivativesSupported?5:4;
- const score=derivativesState==='OI_MISSING_UNEXPECTEDLY'||components.length<requiredComponents?null:(availableWeight?Math.round(rawScore/availableWeight*100):null);
- const turnoverRaw=n(latest.turnover),turnover=turnoverRaw!==null?turnoverRaw*100000:(Number.isFinite(Number(latest.volume))&&Number.isFinite(Number(close))?Number(latest.volume)*Number(close):0),floor=CFG.safetyFloors||{},safetyFailures=[];
- if(!(turnover>=(floor.minTurnoverRupees||50000000)))safetyFailures.push(`turnover is below ₹${((floor.minTurnoverRupees||50000000)/10000000).toFixed(0)} Cr`);
- if(!(priceChangePct!==null&&priceChangePct>=(floor.minPriceChangePct??-0.2)))safetyFailures.push(`price change is below ${(floor.minPriceChangePct??-0.2).toFixed(2)}%`);
- if(!(deliveryPct!==null&&deliveryPct>=(floor.minDeliveryPct??35)))safetyFailures.push(`delivery is below ${(floor.minDeliveryPct??35).toFixed(1)}%`);
- if(rows.length<CFG.minConfirmedHistory)safetyFailures.push(`history is shorter than ${CFG.minConfirmedHistory} sessions`);
- if(derivativesState==='OI_MISSING_UNEXPECTEDLY')safetyFailures.push('F&O OI data is missing unexpectedly; research state is DATA N/A');
- const confirmationCfg=derivativesSupported?CFG.confirmation.fno:CFG.confirmation.cash;
- const pillars={volume:volumeRatio!==null&&volumeRatio>=confirmationCfg.minVolumeRatio,delivery:deliveryPct!==null&&deliveryPct>=confirmationCfg.minDeliveryPct,obv:obvTrend!==null&&obvTrend>0,oi:hasDerivatives&&((changeOi!==null&&changeOi>0)||(oiTrend3Day!==null&&oiTrend3Day>0))};
- const names=derivativesSupported?['volume','delivery','obv','oi']:['volume','delivery','obv'],passed=names.filter(k=>pillars[k]).length,required=derivativesSupported?CFG.quorum.fno.required:CFG.quorum.cash.required;
- const priceConfirmed=priceChangePct!==null&&priceChangePct>=confirmationCfg.minPriceChangePct;
- const quiet=derivativesState!=='OI_MISSING_UNEXPECTEDLY'&&score!==null&&score>=50&&volumeRatio!==null&&volumeRatio>=0.65&&volumeRatio<=1.05&&deliveryPct!==null&&deliveryPct>=55&&obvTrend!==null&&obvTrend>0&&priceChangePct!==null&&Math.abs(priceChangePct)<=0.5&&safetyFailures.length===0;
- const fallingOi=(changeOi!==null&&changeOi<0)||(oiTrend3Day!==null&&oiTrend3Day<0),distribution=(score!==null&&score<CFG.verdicts.mixed)||(priceChangePct!==null&&priceChangePct<-0.2&&volumeRatio!==null&&volumeRatio>=1.3&&(!derivativesSupported||fallingOi));
- let verdict='MIXED / UNCONFIRMED';if(distribution)verdict='DISTRIBUTION';else if(quiet)verdict='QUIET ABSORPTION';else if(derivativesState!=='OI_MISSING_UNEXPECTEDLY'&&score!==null&&score>=CFG.verdicts.confirmed&&safetyFailures.length===0&&priceConfirmed&&passed>=required)verdict='ACCUMULATION CONFIRMED';else if(derivativesState!=='OI_MISSING_UNEXPECTEDLY'&&score!==null&&score>=CFG.verdicts.starting&&safetyFailures.length===0&&passed>=Math.max(1,required-1)&&passed<required)verdict='ACCUMULATION STARTING';
- if(safetyFailures.length)why.push(`Safety floors not satisfied: ${safetyFailures.join('; ')}.`);if(!priceConfirmed&&priceChangePct!==null)why.push(`Confirmation price threshold not met: ${priceChangePct.toFixed(2)}% < ${confirmationCfg.minPriceChangePct.toFixed(2)}%.`);if(derivativesState==='OI_NOT_SUPPORTED')why.push('Futures OI is not supported; normalized cash-equity scoring uses Price, Volume, Delivery and OBV.');else if(derivativesState==='OI_MISSING_UNEXPECTEDLY')why.push('Futures OI is supported for this asset but the current session evidence is missing; result is DATA N/A rather than cash-only fallback.');else if(!oiExactDate&&oiTrend3Day===null)why.push('Futures OI confirmation is unavailable for the exact date.');if(deliveryPct===null)why.push('Delivery data is unavailable.');if(volumeRatio===null)why.push('Volume history is insufficient for a reliable ratio.');if(!rows.length)why.push('No verified EOD history is available.');
- const evidencePresent={price:priceChangePct!==null,volume:volumeRatio!==null,delivery:deliveryPct!==null,obv:obvTrend!==null,futuresOi:derivativesSupported&&oiEvidence};
- return {symbol:String(symbol||latest.symbol||'').toUpperCase(),tradeDate:date,score,verdict,metrics:{close,prevClose,priceChangePct,volume,avgVolume,volumeRatio,deliveryPct,deliveryQty,avgDelivery,deliveryTrend,turnover,turnoverUnit:'INR',obv,obvTrend,futuresOi,changeOi,oiExactDate,oiEvidence,oiTrend3Day,hasDerivatives,derivativesSupported,derivativesState,historySessions:rows.length,evidencePresent},components,why,confirmation:{status:verdict==='ACCUMULATION CONFIRMED'?'confirmed':'blocked',gateFailures:safetyFailures,pillars:{passed,required,total:derivativesSupported?CFG.quorum.fno.total:CFG.quorum.cash.total,details:{...pillars,price:priceConfirmed}}}};
-}
-module.exports={evaluate,calculateObv};
+/*
+ * VIKRAM Accumulation Engine
+ * No synthetic market values. Missing inputs remain N/A and cannot earn points.
+ *
+ * Important: the score is an evidence score, not the verdict by itself.
+ * ACCUMULATION CONFIRMED also requires every hard confirmation gate below.
+ */
+(function (root) {
+  const CFG = root.ACCUMULATION_CONFIG || (typeof require === 'function' ? require('./config') : null);
+  const finite = v => v !== null && v !== undefined && v !== '' && Number.isFinite(Number(v));
+  const num = v => finite(v) ? Number(v) : null;
+  const avg = xs => xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null;
+  const pct = (a, b) => finite(a) && finite(b) && Number(b) !== 0 ? ((Number(a) / Number(b)) - 1) * 100 : null;
+  const dateKey = value => {
+    if (value === null || value === undefined || value === '') return null;
+    if (value instanceof Date) return value.toISOString().slice(0, 10);
+    const text = String(value);
+    const iso = text.match(/^(\d{4}-\d{2}-\d{2})/);
+    if (iso) return iso[1];
+    const parsed = new Date(text);
+    return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString().slice(0, 10);
+  };
+
+  function sortRows(rows) {
+    return (rows || []).filter(Boolean).map(r => ({ ...r, trade_date: dateKey(r.trade_date || r.date) }))
+      .filter(r => r.trade_date).sort((a, b) => a.trade_date.localeCompare(b.trade_date));
+  }
+
+  function calculateObv(rows) {
+    let obv = 0;
+    return sortRows(rows).map((r, i, all) => {
+      const close = num(r.close ?? r.last_price);
+      const prev = num(i ? (all[i - 1].close ?? all[i - 1].last_price) : r.prev_close);
+      const volume = num(r.volume) || 0;
+      if (close !== null && prev !== null) {
+        if (close > prev) obv += volume;
+        else if (close < prev) obv -= volume;
+      }
+      return { ...r, obv };
+    });
+  }
+
+  function scoreComponent(value, max) {
+    return Math.max(0, Math.min(max, value));
+  }
+
+  function evaluate(input) {
+    const history = sortRows(input.history);
+    const current = { ...(input.current || history[history.length - 1] || {}) };
+    current.trade_date = dateKey(current.trade_date || current.date);
+    const f = input.futures || null;
+    const previousRows = history.filter(r => r.trade_date !== current.trade_date);
+    const volumeHistory = previousRows.slice(-CFG.historyDays).map(r => num(r.volume)).filter(finite);
+    const avgVolume = avg(volumeHistory);
+    const currentVolume = num(current.volume);
+    const volumeRatio = currentVolume !== null && avgVolume ? currentVolume / avgVolume : null;
+    const close = num(current.close ?? current.last_price);
+    const prevClose = num(current.prev_close);
+    const priceChangePct = pct(close, prevClose);
+    const deliveryPct = num(current.deliv_per ?? current.delivery_pct);
+    const deliveryQty = num(current.deliv_qty ?? current.delivery_qty);
+    const deliveryHistory = history.slice(-CFG.deliveryTrendLookback).map(r => num(r.deliv_per ?? r.delivery_pct)).filter(finite);
+    const priorDeliveryAvg = deliveryHistory.length > 1 ? avg(deliveryHistory.slice(0, -1)) : null;
+    const deliveryTrend = deliveryPct !== null && priorDeliveryAvg !== null ? deliveryPct - priorDeliveryAvg : null;
+
+    const obvRows = calculateObv(history);
+    const obvCurrent = obvRows.length ? obvRows[obvRows.length - 1].obv : null;
+    const obvStart = obvRows.length > CFG.obvLookback ? obvRows[obvRows.length - 1 - CFG.obvLookback].obv : null;
+    const obvTrend = finite(obvCurrent) && finite(obvStart) ? obvCurrent - obvStart : null;
+
+    const futuresDate = f && (f.trade_date || f.date);
+    const oiExactDate = !!f && dateKey(futuresDate) === current.trade_date;
+    const oi = oiExactDate ? num(f.oi ?? f.open_interest) : null;
+    const changeOi = oiExactDate ? num(f.change_oi ?? f.change_in_oi) : null;
+    const oiPct = oi !== null && finite(changeOi) && oi !== 0 ? (changeOi / Math.abs(oi - changeOi || oi)) * 100 : null;
+    const oiConfirmed = oi !== null && changeOi !== null;
+
+    let score = 0;
+    let availableWeight = 0;
+    const why = [];
+    const components = [];
+
+    function add(name, weight, points, detail) {
+      if (points === null) return;
+      score += points;
+      availableWeight += weight;
+      components.push({ name, weight, points: Math.round(points * 100) / 100, detail });
+      if (detail) why.push(detail);
+    }
+
+    if (priceChangePct !== null) {
+      const points = priceChangePct > CFG.flatPricePct ? CFG.weights.price : priceChangePct >= -CFG.flatPricePct ? CFG.weights.price * 0.65 : CFG.weights.price * 0.15;
+      add('Price action', CFG.weights.price, scoreComponent(points, CFG.weights.price), priceChangePct > CFG.flatPricePct ? 'Price is firm/positive.' : priceChangePct >= -CFG.flatPricePct ? 'Price is broadly flat.' : 'Price is falling; accumulation is not yet confirmed.');
+    }
+    if (volumeRatio !== null) {
+      const points = volumeRatio >= CFG.volumeRatio.strong ? CFG.weights.volume : volumeRatio >= CFG.volumeRatio.elevated ? CFG.weights.volume * 0.7 : volumeRatio >= 0.8 ? CFG.weights.volume * 0.35 : 0;
+      add('Volume', CFG.weights.volume, points, volumeRatio >= CFG.volumeRatio.strong ? `Volume is ${volumeRatio.toFixed(2)}x the prior ${CFG.historyDays}-day average.` : `Volume ratio is ${volumeRatio.toFixed(2)}x.`);
+    }
+    if (deliveryPct !== null) {
+      let points = deliveryPct >= CFG.deliveryPct.strong ? CFG.weights.delivery : deliveryPct >= CFG.deliveryPct.positive ? CFG.weights.delivery * 0.7 : CFG.weights.delivery * 0.25;
+      if (deliveryTrend !== null && deliveryTrend > 0) points += CFG.weights.delivery * 0.15;
+      add('Delivery', CFG.weights.delivery, Math.min(CFG.weights.delivery, points), deliveryTrend !== null && deliveryTrend > 0 ? `Delivery is ${deliveryPct.toFixed(1)}% and trending higher.` : `Delivery is ${deliveryPct.toFixed(1)}%.`);
+    }
+    if (obvTrend !== null) {
+      add('OBV', CFG.weights.obv, obvTrend > 0 ? CFG.weights.obv : obvTrend === 0 ? CFG.weights.obv * 0.5 : 0, obvTrend > 0 ? 'OBV is rising over the lookback.' : obvTrend === 0 ? 'OBV is flat.' : 'OBV is falling.');
+    }
+    if (oiConfirmed) {
+      const positiveOi = changeOi > 0;
+      let points = positiveOi ? CFG.weights.futuresOi : changeOi === 0 ? CFG.weights.futuresOi * 0.4 : 0;
+      if (priceChangePct !== null && Math.abs(priceChangePct) <= CFG.flatPricePct && positiveOi) points = Math.min(CFG.weights.futuresOi, points * 0.85);
+      add('Futures OI', CFG.weights.futuresOi, points, positiveOi ? `Futures OI increased on the exact trading date (${changeOi > 0 ? '+' : ''}${changeOi}).` : `Futures OI change is ${changeOi}.`);
+    }
+
+    const normalizedScore = availableWeight ? (score / availableWeight) * 100 : null;
+    const enoughHistory = history.length >= CFG.minConfirmedHistory;
+    const flatWithOi = priceChangePct !== null && Math.abs(priceChangePct) <= CFG.flatPricePct && changeOi !== null && changeOi > 0;
+    const gates = CFG.confirmedGates;
+    const confirmedGateFailures = [];
+    if (gates.requirePositivePrice && !(priceChangePct !== null && priceChangePct > CFG.flatPricePct)) confirmedGateFailures.push('price is not positively moving');
+    if (!(volumeRatio !== null && volumeRatio >= gates.minVolumeRatio)) confirmedGateFailures.push(`volume ratio is below ${gates.minVolumeRatio.toFixed(1)}x`);
+    if (!(deliveryPct !== null && deliveryPct >= gates.minDeliveryPct)) confirmedGateFailures.push(`delivery is below ${gates.minDeliveryPct}%`);
+    if (gates.requireRisingObv && !(obvTrend !== null && obvTrend > 0)) confirmedGateFailures.push('OBV is not rising');
+    if (gates.requirePositiveExactDateOi && !(oiConfirmed && changeOi > 0)) confirmedGateFailures.push('exact-date futures OI is not increasing');
+    if (!enoughHistory) confirmedGateFailures.push(`history is shorter than ${CFG.minConfirmedHistory} sessions`);
+
+    let verdict = 'UNCONFIRMED / MIXED';
+    if (normalizedScore !== null && normalizedScore >= CFG.verdicts.confirmed && confirmedGateFailures.length === 0) {
+      verdict = 'ACCUMULATION CONFIRMED';
+    } else if (normalizedScore !== null && normalizedScore >= CFG.verdicts.starting && (flatWithOi || (volumeRatio !== null && volumeRatio >= CFG.volumeRatio.elevated))) {
+      verdict = 'ACCUMULATION STARTING';
+    } else if (normalizedScore !== null && normalizedScore < CFG.verdicts.mixed) {
+      verdict = 'DISTRIBUTION';
+    }
+
+    if (confirmedGateFailures.length) why.push(`Confirmation gates not all satisfied: ${confirmedGateFailures.join('; ')}.`);
+    if (changeOi === null) why.push('Futures OI confirmation is unavailable for the exact date.');
+    if (deliveryPct === null) why.push('Delivery data is unavailable.');
+    if (volumeRatio === null) why.push('Volume history is insufficient for a reliable ratio.');
+    if (!enoughHistory) why.push('Historical window is shorter than the preferred confirmation window.');
+    if (!history.length) why.push('No verified EOD history is available.');
+
+    return {
+      symbol: String(input.symbol || current.symbol || '').toUpperCase(), tradeDate: current.trade_date || null,
+      score: normalizedScore === null ? null : Math.round(normalizedScore), verdict,
+      metrics: { close, prevClose, priceChangePct, volume: currentVolume, avgVolume, volumeRatio, deliveryPct, deliveryQty, deliveryTrend, obv: obvCurrent, obvTrend, futuresOi: oi, changeOi, oiPct, oiExactDate },
+      components, why,
+      confirmation: { status: verdict === 'ACCUMULATION CONFIRMED' ? 'confirmed' : 'blocked', gateFailures: confirmedGateFailures }
+    };
+  }
+
+  root.ACCUMULATION_ENGINE = { evaluate, calculateObv };
+  if (typeof module !== 'undefined') module.exports = { evaluate, calculateObv };
+})(typeof window !== 'undefined' ? window : globalThis);
