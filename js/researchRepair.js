@@ -8,3 +8,4 @@ async function repair(){const ticker=sym();if(!ticker)return;css();document.body
 function boot(){repair().catch(()=>{});[250,1000,2500,5000].forEach(ms=>setTimeout(()=>repair().catch(()=>{}),ms))}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
+import('./scannerUiRepair.js').catch(()=>{});
