@@ -1,7 +1,8 @@
 const assert = require('node:assert/strict');
 const { evaluate } = require('../../accumulation/engine');
 
-function row(date, close, prevClose, volume, delivery, turnover = 60000000) {
+function row(date, close, prevClose, volume, delivery, turnover = 600) {
+  // cm_eod.turnover is stored in NSE ₹ lakh units; 600 = ₹6 crore.
   return { trade_date: date, close, prev_close: prevClose, volume, deliv_per: delivery, turnover, deliv_qty: Math.round((Number(volume) || 0) * (Number(delivery) || 0) / 100) };
 }
 
@@ -13,7 +14,7 @@ const base = [
   row('2026-08-28', 105, 104, 1400, 50), row('2026-09-01', 106, 105, 2000, 58)
 ];
 
-const fno = { available: true, trade_date: '2026-09-01', oi: 100000, change_oi: 7000 };
+const fno = { available: true, trade_date: '2026-09-01', oi: 100000, change_oi: 7000, oiTrend3Day: 9000 };
 const cash = { available: false, trade_date: '2026-09-01' };
 
 const cashConfirmed = evaluate({ symbol: 'CASHGOOD', history: base, current: base.at(-1), futures: cash });
@@ -48,6 +49,28 @@ assert.equal(fnoConfirmed.confirmation.pillars.passed, 4);
 assert.equal(fnoConfirmed.confirmation.pillars.required, 4);
 assert.equal(fnoConfirmed.confirmation.pillars.total, 4);
 assert.equal(fnoConfirmed.confirmation.pillars.details.price, true);
+assert.equal(fnoConfirmed.metrics.oiTrend3Day, 9000);
+
+// Missing one core cash input must not produce a deceptively normalized 100 score.
+const cashMissingDeliveryHistory = base.map((r, i) => i === base.length - 1 ? { ...r, deliv_per: null } : r);
+const cashMissingDelivery = evaluate({ symbol: 'CASH_MISSING_DELIVERY', history: cashMissingDeliveryHistory, current: cashMissingDeliveryHistory.at(-1), futures: cash });
+assert.equal(cashMissingDelivery.score, null);
+assert.notEqual(cashMissingDelivery.verdict, 'ACCUMULATION CONFIRMED');
+assert.equal(cashMissingDelivery.metrics.evidencePresent.delivery, false);
+
+// Missing current F&O OI evidence must never fall back to a cash score.
+const fnoMissingOi = evaluate({ symbol: 'FNOMISSINGOI', history: base, current: base.at(-1), futures: { available: false, derivativesSupported: true, trade_date: '2026-09-01' } });
+assert.equal(fnoMissingOi.metrics.derivativesState, 'OI_MISSING_UNEXPECTEDLY');
+assert.equal(fnoMissingOi.score, null);
+assert.notEqual(fnoMissingOi.verdict, 'ACCUMULATION CONFIRMED');
+assert.ok(fnoMissingOi.confirmation.gateFailures.some(x => x.includes('F&O OI data is missing unexpectedly')));
+
+// Exact-date row without numeric OI/change is still missing evidence.
+const fnoBlankOi = evaluate({ symbol: 'FNOBLANKOI', history: base, current: base.at(-1), futures: { available: true, derivativesSupported: true, trade_date: '2026-09-01', oi: null, change_oi: null } });
+assert.equal(fnoBlankOi.metrics.oiExactDate, true);
+assert.equal(fnoBlankOi.metrics.oiEvidence, false);
+assert.equal(fnoBlankOi.metrics.derivativesState, 'OI_MISSING_UNEXPECTEDLY');
+assert.equal(fnoBlankOi.score, null);
 
 // Falling closes are deliberately stronger than the base fixture so the OBV test cannot accidentally rise on the first replacement row.
 const fallingObvHistory = base.map((r, i) => {
@@ -64,18 +87,12 @@ const flatPrice = evaluate({ symbol: 'DABUR_CASE', history: flatPriceHistory, cu
 assert.equal(flatPrice.confirmation.pillars.details.price, false);
 assert.notEqual(flatPrice.verdict, 'ACCUMULATION CONFIRMED');
 
-const fnoMissingOi = evaluate({ symbol: 'FNOMISSINGOI', history: base, current: base.at(-1), futures: { available: false, derivativesSupported: true, trade_date: '2026-09-01' } });
-assert.equal(fnoMissingOi.metrics.derivativesState, 'OI_MISSING_UNEXPECTEDLY');
-assert.equal(fnoMissingOi.score, null);
-assert.notEqual(fnoMissingOi.verdict, 'ACCUMULATION CONFIRMED');
-assert.ok(fnoMissingOi.confirmation.gateFailures.some(x => x.includes('F&O OI data is missing unexpectedly')));
-
 const quiet = base.map((r, i) => i === base.length - 1 ? { ...r, close: 105.2, prev_close: 105.0, volume: 1050, deliv_per: 60 } : r);
 const quietResult = evaluate({ symbol: 'QUIET', history: quiet, current: quiet.at(-1), futures: cash });
 assert.equal(quietResult.verdict, 'QUIET ABSORPTION');
 assert.ok(quietResult.metrics.volumeRatio >= 0.65 && quietResult.metrics.volumeRatio <= 1.05);
 
-const lowTurnover = { ...base.at(-1), turnover: 49999999 };
+const lowTurnover = { ...base.at(-1), turnover: 499.99 };
 const turnoverResult = evaluate({ symbol: 'TURNOVERFAIL', history: base, current: lowTurnover, futures: cash });
 assert.notEqual(turnoverResult.verdict, 'ACCUMULATION CONFIRMED');
 assert.ok(turnoverResult.confirmation.gateFailures.some(x => x.includes('turnover is below ₹5 Cr')));
@@ -104,4 +121,4 @@ const dirtyResult = evaluate({ symbol: 'DIRTY', history: dirtyHistory, current: 
 assert.ok(Number.isFinite(dirtyResult.metrics.avgVolume));
 assert.ok(Number.isFinite(dirtyResult.metrics.avgDelivery));
 
-console.log('accumulation engine tests passed (14 statutory scenarios)');
+console.log('accumulation engine tests passed (17 statutory scenarios)');
