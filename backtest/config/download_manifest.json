@@ -1,0 +1,13 @@
+{
+  "mode": "REAL_DATA_REQUIRED_FOR_PRODUCTION",
+  "approved_hosts": ["nseindia.com", "www.nseindia.com", "archives.nseindia.com", "nsearchives.nseindia.com"],
+  "sources": [
+    "https://www.nseindia.com/all-reports",
+    "https://www.nseindia.com/all-reports-derivatives",
+    "https://www.nseindia.com/static/resources/historical-reports-capital-market-daily-monthly-archives",
+    "https://www.nseindia.com/resources/historical-reports-capital-market-daily-monthly-archives-derivative-market",
+    "https://www.nseindia.com/static/market-data/eod-historical-data-subscription"
+  ],
+  "items": [],
+  "note": "Populate only with legitimately verified dated NSE resources after connectivity is available. Do not invent endpoints."
+}
