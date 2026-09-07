@@ -24,14 +24,11 @@ async function main() {
     const closeC = prevC + 0.5;
     await pool.query(`INSERT INTO cm_eod(symbol,trade_date,series,prev_close,close,last_price,volume,deliv_qty,deliv_per) VALUES('AAA',$1,'EQ',$2,$3,$3,$4,$5,$6)`, [day, prevA, closeA, 1000 + i * 50, 500 + i * 10, 45 + i]);
     await pool.query(`INSERT INTO cm_eod(symbol,trade_date,series,prev_close,close,last_price,volume,deliv_qty,deliv_per) VALUES('BBB',$1,'EQ',$2,$3,$3,$4,$5,$6)`, [day, prevB, closeB, 900 - i * 20, 300 - i * 5, 30 - i]);
-    // CCC: a genuine F&O stock whose current-date futures row is missing.
     await pool.query(`INSERT INTO cm_eod(symbol,trade_date,series,prev_close,close,last_price,volume,deliv_qty,deliv_per) VALUES('CCC',$1,'EQ',$2,$3,$3,$4,$5,$6)`, [day, prevC, closeC, 1200 + i * 30, 600 + i * 12, 46 + i]);
     prevA = closeA; prevB = closeB; prevC = closeC;
   }
 
   await pool.query(`INSERT INTO futures_eod(symbol,trade_date,expiry,close,oi,change_oi) VALUES('AAA',$1,$2,110,50000,4000)`, [days.at(-1), '2026-09-25']);
-  // CCC has real futures history from 14 sessions before the current materialization date,
-  // but no current-date futures row. This is the exact F&O-missing-today scenario.
   await pool.query(`INSERT INTO futures_eod(symbol,trade_date,expiry,close,oi,change_oi) VALUES('CCC',$1,$2,205,80000,3000)`, ['2026-08-10', '2026-08-28']);
 
   const { materializeScannerResults } = require('../src/ingest');
@@ -45,20 +42,15 @@ async function main() {
   assert.equal(aaa.metrics.oiExactDate, true);
   assert.equal(bbb.metrics.oiExactDate, false);
   assert.equal(bbb.metrics.futuresOi, null);
-
-  // BBB is genuinely cash-only and must remain so.
   assert.equal(bbb.metrics.derivativesSupported, false);
   assert.equal(bbb.metrics.derivativesState, 'OI_NOT_SUPPORTED');
-
-  // CCC has genuine F&O history but no current-date OI. It must not be silently
-  // downgraded to cash-only scoring.
   assert.equal(ccc.metrics.derivativesSupported, true);
   assert.equal(ccc.metrics.derivativesState, 'OI_MISSING_UNEXPECTEDLY');
   assert.equal(ccc.metrics.oiExactDate, false);
   assert.equal(ccc.metrics.futuresOi, null);
   assert.equal(ccc.score, null);
   assert.notEqual(ccc.verdict, 'ACCUMULATION CONFIRMED');
-  assert.ok(JSON.parse(ccc.why).some(x => x.includes('result is DATA N/A rather than cash-only fallback')));
+  assert.ok(Array.isArray(ccc.why) && ccc.why.some(x => x.includes('result is DATA N/A rather than cash-only fallback')));
 
   const port = 34567 + Math.floor(Math.random() * 1000);
   const server = spawn(process.execPath, [path.join(__dirname, '../src/index.js')], { env: { ...process.env, PORT: String(port) }, stdio: ['ignore','pipe','pipe'] });
@@ -98,7 +90,7 @@ async function main() {
     const stock = await get('/api/stock/AAA');
     assert.equal(stock.result.symbol, 'AAA');
     assert.equal(stock.result.metrics.oiExactDate, true);
-    console.log('integration tests passed (schema + materializer + API)');
+    console.log('integration tests passed (schema + materializer + API + historical F&O missing-OI regression)');
   } finally {
     server.kill();
   }
