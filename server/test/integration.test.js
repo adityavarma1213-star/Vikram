@@ -17,26 +17,48 @@ async function main() {
   await pool.query('TRUNCATE cm_eod, futures_eod, ingestion_runs, scanner_results');
 
   const days = ['2026-08-24','2026-08-25','2026-08-26','2026-08-27','2026-08-28','2026-08-31','2026-09-01'];
-  let prevA = 100, prevB = 50;
+  let prevA = 100, prevB = 50, prevC = 200;
   for (const [i, day] of days.entries()) {
     const closeA = prevA + 1;
     const closeB = prevB - 0.5;
+    const closeC = prevC + 0.5;
     await pool.query(`INSERT INTO cm_eod(symbol,trade_date,series,prev_close,close,last_price,volume,deliv_qty,deliv_per) VALUES('AAA',$1,'EQ',$2,$3,$3,$4,$5,$6)`, [day, prevA, closeA, 1000 + i * 50, 500 + i * 10, 45 + i]);
     await pool.query(`INSERT INTO cm_eod(symbol,trade_date,series,prev_close,close,last_price,volume,deliv_qty,deliv_per) VALUES('BBB',$1,'EQ',$2,$3,$3,$4,$5,$6)`, [day, prevB, closeB, 900 - i * 20, 300 - i * 5, 30 - i]);
-    prevA = closeA; prevB = closeB;
+    // CCC: a genuine F&O stock whose current-date futures row is missing.
+    await pool.query(`INSERT INTO cm_eod(symbol,trade_date,series,prev_close,close,last_price,volume,deliv_qty,deliv_per) VALUES('CCC',$1,'EQ',$2,$3,$3,$4,$5,$6)`, [day, prevC, closeC, 1200 + i * 30, 600 + i * 12, 46 + i]);
+    prevA = closeA; prevB = closeB; prevC = closeC;
   }
+
   await pool.query(`INSERT INTO futures_eod(symbol,trade_date,expiry,close,oi,change_oi) VALUES('AAA',$1,$2,110,50000,4000)`, [days.at(-1), '2026-09-25']);
+  // CCC has real futures history from 14 sessions before the current materialization date,
+  // but no current-date futures row. This is the exact F&O-missing-today scenario.
+  await pool.query(`INSERT INTO futures_eod(symbol,trade_date,expiry,close,oi,change_oi) VALUES('CCC',$1,$2,205,80000,3000)`, ['2026-08-10', '2026-08-28']);
 
   const { materializeScannerResults } = require('../src/ingest');
   const count = await materializeScannerResults();
-  assert.equal(count, 2);
+  assert.equal(count, 3);
   const stored = await pool.query('SELECT * FROM scanner_results ORDER BY symbol');
-  assert.equal(stored.rows.length, 2);
+  assert.equal(stored.rows.length, 3);
   const aaa = stored.rows.find(r => r.symbol === 'AAA');
   const bbb = stored.rows.find(r => r.symbol === 'BBB');
+  const ccc = stored.rows.find(r => r.symbol === 'CCC');
   assert.equal(aaa.metrics.oiExactDate, true);
   assert.equal(bbb.metrics.oiExactDate, false);
   assert.equal(bbb.metrics.futuresOi, null);
+
+  // BBB is genuinely cash-only and must remain so.
+  assert.equal(bbb.metrics.derivativesSupported, false);
+  assert.equal(bbb.metrics.derivativesState, 'OI_NOT_SUPPORTED');
+
+  // CCC has genuine F&O history but no current-date OI. It must not be silently
+  // downgraded to cash-only scoring.
+  assert.equal(ccc.metrics.derivativesSupported, true);
+  assert.equal(ccc.metrics.derivativesState, 'OI_MISSING_UNEXPECTEDLY');
+  assert.equal(ccc.metrics.oiExactDate, false);
+  assert.equal(ccc.metrics.futuresOi, null);
+  assert.equal(ccc.score, null);
+  assert.notEqual(ccc.verdict, 'ACCUMULATION CONFIRMED');
+  assert.ok(JSON.parse(ccc.why).some(x => x.includes('result is DATA N/A rather than cash-only fallback')));
 
   const port = 34567 + Math.floor(Math.random() * 1000);
   const server = spawn(process.execPath, [path.join(__dirname, '../src/index.js')], { env: { ...process.env, PORT: String(port) }, stdio: ['ignore','pipe','pipe'] });
@@ -60,12 +82,14 @@ async function main() {
   try {
     const health = await get('/api/health');
     assert.equal(health.status, 'ok');
-    assert.equal(health.materializedSymbols, 2);
+    assert.equal(health.materializedSymbols, 3);
 
     const all = await get('/api/scanner/all');
-    assert.equal(all.results.length, 2);
+    assert.equal(all.results.length, 3);
     assert.equal(all.results.find(r => r.symbol === 'AAA').materialized, true);
     assert.equal(all.results.find(r => r.symbol === 'AAA').metrics.oiExactDate, true);
+    assert.equal(all.results.find(r => r.symbol === 'CCC').metrics.derivativesState, 'OI_MISSING_UNEXPECTEDLY');
+    assert.equal(all.results.find(r => r.symbol === 'CCC').score, null);
 
     const mixed = await get('/api/scanner/scan?symbols=AAA,ZZZ');
     assert.equal(mixed.results.length, 2);
