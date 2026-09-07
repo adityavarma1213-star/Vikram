@@ -15,6 +15,7 @@ on:
       - 'js/**'
       - 'index.html'
       - 'data/**'
+      - 'tools/clean-market-history.js'
       - '.github/workflows/static-scanner.yml'
   schedule:
     - cron: '30 13 * * 1-5'
@@ -54,11 +55,14 @@ jobs:
           node --check js/app.js
           node --check js/search.js
           node --check js/dataEngine.js
+          node --check tools/clean-market-history.js
       - name: Run scanner tests
         working-directory: server
         run: npm test
       - name: Backfill up to one year of NSE EOD history
         run: node server/src/backfillHistory.js
+      - name: Remove invalid weekend/mislabeled history before materialization
+        run: node tools/clean-market-history.js
       - name: Fetch latest NSE EOD and build static scanner
         run: node server/src/staticSnapshot.js
       - name: Validate generated full-universe snapshot
