@@ -49,13 +49,12 @@ function buildResult(symbol, rows, futuresBySymbolDate, derivativesSymbols = new
   const key = `${symbol}|${dateKey(current.trade_date)}`;
   const exactFutures = futuresBySymbolDate.get(key) || null;
   const trend = oiTrendBySymbolDate.get(key);
-  // Database futures rows are already verified evidence; explicitly mark them as available
-  // for the canonical engine so exact-date OI is not silently treated as cash-only.
+  // Only pass a futures object when an exact-date verified contract exists.
+  // A derivatives-supported symbol with no exact-date row must remain OI-unavailable,
+  // not masquerade as exact-date evidence.
   const futures = exactFutures
     ? { ...exactFutures, available: true, derivativesSupported: true, oiTrend3Day: Number.isFinite(trend) ? trend : null }
-    : (derivativesSymbols.has(symbol)
-      ? { available: false, derivativesSupported: true, trade_date: dateKey(current.trade_date), oiTrend3Day: null }
-      : { available: false, derivativesSupported: false, trade_date: dateKey(current.trade_date), oiTrend3Day: null });
+    : null;
   return evaluate(symbol, bounded, futures);
 }
 
