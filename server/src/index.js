@@ -2,6 +2,7 @@ const path=require('node:path');
 const express=require('express');
 const {Pool}=require('pg');
 const {evaluate}=require('./scannerEngine');
+const {buildOiTrendBySymbolDate}=require('./scanMaterializer');
 const {runQuery}=require('./ruleEngine/query');
 const {runAlertPipeline}=require('./alerts/alertEngine');
 const push=require('./alerts/providers/push');
@@ -13,7 +14,27 @@ const normalizeSymbols=v=>[...new Set(String(v||'').split(',').map(s=>s.trim().t
 const normalizePeriod=v=>VALID_PERIODS.has(String(v||'').toUpperCase())?String(v).toUpperCase():'1D';
 const owner=req=>String(req.headers['x-vikram-user']||'anonymous').slice(0,200);
 const rowFromMaterialized=r=>({symbol:r.symbol,tradeDate:r.trade_date,score:r.score,verdict:r.verdict,metrics:r.metrics,why:r.why,materialized:true,updatedAt:r.updated_at});
-async function liveScan(symbols,period='1D'){if(!symbols.length)return[];const rowsNeeded=PERIOD_ROWS[period]+20;const q=await pool.query(`WITH ranked AS (SELECT c.*,ROW_NUMBER() OVER(PARTITION BY symbol ORDER BY trade_date DESC) rn FROM cm_eod c WHERE c.series='EQ' AND c.symbol=ANY($1)) SELECT * FROM ranked WHERE rn <= $2 ORDER BY symbol,trade_date`,[symbols,rowsNeeded]);const by=new Map();for(const r of q.rows){if(!by.has(r.symbol))by.set(r.symbol,[]);by.get(r.symbol).push(r);}const f=await pool.query(`SELECT DISTINCT ON (symbol) symbol,trade_date,expiry,close,oi,change_oi,instrument_type,contract_name FROM futures_eod WHERE symbol=ANY($1) AND expiry>=trade_date ORDER BY symbol,trade_date DESC,expiry ASC`,[symbols]);const fm=new Map(f.rows.map(r=>[r.symbol,r]));return symbols.map(s=>evaluate(s,(by.get(s)||[]).slice(-(PERIOD_ROWS[period]+20)),fm.get(s)||null));}
+async function liveScan(symbols,period='1D'){
+  if(!symbols.length)return[];
+  const rowsNeeded=PERIOD_ROWS[period]+20;
+  const q=await pool.query(`WITH ranked AS (SELECT c.*,ROW_NUMBER() OVER(PARTITION BY symbol ORDER BY trade_date DESC) rn FROM cm_eod c WHERE c.series='EQ' AND c.symbol=ANY($1)) SELECT * FROM ranked WHERE rn <= $2 ORDER BY symbol,trade_date`,[symbols,rowsNeeded]);
+  const by=new Map();for(const r of q.rows){if(!by.has(r.symbol))by.set(r.symbol,[]);by.get(r.symbol).push(r);}
+  const f=await pool.query(`SELECT symbol,trade_date,expiry,close,oi,change_oi,instrument_type,contract_name FROM futures_eod WHERE symbol=ANY($1) AND expiry>=trade_date ORDER BY symbol,trade_date DESC,expiry ASC`,[symbols]);
+  const fm=new Map();for(const r of f.rows){const key=`${r.symbol}|${r.trade_date}`;if(!fm.has(key))fm.set(key,r);}
+  const latestDates=[...new Set(q.rows.map(r=>String(r.trade_date).slice(0,10)))].sort().slice(-3);
+  const trendRows=f.rows.filter(r=>latestDates.includes(String(r.trade_date).slice(0,10)));
+  const trends=buildOiTrendBySymbolDate(trendRows);
+  const supportQ=await pool.query(`SELECT DISTINCT symbol FROM futures_eod WHERE symbol=ANY($1) AND trade_date >= (SELECT MAX(trade_date) FROM cm_eod)-INTERVAL '120 days'`,[symbols]);
+  const supported=new Set(supportQ.rows.map(r=>String(r.symbol).trim().toUpperCase()));
+  return symbols.map(s=>{
+    const history=(by.get(s)||[]).slice(-(PERIOD_ROWS[period]+20));
+    const current=history.at(-1);
+    const date=current?String(current.trade_date).slice(0,10):null;
+    const exact=fm.get(`${s}|${date}`)||null;
+    const futures=exact?{...exact,available:true,derivativesSupported:true,oiTrend3Day:trends.get(`${s}|${date}`)??null}:{available:false,derivativesSupported:supported.has(s),trade_date:date,oiTrend3Day:null};
+    return evaluate(s,history,futures);
+  });
+}
 async function scan(symbols,period='1D'){
   if(!symbols.length)return[];
   const table=period==='1D'?'scanner_results':'scanner_results_periods';
