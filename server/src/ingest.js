@@ -37,12 +37,22 @@ async function materializeScannerResults(){
   const historyBySymbol=new Map();for(const r of historyQ.rows){if(!historyBySymbol.has(r.symbol))historyBySymbol.set(r.symbol,[]);historyBySymbol.get(r.symbol).push({...r,trade_date:formatYmd(new Date(r.trade_date))});}
   const futuresQ=await pool.query(`SELECT DISTINCT ON(symbol,trade_date) symbol,trade_date,oi,change_oi FROM futures_eod WHERE symbol=ANY($1) AND expiry>=trade_date ORDER BY symbol,trade_date,expiry`,[symbols]);
   const futuresBySymbolDate=new Map(futuresQ.rows.map(r=>[`${r.symbol}|${formatYmd(new Date(r.trade_date))}`,{...r,trade_date:formatYmd(new Date(r.trade_date))}]));
-  const results=buildScannerResults(historyBySymbol,futuresBySymbolDate);
+
+  // A missing current-date futures row must not erase evidence that a symbol is genuinely F&O.
+  // Build the universe from verified futures history so the canonical engine returns
+  // OI_MISSING_UNEXPECTEDLY instead of silently falling back to cash-only scoring.
+  const derivativesQ=await pool.query(`
+    SELECT DISTINCT symbol
+    FROM futures_eod
+    WHERE symbol=ANY($1)
+      AND trade_date >= (SELECT MAX(trade_date) FROM cm_eod) - INTERVAL '120 days'
+      AND expiry >= trade_date
+  `,[symbols]);
+  const derivativesSymbols=new Set(derivativesQ.rows.map(r=>String(r.symbol||'').trim().toUpperCase()).filter(Boolean));
+  const results=buildScannerResults(historyBySymbol,futuresBySymbolDate,derivativesSymbols);
   const client=await pool.connect();
   try{await client.query('BEGIN');for(const r of results){await client.query(`INSERT INTO scanner_results(symbol,trade_date,score,verdict,metrics,why,updated_at) VALUES($1,$2,$3,$4,$5,$6,now()) ON CONFLICT(symbol) DO UPDATE SET trade_date=EXCLUDED.trade_date,score=EXCLUDED.score,verdict=EXCLUDED.verdict,metrics=EXCLUDED.metrics,why=EXCLUDED.why,updated_at=now()`,[r.symbol,r.tradeDate,r.score,r.verdict,JSON.stringify(r.metrics),JSON.stringify(r.why)]);}await client.query('COMMIT');}catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();}
 
-  // Alerts are downstream of a successful materialization. Provider failures are isolated
-  // inside the alert engine so they cannot invalidate the market-data pipeline.
   try {
     const alertSummary = await runAlertPipeline(pool, 'accumulation', results);
     console.log(`ALERTS new=${alertSummary.newMatches} sent=${alertSummary.sent} failed=${alertSummary.failed}`);
