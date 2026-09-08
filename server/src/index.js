@@ -6,9 +6,21 @@ const {buildOiTrendBySymbolDate}=require('./scanMaterializer');
 const {runQuery}=require('./ruleEngine/query');
 const {runAlertPipeline}=require('./alerts/alertEngine');
 const push=require('./alerts/providers/push');
+const {IndstocksClient,InstrumentMapping,LiveRelay}=require('./liveData');
 const app=express(); app.disable('x-powered-by'); app.use(express.json({limit:'100kb'}));
 if(!process.env.DATABASE_URL){console.error('DATABASE_URL is required');process.exit(1);}
 const pool=new Pool({connectionString:process.env.DATABASE_URL,ssl:process.env.DATABASE_URL.includes('sslmode=require')?{rejectUnauthorized:false}:undefined,max:10,idleTimeoutMillis:30000,connectionTimeoutMillis:10000});
+const liveMapping=new InstrumentMapping();
+const liveClient=new IndstocksClient({instrumentMapping:liveMapping});
+const liveRelay=new LiveRelay();
+let liveMappingReady=false;
+async function ensureLiveMapping(){
+  if(liveMappingReady)return;
+  const url=process.env.INDSTOCKS_INSTRUMENTS_URL;
+  if(!url)throw new Error('INDSTOCKS_INSTRUMENTS_URL_NOT_CONFIGURED');
+  await liveMapping.refresh(url);
+  liveMappingReady=true;
+}
 const watchlist=['ONGC','VBL','BSE','NMDC'],MAX_SYMBOLS=200,PERIOD_ROWS={'1D':1,'1W':5,'1M':22,'3M':66,'6M':132,'1Y':252},VALID_PERIODS=new Set(Object.keys(PERIOD_ROWS));
 const normalizeSymbols=v=>[...new Set(String(v||'').split(',').map(s=>s.trim().toUpperCase()).filter(s=>/^[A-Z0-9&.-]{1,30}$/.test(s)))].slice(0,MAX_SYMBOLS);
 const normalizePeriod=v=>VALID_PERIODS.has(String(v||'').toUpperCase())?String(v).toUpperCase():'1D';
@@ -46,6 +58,8 @@ async function scan(symbols,period='1D'){
   return symbols.map(s=>found.get(s)||lm.get(s)||evaluate(s,[],null));
 }
 app.get('/api/health',async(_req,res)=>{try{const[cm,fo,m]=await Promise.all([pool.query('SELECT MAX(trade_date) last_cm_date FROM cm_eod'),pool.query('SELECT MAX(trade_date) last_fo_date FROM futures_eod'),pool.query('SELECT COUNT(*)::int count,MAX(updated_at) updated_at FROM scanner_results')]);res.json({status:'ok',database:'connected',lastCmDate:cm.rows[0]?.last_cm_date||null,lastFoDate:fo.rows[0]?.last_fo_date||null,materializedSymbols:m.rows[0]?.count||0,materializedAt:m.rows[0]?.updated_at||null});}catch(e){res.status(503).json({status:'error',database:'unavailable',error:e.message});}});
+app.get('/api/live/status',(_req,res)=>{const configured=liveClient.tokens.configured;const enabled=String(process.env.LIVE_MARKET_DATA_ENABLED||'false').toLowerCase()==='true';res.json({enabled,configured,instrumentsConfigured:!!process.env.INDSTOCKS_INSTRUMENTS_URL,mappingLoaded:liveMappingReady,source:'INDstocks',serverTime:new Date().toISOString(),message:!enabled?'Live market data is disabled on the server.':!configured?'Provider credentials are not configured on the server.':!process.env.INDSTOCKS_INSTRUMENTS_URL?'Instrument mapping URL is not configured.':'Live feed is configured; connection is tested only when a quote request is made.'});});
+app.get('/api/live/quotes',async(req,res)=>{try{if(String(process.env.LIVE_MARKET_DATA_ENABLED||'false').toLowerCase()!=='true')return res.status(503).json({error:'Live market data is disabled. Set LIVE_MARKET_DATA_ENABLED=true on the server after provider authorization is verified.'});const symbols=normalizeSymbols(req.query.symbols);if(!symbols.length)return res.status(400).json({error:'Provide at least one valid symbol.'});await ensureLiveMapping();const quotes=await liveClient.quote(symbols);for(const q of quotes)liveRelay.set(q.symbol,q);res.json({source:'INDstocks',quotes,asOf:new Date().toISOString()});}catch(e){res.status(502).json({error:'Live market data request failed. No market data was fabricated.',detail:e.message});}});
 app.get('/api/scanner/watchlist',async(req,res)=>{try{const period=normalizePeriod(req.query.period);res.json({symbols:watchlist,period,results:await scan(watchlist,period)});}catch(e){res.status(500).json({error:'Watchlist scan failed.',detail:e.message});}});
 app.get('/api/scanner/scan',async(req,res)=>{try{const symbols=normalizeSymbols(req.query.symbols);if(!symbols.length)return res.status(400).json({error:'Provide at least one valid symbol.'});const period=normalizePeriod(req.query.period);res.json({results:await scan(symbols,period),period,asOf:new Date().toISOString()});}catch(e){res.status(500).json({error:'Scanner failed. No market data was fabricated.',detail:e.message});}});
 app.get('/api/scanner/all',async(req,res)=>{try{const period=normalizePeriod(req.query.period);const q=await pool.query(`SELECT DISTINCT symbol FROM cm_eod WHERE series='EQ' ORDER BY symbol`);const symbols=q.rows.map(r=>r.symbol).slice(0,MAX_SYMBOLS);const results=await scan(symbols,period);res.json({results,count:results.length,period,asOf:new Date().toISOString()});}catch(e){res.status(500).json({error:'All-stock scanner failed. No market data was fabricated.',detail:e.message});}});
@@ -60,4 +74,4 @@ app.post('/api/push/subscribe',async(req,res)=>{try{const s=req.body?.subscripti
 app.get('/api/stock/:symbol',async(req,res)=>{try{const symbols=normalizeSymbols(req.params.symbol);if(symbols.length!==1)return res.status(400).json({error:'Invalid symbol.'});const period=normalizePeriod(req.query.period);const result=(await scan(symbols,period))[0];if(!result?.tradeDate)return res.status(404).json({error:`No verified EOD data for ${symbols[0]}.`});res.json({result,period});}catch(e){res.status(500).json({error:'Stock detail failed.',detail:e.message});}});
 const publicRoot=path.resolve(__dirname,'../..');app.use(express.static(publicRoot,{extensions:['html'],index:'index.html'}));app.get('/scanner',(_req,res)=>res.sendFile(path.join(publicRoot,'scanner.html')));app.get('/',(_req,res)=>res.sendFile(path.join(publicRoot,'index.html')));
 const port=Number(process.env.PORT)||3000;const server=app.listen(port,()=>console.log(`VIKRAM server listening on ${port}`));
-const shutdown=signal=>{console.log(`${signal}: shutting down`);server.close(async()=>{await pool.end();process.exit(0);});};process.on('SIGTERM',()=>shutdown('SIGTERM'));process.on('SIGINT',()=>shutdown('SIGINT'));
+const shutdown=signal=>{console.log(`${signal}: shutting down`);liveRelay.stop();server.close(async()=>{await pool.end();process.exit(0);});};process.on('SIGTERM',()=>shutdown('SIGTERM'));process.on('SIGINT',()=>shutdown('SIGINT'));
