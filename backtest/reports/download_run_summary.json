@@ -1,0 +1,24 @@
+{
+  "blocked": {
+    "error": "BLOCKED (403, x-deny-reason: host_not_allowed): Host not in allowlist: nsearchives.nseindia.com. Add this host to your network egress settings to allow access.",
+    "url": "https://nsearchives.nseindia.com/content/cm/BhavCopy_NSE_CM_0_0_0_20210909_F_0000.csv.zip",
+    "date": "2021-09-09",
+    "segment": "CM"
+  },
+  "manifest": {
+    "data_provenance": "REAL_NSE",
+    "real_data_records": 0,
+    "trading_sessions_confirmed": 0,
+    "date_range": [],
+    "by_segment": {
+      "CM": {
+        "success_valid": 0,
+        "failed": 0,
+        "blocked": 1,
+        "invalid": 0,
+        "not_trading_day": 0,
+        "total": 1
+      }
+    }
+  }
+}

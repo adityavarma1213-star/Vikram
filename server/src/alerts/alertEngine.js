@@ -40,7 +40,15 @@ async function runAlertPipeline(pool, scannerId, matches) {
   const bySymbol = new Map(matches.map(match => [match.symbol, match]));
   let preferences;
   try {
-    preferences = (await pool.query('SELECT * FROM alert_preferences WHERE scanner_id=$1 AND (email_enabled OR push_enabled)', [scannerId])).rows;
+    // owner_key is the authenticated user's id (see #10 remediation — it is never a client-
+    // supplied value), so the deliverable email address must be looked up from the real users
+    // table rather than assumed to look like an email itself.
+    preferences = (await pool.query(
+      `SELECT ap.*, u.email AS account_email FROM alert_preferences ap
+       LEFT JOIN users u ON u.id::text = ap.owner_key
+       WHERE ap.scanner_id=$1 AND (ap.email_enabled OR ap.push_enabled)`,
+      [scannerId]
+    )).rows;
   } catch (error) {
     console.error('Alert preferences:', error.message);
     return summary;
@@ -53,13 +61,13 @@ async function runAlertPipeline(pool, scannerId, matches) {
 
       if (preference.email_enabled) {
         try {
-          const to = String(preference.owner_key || '').includes('@') ? preference.owner_key : null;
+          const to = preference.account_email || null;
           const result = to
             ? await email.send({
                 to,
                 ...email.buildAlertEmail({ symbol: match.symbol, verdict: match.verdict, score: match.score, scannerId, deepLink })
               })
-            : { status: 'FAILED', error: 'owner_key is not an email address' };
+            : { status: 'FAILED', error: 'No account email found for this user' };
 
           await record(pool, { ownerKey: preference.owner_key, scannerId, symbol: match.symbol, tradeDate: match.tradeDate, channel: 'email', status: result.status, error: result.error, deepLink });
           result.status === 'SENT' ? summary.sent += 1 : summary.failed += 1;

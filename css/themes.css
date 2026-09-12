@@ -23,62 +23,104 @@ html[data-mode="system"]{color-scheme:light dark}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg-page);color:var(--text-main);font-family:Inter,ui-sans-serif,system-ui,sans-serif}.workspace-layout{display:grid;grid-template-columns:210px 1fr 260px;min-height:calc(100vh - 60px)}
 .vikram-theme-control{display:flex;align-items:center;gap:8px}.vikram-theme-control select,.vikram-theme-control button{font:inherit}.theme-menu{position:absolute;right:0;top:calc(100% + 8px);z-index:1000;min-width:190px;padding:8px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);box-shadow:var(--shadow-lg)}
 @media(max-width:1180px){.workspace-layout{grid-template-columns:190px 1fr}.right-feed{display:none}}@media(max-width:820px){.workspace-layout{display:block}.sidebar{display:none}.main-content{min-width:0}.navbar{padding:0 14px}.nav-tagline{display:none}}
-/* APPROVED SAMPLE A — compact baseline retained for non-Calm themes. */
-.hero-panoramic{min-height:154px!important;padding:18px 22px!important;border-radius:18px!important}.hero-content{max-width:100%!important}.eyebrow{font-size:8px!important;letter-spacing:.16em!important}.hero-panoramic h1{font-size:28px!important;line-height:1.05!important;margin:5px 0 4px!important;letter-spacing:-.035em!important}.hero-panoramic p{font-size:11px!important;max-width:760px!important;line-height:1.35!important}.hero-search{margin-top:10px!important;max-width:760px!important}.hero-search input,.hero-search button{height:38px!important}.hero-search button{padding:0 15px!important}.popular{margin-top:7px!important;gap:5px!important}.ticker-pill{padding:4px 8px!important;font-size:9px!important}.hero-slogan{font-size:16px!important;right:20px!important;bottom:18px!important;max-width:230px!important}.hero-panoramic:after{height:55px!important;opacity:.14!important}.indices-grid{gap:8px!important;margin-top:10px!important}.index-card{padding:10px 12px!important;border-radius:12px!important;min-height:70px!important}.index-card span{font-size:8px!important}.index-card strong{font-size:16px!important;margin:3px 0 1px!important}.delta{font-size:9px!important}.action-modules-grid{gap:8px!important;margin-top:10px!important}.action-card{min-height:82px!important;padding:12px!important;border-radius:13px!important}.action-card h3{font-size:12px!important;margin:0 0 4px!important}.action-card p{font-size:9px!important;line-height:1.3!important}.scanner-container-surface{margin-top:12px!important;padding:13px!important;border-radius:15px!important}.surface-tabs{gap:4px!important;padding-bottom:8px!important}.surface-tab{padding:7px 9px!important;font-size:10px!important}.filter-controls{margin:8px 0!important;gap:6px!important}.filter-controls select{padding:7px 9px!important;font-size:9px!important}.scanner-meta{margin-bottom:7px!important;font-size:9px!important;gap:10px!important}.scanner-table th,.scanner-table td{padding:8px 7px!important;font-size:10px!important}.scanner-table td{font-size:11px!important}.company-overview{margin-top:12px!important}.overview-card{padding:13px!important;border-radius:15px!important}.overview-grid{gap:7px!important}.metric{padding:9px!important}.metric span{font-size:8px!important}.metric strong{font-size:12px!important;margin-top:3px!important}.sidebar{padding:14px 9px!important}.side-section{margin-bottom:14px!important}.side-link{padding:8px 9px!important;font-size:11px!important}.right-feed{padding:14px 9px!important}.feed-card{padding:12px!important;margin-bottom:8px!important}.filter-controls{display:none!important}#hiddenGemsPreview .opportunity-empty,#opportunityRadar .opportunity-empty{min-height:180px!important}@media(max-width:1050px){.hero-panoramic{min-height:145px!important}.hero-slogan{display:none!important}}@media(max-width:760px){.hero-panoramic{min-height:0!important;padding:15px!important}.hero-panoramic h1{font-size:24px!important}.hero-search{margin-top:8px!important}.indices-grid,.action-modules-grid{gap:7px!important}.index-card{min-height:64px!important;padding:9px!important}.action-card{min-height:74px!important}}
 
-/* ================================================================
-   SAMPLE E — CALM / FOCUS & WELLBEING
-   The approved Calm reference is light, quiet, compact and scanner-first.
-   These rules are scoped to Calm + Light so the other five themes remain intact.
-   ================================================================ */
-html[data-theme="calm"][data-mode="light"] body{background:#f3f6f5;color:#1d292d}
-html[data-theme="calm"][data-mode="light"] .navbar{background:rgba(255,255,255,.94);border-bottom-color:#dce7e3;box-shadow:0 1px 8px rgba(38,76,68,.06)}
-html[data-theme="calm"][data-mode="light"] .brand-icon{background:#397d73;color:#fff}
-html[data-theme="calm"][data-mode="light"] .brand-name{letter-spacing:.12em}
-html[data-theme="calm"][data-mode="light"] .main-content{padding:18px 20px 40px}
-html[data-theme="calm"][data-mode="light"] .sidebar{background:#f7faf9;border-right-color:#dce7e3}
-html[data-theme="calm"][data-mode="light"] .side-link{color:#5f716f}
-html[data-theme="calm"][data-mode="light"] .side-link:hover,html[data-theme="calm"][data-mode="light"] .side-link.active{background:#e6f1ed;color:#24665d;box-shadow:inset 3px 0 #397d73}
-html[data-theme="calm"][data-mode="light"] .hero-panoramic{background:#edf5f1;box-shadow:none;border-color:#d9e6e1}
-html[data-theme="calm"][data-mode="light"] .hero-panoramic:after{display:none}
-html[data-theme="calm"][data-mode="light"] .hero-panoramic h1{color:#203331}
-html[data-theme="calm"][data-mode="light"] .hero-search input{background:#fff;border-color:#d5e1dd;color:#1d292d}
-html[data-theme="calm"][data-mode="light"] .hero-search button{background:#397d73;color:#fff}
-html[data-theme="calm"][data-mode="light"] .ticker-pill{background:#fff;border-color:#d5e1dd;color:#5f716f}
-html[data-theme="calm"][data-mode="light"] .index-card,html[data-theme="calm"][data-mode="light"] .action-card,html[data-theme="calm"][data-mode="light"] .scanner-container-surface,html[data-theme="calm"][data-mode="light"] .overview-card,html[data-theme="calm"][data-mode="light"] .feed-card{box-shadow:0 4px 16px rgba(39,77,69,.055);border-color:#d8e4df}
-html[data-theme="calm"][data-mode="light"] .index-card{background:#fff}
-html[data-theme="calm"][data-mode="light"] .action-card{background:#eaf3ef;color:#24443e;min-height:96px}
-html[data-theme="calm"][data-mode="light"] .action-card h3{color:#24443e}
-html[data-theme="calm"][data-mode="light"] .action-card p{color:#5f716f;opacity:1}
-html[data-theme="calm"][data-mode="light"] .scanner-container-surface{background:#fff;padding:16px;border-radius:16px}
-html[data-theme="calm"][data-mode="light"] .surface-tabs{border-bottom-color:#e0e9e5}
-html[data-theme="calm"][data-mode="light"] .surface-tab{color:#667774;background:transparent}
-html[data-theme="calm"][data-mode="light"] .surface-tab.active,html[data-theme="calm"][data-mode="light"] .surface-tab:hover{background:#e7f2ee;color:#24665d}
-html[data-theme="calm"][data-mode="light"] .scanner-meta{color:#70817e}
-html[data-theme="calm"][data-mode="light"] .scanner-table-wrap{border-color:#dfe8e4;border-radius:12px}
-html[data-theme="calm"][data-mode="light"] .scanner-table th{background:#f3f7f5;color:#63736f;border-bottom-color:#dfe8e4}
-html[data-theme="calm"][data-mode="light"] .scanner-table td{border-bottom-color:#e7eeeb;color:#253331}
-html[data-theme="calm"][data-mode="light"] .scanner-table tr:hover td{background:#f7fbf9}
-html[data-theme="calm"][data-mode="light"] .status-confirmed,html[data-theme="calm"][data-mode="light"] .scanner-positive,html[data-theme="calm"][data-mode="light"] .scanner-strong{color:#187d5c!important}
-html[data-theme="calm"][data-mode="light"] .status-starting,html[data-theme="calm"][data-mode="light"] .scanner-starting{color:#397d73!important}
-html[data-theme="calm"][data-mode="light"] .status-distribution,html[data-theme="calm"][data-mode="light"] .scanner-negative{color:#bd4a54!important}
-html[data-theme="calm"][data-mode="light"] .scanner-warning,html[data-theme="calm"][data-mode="light"] .scanner-neutral{color:#a77b25!important}
-html[data-theme="calm"][data-mode="light"] .scanner-heading-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin:8px 0 12px}
-html[data-theme="calm"][data-mode="light"] .scanner-heading-row h2{margin:4px 0 3px;font-size:22px;color:#203331}
-html[data-theme="calm"][data-mode="light"] .scanner-heading-row p{margin:0;color:#6b7b77;font-size:10px}
-html[data-theme="calm"][data-mode="light"] .scanner-status-pill{padding:6px 9px;border-radius:999px;background:#e5f3ed;color:#187d5c;font-size:9px;font-weight:900;white-space:nowrap}
-html[data-theme="calm"][data-mode="light"] .scanner-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:10px 0}
-html[data-theme="calm"][data-mode="light"] .scanner-summary{padding:11px 12px;border:1px solid #dce7e3;border-radius:12px;background:#fff;display:flex;flex-direction:column;gap:3px}
-html[data-theme="calm"][data-mode="light"] .scanner-summary strong{font-size:19px;color:#203331}.scanner-summary span{font-size:9px;color:#6b7b77;font-weight:800}
-html[data-theme="calm"][data-mode="light"] .scanner-summary-green{border-left:3px solid #68b89c}.scanner-summary-blue{border-left:3px solid #6ca9a0}.scanner-summary-gold{border-left:3px solid #c9ad68}.scanner-summary-neutral{border-left:3px solid #b7c5c0}
-html[data-theme="calm"][data-mode="light"] .scanner-legend{display:flex;gap:12px;flex-wrap:wrap;padding:0 2px 9px;color:#75837f;font-size:9px}
-html[data-theme="calm"][data-mode="light"] .scanner-pager{display:flex;align-items:center;justify-content:center;gap:10px;padding-top:11px;color:#6d7d79;font-size:9px}
-html[data-theme="calm"][data-mode="light"] .scanner-page-btn{border:1px solid #d5e1dd;background:#fff;color:#4e6962;border-radius:8px;padding:6px 10px;font-size:9px;font-weight:900;cursor:pointer}.scanner-page-btn:disabled{opacity:.45;cursor:default}
-html[data-theme="calm"][data-mode="light"] .right-feed{background:#f7faf9;border-left-color:#dce7e3}
-html[data-theme="calm"][data-mode="light"] .quote-card{background:#fff;border-color:#dce7e3}
-html[data-theme="calm"][data-mode="light"] .profile-badge,html[data-theme="calm"][data-mode="light"] .theme-menu-btn{background:#fff;border-color:#d5e1dd;color:#506560}
-html[data-theme="calm"][data-mode="light"] .avatar{background:#397d73;color:#fff}
-html[data-theme="calm"][data-mode="light"] .suggestions-dropdown{background:#fff;border-color:#d5e1dd}
-html[data-theme="calm"][data-mode="light"] .empty-cell{background:#fbfdfc;color:#71807c!important}
-@media(max-width:1050px){html[data-theme="calm"][data-mode="light"] .right-feed{display:none}}
-@media(max-width:760px){html[data-theme="calm"][data-mode="light"] .main-content{padding:10px}.scanner-heading-row{flex-direction:column}.scanner-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.scanner-pager{flex-wrap:wrap}.scanner-table{min-width:760px}}
+/* ------------------------------------------------------------------
+   APPROVED SAMPLE A — compact, information-first VIKRAM dashboard.
+   These overrides intentionally preserve the existing DOM and product
+   surfaces while removing oversized landing-page whitespace.
+   ------------------------------------------------------------------ */
+.hero-panoramic{min-height:154px!important;padding:18px 22px!important;border-radius:18px!important}
+.hero-content{max-width:100%!important}
+.eyebrow{font-size:8px!important;letter-spacing:.16em!important}
+.hero-panoramic h1{font-size:28px!important;line-height:1.05!important;margin:5px 0 4px!important;letter-spacing:-.035em!important}
+.hero-panoramic p{font-size:11px!important;max-width:760px!important;line-height:1.35!important}
+.hero-search{margin-top:10px!important;max-width:760px!important}
+.hero-search input,.hero-search button{height:38px!important}
+.hero-search button{padding:0 15px!important}
+.popular{margin-top:7px!important;gap:5px!important}
+.ticker-pill{padding:4px 8px!important;font-size:9px!important}
+.hero-slogan{font-size:16px!important;right:20px!important;bottom:18px!important;max-width:230px!important}
+.hero-panoramic:after{height:55px!important;opacity:.14!important}
+.indices-grid{gap:8px!important;margin-top:10px!important}
+.index-card{padding:10px 12px!important;border-radius:12px!important;min-height:70px!important}
+.index-card span{font-size:8px!important}
+.index-card strong{font-size:16px!important;margin:3px 0 1px!important}
+.delta{font-size:9px!important}
+.action-modules-grid{gap:8px!important;margin-top:10px!important}
+.action-card{min-height:82px!important;padding:12px!important;border-radius:13px!important}
+.action-card h3{font-size:12px!important;margin:0 0 4px!important}
+.action-card p{font-size:9px!important;line-height:1.3!important}
+.scanner-container-surface{margin-top:12px!important;padding:13px!important;border-radius:15px!important}
+.surface-tabs{gap:4px!important;padding-bottom:8px!important}
+.surface-tab{padding:7px 9px!important;font-size:10px!important}
+.filter-controls{margin:8px 0!important;gap:6px!important}
+.filter-controls select{padding:7px 9px!important;font-size:9px!important}
+.universe-status-line{font-size:9px;font-weight:700;color:var(--text-muted);white-space:nowrap;align-self:center}
+.detection-cell{font-size:9px;line-height:1.5;white-space:nowrap}
+.detection-status{display:inline-block;font-weight:700;padding:1px 6px;border-radius:999px;margin-bottom:2px}
+.detection-status--new{background:var(--accent-soft,rgba(16,185,129,.15));color:var(--accent,#10b981)}
+.detection-status--active{background:var(--info-soft,rgba(59,130,246,.15));color:var(--info,#3b82f6)}
+.detection-since,.detection-latest,.detection-days{color:var(--text-muted)}
+.radar-row{border:1px solid var(--border,#223252);border-radius:8px;padding:8px 10px;margin-bottom:6px}
+.radar-row summary{cursor:pointer;font-size:12px}
+.radar-detail{margin-top:8px;font-size:11px;color:var(--text-muted)}
+.radar-detail ul{margin:4px 0 8px 18px}
+.research-badge{font-size:9px;font-weight:700;color:#b45309;background:rgba(180,83,9,.12);padding:2px 8px;border-radius:999px;margin-left:8px;vertical-align:middle}
+.analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;font-size:11px}
+.analytics-grid ul{margin:4px 0 0 16px;color:var(--text-muted)}
+#tablePagination button{border:1px solid var(--border-subtle);background:var(--bg-card-2);color:var(--text-main);border-radius:6px;padding:4px 10px;font-size:10px;cursor:pointer}
+#tablePagination button:disabled{opacity:.4;cursor:default}
+.scanner-table thead th[data-sort-key]:hover{color:var(--accent-cyan)}
+/* Discovery-style compact card scanner (Part 1 of the requested redesign) — same visual language
+   as .radar-row (Opportunity Radar) and Hidden Gems: dark compact card, collapsed by default,
+   click to expand full evidence. */
+.discovery-card-list{display:flex;flex-direction:column;gap:6px}
+.radar-row,.discovery-card{border:1px solid var(--border-subtle);border-radius:10px;background:var(--bg-card-2);padding:0;margin-bottom:6px}
+.radar-row summary,.discovery-card summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:9px 12px;font-size:11px}
+.radar-row summary::-webkit-details-marker,.discovery-card summary::-webkit-details-marker{display:none}
+.radar-row summary:hover,.discovery-card summary:hover{background:rgba(255,255,255,.03)}
+.radar-detail,.dc-detail{padding:0 12px 12px;border-top:1px solid var(--border-subtle);color:var(--text-muted);font-size:10.5px}
+.dc-name{flex:1 1 160px;min-width:0;display:flex;flex-direction:column;line-height:1.3}
+.dc-symbol{color:var(--text-muted);font-size:9.5px}
+.dc-price{flex:0 0 auto;font-weight:700;white-space:nowrap}
+.dc-score{flex:0 0 auto;color:var(--text-muted)}
+.dc-verdict{flex:0 0 auto;font-size:10px;white-space:nowrap}
+.dc-metrics{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0}
+/* Filter chips: real <select> elements styled as compact labeled buttons — clicking still opens
+   the browser-native option list (the "menu of options" behavior), selecting immediately filters. */
+.filter-chip{display:inline-flex;align-items:center;gap:6px;font-size:9.5px;font-weight:700;color:var(--text-muted);background:var(--bg-card-2);border:1px solid var(--border-subtle);border-radius:999px;padding:5px 6px 5px 12px}
+.filter-chip select{border:0;background:transparent;color:var(--text-main);font-size:10px;font-weight:800;padding:2px 4px}
+.sort-chip{border-color:var(--accent-cyan,#4dd0e1)}
+.table-search-input{border:1px solid var(--border-subtle);background:var(--bg-card-2);color:var(--text-main);border-radius:9px;padding:8px 10px;font-size:10px}
+@media(max-width:700px){
+  .discovery-card summary{flex-wrap:wrap;gap:6px}
+  .dc-name{flex-basis:100%}
+  .filter-controls{gap:6px}
+  .filter-chip{padding:4px 6px 4px 10px;font-size:9px}
+}
+.scanner-meta{margin-bottom:7px!important;font-size:9px!important;gap:10px!important}
+.scanner-table th,.scanner-table td{padding:8px 7px!important;font-size:10px!important}
+.scanner-table td{font-size:11px!important}
+.company-overview{margin-top:12px!important}
+.overview-card{padding:13px!important;border-radius:15px!important}
+.overview-grid{gap:7px!important}
+.metric{padding:9px!important}
+.metric span{font-size:8px!important}.metric strong{font-size:12px!important;margin-top:3px!important}
+.sidebar{padding:14px 9px!important}.side-section{margin-bottom:14px!important}.side-link{padding:8px 9px!important;font-size:11px!important}
+.right-feed{padding:14px 9px!important}.feed-card{padding:12px!important;margin-bottom:8px!important}
+
+/* Avoid empty-page feeling when a discovery surface has no candidates. */
+#hiddenGemsPreview .opportunity-empty,#opportunityRadar .opportunity-empty{min-height:180px!important}
+
+@media(max-width:1050px){
+  .hero-panoramic{min-height:145px!important}
+  .hero-slogan{display:none!important}
+}
+@media(max-width:760px){
+  .hero-panoramic{min-height:0!important;padding:15px!important}
+  .hero-panoramic h1{font-size:24px!important}
+  .hero-search{margin-top:8px!important}
+  .indices-grid,.action-modules-grid{gap:7px!important}
+  .index-card{min-height:64px!important;padding:9px!important}
+  .action-card{min-height:74px!important}
+}

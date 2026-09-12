@@ -3,7 +3,10 @@ const { parse } = require('csv-parse/sync');
 const unzipper = require('unzipper');
 const { toIstCalendarDate, addDays, formatYmd, formatDdMmYyyy, formatYmdCompact } = require('./istDate');
 const { buildScannerResults, buildPeriodResults, buildOiTrendBySymbolDate, MATERIALIZE_LOOKBACK_DAYS } = require('./scanMaterializer');
+const { buildDetectionMap } = require('./detectionHistory');
+const accumulationEngine = require('../../accumulation/engine');
 const { runAlertPipeline } = require('./alerts/alertEngine');
+const { classifyCmRow, classifyFoRow, validateBatch } = require('./ingestValidation');
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: process.env.DATABASE_URL?.includes('sslmode=require') ? { rejectUnauthorized:false } : undefined });
 const HOME='https://www.nseindia.com';
@@ -13,21 +16,48 @@ function clean(v){return v===undefined||v===null||String(v).trim()===''?null:Str
 function num(v){const x=Number(String(v??'').replace(/,/g,''));return Number.isFinite(x)?x:null;}
 function parseCsv(buf){return parse(buf.toString('utf8').replace(/^\uFEFF/,''),{columns:true,skip_empty_lines:true,trim:true,relax_column_count:true});}
 
+// #8 remediation: raw rows are classified by ingestValidation.js BEFORE they are trusted. Only
+// VALID rows are inserted; MISSING/MALFORMED/INVALID/DUPLICATE rows are excluded and counted, and
+// that count + a per-status breakdown is recorded on the ingestion_runs row so bad upstream data
+// is visible rather than silently becoming (or silently disappearing from) scanner evidence.
 async function ingestCm(date){
   const url=`https://nsearchives.nseindia.com/products/content/sec_bhavdata_full_${formatDdMmYyyy(date)}.csv`;
-  const rows=parseCsv(await get(url)).filter(r=>clean(r.SERIES)==='EQ');
+  const ymd=formatYmd(date);
+  const rawRows=parseCsv(await get(url)).filter(r=>clean(r.SERIES)==='EQ');
+  const { valid: rows, invalid, summary } = validateBatch(rawRows, classifyCmRow, ymd, row => row.SYMBOL);
   const client=await pool.connect();
-  try{await client.query('BEGIN');for(const r of rows){await client.query(`INSERT INTO cm_eod(symbol,trade_date,series,prev_close,open,high,low,last_price,close,avg_price,volume,deliv_qty,deliv_per,turnover,no_of_trades) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) ON CONFLICT(symbol,trade_date) DO UPDATE SET prev_close=EXCLUDED.prev_close,open=EXCLUDED.open,high=EXCLUDED.high,low=EXCLUDED.low,last_price=EXCLUDED.last_price,close=EXCLUDED.close,avg_price=EXCLUDED.avg_price,volume=EXCLUDED.volume,deliv_qty=EXCLUDED.deliv_qty,deliv_per=EXCLUDED.deliv_per,turnover=EXCLUDED.turnover,no_of_trades=EXCLUDED.no_of_trades`,[clean(r.SYMBOL),formatYmd(date),clean(r.SERIES),num(r.PREV_CLOSE),num(r.OPEN_PRICE),num(r.HIGH_PRICE),num(r.LOW_PRICE),num(r.LAST_PRICE),num(r.CLOSE_PRICE),num(r.AVG_PRICE),num(r.TTL_TRD_QNTY),num(r.DELIV_QTY),num(r.DELIV_PER),num(r.TURNOVER_LACS),num(r.NO_OF_TRADES)]);}await client.query(`INSERT INTO ingestion_runs(segment,trade_date,status,row_count,schema_version) VALUES('CM',$1,'success',$2,'cm-full-v1-turnover-lacs')`,[formatYmd(date),rows.length]);await client.query('COMMIT');return rows.length;}catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();}
+  try{
+    await client.query('BEGIN');
+    for(const r of rows){
+      await client.query(`INSERT INTO cm_eod(symbol,trade_date,series,prev_close,open,high,low,last_price,close,avg_price,volume,deliv_qty,deliv_per,turnover,no_of_trades) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) ON CONFLICT(symbol,trade_date) DO UPDATE SET prev_close=EXCLUDED.prev_close,open=EXCLUDED.open,high=EXCLUDED.high,low=EXCLUDED.low,last_price=EXCLUDED.last_price,close=EXCLUDED.close,avg_price=EXCLUDED.avg_price,volume=EXCLUDED.volume,deliv_qty=EXCLUDED.deliv_qty,deliv_per=EXCLUDED.deliv_per,turnover=EXCLUDED.turnover,no_of_trades=EXCLUDED.no_of_trades`,
+        [r.SYMBOL,ymd,r.SERIES,r.PREV_CLOSE,r.OPEN_PRICE,r.HIGH_PRICE,r.LOW_PRICE,r.LAST_PRICE,r.CLOSE_PRICE,r.AVG_PRICE,r.TTL_TRD_QNTY,r.DELIV_QTY,r.DELIV_PER,r.TURNOVER_LACS,r.NO_OF_TRADES]);
+    }
+    if(invalid.length)console.warn(`CM ${ymd}: rejected ${invalid.length} invalid row(s)`,summary);
+    await client.query(`INSERT INTO ingestion_runs(segment,trade_date,status,row_count,invalid_count,validation_summary,schema_version) VALUES('CM',$1,'success',$2,$3,$4,'cm-full-v1-turnover-lacs')`,[ymd,rows.length,invalid.length,JSON.stringify(summary)]);
+    await client.query('COMMIT');
+    return rows.length;
+  }catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();}
 }
 
 async function ingestFo(date){
   const url=`https://nsearchives.nseindia.com/content/fo/BhavCopy_NSE_FO_0_0_0_${formatYmdCompact(date)}_F_0000.csv.zip`;
+  const ymd=formatYmd(date);
   const zip=await unzipper.Open.buffer(await get(url));
   const file=zip.files.find(f=>/\.csv$/i.test(f.path));if(!file)throw new Error('No CSV found in NSE F&O archive');
-  const rows=parseCsv(await file.buffer());
-  const futures=rows.filter(r=>clean(r.Sgmt)==='FO'&&clean(r.FinInstrmTp)==='STF'&&clean(r.OptnTp)==='XX');
+  const rawRows=parseCsv(await file.buffer()).filter(r=>clean(r.Sgmt)==='FO'&&clean(r.FinInstrmTp)==='STF'&&clean(r.OptnTp)==='XX');
+  const { valid: futures, invalid, summary } = validateBatch(rawRows, classifyFoRow, ymd, row => `${row.TckrSymb}|${row.XpryDt}`);
   const client=await pool.connect();
-  try{await client.query('BEGIN');for(const r of futures){const symbol=clean(r.TckrSymb),expiry=clean(r.XpryDt);if(!symbol||!expiry)continue;await client.query(`INSERT INTO futures_eod(symbol,trade_date,expiry,close,oi,change_oi,instrument_type,contract_name) VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT(symbol,trade_date,expiry) DO UPDATE SET close=EXCLUDED.close,oi=EXCLUDED.oi,change_oi=EXCLUDED.change_oi,instrument_type=EXCLUDED.instrument_type,contract_name=EXCLUDED.contract_name`,[symbol,formatYmd(date),expiry,num(r.ClsPric),num(r.OpnIntrst),num(r.ChngInOpnIntrst),clean(r.FinInstrmTp),clean(r.FinInstrmNm)]);}await client.query(`INSERT INTO ingestion_runs(segment,trade_date,status,row_count,schema_version) VALUES('FO',$1,'success',$2,'fo-udiff-v1')`,[formatYmd(date),futures.length]);await client.query('COMMIT');return futures.length;}catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();}
+  try{
+    await client.query('BEGIN');
+    for(const r of futures){
+      await client.query(`INSERT INTO futures_eod(symbol,trade_date,expiry,close,oi,change_oi,instrument_type,contract_name) VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT(symbol,trade_date,expiry) DO UPDATE SET close=EXCLUDED.close,oi=EXCLUDED.oi,change_oi=EXCLUDED.change_oi,instrument_type=EXCLUDED.instrument_type,contract_name=EXCLUDED.contract_name`,
+        [r.TckrSymb,ymd,r.XpryDt,r.ClsPric,r.OpnIntrst,r.ChngInOpnIntrst,r.FinInstrmTp,r.FinInstrmNm]);
+    }
+    if(invalid.length)console.warn(`FO ${ymd}: rejected ${invalid.length} invalid row(s)`,summary);
+    await client.query(`INSERT INTO ingestion_runs(segment,trade_date,status,row_count,invalid_count,validation_summary,schema_version) VALUES('FO',$1,'success',$2,$3,$4,'fo-udiff-v1')`,[ymd,futures.length,invalid.length,JSON.stringify(summary)]);
+    await client.query('COMMIT');
+    return futures.length;
+  }catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();}
 }
 
 async function materializeScannerResults(){
@@ -51,8 +81,14 @@ async function materializeScannerResults(){
   const derivativesSymbols=new Set(derivativesQ.rows.map(r=>String(r.symbol||'').trim().toUpperCase()).filter(Boolean));
   const results=buildScannerResults(historyBySymbol,futuresBySymbolDate,derivativesSymbols,oiTrendBySymbolDate);
   const periods=buildPeriodResults(historyBySymbol,futuresBySymbolDate,derivativesSymbols,oiTrendBySymbolDate);
+  // Detection History (Blueprint §F/§9): same canonical calculator used by the static-snapshot
+  // path (server/src/detectionHistory.js) — wired into the live Postgres path here for the first
+  // time, so the live API can expose detection history too, not only the static snapshot. This
+  // is purely additive: it reads the same real history already fetched above and does not touch
+  // authentication, ingestion validation, or the race-condition fix.
+  const detectionMap=buildDetectionMap(historyBySymbol,futuresBySymbolDate,derivativesSymbols,results,accumulationEngine.evaluate);
   const client=await pool.connect();
-  try{await client.query('BEGIN');for(const r of results){await client.query(`INSERT INTO scanner_results(symbol,trade_date,score,verdict,metrics,why,updated_at) VALUES($1,$2,$3,$4,$5,$6,now()) ON CONFLICT(symbol) DO UPDATE SET trade_date=EXCLUDED.trade_date,score=EXCLUDED.score,verdict=EXCLUDED.verdict,metrics=EXCLUDED.metrics,why=EXCLUDED.why,updated_at=now()`,[r.symbol,r.tradeDate,r.score,r.verdict,JSON.stringify(r.metrics),JSON.stringify(r.why)]);}for(const rows of Object.values(periods)){for(const r of rows){await client.query(`INSERT INTO scanner_results_periods(symbol,period,trade_date,score,verdict,metrics,why,updated_at) VALUES($1,$2,$3,$4,$5,$6,$7,now()) ON CONFLICT(symbol,period) DO UPDATE SET trade_date=EXCLUDED.trade_date,score=EXCLUDED.score,verdict=EXCLUDED.verdict,metrics=EXCLUDED.metrics,why=EXCLUDED.why,updated_at=now()`,[r.symbol,r.period,r.tradeDate,r.score,r.verdict,JSON.stringify(r.metrics),JSON.stringify(r.why)]);}}await client.query('COMMIT');}catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();}
+  try{await client.query('BEGIN');for(const r of results){const detection=detectionMap.get(String(r.symbol||'').toUpperCase())||null;await client.query(`INSERT INTO scanner_results(symbol,trade_date,score,verdict,metrics,why,detection,updated_at) VALUES($1,$2,$3,$4,$5,$6,$7,now()) ON CONFLICT(symbol) DO UPDATE SET trade_date=EXCLUDED.trade_date,score=EXCLUDED.score,verdict=EXCLUDED.verdict,metrics=EXCLUDED.metrics,why=EXCLUDED.why,detection=EXCLUDED.detection,updated_at=now()`,[r.symbol,r.tradeDate,r.score,r.verdict,JSON.stringify(r.metrics),JSON.stringify(r.why),JSON.stringify(detection)]);}for(const rows of Object.values(periods)){for(const r of rows){await client.query(`INSERT INTO scanner_results_periods(symbol,period,trade_date,score,verdict,metrics,why,updated_at) VALUES($1,$2,$3,$4,$5,$6,$7,now()) ON CONFLICT(symbol,period) DO UPDATE SET trade_date=EXCLUDED.trade_date,score=EXCLUDED.score,verdict=EXCLUDED.verdict,metrics=EXCLUDED.metrics,why=EXCLUDED.why,updated_at=now()`,[r.symbol,r.period,r.tradeDate,r.score,r.verdict,JSON.stringify(r.metrics),JSON.stringify(r.why)]);}}await client.query('COMMIT');}catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();}
 
   try { const alertSummary = await runAlertPipeline(pool, 'accumulation', results); console.log(`ALERTS new=${alertSummary.newMatches} sent=${alertSummary.sent} failed=${alertSummary.failed}`); } catch (error) { console.error('Alert pipeline failed after materialization:', error.message); }
   return results.length;

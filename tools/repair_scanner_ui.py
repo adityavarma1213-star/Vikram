@@ -4,16 +4,6 @@ import re
 ROOT = Path(__file__).resolve().parents[1]
 index = ROOT / 'index.html'
 text = index.read_text(encoding='utf-8')
-
-# Sample E has a dedicated semantic home layout. Do not run the legacy
-# scanner CSS rewriter against it: that rewriter assumes the former
-# panoramic inline-CSS baseline and would deliberately reintroduce it.
-if 'css/home-calm.css' in text and 'class="vikram-home"' in text:
-    text = text.replace('href="accumulation.html"', 'href="index.html#scannerSurface"')
-    index.write_text(text, encoding='utf-8')
-    (ROOT / 'accumulation.html').unlink(missing_ok=True)
-    raise SystemExit(0)
-
 text = text.replace('href="accumulation.html"', 'href="index.html#scannerSurface"')
 old = '.scanner-table{width:100%;min-width:900px;border-collapse:collapse}'
 new = ('.scanner-table{width:100%;min-width:0;table-layout:fixed;border-collapse:collapse}'
@@ -47,6 +37,7 @@ if 'function renderScannerMeta' not in text:
     repl = marker + "\n  const dataDateEl = document.getElementById('scannerDataDate');\n  const dataAgeEl = document.getElementById('scannerDataAge');\n  function renderScannerMeta(asOf) {\n    if (!dataDateEl || !dataAgeEl) return;\n    if (!asOf) { dataDateEl.textContent = 'N/A'; dataAgeEl.textContent = 'N/A'; return; }\n    const asOfDate = new Date(`${asOf}T00:00:00Z`);\n    if (Number.isNaN(asOfDate.getTime())) { dataDateEl.textContent = 'N/A'; dataAgeEl.textContent = 'N/A'; return; }\n    dataDateEl.textContent = asOfDate.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' });\n    const diffDays = Math.floor((Date.now() - asOfDate.getTime()) / 86400000);\n    dataAgeEl.textContent = diffDays <= 0 ? 'Today (EOD verified)' : diffDays === 1 ? '1 day old' : `${diffDays} days old`;\n  }"
     text = text.replace(marker, repl, 1)
 text = text.replace("rows = Array.isArray(snapshot.results) ? snapshot.results : []; render();", "rows = Array.isArray(snapshot.results) ? snapshot.results : []; renderScannerMeta(snapshot.asOf); render();", 1)
+# Collapse any number of duplicate metadata calls introduced by earlier repair runs.
 text = re.sub(r'(?:renderScannerMeta\(null\);\s*){2,}', 'renderScannerMeta(null); ', text)
 text = text.replace("}).slice(0, 40);", "});", 1)
 mobile_marker = '@media(max-width:760px){'
@@ -57,6 +48,7 @@ script_tag = '<script src="js/discoveryRepair.js"></script>'
 if script_tag not in text:
     text = text.replace('</body>', f'{script_tag}\n</body>', 1)
 index.write_text(text, encoding='utf-8')
+(ROOT / 'accumulation.html').unlink(missing_ok=True)
 assert '.scanner-table{width:100%;min-width:0;table-layout:fixed' in text
 assert 'scanner-meta' in text
 assert "}).slice(0, 40);" not in text

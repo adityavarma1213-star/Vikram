@@ -1,0 +1,7 @@
+'use strict';
+// Canonical alert-engine constants (consolidated from the former server/src/alertEngine/ duplicate).
+module.exports = {
+  FREQUENCY: Object.freeze({ NEW_MATCH_ONLY: 'NEW_MATCH_ONLY', ONCE_PER_STOCK_PER_DAY: 'ONCE_PER_STOCK_PER_DAY' }),
+  CHANNEL: Object.freeze({ EMAIL: 'EMAIL', PUSH: 'PUSH' }),
+  STATUS: Object.freeze({ PENDING: 'PENDING', SENT: 'SENT', FAILED: 'FAILED', SKIPPED: 'SKIPPED_DEDUPLICATED' })
+};

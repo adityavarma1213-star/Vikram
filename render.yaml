@@ -9,6 +9,8 @@ services:
         fromDatabase:
           name: vikram-market-data
           property: connectionString
+      - key: AUTH_SECRET
+        generateValue: true
 
   - type: cron
     name: vikram-eod-ingestion

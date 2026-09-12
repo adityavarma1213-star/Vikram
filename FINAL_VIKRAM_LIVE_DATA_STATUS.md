@@ -1,32 +1,41 @@
 # VIKRAM LIVE MARKET DATA STATUS
 
-## Current implementation
-The existing INDstocks live-data modules are now connected to the Express server and exposed to the VIKRAM website through safe server-side routes. The Accumulation Engine/EOD scanner path was not replaced.
+## Merge status
+The live-data and alert-layer implementation from the supplied Gemini implementation package has been added to the legacy Express/vanilla VIKRAM repository as isolated server-side modules. Existing scanner/accumulation code was not replaced.
 
 ## Provider
 INDstocks
 
-## Website
-The main VIKRAM Settings section now shows live-data readiness and includes a server-mediated **Test Live Quote** control. Provider credentials are never entered into or stored in browser code.
+## Public live data
+UNVERIFIED / DISABLED BY DEFAULT. `LIVE_MARKET_DATA_ENABLED=false` until public-display/redistribution authorization is independently verified.
 
-## API routes
-- `GET /api/live/status` — reports enabled/configured/instrument-mapping state without exposing secrets.
-- `GET /api/live/quotes?symbols=RELIANCE` — requests verified live quotes through the server and returns provider data only when live data is explicitly enabled.
+## Live API test
+NOT RUN. Real provider credentials were not supplied. No live response, LTP, connection, deployment, or licensing approval is fabricated.
 
-## Configuration
-Required server-side environment variables are documented in `.env.example`:
-- `LIVE_MARKET_DATA_ENABLED`
-- `INDSTOCKS_API_KEY`
-- `INDSTOCKS_MPIN`
-- `INDSTOCKS_TOTP_SECRET`
-- `INDSTOCKS_INSTRUMENTS_URL`
-- optional token/base URL overrides
+## Architecture
+Frontend -> VIKRAM server/live-data layer -> INDstocks. Provider credentials remain server-side. Live quotes are an overlay and do not alter EOD scanner calculations.
 
-## Production status
-LIVE MARKET DATA: **NOT YET VERIFIED**. Real provider credentials have not been supplied in this development environment, and provider authorization for public display/redistribution has not been independently verified. Therefore VIKRAM must continue to show a not-ready state until those gates are satisfied.
+## Added modules
+- `server/src/liveData/types.js`
+- `server/src/liveData/tokenManager.js`
+- `server/src/liveData/instrumentMapping.js`
+- `server/src/liveData/indstocksClient.js`
+- `server/src/liveData/marketHours.js`
+- `server/src/liveData/relayService.js`
+- `server/src/liveData/index.js`
+- `server/src/alertEngine/types.js`
+- `server/src/alertEngine/deduplication.js`
+- `server/src/alertEngine/alertEngine.js`
+- `server/src/alertEngine/emailNotifier.js`
+- `server/src/alertEngine/fcm/fcmSender.js`
+- `server/test/liveData.test.js`
+- `public/firebase-messaging-sw.js`
+- `.env.example`
 
-## Integrity
-No live LTP, connection result, provider response, deployment status, or licensing approval is fabricated. Live quotes remain an overlay and do not replace verified EOD scanner calculations.
+## Protected
+Existing Option B/scanner, accumulation, ingestion, static snapshot, UI, data and regression files remain in the repository. No Option B rewrite was performed.
 
-## Verified repository change
-PR #4 was merged to `main`, adding the server integration and website Settings visibility for live market data.
+## Gates
+CODE COMPLETE: UNVERIFIED until the merged repository is installed and the full relevant test suite passes.
+LIVE DATA CONNECTED: UNVERIFIED — credentials not supplied.
+PUBLIC PRODUCTION LIVE DATA VERIFIED: UNVERIFIED — authorization and production deployment not verified.

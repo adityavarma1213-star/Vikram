@@ -1,0 +1,10 @@
+Probing real NSE archive endpoint: https://nsearchives.nseindia.com/content/cm/BhavCopy_NSE_CM_0_0_0_20260907_F_0000.csv.zip
+RESULT: BLOCKED at network egress layer. HTTP 403, x-deny-reason: host_not_allowed
+This means the request never reached NSE — it was rejected by this execution environment's own egress allowlist.
+ACTION REQUIRED: add nsearchives.nseindia.com / www.nseindia.com to network egress settings before a real download can run.
+{
+  "reachable": false,
+  "blockedBy": "sandbox_egress_allowlist",
+  "httpStatus": 403,
+  "denyReason": "host_not_allowed"
+}

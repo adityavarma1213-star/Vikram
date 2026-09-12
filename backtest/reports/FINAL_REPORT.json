@@ -1,0 +1,74 @@
+{
+  "run_timestamp_utc": "2026-09-08T03:42:00Z",
+  "task": "5-year NSE historical downloader + VIKRAM accumulation-engine backtest",
+  "REAL_NSE_DATA": "FAIL",
+  "REAL_NSE_DATA_REASON": "Network egress to NSE's archive host (nsearchives.nseindia.com / www.nseindia.com) is blocked by this execution sandbox's own egress allowlist (HTTP 403, x-deny-reason: host_not_allowed). The request never reached NSE. This is NOT NSE itself refusing the request.",
+  "DATA_DATE_RANGE": null,
+  "NUMBER_OF_TRADING_SESSIONS": 0,
+  "CM_DATA": "FAIL",
+  "DELIVERY_DATA": "FAIL",
+  "FO_OI_DATA": "FAIL",
+  "VIKRAM_ENGINE": "PASS",
+  "VIKRAM_ENGINE_DETAIL": {
+    "integrated_file": "accumulation/engine.js",
+    "sha256": "ae6a8f1f6698fc41d16d7c15800ca7f406361f3f6ef06bc3e04dd43287fedf58",
+    "is_production_vikram": true,
+    "is_synthetic": false,
+    "note": "The real, unmodified engine from the uploaded Vikram-main repo is wired in via backtest/lib/engineAdapter.js and passes the production gate contract. It also passes its own pre-existing repo test suite (server/test/accumulationEngine.test.js, 6/6 scenarios)."
+  },
+  "BACKTEST": "FAIL",
+  "BACKTEST_REASON": "backtest/backtestRunner.js refused to run: 'REAL DATA REQUIRED: manifest contains no real market records.' The production gate (backtest/lib/productionGate.js) blocked execution because zero real NSE records exist. No horizons (1D/5D/20D/60D/120D) were computed against fabricated or estimated data.",
+  "TESTS": {
+    "software_tests_synthetic_fixtures_only": {
+      "validators.test.js": "PASS",
+      "manifest.test.js": "PASS",
+      "productionGate.test.js": "PASS",
+      "backtestRunner.test.js": "PASS",
+      "note": "These test pipeline MECHANICS ONLY (checksum correctness, schema validation, checkpoint/resume, the honesty gate's refusal logic, look-ahead-safe forward-return math) using hand-built SYNTHETIC_TEST_ONLY fixtures. They are NOT evidence of a real backtest and must never be quoted as VIKRAM performance."
+    },
+    "live_network_probe": {
+      "liveNetworkProbe.test.js": "BLOCKED (expected red until real NSE egress is available)",
+      "http_status": 403,
+      "deny_reason": "host_not_allowed"
+    },
+    "live_download_attempt": {
+      "command": "node nseDownloader.js",
+      "candidate_dates": 1304,
+      "result": "STOPPED at first candidate date (2021-09-09) per requirement #11 -- no synthetic substitution",
+      "manifest_real_data_records": 0
+    },
+    "existing_repo_engine_tests": {
+      "server/test/accumulationEngine.test.js": "PASS (6/6 scenarios, run against the real unmodified engine)"
+    }
+  },
+  "FILES_CREATED": [
+    "backtest/lib/dateUtils.js",
+    "backtest/lib/validators.js",
+    "backtest/lib/manifest.js",
+    "backtest/lib/productionGate.js",
+    "backtest/lib/engineAdapter.js",
+    "backtest/nseDownloader.js",
+    "backtest/backtestRunner.js",
+    "backtest/package.json",
+    "backtest/test/validators.test.js",
+    "backtest/test/manifest.test.js",
+    "backtest/test/productionGate.test.js",
+    "backtest/test/backtestRunner.test.js",
+    "backtest/test/liveNetworkProbe.test.js",
+    "backtest/data/manifest.json",
+    "backtest/reports/download_run_summary.json",
+    "backtest/reports/backtest_results.json",
+    "backtest/reports/live_network_probe_result.txt",
+    "backtest/reports/FINAL_REPORT.json",
+    "backtest/reports/FINAL_REPORT.xlsx",
+    "backtest/README.md"
+  ],
+  "EXACT_LIMITATIONS": [
+    "This execution environment's outbound network allowlist does not include any NSE domain (nseindia.com, www.nseindia.com, nsearchives.nseindia.com, archives.nseindia.com). Every attempt returns HTTP 403 with x-deny-reason: host_not_allowed BEFORE the request leaves this sandbox. NSE's own servers were never contacted, so this is not evidence about NSE's own access policy.",
+    "Because of the above, ZERO real CM, delivery, or F&O/OI records were downloaded. The 5-year date range, session count, and per-file SHA-256/validation manifest are all real MECHANISMS that have never been exercised against real data.",
+    "The trading-calendar logic is deliberately empirical (a date only counts as a confirmed session once NSE actually returns a schema-valid file whose internal date matches), so no NSE holiday list is asserted as ground truth anywhere in this deliverable.",
+    "No real backtest numbers (win rate, average return, signal counts) exist for any horizon. Any number resembling a backtest result found elsewhere in this package is explicitly labeled SYNTHETIC_TEST_ONLY and must not be used as evidence of VIKRAM performance.",
+    "The VIKRAM engine integration itself (accumulation/engine.js) is real, unmodified, and independently verified against its own pre-existing test suite plus new unit tests -- that part of the requirement is genuinely met.",
+    "To complete this task for real: run backtest/nseDownloader.js followed by backtest/backtestRunner.js in an environment whose network egress allowlist includes nsearchives.nseindia.com and www.nseindia.com. No code changes should be required."
+  ]
+}

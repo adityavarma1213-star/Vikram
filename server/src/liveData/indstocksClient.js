@@ -3,6 +3,7 @@ const { TokenManager } = require('./tokenManager');
 const { normalizedQuote, STATUS } = require('./types');
 const { statusForAvailability } = require('./marketHours');
 const { InstrumentMapping } = require('./instrumentMapping');
+const { assertLiveMarketDataEnabled } = require('./gate');
 
 function first(obj, keys) {
   for (const key of keys) {
@@ -26,8 +27,12 @@ class IndstocksClient {
   }
 
   async quote(symbols) {
+    // #11: this is the actual network-calling entry point into the live provider. Every caller,
+    // present or future, is blocked here when live data is disabled — the check happens before
+    // any token request or network call, never after.
+    assertLiveMarketDataEnabled();
     if (!Array.isArray(symbols) || symbols.length === 0) return [];
-    const token = await this.tokens.getToken();
+    const token = await this.tokens.getToken(); // throws INDSTOCKS_NOT_CONFIGURED if credentials are missing (safe failure, no fabricated quote)
     const codes = symbols.map((s) => this.resolveCode(s)).join(',');
     const url = `${this.base}/market/quotes/full?scrip-codes=${encodeURIComponent(codes)}`;
     const r = await this.fetch(url, { headers: { Authorization: token } });

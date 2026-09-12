@@ -31,7 +31,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install
+      - run: npm ci
       - run: node --check src/scannerEngine.js
       - run: node --check src/ingest.js
       - run: node --check src/index.js
@@ -39,6 +39,9 @@ jobs:
       - run: node --check src/istDate.js
       - run: node --check src/scanMaterializer.js
       - run: node --check src/staticSnapshot.js
+      - run: node --check src/auth.js
+      - run: node --check src/ingestValidation.js
+      - run: node --check src/liveData/gate.js
       - run: node --check src/ruleEngine/indicators.js
       - run: node --check src/ruleEngine/ruleEvaluator.js
       - run: node --check src/ruleEngine/query.js
@@ -48,7 +51,9 @@ jobs:
         run: node src/migrate.js
         env:
           DATABASE_URL: postgres://vikram:vikram@localhost:5432/vikram_ci
-      - name: Integration tests
+          AUTH_SECRET: ci-test-secret-not-for-production-use
+      - name: Integration + auth + concurrency + full-universe tests (real Postgres, fixture data — no live NSE call)
         run: npm run test:integration
         env:
           DATABASE_URL: postgres://vikram:vikram@localhost:5432/vikram_ci
+          AUTH_SECRET: ci-test-secret-not-for-production-use

@@ -1,0 +1,7 @@
+{
+  "status": "FAIL",
+  "reason": "REAL DATA REQUIRED: manifest contains no real market records.",
+  "gateFailures": [
+    "REAL DATA REQUIRED: manifest contains no real market records."
+  ]
+}
