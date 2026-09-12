@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/discovery-premium.css">
 <link rel="stylesheet" href="css/themes.css">
+<link rel="stylesheet" href="css/aurora.css">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icons/icon-192.png">
 <style>
@@ -54,17 +55,30 @@
 <div class="workspace-layout">
   <aside class="sidebar">
     <section class="side-section">
-      <div class="side-label">WORKSPACE</div>
+      <div class="side-label">PRIMARY</div>
       <a class="side-link active" href="index.html">⌂ Home</a>
-      <a class="side-link" href="#companyOverview">◉ Analysis</a>
-      <a class="side-link" href="index.html#scannerSurface">◒ Accumulation Scanner</a>
-      <a class="side-link" href="#hiddenGems">◆ Hidden Gems</a>
-      <a class="side-link" href="#opportunityRadar">◈ Opportunity Radar</a>
-      <a class="side-link" href="nse-data.html">⇩ NSE Data &amp; Research <span class="new-pill">NEW</span></a>
-      <a class="side-link" href="research.html">◷ 1 Year Research</a>
+      <a class="side-link" href="#companyOverview">◉ Research</a>
+      <a class="side-link" href="discover.html">◈ Discover</a>
       <a class="side-link" href="#portfolio">▣ Portfolio</a>
+      <a class="side-link" href="academy.html">Academy <span class="new-pill">NEW</span></a>
     </section>
     <section class="side-section">
+      <div class="side-label">ADVANCED</div>
+      <a class="side-link" href="performance-lab.html">Performance Lab <span class="new-pill">NEW</span></a>
+      <a class="side-link" href="market-intelligence.html">Market Intelligence <span class="new-pill">NEW</span></a>
+      <a class="side-link" href="#watchlist">Watchlist</a>
+      <a class="side-link" href="alerts.html">Alerts</a>
+      <a class="side-link" href="#settings">Settings</a>
+      <a class="side-link" href="nse-data.html">NSE Data &amp; Research</a>
+    </section>
+    <section class="side-section">
+      <div class="side-label">MORE</div>
+      <a class="side-link" href="#hiddenGems">◆ Hidden Gems</a>
+      <a class="side-link" href="index.html#scannerSurface">◒ Accumulation Scanner</a>
+      <a class="side-link" href="#opportunityRadar">◈ Opportunity Radar</a>
+      <a class="side-link" href="research.html">◷ 1 Year Research</a>
+    </section>
+    <section class="side-section" style="display:none">
       <div class="side-label">DISCOVER</div>
       <a class="side-link" href="#vikramLite">VIKRAM Lite <span class="new-pill">NEW</span></a>
       <a class="side-link" href="#marketInsights">Market Insights</a>
@@ -76,11 +90,11 @@
   </aside>
 
   <main class="main-content">
-    <section class="hero-panoramic" id="home">
+    <section class="hero-panoramic aurora-hero" id="home">
       <div class="hero-content">
-        <span class="eyebrow">NSE MARKET INTELLIGENCE</span>
-        <h1>Good Morning, Aditya!</h1>
-        <p>Discover verified market evidence, research signals and accumulation intelligence without synthetic market values.</p>
+        <span class="eyebrow">VIKRAM</span>
+        <h1>Invest with Clarity &amp; Evidence</h1>
+        <p>Research. Understand. Decide. Monitor. — using only verified NSE evidence; nothing here is simulated or estimated.</p>
         <form class="hero-search" id="heroSearchForm">
           <input id="symbolSearchInput" type="text" autocomplete="off" placeholder="Search NSE symbol or company name">
           <button id="searchSubmitBtn" type="submit">Search</button>
@@ -100,19 +114,40 @@
       <article class="index-card"><span>NIFTY MIDCAP 100</span><strong>N/A</strong><div class="delta na">Verified index feed unavailable</div></article>
     </section>
 
-    <section class="action-modules-grid">
-      <a class="action-card module-blue" href="index.html#scannerSurface"><h3>Accumulation Scanner</h3><p>Find verified early and confirmed accumulation evidence across the supported NSE universe.</p></a>
-      <a class="action-card module-purple" href="#hiddenGems"><h3>Hidden Gems</h3><p>Explore discovery candidates from the common verified research layer.</p></a>
-      <a class="action-card module-orange" href="#opportunityRadar"><h3>Opportunity Radar</h3><p>Review cross-factor opportunities with transparent evidence.</p></a>
-      <a class="action-card module-green" href="#vikramLite"><h3>VIKRAM Lite</h3><p>A lightweight market view for fast, disciplined decisions.</p></a>
-      <a class="action-card module-red" href="nse-data.html"><h3>NSE Data &amp; Research <span class="new-pill" style="margin-left:6px">NEW</span></h3><p>See exactly what NSE data VIKRAM has stored — CM/F&amp;O coverage, gaps, delivery/OI availability — and trigger real acquisition.</p></a>
-      <a class="action-card module-teal" href="research.html"><h3>1 Year Research</h3><p>Browse the verified ~1-year NSE history: historical accumulation signals, forward returns, and data coverage.</p></a>
+    <section class="aurora-primary-cards">
+      <a class="aurora-card aurora-card--research" href="#companyOverview"><div><h3>Research a Company</h3><p>Get verified evidence and the VIKRAM Score for any covered NSE stock.</p></div><span class="cta">Start Research →</span></a>
+      <a class="aurora-card aurora-card--discover" href="discover.html"><div><h3>Discover Opportunities</h3><p>Explore the Accumulation Scanner, Hidden Gems and Opportunity Radar.</p></div><span class="cta">Explore →</span></a>
+      <a class="aurora-card aurora-card--portfolio" href="#portfolio"><div><h3>Track Your Portfolio</h3><p>Monitor holdings you've added — stored locally in your browser only.</p></div><span class="cta">View Portfolio →</span></a>
+      <a class="aurora-card aurora-card--academy" href="academy.html"><div><h3>Learn with VIKRAM Academy</h3><p>Structure is live; lesson content is still being built.</p></div><span class="cta">See Status →</span></a>
+    </section>
+
+    <section class="aurora-grid-2" style="margin-top:18px">
+      <div class="aurora-section" id="todaysFocus">
+        <h2>Today's Focus</h2>
+        <p class="desc">The highest-scoring real signals from the current scanner dataset — not a curated pick, just the top of the verified list.</p>
+        <div id="todaysFocusBody"><p class="desc">Loading…</p></div>
+      </div>
+      <div class="aurora-section" id="investorGpsPreview">
+        <h2>Investor GPS <span style="font-weight:400;color:var(--aurora-text-muted);font-size:.8rem">(Preview)</span></h2>
+        <p class="desc">NOT YET IMPLEMENTED. Investor GPS requires Business Quality, Financial Health, and Institutional Activity scoring — none of these data sources exist in VIKRAM yet. This card is a placeholder, not a fabricated score.</p>
+      </div>
+    </section>
+
+    <section class="aurora-section" id="dataTrustPanel">
+      <h2>Data Trust &amp; Freshness</h2>
+      <p class="desc">Real status, computed from the same data the scanner uses — see <a href="nse-data.html" style="color:var(--aurora-gps)">NSE Data &amp; Research</a> for full detail.</p>
+      <div id="dataTrustBody" class="aurora-grid-3"><p class="desc">Loading…</p></div>
+    </section>
+
+    <section class="aurora-section" id="latestInsights">
+      <h2>Latest Insights</h2>
+      <p class="desc">NOT YET IMPLEMENTED — VIKRAM has no news/sector-commentary feed yet. This section intentionally shows nothing fabricated rather than invented headlines.</p>
     </section>
 
     <section class="scanner-container-surface" id="scannerSurface">
       <div class="surface-tabs" role="tablist"><button class="surface-tab active" type="button" role="tab" aria-selected="true">★ Top Opportunities</button><button class="surface-tab" type="button" role="tab" aria-selected="false" disabled title="Not available yet — no UI exists to add symbols to a watchlist">Watchlist <span class="tab-unavailable">Not available yet</span></button><button class="surface-tab" type="button" role="tab" aria-selected="false" disabled title="Not available yet — no UI exists to add symbols to a portfolio">My Portfolio <span class="tab-unavailable">Not available yet</span></button><button class="surface-tab" type="button" role="tab" aria-selected="false" disabled title="Not available yet — no live news feed is connected">Market News <span class="tab-unavailable">Not available yet</span></button></div>
       <div class="scanner-meta" id="scannerMeta"><span>Scanner Data Date: <strong id="scannerDataDate">—</strong></span><span>Data Age: <strong id="scannerDataAge">—</strong></span></div>
-      <div class="filter-controls" aria-label="Scanner filters">
+      <div class="filter-controls aurora-filter-toolbar" aria-label="Scanner filters">
         <label class="filter-chip">Universe<select id="universeFilter"><option value="ALL">All Stocks</option><option value="NIFTY 50">Nifty 50</option><option value="NIFTY 200">Nifty 200</option><option value="NIFTY 500">Nifty 500</option></select></label>
         <span id="universeStatusLine" class="universe-status-line" aria-live="polite">—</span>
         <label class="filter-chip">Verdict<select id="verdictFilter"><option value="ALL">All Verdicts</option><option value="ACCUMULATION CONFIRMED">Confirmed</option><option value="ACCUMULATION STARTING">Starting</option><option value="QUIET ABSORPTION">Quiet Absorption</option><option value="DISTRIBUTION">Distribution</option></select></label>
@@ -367,5 +402,6 @@
 </script>
 <script src="js/researchRepair.js"></script>
 <script src="js/discoveryRepair.js"></script>
+<script src="js/homeAurora.js"></script>
 </body>
 </html>
