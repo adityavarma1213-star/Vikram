@@ -1,0 +1,56 @@
+/* 1-Year Research page — uses only existing VIKRAM design tokens (css/themes.css),
+   no new color system introduced. */
+.eyebrow-tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--accent-color);background:rgba(79,156,255,.12);padding:4px 10px;border-radius:999px}
+
+.source-badge{font-size:9px;font-weight:800;letter-spacing:.04em;padding:3px 9px;border-radius:999px;margin-left:8px;vertical-align:middle;white-space:nowrap}
+.source-badge--backtest{color:#0891b2;background:rgba(8,145,178,.14)}
+.source-badge--live{color:#b45309;background:rgba(180,83,9,.12)}
+
+.table-scroll{width:100%;overflow:auto;border:1px solid var(--border-color);border-radius:12px}
+.table-scroll table{margin:0}
+
+.research-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.research-controls .filter-chip{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;color:var(--text-muted);background:var(--bg-card);border:1px solid var(--border-color);border-radius:999px;padding:6px 6px 6px 12px}
+.research-controls .filter-chip select,.research-controls .filter-chip input{border:0;background:transparent;color:var(--text-primary);font-size:11px;font-weight:700;padding:2px 4px}
+.research-controls input[type="date"]{color-scheme:dark}
+
+.pager{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:11px;color:var(--text-muted)}
+.pager button{border:1px solid var(--border-color);background:var(--bg-card);color:var(--text-primary);border-radius:7px;padding:5px 12px;font-size:11px;cursor:pointer}
+.pager button:disabled{opacity:.4;cursor:default}
+
+.return-cell{font-weight:700;white-space:nowrap}
+.return-positive{color:var(--color-green)}
+.return-negative{color:var(--color-red)}
+.return-na{color:var(--text-muted);font-weight:500}
+
+.signal-row-expand{cursor:pointer}
+.signal-row-expand:hover td{background:rgba(255,255,255,.02)}
+.asm-detail-row td{background:rgba(255,255,255,.015);border-top:0}
+.asm-detail{padding:10px 14px;font-size:11px;color:var(--text-muted);display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.asm-detail div{border:1px solid var(--border-color);border-radius:9px;padding:8px 10px}
+.asm-detail strong{display:block;color:var(--text-primary);margin-bottom:4px;font-size:10px;letter-spacing:.04em;text-transform:uppercase}
+
+.symbol-link{color:var(--accent-color);text-decoration:none;font-weight:700}
+.symbol-link:hover{text-decoration:underline}
+
+code{background:var(--bg-card);border:1px solid var(--border-color);border-radius:5px;padding:1px 6px;font-size:0.85em}
+
+@media(max-width:760px){
+  .research-controls{gap:7px}
+  .grid-layout.cols-4{grid-template-columns:repeat(2,1fr)}
+}
+
+/* NSE Data Management page */
+.research-workflow-trail{font-size:11px;color:var(--text-muted);font-weight:700;margin-top:10px}
+.research-workflow-trail strong{color:var(--accent-color)}
+.research-workflow-trail a{color:var(--text-primary);text-decoration:none}
+.research-workflow-trail a:hover{color:var(--accent-color);text-decoration:underline}
+.metric-group-list{display:flex;flex-direction:column;gap:8px}
+.metric-group-list .metric-group{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--border-color);border-radius:9px;padding:9px 12px}
+.metric-group-list .metric-label{font-size:11px}
+.metric-group-list .metric-value{font-size:13px}
+.quality-flag-item{border:1px solid rgba(180,83,9,.35);background:rgba(180,83,9,.08);border-radius:9px;padding:8px 12px;margin-bottom:8px;font-size:12px}
+.quality-flag-item strong{color:#f2c14e}
+.acquire-btn{padding:10px 18px;font-size:0.9rem}
+.acquire-btn:disabled{opacity:.5;cursor:not-allowed}
+.acquisition-log{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:9px;padding:10px 12px;max-height:220px;overflow:auto;white-space:pre-wrap}

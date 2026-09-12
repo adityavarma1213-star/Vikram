@@ -94,12 +94,79 @@ async function materializeScannerResults(){
   return results.length;
 }
 
+// Real, database-backed concurrency lock (Postgres advisory lock — no schema migration needed).
+// pg_try_advisory_lock is non-blocking: it returns immediately with true/false rather than
+// queuing, which is exactly what "reject a second concurrent run instead of queuing it" needs.
+// A fixed, arbitrary 63-bit key identifies "the NSE ingestion job" specifically; it does not
+// collide with any other advisory lock use elsewhere in this codebase (there is none).
+//
+// IMPORTANT: advisory locks are scoped to a single Postgres SESSION (physical connection), not to
+// the logical `pool`. Acquiring via one pool.query() call and releasing via another can silently
+// land on two DIFFERENT pooled connections — the "release" would then unlock nothing, and the
+// original lock would stay held until that connection is later recycled/closed. So the lock is
+// acquired and released on ONE dedicated client held for the entire runIncrementalIngest call,
+// exactly like ingestCm/ingestFo already do for their transactions.
+const INGESTION_LOCK_KEY = 583920147; // arbitrary constant, unique to this job
+async function recordSystemRun(status, reason){
+  try{ await pool.query(`INSERT INTO ingestion_runs(segment,trade_date,status,error) VALUES('SYSTEM',NULL,$1,$2)`,[status,reason]); }
+  catch(e){ console.error('Failed to record system ingestion_runs row:',e.message); }
+}
+
+// Extracted from the original main() below so both the CLI entrypoint and the new
+// POST /api/admin/ingest/run route (server/src/index.js) share the exact same real acquisition
+// logic — same backward search window, same real ingestCm/ingestFo/materializeScannerResults
+// calls, same skip-on-not-yet-published behavior. No ingestion, validation, or scoring logic was
+// changed by this extraction — only the return value changed, from console.log+return to a
+// structured result object the API route can report back to the browser honestly.
+async function runIncrementalIngest({ searchWindowDays = 10 } = {}) {
+  const lockClient = await pool.connect();
+  try {
+    const lockQ = await lockClient.query('SELECT pg_try_advisory_lock($1) AS locked',[INGESTION_LOCK_KEY]);
+    if (!lockQ.rows[0]?.locked) {
+      await recordSystemRun('blocked', 'INGESTION_ALREADY_RUNNING');
+      return { status: 'BLOCKED', reason: 'INGESTION_ALREADY_RUNNING', attempts: [] };
+    }
+    try {
+      const anchor = toIstCalendarDate();
+      const attempts = [];
+      for (let i = 0; i < searchWindowDays; i += 1) {
+        const x = addDays(anchor, -i);
+        const ymd = formatYmd(x);
+        try {
+          const cm = await ingestCm(x);
+          const fo = await ingestFo(x);
+          const materialized = await materializeScannerResults();
+          attempts.push({ date: ymd, status: 'INGESTED', cmRows: cm, foRows: fo, materializedSymbols: materialized });
+          return { status: 'SUCCESS', ingestedDate: ymd, cmRows: cm, foRows: fo, materializedSymbols: materialized, attempts };
+        } catch (e) {
+          attempts.push({ date: ymd, status: 'SKIPPED', reason: e.message });
+        }
+      }
+      const reason = `No recent NSE trading-day file was available in the last ${searchWindowDays} calendar days.`;
+      await recordSystemRun('no_new_data', reason);
+      return { status: 'NO_NEW_DATA', reason, attempts };
+    } catch (e) {
+      await recordSystemRun('failed', e.message);
+      return { status: 'FAILED', reason: e.message, attempts: [] };
+    } finally {
+      try { await lockClient.query('SELECT pg_advisory_unlock($1)',[INGESTION_LOCK_KEY]); }
+      catch(e){ console.error('Failed to release ingestion lock:',e.message); }
+    }
+  } finally {
+    lockClient.release();
+  }
+}
+
 async function main(){
-  const anchor=toIstCalendarDate();
-  const SEARCH_WINDOW_DAYS=10;
-  for(let i=0;i<SEARCH_WINDOW_DAYS;i++){const x=addDays(anchor,-i);try{const cm=await ingestCm(x);const fo=await ingestFo(x);console.log(`INGESTED ${formatYmd(x)} CM=${cm} FO=${fo}`);const materialized=await materializeScannerResults();console.log(`MATERIALIZED scanner_results for ${materialized} symbol(s)`);return;}catch(e){console.log(`SKIP ${formatYmd(x)}: ${e.message}`);}}
-  throw new Error(`No recent NSE trading-day file was available in the last ${SEARCH_WINDOW_DAYS} calendar days.`);
+  const result = await runIncrementalIngest();
+  if (result.status === 'SUCCESS') {
+    console.log(`INGESTED ${result.ingestedDate} CM=${result.cmRows} FO=${result.foRows}`);
+    console.log(`MATERIALIZED scanner_results for ${result.materializedSymbols} symbol(s)`);
+    return;
+  }
+  for (const a of result.attempts) console.log(`SKIP ${a.date}: ${a.reason}`);
+  throw new Error(result.reason);
 }
 
 if(require.main===module)main().then(()=>pool.end()).catch(e=>{console.error(e);pool.end();process.exit(1)});
-module.exports={ingestCm,ingestFo,materializeScannerResults};
+module.exports={ingestCm,ingestFo,materializeScannerResults,runIncrementalIngest};

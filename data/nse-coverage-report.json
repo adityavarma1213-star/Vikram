@@ -1,0 +1,140 @@
+{
+  "status": "VERIFIED",
+  "generatedAt": "2026-09-12T18:53:48.496Z",
+  "source": "data/market-history/*.json (real NSE EOD bhavcopy-derived files)",
+  "dateRange": {
+    "first": "2025-09-02",
+    "last": "2026-09-11"
+  },
+  "tradingSessions": 268,
+  "cm": {
+    "daysWithData": 268,
+    "daysWithoutData": 0,
+    "totalRows": 642710,
+    "rowsWithDeliveryValuePresent": 642710,
+    "deliveryFieldCoveragePct": 100,
+    "emptyDates": [],
+    "suspectedDuplicateSessions": [
+      {
+        "date": "2025-10-22",
+        "comparedTo": "2025-10-21",
+        "symbolsCompared": 2291
+      },
+      {
+        "date": "2025-11-05",
+        "comparedTo": "2025-11-04",
+        "symbolsCompared": 2286
+      },
+      {
+        "date": "2025-12-25",
+        "comparedTo": "2025-12-24",
+        "symbolsCompared": 2375
+      },
+      {
+        "date": "2026-01-15",
+        "comparedTo": "2026-01-14",
+        "symbolsCompared": 2390
+      },
+      {
+        "date": "2026-01-26",
+        "comparedTo": "2026-01-23",
+        "symbolsCompared": 2395
+      },
+      {
+        "date": "2026-03-03",
+        "comparedTo": "2026-03-02",
+        "symbolsCompared": 2423
+      },
+      {
+        "date": "2026-03-26",
+        "comparedTo": "2026-03-25",
+        "symbolsCompared": 2438
+      },
+      {
+        "date": "2026-03-31",
+        "comparedTo": "2026-03-30",
+        "symbolsCompared": 2448
+      },
+      {
+        "date": "2026-04-03",
+        "comparedTo": "2026-04-02",
+        "symbolsCompared": 2451
+      },
+      {
+        "date": "2026-04-14",
+        "comparedTo": "2026-04-13",
+        "symbolsCompared": 2456
+      },
+      {
+        "date": "2026-05-01",
+        "comparedTo": "2026-04-30",
+        "symbolsCompared": 2455
+      },
+      {
+        "date": "2026-05-28",
+        "comparedTo": "2026-05-27",
+        "symbolsCompared": 2463
+      },
+      {
+        "date": "2026-06-26",
+        "comparedTo": "2026-06-25",
+        "symbolsCompared": 2406
+      }
+    ]
+  },
+  "fo": {
+    "daysWithData": 255,
+    "daysWithoutData": 13,
+    "totalRows": 158898,
+    "rowsWithOiPresent": 158898,
+    "oiFieldCoveragePct": 100,
+    "emptyDates": [
+      "2025-10-22",
+      "2025-11-05",
+      "2025-12-25",
+      "2026-01-15",
+      "2026-01-26",
+      "2026-03-03",
+      "2026-03-26",
+      "2026-03-31",
+      "2026-04-03",
+      "2026-04-14",
+      "2026-05-01",
+      "2026-05-28",
+      "2026-06-26"
+    ]
+  },
+  "dataQualityFlags": [
+    {
+      "date": "2026-09-04",
+      "issue": "2633 of 2633 CM rows (100%) report exactly 0% delivery — verified anomaly, not fabricated, not silently corrected"
+    },
+    {
+      "date": "2026-09-07",
+      "issue": "2652 of 2652 CM rows (100%) report exactly 0% delivery — verified anomaly, not fabricated, not silently corrected"
+    },
+    {
+      "date": "2026-09-08",
+      "issue": "2650 of 2650 CM rows (100%) report exactly 0% delivery — verified anomaly, not fabricated, not silently corrected"
+    },
+    {
+      "date": "2026-09-09",
+      "issue": "2644 of 2644 CM rows (100%) report exactly 0% delivery — verified anomaly, not fabricated, not silently corrected"
+    },
+    {
+      "date": "2026-09-10",
+      "issue": "2638 of 2638 CM rows (100%) report exactly 0% delivery — verified anomaly, not fabricated, not silently corrected"
+    },
+    {
+      "date": "2026-09-11",
+      "issue": "2637 of 2637 CM rows (100%) report exactly 0% delivery — verified anomaly, not fabricated, not silently corrected"
+    }
+  ],
+  "unaccountedWeekdays": {
+    "status": "DATA_INSUFFICIENT_TO_CLASSIFY",
+    "reason": "No NSE trading-holiday calendar exists in this repository, so a weekday with no stored file cannot be distinguished from a genuine market holiday. Listed for disclosure only — not asserted to be a gap or an error.",
+    "dates": [
+      "2025-10-02"
+    ]
+  }
+}

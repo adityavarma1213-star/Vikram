@@ -125,6 +125,56 @@ app.get('/api/alerts/history',requireAuthMw,async(req,res)=>{try{const q=await p
 app.get('/api/push/vapid-public-key',(_req,res)=>{if(!process.env.VAPID_PUBLIC_KEY)return res.status(503).json({error:'Push provider not configured.'});res.json({publicKey:process.env.VAPID_PUBLIC_KEY});});
 app.post('/api/push/subscribe',requireAuthMw,async(req,res)=>{try{const s=req.body?.subscription;if(!s?.endpoint||!s?.keys?.p256dh||!s?.keys?.auth)return res.status(400).json({error:'Invalid push subscription.'});const q=await pool.query(`INSERT INTO push_subscriptions(owner_key,endpoint,p256dh,auth,invalidated_at) VALUES($1,$2,$3,$4,NULL) ON CONFLICT(endpoint) DO UPDATE SET owner_key=EXCLUDED.owner_key,p256dh=EXCLUDED.p256dh,auth=EXCLUDED.auth,invalidated_at=NULL RETURNING id`,[owner(req),s.endpoint,s.keys.p256dh,s.keys.auth]);res.status(201).json({id:q.rows[0].id});}catch(e){res.status(500).json({error:e.message});}});
 app.get('/api/stock/:symbol',async(req,res)=>{try{const symbols=normalizeSymbols(req.params.symbol);if(symbols.length!==1)return res.status(400).json({error:'Invalid symbol.'});const period=normalizePeriod(req.query.period);const result=(await scan(symbols,period))[0];if(!result?.tradeDate)return res.status(404).json({error:`No verified EOD data for ${symbols[0]}.`});res.json({result,period});}catch(e){res.status(500).json({error:'Stock detail failed.',detail:e.message});}});
+// --- 1-Year Research (Part 18): thin, DB-independent passthrough of already-computed static
+// artifacts (see server/src/researchStatic.js). Deliberately does NOT touch Postgres or
+// re-run any scan/backtest — the research.html frontend already reads data/scanner.json and
+// backtest/REAL_1YEAR_BACKTEST_RESULT.json directly as static files, so these routes exist only
+// for API-based consumers and for parity when the site is served from this Node app rather than
+// a static host.
+const { getCoverage: getResearchCoverage, getBacktest: getResearchBacktest, getCoverageReport: getResearchCoverageReport } = require('./researchStatic');
+app.get('/api/research/coverage',(_req,res)=>{
+  const coverage = getResearchCoverage();
+  if (coverage.status !== 'VERIFIED') return res.status(503).json(coverage);
+  res.json(coverage);
+});
+app.get('/api/research/backtest',(_req,res)=>{
+  const backtest = getResearchBacktest();
+  if (backtest.status !== 'VERIFIED') return res.status(503).json({ status: backtest.status, reason: backtest.reason });
+  res.json(backtest.data);
+});
+app.get('/api/research/coverage-report',(_req,res)=>{
+  const report = getResearchCoverageReport();
+  if (report.status !== 'VERIFIED') return res.status(503).json({ status: report.status, reason: report.reason });
+  res.json(report.data);
+});
+// --- NSE Data Management (acquisition). Gated behind BOTH authentication (requireAuthMw) AND
+// server-side admin authorization (requireAdmin, backed by the ADMIN_EMAILS allowlist — see
+// server/src/adminAuth.js). Being logged in is NOT sufficient on its own: any visitor can create
+// an account through the same auto-register flow Alerts uses, so triggering a real NSE fetch +
+// database write requires being on the admin allowlist too. This calls the REAL, unmodified
+// ingestCm/ingestFo/materializeScannerResults functions in server/src/ingest.js — the same code
+// path the scheduled cron job uses — it does not simulate, mock, or fabricate a result. A
+// Postgres advisory lock inside runIncrementalIngest rejects a second concurrent run with
+// INGESTION_ALREADY_RUNNING rather than queuing or racing it.
+const { runIncrementalIngest } = require('./ingest');
+const { requireAdmin } = require('./adminAuth');
+app.post('/api/admin/ingest/run',requireAuthMw,requireAdmin(pool),async(_req,res)=>{
+  try{
+    const result = await runIncrementalIngest();
+    const statusCode = { SUCCESS: 200, NO_NEW_DATA: 202, BLOCKED: 409, FAILED: 502 }[result.status] || 500;
+    res.status(statusCode).json(result);
+  }catch(e){
+    res.status(502).json({ status: 'ERROR', reason: e.message });
+  }
+});
+app.get('/api/admin/ingestion-runs',requireAuthMw,requireAdmin(pool),async(_req,res)=>{
+  try{
+    const q = await pool.query('SELECT id,segment,trade_date,status,row_count,invalid_count,schema_version,error,created_at FROM ingestion_runs ORDER BY created_at DESC LIMIT 30');
+    res.json({ runs: q.rows, note: 'CM/FO rows are only inserted on a successful write; segment=SYSTEM rows (status: blocked/no_new_data/failed) record acquisition attempts that did not result in a successful per-day ingestion.' });
+  }catch(e){
+    res.status(503).json({ status: 'DATA_INSUFFICIENT', reason: e.message });
+  }
+});
 const publicRoot=path.resolve(__dirname,'../..');app.use(express.static(publicRoot,{extensions:['html'],index:'index.html'}));app.get('/scanner',(_req,res)=>res.sendFile(path.join(publicRoot,'scanner.html')));app.get('/',(_req,res)=>res.sendFile(path.join(publicRoot,'index.html')));
 const port=Number(process.env.PORT)||3000;const server=app.listen(port,()=>console.log(`VIKRAM server listening on ${port}`));
 const shutdown=signal=>{console.log(`${signal}: shutting down`);server.close(async()=>{await pool.end();process.exit(0);});};process.on('SIGTERM',()=>shutdown('SIGTERM'));process.on('SIGINT',()=>shutdown('SIGINT'));

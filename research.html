@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1-Year Research — VIKRAM</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/themes.css">
+<link rel="stylesheet" href="css/research.css">
+<link rel="manifest" href="manifest.json">
+<script src="js/themeEngine.js"></script>
+</head>
+<body>
+<header class="app-header">
+  <div class="header-container">
+    <div class="brand-identity"><span class="brand-logo">🧠</span><span class="brand-name">VIKRAM</span></div>
+    <nav class="app-navigation" aria-label="Main Navigation">
+      <ul class="nav-list">
+        <li><a class="nav-link" href="index.html#home">Home</a></li>
+        <li><a class="nav-link" href="index.html#companyOverview">Analysis</a></li>
+        <li><a class="nav-link" href="accumulation.html">Accumulation Scanner</a></li>
+        <li><a class="nav-link" href="index.html#hiddenGems">Hidden Gems</a></li>
+        <li><a class="nav-link" href="index.html#opportunityRadar">Opportunity Radar</a></li>
+        <li><a class="nav-link" href="nse-data.html">NSE Data</a></li>
+        <li><a class="nav-link active" href="research.html" aria-current="page">1 Year Research</a></li>
+        <li><a class="nav-link" href="index.html#portfolio">Portfolio</a></li>
+        <li><a class="nav-link" href="about.html">About</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="app-container" style="max-width:1320px;">
+
+  <section class="hero-section" style="padding:36px 32px;text-align:left">
+    <span class="eyebrow-tag">VERIFIED NSE EOD DATA</span>
+    <h1 class="hero-title" style="font-size:2.1rem;margin:10px 0 6px">1-Year NSE Research</h1>
+    <p class="hero-subtitle" style="font-size:1rem;margin-bottom:6px">Research the existing, genuine ~1-year NSE dataset already stored by VIKRAM — historical accumulation signals, real forward returns, and full data-coverage disclosure. Nothing on this page is estimated, simulated, or fabricated.</p>
+    <p id="coverageHeadline" class="text-muted" style="margin:0;font-size:0.95rem">Loading verified data coverage…</p>
+  </section>
+
+  <section class="dashboard-card" id="dataCoverage">
+    <h2 class="card-headline">Data Coverage</h2>
+    <p class="text-muted" style="margin-top:-6px">Source: <code>backtest/REAL_1YEAR_BACKTEST_RESULT.json</code> → <code>manifestSummary</code>, cross-checked against <code>data/scanner.json</code>.</p>
+    <div id="coverageGrid" class="grid-layout cols-4" style="margin-top:16px">
+      <p class="text-muted">Loading…</p>
+    </div>
+    <p id="coverageDisclosure" class="text-muted" style="margin-top:14px;font-size:0.85rem"></p>
+  </section>
+
+  <section class="dashboard-card" id="signalOverview">
+    <h2 class="card-headline">Signal Overview &amp; Performance <span class="source-badge source-badge--backtest">REAL 1-YEAR BACKTEST RESULT</span></h2>
+    <p class="text-muted" style="margin-top:-6px">Every ACCUMULATION CONFIRMED detection event produced by the real, production <code>accumulation/engine.js</code> across the full verified history, walked forward day-by-day with no look-ahead. Forward returns use only real future NSE closes that actually exist in the stored data — never estimated or interpolated.</p>
+    <div id="signalOverviewGrid" style="margin-top:14px">
+      <p class="text-muted">Loading…</p>
+    </div>
+    <div class="table-scroll" style="margin-top:16px">
+      <table class="metric-table" id="horizonTable">
+        <thead><tr><th>Horizon</th><th>Signals</th><th>Computed</th><th>Insufficient Future Data</th><th>Win Rate</th><th>Avg Return</th></tr></thead>
+        <tbody><tr><td colspan="6" class="text-muted">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="dashboard-card" id="currentScanner">
+    <h2 class="card-headline">Trailing-Window Scanner View <span class="source-badge source-badge--live">CURRENT / LIVE SCANNER DATA</span></h2>
+    <p class="text-muted" style="margin-top:-6px">This is <strong>today's</strong> scanner snapshot recomputed using different trailing lookback windows (1W / 1M / 3M / 6M / 1Y) of real history ending on the latest verified trading date. It is <strong>not</strong> a historical timeline of past signals — for that, see Historical Signal Research below.</p>
+    <div class="research-controls">
+      <label class="filter-chip">Window
+        <select id="periodSelect">
+          <option value="1D">1 Day</option>
+          <option value="1W">1 Week</option>
+          <option value="1M">1 Month</option>
+          <option value="3M">3 Months</option>
+          <option value="6M">6 Months</option>
+          <option value="1Y" selected>1 Year</option>
+        </select>
+      </label>
+      <label class="filter-chip">Universe
+        <select id="periodUniverse">
+          <option value="ALL">All Stocks</option>
+          <option value="NIFTY 50">Nifty 50</option>
+          <option value="NIFTY 200">Nifty 200</option>
+          <option value="NIFTY 500">Nifty 500</option>
+        </select>
+      </label>
+      <label class="filter-chip">Verdict
+        <select id="periodVerdict">
+          <option value="ALL">All Verdicts</option>
+          <option value="ACCUMULATION CONFIRMED">Confirmed</option>
+          <option value="ACCUMULATION STARTING">Starting</option>
+          <option value="QUIET ABSORPTION">Quiet Absorption</option>
+          <option value="DISTRIBUTION">Distribution</option>
+        </select>
+      </label>
+      <input id="periodSearch" type="search" class="table-search-input" placeholder="Search symbol or name">
+      <span id="periodStatusLine" class="text-muted" style="font-size:11px"></span>
+    </div>
+    <div class="table-scroll" style="margin-top:12px;max-height:480px">
+      <table class="metric-table" id="periodTable">
+        <thead><tr><th>Stock</th><th>Close</th><th>Change</th><th>Score</th><th>Verdict</th><th>Volume</th><th>Delivery</th></tr></thead>
+        <tbody><tr><td colspan="7" class="text-muted">Loading…</td></tr></tbody>
+      </table>
+    </div>
+    <div id="periodPagination" class="pager"></div>
+  </section>
+
+  <section class="dashboard-card" id="historicalSignals">
+    <h2 class="card-headline" id="asm">Historical Signal Research <span class="source-badge source-badge--backtest">REAL 1-YEAR BACKTEST RESULT</span></h2>
+    <p class="text-muted" style="margin-top:-6px">Every row is a real ACCUMULATION CONFIRMED detection event (consecutive CONFIRMED trading sessions grouped into one event, entered at the event's first detection date/price — never a later, more favourable day in the same streak). Verdict is <strong>ACCUMULATION CONFIRMED</strong> for every row by construction — this backtest only tracks that verdict's events, so Score/Volume/Delivery/OI are <strong>DATA N/A</strong> (not tracked per historical event in this artifact) and are not shown as columns to avoid implying otherwise.</p>
+    <p class="text-muted" id="pitNotice" style="font-size:0.85rem">HISTORICAL PIT MEMBERSHIP: DATA INSUFFICIENT — only today's index constituents are known, not who belonged to Nifty 50/200/500 on each historical signal date, so no universe filter is applied here (applying today's membership to past events would introduce survivorship bias).</p>
+
+    <div class="research-controls">
+      <input id="signalSymbolSearch" type="search" class="table-search-input" placeholder="Filter by symbol">
+      <label class="filter-chip">From <input id="signalDateFrom" type="date"></label>
+      <label class="filter-chip">To <input id="signalDateTo" type="date"></label>
+      <label class="filter-chip">Result
+        <select id="signalResultFilter">
+          <option value="ALL">Any</option>
+          <option value="POSITIVE">Positive 20D return</option>
+          <option value="NEGATIVE">Negative 20D return</option>
+        </select>
+      </label>
+      <label class="filter-chip">Sort
+        <select id="signalSort">
+          <option value="signalDate:desc">Date (Newest first)</option>
+          <option value="signalDate:asc">Date (Oldest first)</option>
+          <option value="symbol:asc">Symbol (A→Z)</option>
+          <option value="return20D:desc">20D Return (High→Low)</option>
+          <option value="return20D:asc">20D Return (Low→High)</option>
+        </select>
+      </label>
+      <button id="signalDateOutOfRange" class="text-muted" style="display:none;border:1px dashed var(--border-color);background:transparent;border-radius:8px;padding:6px 10px;font-size:11px" disabled>DATA NOT AVAILABLE FOR THIS PERIOD</button>
+      <button id="exportCsvBtn" class="btn btn-primary" style="padding:8px 16px;font-size:0.85rem;margin-left:auto">Export CSV</button>
+    </div>
+    <p id="signalResultSummary" class="text-muted" style="font-size:11px;margin:8px 0"></p>
+
+    <div class="table-scroll">
+      <table class="metric-table" id="signalTable">
+        <thead>
+          <tr>
+            <th>Signal Date</th><th>Symbol</th><th>Entry Price</th><th>Streak</th><th>Status</th>
+            <th>1D</th><th>5D</th><th>20D</th><th>60D</th><th>120D</th>
+          </tr>
+        </thead>
+        <tbody><tr><td colspan="10" class="text-muted">Loading…</td></tr></tbody>
+      </table>
+    </div>
+    <div id="signalPagination" class="pager"></div>
+    <p class="text-muted" style="margin-top:14px;font-size:0.8rem">Expand any row (click it) for the Accumulation Success Matrix detail — MFE / MAE / max drawdown per horizon, from <code>backtest/REAL_1YEAR_BACKTEST_RESULT.json</code>'s <code>asm</code> section. ASM is research/validation only, uses EOD closes only (no intraday high/low), and is <strong>not</strong> a trading signal or recommendation.</p>
+    <p class="text-muted" id="corporateActionNotice" style="font-size:0.8rem"></p>
+  </section>
+
+  <section class="dashboard-card">
+    <h2 class="card-headline">Data Integrity Status</h2>
+    <div class="grid-layout cols-4" style="margin-top:10px">
+      <div class="metric-group"><span class="metric-label">Historical Signals</span><span class="metric-value" style="font-size:0.95rem;color:var(--color-green)">VERIFIED</span></div>
+      <div class="metric-group"><span class="metric-label">Corporate Actions</span><span class="metric-value" style="font-size:0.95rem;color:#f2c14e" id="caStatusBadge">DATA INSUFFICIENT</span></div>
+      <div class="metric-group"><span class="metric-label">Historical PIT Universe</span><span class="metric-value" style="font-size:0.95rem;color:#f2c14e">DATA INSUFFICIENT</span></div>
+      <div class="metric-group"><span class="metric-label">Benchmark-Relative Returns</span><span class="metric-value" style="font-size:0.95rem;color:#f2c14e">NOT AVAILABLE</span></div>
+    </div>
+  </section>
+
+</main>
+<script src="js/universeMembership.js"></script>
+<script src="js/research.js"></script>
+</body>
+</html>
