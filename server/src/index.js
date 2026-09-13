@@ -11,6 +11,28 @@ const {liveMarketDataStatus}=require('./liveData/gate');
 const {TokenManager}=require('./liveData/tokenManager');
 const liveTokenManager=new TokenManager();
 const app=express(); app.disable('x-powered-by'); app.use(express.json({limit:'100kb'}));
+
+// --- Production integration: CORS -----------------------------------------------------------
+// This service serves the frontend itself (see express.static below), so same-origin requests
+// (the primary, self-contained Render deployment) never need CORS at all. CORS only matters for
+// the separate GitHub Pages mirror of this same repo, which is a genuinely different origin and
+// cannot run a backend of its own. CORS_ALLOWED_ORIGIN lets the real deployer set the exact
+// origin; the default below is the standard GitHub Pages URL for this exact repo
+// (https://<owner>.github.io), derived from the repository's own name -- not independently
+// verified as live from this sandbox (no access to check). Never wildcard ("*") -- an explicit,
+// single allowed origin only.
+const CORS_ALLOWED_ORIGIN = process.env.CORS_ALLOWED_ORIGIN || 'https://adityavarma1213-star.github.io';
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin === CORS_ALLOWED_ORIGIN) {
+    res.setHeader('Access-Control-Allow-Origin', CORS_ALLOWED_ORIGIN);
+    res.setHeader('Vary', 'Origin');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+    if (req.method === 'OPTIONS') return res.sendStatus(204);
+  }
+  next();
+});
 if(!process.env.DATABASE_URL){console.error('DATABASE_URL is required');process.exit(1);}
 if(!process.env.AUTH_SECRET||process.env.AUTH_SECRET.length<16){console.error('AUTH_SECRET is required (>=16 chars) to run the server securely');process.exit(1);}
 const pool=new Pool({connectionString:process.env.DATABASE_URL,ssl:process.env.DATABASE_URL.includes('sslmode=require')?{rejectUnauthorized:false}:undefined,max:10,idleTimeoutMillis:30000,connectionTimeoutMillis:10000});
@@ -176,5 +198,16 @@ app.get('/api/admin/ingestion-runs',requireAuthMw,requireAdmin(pool),async(_req,
   }
 });
 const publicRoot=path.resolve(__dirname,'../..');app.use(express.static(publicRoot,{extensions:['html'],index:'index.html'}));app.get('/scanner',(_req,res)=>res.sendFile(path.join(publicRoot,'scanner.html')));app.get('/',(_req,res)=>res.sendFile(path.join(publicRoot,'index.html')));
+// Production integration: honest 404 for unmatched API routes (never silently fall through to
+// the SPA's index.html for an /api/* path -- that would look like a confusing empty success).
+app.use('/api', (_req, res) => res.status(404).json({ status: 'VERIFICATION_BLOCKED', reason: 'Unknown API endpoint.' }));
+// Production integration: final safety net for any route handler that throws synchronously or
+// forwards an error via next(err) instead of handling it locally. Every existing route already
+// has its own try/catch returning an honest status -- this only catches what those miss, so a
+// real backend bug surfaces as SERVICE_UNAVAILABLE instead of a raw stack trace or a hang.
+app.use((err, _req, res, _next) => {
+  console.error('Unhandled route error:', err);
+  res.status(503).json({ status: 'SERVICE_UNAVAILABLE', reason: 'An unexpected server error occurred.' });
+});
 const port=Number(process.env.PORT)||3000;const server=app.listen(port,()=>console.log(`VIKRAM server listening on ${port}`));
 const shutdown=signal=>{console.log(`${signal}: shutting down`);server.close(async()=>{await pool.end();process.exit(0);});};process.on('SIGTERM',()=>shutdown('SIGTERM'));process.on('SIGINT',()=>shutdown('SIGINT'));

@@ -46,9 +46,19 @@
     return out.token;
   }
 
+  // Production integration: bound every backend call (see accumulation/api.js for the same
+  // pattern) so an unreachable backend fails fast with an honest message instead of hanging.
+  async function fetchWithTimeout(url, options, timeoutMs) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs || 15000);
+    try { return await fetch(url, { ...options, signal: controller.signal }); }
+    catch (e) { if (e.name === 'AbortError') throw new Error('SERVICE_UNAVAILABLE: backend did not respond in time.'); throw e; }
+    finally { clearTimeout(timer); }
+  }
+
   async function authedFetch(path, options = {}) {
     const token = await ensureAuth();
-    const res = await fetch(API_BASE + path, { ...options, headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`, ...(options.headers || {}) } });
+    const res = await fetchWithTimeout(API_BASE + path, { ...options, headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`, ...(options.headers || {}) } });
     if (res.status === 401) { localStorage.removeItem(TOKEN_KEY); throw new Error('Your session expired — please retry.'); }
     const body = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(body.reason || body.error || `Request failed (${res.status})`);

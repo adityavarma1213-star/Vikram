@@ -21,8 +21,18 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', installGlobalNavigation, { once: true });
   else installGlobalNavigation();
 
+  // Production integration: bound every backend call so an unreachable/hanging backend surfaces
+  // as an honest timeout error within a few seconds, instead of leaving the UI waiting forever.
+  async function fetchWithTimeout(url, options, timeoutMs) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs || 15000);
+    try { return await fetch(url, { ...options, signal: controller.signal }); }
+    catch (e) { if (e.name === 'AbortError') throw new Error('SERVICE_UNAVAILABLE: backend did not respond in time.'); throw e; }
+    finally { clearTimeout(timer); }
+  }
+
   async function request(path, options) {
-    const res = await fetch(`${API_BASE}${path}`, { headers: { Accept: 'application/json' }, ...options });
+    const res = await fetchWithTimeout(`${API_BASE}${path}`, { headers: { Accept: 'application/json' }, ...options });
     const body = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(body.error || `API request failed (${res.status})`);
     return body;
