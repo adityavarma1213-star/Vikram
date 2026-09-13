@@ -1,0 +1,26 @@
+{
+  "_purpose": "Cross-reference for the 13 CM dates flagged as payload-identical to the prior trading day (see scripts/buildNseCoverageReport.js). This is NOT an NSE-sourced file -- VIKRAM has no ingested official NSE holiday circular. It is a manually-researched cross-reference built from public secondary sources, used only to classify each duplicate date as LIKELY_HOLIDAY or UNRESOLVED, never to silently delete or relabel data.",
+  "_limitation": "Sources are third-party holiday-calendar publishers (smallcase.com, stablemoney.in, ebc.com, thiyagi.com), not the primary NSE circular (NSE/CMTR/71775 for 2026; the equivalent 2025 circular was not directly fetched -- this sandbox's network egress does not permit reaching nseindia.com). This file is evidence, not proof of NSE source authenticity per forensic finding P1-09.",
+  "researchedOn": "2026-09-13",
+  "classifications": [
+    { "date": "2025-10-22", "classification": "LIKELY_HOLIDAY", "holidayName": "Diwali Balipratipada / Govardhan Puja (day after Diwali)", "confidence": "MEDIUM", "note": "Multiple secondary sources describe 'Diwali Oct 21-22' as a closure window; the primary confirmed date is Oct 21 (Muhurat Trading). Oct 22 as a second closure day is not independently confirmed from a primary source." },
+    { "date": "2025-11-05", "classification": "LIKELY_HOLIDAY", "holidayName": "Guru Nanak Jayanti", "confidence": "HIGH", "note": "Multiple independent secondary sources agree on this exact date for 2025." },
+    { "date": "2025-12-25", "classification": "LIKELY_HOLIDAY", "holidayName": "Christmas", "confidence": "HIGH", "note": "Well-established annual holiday, multiple sources agree." },
+    { "date": "2026-01-15", "classification": "UNRESOLVED", "holidayName": null, "confidence": "N/A", "note": "Does NOT appear on the official 2026 NSE holiday list (15 dates, NSE Circular NSE/CMTR/71775, as republished by smallcase.com). No known Indian national holiday falls on this date. This is the strongest candidate for a genuine downloader/pipeline defect rather than a legitimate non-trading day." },
+    { "date": "2026-01-26", "classification": "LIKELY_HOLIDAY", "holidayName": "Republic Day", "confidence": "HIGH", "note": "Matches official 2026 NSE holiday circular exactly." },
+    { "date": "2026-03-03", "classification": "LIKELY_HOLIDAY", "holidayName": "Holi", "confidence": "HIGH", "note": "Matches official 2026 NSE holiday circular exactly." },
+    { "date": "2026-03-26", "classification": "LIKELY_HOLIDAY", "holidayName": "Shri Ram Navami", "confidence": "HIGH", "note": "Matches official 2026 NSE holiday circular exactly." },
+    { "date": "2026-03-31", "classification": "LIKELY_HOLIDAY", "holidayName": "Shri Mahavir Jayanti", "confidence": "HIGH", "note": "Matches official 2026 NSE holiday circular exactly." },
+    { "date": "2026-04-03", "classification": "LIKELY_HOLIDAY", "holidayName": "Good Friday", "confidence": "HIGH", "note": "Matches official 2026 NSE holiday circular exactly." },
+    { "date": "2026-04-14", "classification": "LIKELY_HOLIDAY", "holidayName": "Dr. Baba Saheb Ambedkar Jayanti", "confidence": "HIGH", "note": "Matches official 2026 NSE holiday circular exactly." },
+    { "date": "2026-05-01", "classification": "LIKELY_HOLIDAY", "holidayName": "Maharashtra Day", "confidence": "HIGH", "note": "Matches official 2026 NSE holiday circular exactly." },
+    { "date": "2026-05-28", "classification": "LIKELY_HOLIDAY", "holidayName": "Bakri Id", "confidence": "HIGH", "note": "Matches official 2026 NSE holiday circular exactly." },
+    { "date": "2026-06-26", "classification": "LIKELY_HOLIDAY", "holidayName": "Muharram", "confidence": "HIGH", "note": "Matches official 2026 NSE holiday circular exactly." }
+  ],
+  "sources": [
+    "https://www.smallcase.com/learn/nse-holidays-2026/ (republishes NSE Circular NSE/CMTR/71775, fetched 2026-09-13)",
+    "https://www.thiyagi.com/holiday/indian-holiday/nse-holidays",
+    "https://www.ebc.com/forex/nse-holidays-2025-full-trading-holiday-calendar-with-dates",
+    "https://www.stablemoney.in/pages/nse-holidays-2025"
+  ]
+}

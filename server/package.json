@@ -2,11 +2,13 @@
   "name": "vikram-accumulation-api",
   "private": true,
   "type": "commonjs",
-  "engines": {"node": ">=20"},
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "start": "node src/migrate.js && node src/index.js",
     "ingest": "node src/migrate.js && node src/ingest.js",
-    "test": "node test/scanner.test.js && node test/accumulationEngine.test.js && node test/researchDataIntegrity.test.js && node test/istDate.test.js && node test/scanMaterializer.test.js && node test/ruleEngine.test.js && node test/alertEngine.test.js && node test/ingestValidation.test.js && node test/liveDataGate.test.js && node test/universeMembership.test.js && node test/detectionHistoryView.test.js && node test/pointInTimeUniverse.test.js && node test/corporateActions.test.js && node test/survivorship.test.js && node test/hiddenGemsEngine.test.js && node test/detectionHistory.test.js && node test/researchStatic.test.js && node test/adminAuth.test.js && node test/ingestionLock.test.js",
+    "test": "node test/scanner.test.js && node test/accumulationEngine.test.js && node test/researchDataIntegrity.test.js && node test/istDate.test.js && node test/scanMaterializer.test.js && node test/ruleEngine.test.js && node test/alertEngine.test.js && node test/ingestValidation.test.js && node test/liveDataGate.test.js && node test/universeMembership.test.js && node test/detectionHistoryView.test.js && node test/pointInTimeUniverse.test.js && node test/corporateActions.test.js && node test/survivorship.test.js && node test/hiddenGemsEngine.test.js && node test/detectionHistory.test.js && node test/researchStatic.test.js && node test/adminAuth.test.js && node test/ingestionLock.test.js && node test/ingestRangeBackfill.test.js",
     "test:integration": "node test/integration.test.js && node test/auth.test.js && node test/raceCondition.test.js && node test/fullUniverse.test.js && node test/ingestionLock.test.js",
     "validate:snapshot": "node ../scripts/validateStaticSnapshot.js",
     "test:live": "node test/liveData.test.js"

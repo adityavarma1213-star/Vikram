@@ -1,6 +1,6 @@
 {
   "status": "VERIFIED",
-  "generatedAt": "2026-09-12T18:53:48.496Z",
+  "generatedAt": "2026-09-13T04:32:20.771Z",
   "source": "data/market-history/*.json (real NSE EOD bhavcopy-derived files)",
   "dateRange": {
     "first": "2025-09-02",
@@ -18,67 +18,119 @@
       {
         "date": "2025-10-22",
         "comparedTo": "2025-10-21",
-        "symbolsCompared": 2291
+        "symbolsCompared": 2291,
+        "classification": "LIKELY_HOLIDAY",
+        "holidayName": "Diwali Balipratipada / Govardhan Puja (day after Diwali)",
+        "classificationConfidence": "MEDIUM",
+        "classificationNote": "Multiple secondary sources describe 'Diwali Oct 21-22' as a closure window; the primary confirmed date is Oct 21 (Muhurat Trading). Oct 22 as a second closure day is not independently confirmed from a primary source."
       },
       {
         "date": "2025-11-05",
         "comparedTo": "2025-11-04",
-        "symbolsCompared": 2286
+        "symbolsCompared": 2286,
+        "classification": "LIKELY_HOLIDAY",
+        "holidayName": "Guru Nanak Jayanti",
+        "classificationConfidence": "HIGH",
+        "classificationNote": "Multiple independent secondary sources agree on this exact date for 2025."
       },
       {
         "date": "2025-12-25",
         "comparedTo": "2025-12-24",
-        "symbolsCompared": 2375
+        "symbolsCompared": 2375,
+        "classification": "LIKELY_HOLIDAY",
+        "holidayName": "Christmas",
+        "classificationConfidence": "HIGH",
+        "classificationNote": "Well-established annual holiday, multiple sources agree."
       },
       {
         "date": "2026-01-15",
         "comparedTo": "2026-01-14",
-        "symbolsCompared": 2390
+        "symbolsCompared": 2390,
+        "classification": "UNRESOLVED",
+        "holidayName": null,
+        "classificationConfidence": "N/A",
+        "classificationNote": "Does NOT appear on the official 2026 NSE holiday list (15 dates, NSE Circular NSE/CMTR/71775, as republished by smallcase.com). No known Indian national holiday falls on this date. This is the strongest candidate for a genuine downloader/pipeline defect rather than a legitimate non-trading day."
       },
       {
         "date": "2026-01-26",
         "comparedTo": "2026-01-23",
-        "symbolsCompared": 2395
+        "symbolsCompared": 2395,
+        "classification": "LIKELY_HOLIDAY",
+        "holidayName": "Republic Day",
+        "classificationConfidence": "HIGH",
+        "classificationNote": "Matches official 2026 NSE holiday circular exactly."
       },
       {
         "date": "2026-03-03",
         "comparedTo": "2026-03-02",
-        "symbolsCompared": 2423
+        "symbolsCompared": 2423,
+        "classification": "LIKELY_HOLIDAY",
+        "holidayName": "Holi",
+        "classificationConfidence": "HIGH",
+        "classificationNote": "Matches official 2026 NSE holiday circular exactly."
       },
       {
         "date": "2026-03-26",
         "comparedTo": "2026-03-25",
-        "symbolsCompared": 2438
+        "symbolsCompared": 2438,
+        "classification": "LIKELY_HOLIDAY",
+        "holidayName": "Shri Ram Navami",
+        "classificationConfidence": "HIGH",
+        "classificationNote": "Matches official 2026 NSE holiday circular exactly."
       },
       {
         "date": "2026-03-31",
         "comparedTo": "2026-03-30",
-        "symbolsCompared": 2448
+        "symbolsCompared": 2448,
+        "classification": "LIKELY_HOLIDAY",
+        "holidayName": "Shri Mahavir Jayanti",
+        "classificationConfidence": "HIGH",
+        "classificationNote": "Matches official 2026 NSE holiday circular exactly."
       },
       {
         "date": "2026-04-03",
         "comparedTo": "2026-04-02",
-        "symbolsCompared": 2451
+        "symbolsCompared": 2451,
+        "classification": "LIKELY_HOLIDAY",
+        "holidayName": "Good Friday",
+        "classificationConfidence": "HIGH",
+        "classificationNote": "Matches official 2026 NSE holiday circular exactly."
       },
       {
         "date": "2026-04-14",
         "comparedTo": "2026-04-13",
-        "symbolsCompared": 2456
+        "symbolsCompared": 2456,
+        "classification": "LIKELY_HOLIDAY",
+        "holidayName": "Dr. Baba Saheb Ambedkar Jayanti",
+        "classificationConfidence": "HIGH",
+        "classificationNote": "Matches official 2026 NSE holiday circular exactly."
       },
       {
         "date": "2026-05-01",
         "comparedTo": "2026-04-30",
-        "symbolsCompared": 2455
+        "symbolsCompared": 2455,
+        "classification": "LIKELY_HOLIDAY",
+        "holidayName": "Maharashtra Day",
+        "classificationConfidence": "HIGH",
+        "classificationNote": "Matches official 2026 NSE holiday circular exactly."
       },
       {
         "date": "2026-05-28",
         "comparedTo": "2026-05-27",
-        "symbolsCompared": 2463
+        "symbolsCompared": 2463,
+        "classification": "LIKELY_HOLIDAY",
+        "holidayName": "Bakri Id",
+        "classificationConfidence": "HIGH",
+        "classificationNote": "Matches official 2026 NSE holiday circular exactly."
       },
       {
         "date": "2026-06-26",
         "comparedTo": "2026-06-25",
-        "symbolsCompared": 2406
+        "symbolsCompared": 2406,
+        "classification": "LIKELY_HOLIDAY",
+        "holidayName": "Muharram",
+        "classificationConfidence": "HIGH",
+        "classificationNote": "Matches official 2026 NSE holiday circular exactly."
       }
     ]
   },

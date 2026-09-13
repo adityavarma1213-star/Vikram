@@ -35,6 +35,7 @@ assert.ok(d.fo.daysWithData <= d.tradingSessions, 'F&O day coverage cannot excee
 assert.ok(Array.isArray(d.dataQualityFlags), 'data quality flags must be an array, even if empty — never silently dropped');
 assert.ok(Array.isArray(d.unaccountedWeekdays.dates), 'unaccounted weekdays must be listed, not asserted as confirmed gaps without a holiday calendar');
 assert.ok(Array.isArray(d.cm.suspectedDuplicateSessions), 'CM suspected-duplicate-session detection must be present, even if empty — regression guard for the known stale-holiday-file defect');
-assert.ok(d.cm.suspectedDuplicateSessions.some(s => s.date === '2025-12-25' || s.date === '2026-01-26'), 'expected at least one known duplicate holiday session to be flagged');
+assert.ok(d.cm.suspectedDuplicateSessions.every(s => s.classification === 'LIKELY_HOLIDAY' || s.classification === 'UNRESOLVED'), 'every duplicate session must carry an explicit classification, never silently deleted or relabeled');
+assert.ok(d.cm.suspectedDuplicateSessions.some(s => s.classification === 'UNRESOLVED'), 'expected 2026-01-15 to remain UNRESOLVED -- it does not match any date on the researched 2026 NSE holiday list; regression guard against silently reclassifying it as a holiday without real evidence');
 
 console.log('researchStatic tests passed (coverage + backtest passthrough + NSE coverage report, all DB-independent)');

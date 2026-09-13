@@ -8,6 +8,7 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const HISTORY_DIR = path.join(ROOT, 'data', 'market-history');
 const OUT_PATH = path.join(ROOT, 'data', 'nse-coverage-report.json');
+const holidayCrossref = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'duplicate-date-holiday-crossref.json'), 'utf8'));
 
 // A stock's delivery% is only meaningful if NSE actually published it for that CM row. `0` is a
 // legitimate reported value (a stock can genuinely trade with zero delivery), so a single zero
@@ -125,7 +126,16 @@ function buildReport() {
       rowsWithDeliveryValuePresent: cmSymbolDaysWithDeliveryData,
       deliveryFieldCoveragePct: cmRowsTotal ? Math.round((cmSymbolDaysWithDeliveryData / cmRowsTotal) * 10000) / 100 : null,
       emptyDates: emptyCmDates,
-      suspectedDuplicateSessions: suspectedDuplicateCmSessions
+      suspectedDuplicateSessions: suspectedDuplicateCmSessions.map(d => {
+        const crossref = holidayCrossref.classifications.find(c => c.date === d.date);
+        return {
+          ...d,
+          classification: crossref ? crossref.classification : 'UNRESOLVED',
+          holidayName: crossref ? crossref.holidayName : null,
+          classificationConfidence: crossref ? crossref.confidence : 'N/A',
+          classificationNote: crossref ? crossref.note : 'Not present in the researched holiday cross-reference -- treat as unresolved, not a confirmed defect or a confirmed holiday.'
+        };
+      })
     },
     fo: {
       daysWithData: foDays,

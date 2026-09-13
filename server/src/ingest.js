@@ -20,10 +20,36 @@ function parseCsv(buf){return parse(buf.toString('utf8').replace(/^\uFEFF/,''),{
 // VALID rows are inserted; MISSING/MALFORMED/INVALID/DUPLICATE rows are excluded and counted, and
 // that count + a per-status breakdown is recorded on the ingestion_runs row so bad upstream data
 // is visible rather than silently becoming (or silently disappearing from) scanner evidence.
+const crypto=require('crypto');
+
+// GATE 4 / forensic finding P1-06, P1-07: preserve the exact bytes NSE returned, before any
+// parsing, for every file this process downloads from here on. This does NOT retroactively
+// create raw files for the ~1 year of data already in data/market-history before this change --
+// that existing batch remains correctly labelled PROVENANCE INCOMPLETE (see
+// data/duplicate-date-holiday-crossref.json and REMEDIATION_STATUS.md). Fabricating raw bytes for
+// historical data that was never preserved would be worse than admitting the gap.
+const RAW_ARCHIVE_DIR=require('path').join(__dirname,'..','..','data','raw-archive');
+function preserveRaw(segment,ymd,url,buffer){
+  try{
+    const fs=require('fs'); const path=require('path');
+    const dir=path.join(RAW_ARCHIVE_DIR,segment); fs.mkdirSync(dir,{recursive:true});
+    const ext=segment==='FO'?'.zip':'.csv';
+    fs.writeFileSync(path.join(dir,`${ymd}${ext}`),buffer);
+    const sha256=crypto.createHash('sha256').update(buffer).digest('hex');
+    const manifestPath=path.join(RAW_ARCHIVE_DIR,'manifest.json');
+    let manifest=[]; try{manifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));}catch{}
+    manifest=manifest.filter(m=>!(m.segment===segment&&m.tradeDate===ymd));
+    manifest.push({segment,tradeDate:ymd,sourceUrl:url,sha256,byteSize:buffer.length,acquiredAt:new Date().toISOString()});
+    fs.writeFileSync(manifestPath,JSON.stringify(manifest,null,2));
+  }catch(e){console.warn(`Raw-byte preservation failed for ${segment} ${ymd} (non-fatal, ingestion continues): ${e.message}`);}
+}
+
 async function ingestCm(date){
   const url=`https://nsearchives.nseindia.com/products/content/sec_bhavdata_full_${formatDdMmYyyy(date)}.csv`;
   const ymd=formatYmd(date);
-  const rawRows=parseCsv(await get(url)).filter(r=>clean(r.SERIES)==='EQ');
+  const rawBuffer=await get(url);
+  preserveRaw('CM',ymd,url,rawBuffer);
+  const rawRows=parseCsv(rawBuffer).filter(r=>clean(r.SERIES)==='EQ');
   const { valid: rows, invalid, summary } = validateBatch(rawRows, classifyCmRow, ymd, row => row.SYMBOL);
   const client=await pool.connect();
   try{
@@ -42,7 +68,9 @@ async function ingestCm(date){
 async function ingestFo(date){
   const url=`https://nsearchives.nseindia.com/content/fo/BhavCopy_NSE_FO_0_0_0_${formatYmdCompact(date)}_F_0000.csv.zip`;
   const ymd=formatYmd(date);
-  const zip=await unzipper.Open.buffer(await get(url));
+  const rawBuffer=await get(url);
+  preserveRaw('FO',ymd,url,rawBuffer);
+  const zip=await unzipper.Open.buffer(rawBuffer);
   const file=zip.files.find(f=>/\.csv$/i.test(f.path));if(!file)throw new Error('No CSV found in NSE F&O archive');
   const rawRows=parseCsv(await file.buffer()).filter(r=>clean(r.Sgmt)==='FO'&&clean(r.FinInstrmTp)==='STF'&&clean(r.OptnTp)==='XX');
   const { valid: futures, invalid, summary } = validateBatch(rawRows, classifyFoRow, ymd, row => `${row.TckrSymb}|${row.XpryDt}`);
@@ -168,5 +196,62 @@ async function main(){
   throw new Error(result.reason);
 }
 
+// GATE 2 / forensic finding P1-13, P0-04: a genuine explicit-range historical backfill, distinct
+// from runIncrementalIngest above (which is deliberately narrow -- cron-friendly, stops at the
+// first success, and must keep working exactly as before for the scheduled job). This function:
+//   - takes an explicit start/end date, not an open-ended "look back N days" search
+//   - is RESUMABLE: skips any date that already has CM rows in cm_eod, so a killed/restarted run
+//     picks up where it left off rather than re-fetching everything
+//   - rate-limits between requests (rateLimitMs) instead of hammering NSE
+//   - reuses ingestCm/ingestFo unchanged, so every date it fetches gets the same raw-byte
+//     preservation (see preserveRaw above) as the daily cron job
+// This does NOT retroactively acquire 5 years of data on its own -- it is the mechanism GATE 2
+// requires; actually running it against nsearchives.nseindia.com for a multi-year range has not
+// been executed from this sandbox, because this sandbox's network egress does not permit reaching
+// that host (confirmed by a real, logged HTTP attempt -- see REMEDIATION_STATUS.md, P0-05).
+async function runRangeBackfill({ startDate, endDate, rateLimitMs = 1200 } = {}) {
+  if (!startDate || !endDate) throw new Error('runRangeBackfill requires explicit startDate and endDate (YYYY-MM-DD)');
+  const lockClient = await pool.connect();
+  const results = { status: 'COMPLETE', startDate, endDate, ingested: [], skippedExisting: [], failed: [] };
+  try {
+    const lockQ = await lockClient.query('SELECT pg_try_advisory_lock($1) AS locked', [INGESTION_LOCK_KEY]);
+    if (!lockQ.rows[0]?.locked) {
+      await recordSystemRun('blocked', 'INGESTION_ALREADY_RUNNING');
+      return { status: 'BLOCKED', reason: 'INGESTION_ALREADY_RUNNING' };
+    }
+    try {
+      let cursor = new Date(`${startDate}T00:00:00Z`);
+      const end = new Date(`${endDate}T00:00:00Z`);
+      while (cursor <= end) {
+        const ymd = formatYmd(cursor);
+        const day = cursor.getUTCDay();
+        if (day === 0 || day === 6) { cursor.setUTCDate(cursor.getUTCDate() + 1); continue; }
+        const existing = await pool.query('SELECT 1 FROM cm_eod WHERE trade_date=$1 LIMIT 1', [ymd]);
+        if (existing.rows.length) {
+          results.skippedExisting.push(ymd);
+        } else {
+          try {
+            const cm = await ingestCm(cursor);
+            let fo = 0;
+            try { fo = await ingestFo(cursor); } catch (e) { console.warn(`F&O unavailable for ${ymd}, CM still stored: ${e.message}`); }
+            results.ingested.push({ date: ymd, cmRows: cm, foRows: fo });
+          } catch (e) {
+            results.failed.push({ date: ymd, reason: e.message });
+          }
+          await new Promise(r => setTimeout(r, rateLimitMs));
+        }
+        cursor.setUTCDate(cursor.getUTCDate() + 1);
+      }
+      try { await materializeScannerResults(); } catch (e) { console.warn('Post-backfill materialization failed:', e.message); }
+      return results;
+    } finally {
+      try { await lockClient.query('SELECT pg_advisory_unlock($1)', [INGESTION_LOCK_KEY]); }
+      catch (e) { console.error('Failed to release ingestion lock:', e.message); }
+    }
+  } finally {
+    lockClient.release();
+  }
+}
+
 if(require.main===module)main().then(()=>pool.end()).catch(e=>{console.error(e);pool.end();process.exit(1)});
-module.exports={ingestCm,ingestFo,materializeScannerResults,runIncrementalIngest};
+module.exports={ingestCm,ingestFo,materializeScannerResults,runIncrementalIngest,runRangeBackfill};
