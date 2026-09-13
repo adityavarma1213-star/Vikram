@@ -195,6 +195,7 @@
 <script src="js/universeMembership.js"></script>
 <script src="js/detectionHistoryView.js"></script>
 <script src="js/opportunityRadar.js"></script>
+<script src="js/researchIntelligence.js"></script>
 <script src="js/analytics.js"></script>
 <script src="js/tableControls.js"></script>
 <script src="js/dataEngine.js"></script>
@@ -212,6 +213,11 @@
   let rows = [];
   let indexUniverseStatus = 'DATA N/A';
   let scannerAsOf = null;
+  // Canonical Research Intelligence (see backtest/lib/researchIntelligence.js /
+  // data/researchIntelligence.json / js/researchIntelligence.js). Populated once, alongside the
+  // scanner snapshot below, and consumed by Opportunity Radar's disclosure panel and the Hidden
+  // Gems static-evidence fallback — never blended into the live score/verdict.
+  let intelligenceMap = new Map();
   let sortState = { key: 'score', direction: 'desc' };
   let tablePage = 1;
   const TABLE_PAGE_SIZE = 25; // Blueprint requirement: real pagination, 25 per page
@@ -248,15 +254,29 @@
     const { buildRadar, buildDisclosure } = window.VikramOpportunityRadar;
     const ranked = buildRadar(rows, radarCategory ? radarCategory.value : 'ALL').slice(0, 50);
     radarList.innerHTML = ranked.length ? ranked.map(({ row }) => {
-      const d = buildDisclosure(row);
+      const d = buildDisclosure(row, intelligenceMap);
       const whyHtml = d.level2.why.length ? `<ul>${d.level2.why.map(w => `<li>${text(w)}</li>`).join('')}</ul>` : '<p class="text-muted">No additional explanation recorded.</p>';
+      const evidence = d.level5 ? d.level5.historicalEvidence : null;
+      const historicalHtml = evidence ? renderHistoricalEvidenceHtml(evidence) : '<p class="text-muted">No historical research evidence available yet for this symbol.</p>';
       return `<details class="radar-row"><summary><strong>${text(d.level1.symbol)}</strong> — ${text(d.level1.verdict)} <span class="text-muted">(score ${text(d.level1.score)})</span></summary>
         <div class="radar-detail"><strong>Why</strong>${whyHtml}
         <strong>Evidence</strong><ul><li>Volume ratio: ${d.level3.volumeRatio == null ? 'N/A' : Number(d.level3.volumeRatio).toFixed(2) + 'x'}</li><li>Delivery: ${d.level3.deliveryPct == null ? 'N/A' : Number(d.level3.deliveryPct).toFixed(1) + '%'}</li><li>Change in OI: ${d.level3.changeOi == null ? 'N/A' : Number(d.level3.changeOi).toLocaleString('en-IN')}</li></ul>
+        <strong>Historical Research Evidence <span class="text-muted">(not a guarantee — see 1-Year Research)</span></strong>${historicalHtml}
         <a href="${d.level4.deepLinkAnchor}">${text(d.level4.note)}</a></div></details>`;
     }).join('') : '<p class="text-muted">No opportunities match this filter.</p>';
   }
   if (radarCategory) radarCategory.addEventListener('change', renderOpportunityRadar);
+
+  // Renders a symbol's real historical ASM-derived evidence (see backtest/lib/researchIntelligence.js).
+  function renderHistoricalEvidenceHtml(evidence) {
+    const horizons = ['20D', '60D', '5D', '1D', '120D'].filter(h => evidence.horizons && evidence.horizons[h]);
+    const rows2 = horizons.slice(0, 3).map(h => {
+      const v = evidence.horizons[h];
+      if (!v || v.status !== 'COMPUTED') return `<li>${h}: DATA INSUFFICIENT (sample too small)</li>`;
+      return `<li>${h}: ${v.successRatePct}% success \u00b7 median ${v.medianReturnPct > 0 ? '+' : ''}${v.medianReturnPct}% \u00b7 confidence ${v.confidence} (n=${v.computedCount})</li>`;
+    }).join('');
+    return `<ul><li>Historical signals for this symbol: <strong>${evidence.totalHistoricalEvents}</strong> (${text(evidence.firstSignalDate)} \u2192 ${text(evidence.lastSignalDate)})</li>${rows2}</ul>`;
+  }
 
   // Hidden Gems (Blueprint §13). Classification itself calls the LIVE server's /api/hidden-gems,
   // not the static snapshot — the static site alone has no institutional/news data pipeline. On a
@@ -279,13 +299,32 @@
     renderHiddenGemsMeta();
     const base = (window.ACCUMULATION_API_BASE || '').replace(/\/$/, '');
     if (!base) {
-      hiddenGemsList.innerHTML = '<div class="hg-empty-state"><strong>NO VERIFIED HIDDEN GEMS</strong>Hidden Gems classification depends on institutional and news evidence, which is only computed by the live VIKRAM backend — not configured on this static deployment. VERIFICATION BLOCKED. This is not the same as \u201cno candidates found\u201d and no candidate list is being estimated in its place.</div>';
+      // No live backend configured -> the full stealth/recognition/institutional classification
+      // genuinely cannot be computed here, and we do not fabricate one. But the canonical
+      // Research Intelligence artifact (real, already computed from NSE history) IS a static
+      // file, so we can honestly show real historical evidence for today's ACCUMULATION
+      // CONFIRMED/STARTING symbols automatically — no live backend required.
+      const candidates = rows.filter(r => {
+        const v = String(r.verdict || '').toUpperCase();
+        return v === 'ACCUMULATION CONFIRMED' || v === 'ACCUMULATION STARTING';
+      });
+      const withEvidence = candidates
+        .map(r => ({ row: r, evidence: intelligenceMap.get(r.symbol) || null }))
+        .filter(x => x.evidence);
+      const evidenceHtml = withEvidence.length
+        ? `<div class="hg-empty-state" style="margin-top:10px"><strong>HISTORICAL RESEARCH EVIDENCE (STATIC) \u2014 ${withEvidence.length} of ${candidates.length} current CONFIRMED/STARTING symbol(s) have prior signal history</strong>
+          <p class="text-muted" style="margin:6px 0">This is NOT a live Hidden Gems classification (institutional/news evidence still requires a connected backend) and NOT a recommendation \u2014 it is how each symbol's own past ACCUMULATION CONFIRMED signals actually performed.</p>
+          ${withEvidence.slice(0, 30).map(({ row: r, evidence }) => `<details class="radar-row"><summary><strong>${text(r.symbol)}</strong> \u2014 ${text(r.verdict)} <span class="text-muted">(${evidence.totalHistoricalEvents} prior signal${evidence.totalHistoricalEvents === 1 ? '' : 's'})</span></summary><div class="radar-detail">${renderHistoricalEvidenceHtml(evidence)}</div></details>`).join('')}
+        </div>`
+        : '';
+      hiddenGemsList.innerHTML = '<div class="hg-empty-state"><strong>NO VERIFIED HIDDEN GEMS</strong>Hidden Gems classification depends on institutional and news evidence, which is only computed by the live VIKRAM backend — not configured on this static deployment. VERIFICATION BLOCKED. This is not the same as \u201cno candidates found\u201d and no candidate list is being estimated in its place.</div>' + evidenceHtml;
       return;
     }
     fetch(base + '/api/hidden-gems').then(r => r.json()).then(data => {
       if (!data.results || !data.results.length) { hiddenGemsList.innerHTML = '<div class="hg-empty-state"><strong>NO VERIFIED HIDDEN GEMS</strong>No ACCUMULATION CONFIRMED symbols currently meet the Hidden Gems evidence requirements.</div>'; return; }
       hiddenGemsList.innerHTML = data.results.map(r => `<details class="radar-row"><summary><strong>${text(r.symbol)}</strong> — ${text(r.classification)} <span class="text-muted">(tier: ${text(r.tier || 'NONE')})</span></summary>
-        <div class="radar-detail">Stealth: ${r.stealth ? (r.stealth.isStealthy ? 'moderate evidence' : 'not stealthy') : 'N/A'} \u00b7 Recognition: ${text(r.recognitionState)} \u00b7 Institutional: ${text(r.institutionalState)} \u00b7 Data confidence: ${text(r.dataConfidence)}<br>Config: ${text(r.configVersion)} (unvalidated)</div></details>`).join('');
+        <div class="radar-detail">Stealth: ${r.stealth ? (r.stealth.isStealthy ? 'moderate evidence' : 'not stealthy') : 'N/A'} \u00b7 Recognition: ${text(r.recognitionState)} \u00b7 Institutional: ${text(r.institutionalState)} \u00b7 Data confidence: ${text(r.dataConfidence)}<br>Config: ${text(r.configVersion)} (unvalidated)
+        ${r.historicalEvidence ? `<br><strong>Historical Research Evidence</strong>${renderHistoricalEvidenceHtml(r.historicalEvidence)}` : '<br><span class="text-muted">No historical research evidence available yet for this symbol.</span>'}</div></details>`).join('');
     }).catch(() => { hiddenGemsList.innerHTML = '<div class="hg-empty-state"><strong>NO VERIFIED HIDDEN GEMS</strong>Hidden Gems research pass unavailable right now. VERIFICATION BLOCKED.</div>'; });
   }
 
@@ -398,7 +437,7 @@
     const diffDays = Math.floor((Date.now() - asOfDate.getTime()) / 86400000);
     dataAgeEl.textContent = diffDays <= 0 ? 'Today (EOD verified)' : diffDays === 1 ? '1 day old' : `${diffDays} days old`;
   }
-  fetch('data/scanner.json',{cache:'no-store'}).then(r => r.json()).then(snapshot => { if (snapshot.dataStatus !== 'EOD VERIFIED') throw new Error('SNAPSHOT_NOT_VERIFIED'); rows = Array.isArray(snapshot.results) ? snapshot.results : []; indexUniverseStatus = snapshot.indexUniverseStatus || 'DATA N/A'; scannerAsOf = snapshot.asOf || null; renderScannerMeta(snapshot.asOf); render(); renderOpportunityRadar(); renderAnalytics(); renderHiddenGems(); }).catch(() => { if (scannerCards) scannerCards.innerHTML = '<p class="empty-cell">Verified scanner snapshot unavailable. No market values are being estimated.</p>'; if (universeStatusLine) universeStatusLine.textContent = 'DATA N/A'; renderScannerMeta(null); if (radarList) radarList.innerHTML = '<p class="text-muted">Verified scanner snapshot unavailable.</p>'; renderHiddenGems(); });
+  fetch('data/scanner.json',{cache:'no-store'}).then(r => r.json()).then(snapshot => { if (snapshot.dataStatus !== 'EOD VERIFIED') throw new Error('SNAPSHOT_NOT_VERIFIED'); rows = Array.isArray(snapshot.results) ? snapshot.results : []; indexUniverseStatus = snapshot.indexUniverseStatus || 'DATA N/A'; scannerAsOf = snapshot.asOf || null; renderScannerMeta(snapshot.asOf); render(); renderOpportunityRadar(); renderAnalytics(); renderHiddenGems(); if (window.VikramResearchIntelligence) { window.VikramResearchIntelligence.load().then(data => { intelligenceMap = new Map(Object.entries(data.symbols || {})); renderOpportunityRadar(); renderHiddenGems(); }).catch(() => {}); } }).catch(() => { if (scannerCards) scannerCards.innerHTML = '<p class="empty-cell">Verified scanner snapshot unavailable. No market values are being estimated.</p>'; if (universeStatusLine) universeStatusLine.textContent = 'DATA N/A'; renderScannerMeta(null); if (radarList) radarList.innerHTML = '<p class="text-muted">Verified scanner snapshot unavailable.</p>'; renderHiddenGems(); });
 })();
 </script>
 <script src="js/researchRepair.js"></script>

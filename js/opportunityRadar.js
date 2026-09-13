@@ -57,8 +57,15 @@
   //   Level 2 = why (the engine's own real explanation strings — never invented)
   //   Level 3 = evidence (the real metrics already computed)
   //   Level 4 = deeper research (pointer to the full Accumulation Scanner row for this symbol)
-  function buildDisclosure(row) {
-    return {
+  //   Level 5 (optional) = historical research evidence for this exact symbol, from the
+  //   canonical Research Intelligence artifact (see backtest/lib/researchIntelligence.js /
+  //   data/researchIntelligence.json). Purely additive and OFF by default (only present when
+  //   the caller supplies `intelligenceMap`) — this is CURRENT-SIGNAL evidence (levels 1-4)
+  //   plus HISTORICAL evidence (level 5), never blended into rankScore/verdict/score above, so
+  //   the two stay distinguishable rather than the historical record silently overriding or
+  //   replacing the live signal (per the integration blueprint's explicit instruction).
+  function buildDisclosure(row, intelligenceMap = null) {
+    const disclosure = {
       level1: { symbol: row.symbol, companyName: row.companyName || null, verdict: row.verdict, score: row.score },
       level2: { why: Array.isArray(row.why) ? row.why.slice() : [] },
       level3: {
@@ -69,6 +76,11 @@
       },
       level4: { deepLinkAnchor: `#scannerSurface`, note: 'Open the full Accumulation Scanner row for complete history and detection context.' }
     };
+    if (intelligenceMap) {
+      const evidence = intelligenceMap.get ? intelligenceMap.get(row.symbol) : intelligenceMap[row.symbol];
+      disclosure.level5 = { historicalEvidence: evidence || null };
+    }
+    return disclosure;
   }
 
   return { CATEGORIES, categoriesFor, matchesCategory, rankScore, buildRadar, buildDisclosure };

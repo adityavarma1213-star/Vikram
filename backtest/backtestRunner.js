@@ -31,6 +31,9 @@ const { requireRealBacktest } = require('./lib/productionGate');
 const { buildDetectionEvents } = require('./lib/detectionEvents');
 const { detectPriceDiscontinuities, assessCoverage } = require('./lib/corporateActions');
 const { buildAsm } = require('./lib/asm');
+const { buildResearchIntelligence } = require('./lib/researchIntelligence');
+const { scanForStaleDuplicates } = require('./lib/staleDuplicateDetector');
+const { isKnownHolidayDate, holidayInfo } = require('./lib/nseHolidayCalendar');
 const engine = require('./lib/engineAdapter');
 
 const ROOT = __dirname;
@@ -44,9 +47,45 @@ function loadNormalizedBySymbol() {
   const bySymbol = new Map();
   const futuresBySymbolDate = new Map();
 
+  // AUDIT FOLLOW-UP (Item 1 — see FORENSIC_INTEGRATION_REPORT.md / ITEM1_DATE_VERIFICATION_REPORT.md):
+  // 13 dates in the existing dataset were found to be stale, carried-forward duplicates of the
+  // immediately preceding trading day (all 13 independently confirmed as genuine NSE non-trading
+  // days — see lib/nseHolidayCalendar.js for the cited evidence per date). A stored JSON file
+  // existing for a date is NOT treated as proof it was a genuine trading session: every date is
+  // re-checked here with the general-purpose automated stale-duplicate detector
+  // (lib/staleDuplicateDetector.js), so a FUTURE undetected duplicate (including an ad-hoc
+  // holiday like 2026-01-15's, announced too late for any static calendar) is still caught even
+  // without a calendar entry. Matched dates are excluded from every symbol's trading-session
+  // history below — the underlying files on disk are left untouched (never deleted).
+  const excludedDates = new Set();
+  const excludedDateDetail = [];
   if (fs.existsSync(cmDir)) {
-    for (const file of fs.readdirSync(cmDir).filter(f => f.endsWith('.json'))) {
-      const rows = JSON.parse(fs.readFileSync(path.join(cmDir, file), 'utf8'));
+    const cmFiles = fs.readdirSync(cmDir).filter(f => /^\d{4}-\d{2}-\d{2}\.json$/.test(f));
+    const rowsByDate = {};
+    for (const file of cmFiles) rowsByDate[file.slice(0, 10)] = JSON.parse(fs.readFileSync(path.join(cmDir, file), 'utf8'));
+    // Exclusion is driven ONLY by the automated stale-duplicate detector — i.e. a date is excluded
+    // because its data is provably a carried-forward copy, not merely because a date happens to
+    // be *some kind* of special/reduced-session day. This intentionally leaves 2025-10-21 (Diwali
+    // Laxmi Pujan Muhurat Trading — real, low-volume, but genuinely distinct data) IN the trading
+    // calendar: nseHolidayCalendar.js documents it for context, but it was never itself flagged as
+    // a duplicate, and this pipeline does not remove real, distinct data on a policy judgment call
+    // that was outside what was asked. isKnownHolidayDate()/holidayInfo() are used only to
+    // CLASSIFY an already-detected finding for the audit trail below — never as an independent
+    // trigger for exclusion.
+    for (const finding of scanForStaleDuplicates(rowsByDate)) {
+      if (!finding.result.isStaleDuplicate) continue;
+      excludedDates.add(finding.date);
+      excludedDateDetail.push({
+        date: finding.date,
+        previousDate: finding.previousDate,
+        matchRatio: finding.result.matchRatio,
+        classification: isKnownHolidayDate(finding.date) ? 'NOT_A_TRADING_DAY' : 'DATA_INGESTION_ERROR_UNRESOLVED',
+        evidence: holidayInfo(finding.date)
+      });
+    }
+
+    for (const [date, rows] of Object.entries(rowsByDate)) {
+      if (excludedDates.has(date)) continue; // not a genuine trading session — see note above
       for (const row of rows) {
         if (!bySymbol.has(row.symbol)) bySymbol.set(row.symbol, []);
         bySymbol.get(row.symbol).push(row);
@@ -55,6 +94,8 @@ function loadNormalizedBySymbol() {
   }
   if (fs.existsSync(foDir)) {
     for (const file of fs.readdirSync(foDir).filter(f => f.endsWith('.json'))) {
+      const date = file.slice(0, 10);
+      if (excludedDates.has(date)) continue; // same exclusion applies to F&O rows for that date
       const rows = JSON.parse(fs.readFileSync(path.join(foDir, file), 'utf8'));
       for (const row of rows) {
         const key = `${row.symbol}|${row.trade_date}`;
@@ -64,7 +105,7 @@ function loadNormalizedBySymbol() {
     }
   }
   for (const rows of bySymbol.values()) rows.sort((a, b) => a.trade_date.localeCompare(b.trade_date));
-  return { bySymbol, futuresBySymbolDate };
+  return { bySymbol, futuresBySymbolDate, excludedDates: [...excludedDates].sort(), excludedDateDetail };
 }
 
 // Pure signal-detection core: no disk I/O, no gate check. Takes data and an
@@ -175,7 +216,7 @@ function runBacktest() {
   // silently defaulting to "available."
   const corporateActionCoverage = assessCoverage(null);
 
-  const { bySymbol, futuresBySymbolDate } = loadNormalizedBySymbol();
+  const { bySymbol, futuresBySymbolDate, excludedDates, excludedDateDetail } = loadNormalizedBySymbol();
   const { signals, horizonStats } = detectSignalsAndForwardReturns(bySymbol, futuresBySymbolDate, engine, { corporateActionCoverage });
 
   // ASM (Accumulation Success Matrix): research/validation only — see lib/asm.js. No benchmark
@@ -184,14 +225,24 @@ function runBacktest() {
   // both still present on the new event-based signal shape above.
   const asm = buildAsm(signals, bySymbol, null);
 
+  // Canonical Research Intelligence (see lib/researchIntelligence.js): the per-symbol
+  // historical-evidence rollup that Hidden Gems and Opportunity Radar join against.
+  // Built from the SAME `asm` object above — no separate/duplicate calculation engine.
+  const researchIntelligence = buildResearchIntelligence(asm);
+
   return {
     engine: { source_file: engine.source_file, source_sha256: engine.source_sha256, is_production_vikram: engine.is_production_vikram },
     manifestSummary: summary,
     corporateActionCoverage,
+    // Item 1 audit trail (see ITEM1_DATE_VERIFICATION_REPORT.md): dates excluded from the trading
+    // calendar as confirmed non-trading-day stale duplicates. The underlying files were not
+    // deleted — only excluded from signal/forward-return computation above.
+    excludedNonTradingDates: excludedDateDetail,
     totalSignals: signals.length,
     horizonStats,
     signals,
-    asm
+    asm,
+    researchIntelligence
   };
 }
 
@@ -202,6 +253,18 @@ if (require.main === module) {
     const result = runBacktest();
     fs.mkdirSync(path.join(ROOT, 'reports'), { recursive: true });
     fs.writeFileSync(path.join(ROOT, 'reports', 'backtest_results.json'), JSON.stringify(result, null, 2));
+    // Also publish the canonical research-intelligence artifact to data/ so the static
+    // site and live server can join against it directly — no manual export/import step.
+    const dataDir = path.join(ROOT, '..', 'data');
+    fs.mkdirSync(dataDir, { recursive: true });
+    fs.writeFileSync(path.join(dataDir, 'researchIntelligence.json'), JSON.stringify({
+      ...result.researchIntelligence,
+      generatedAt: new Date().toISOString(),
+      sourceFile: 'backtest/REAL_1YEAR_BACKTEST_RESULT.json',
+      sourceDataProvenance: result.manifestSummary ? result.manifestSummary.data_provenance : null,
+      sourceEngine: result.engine || null,
+      sourceTotalSignals: result.totalSignals || 0
+    }, null, 2));
     console.log(`BACKTEST COMPLETE: ${result.totalSignals} signal(s) across ${Object.keys(result.horizonStats).length} horizons.`);
     process.exit(0);
   } catch (error) {

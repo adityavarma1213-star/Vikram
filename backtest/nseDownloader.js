@@ -78,7 +78,7 @@ function parseCsvBuffer(buf) {
 
 function normalizeCmRows(rawRows, format, ymd) {
   if (format === 'UDIFF_ZIP') {
-    requireColumns(rawRows, 'NSE UDiFF CM', ['TradDt', 'TckrSymb', 'SctySrs', 'ClsPric', 'PrvsClsgPric', 'TtlTradgVol']);
+    requireColumns(rawRows, 'NSE UDiFF CM', ['TradDt', 'TckrSymb', 'SctySrs', 'ClsPric', 'PrvsClsgPric', 'TtlTradgVol', 'DlvryQty', 'DlvryPct']); // hardened: see ITEM3_FIVE_YEAR_DATA_REPORT.md
     const dateCheck = confirmTradeDate(rawRows, ymd, 'TradDt');
     return {
       dateCheck,
@@ -88,7 +88,7 @@ function normalizeCmRows(rawRows, format, ymd) {
       })).filter(r => r.symbol)
     };
   }
-  requireColumns(rawRows, 'NSE legacy sec_bhavdata_full', ['SYMBOL', 'SERIES', 'CLOSE_PRICE', 'PREV_CLOSE', 'TTL_TRD_QNTY']);
+  requireColumns(rawRows, 'NSE legacy sec_bhavdata_full', ['SYMBOL', 'SERIES', 'CLOSE_PRICE', 'PREV_CLOSE', 'TTL_TRD_QNTY', 'DELIV_QTY', 'DELIV_PER']); // hardened: see ITEM3_FIVE_YEAR_DATA_REPORT.md
   const dateField = rawRows[0].DATE1 !== undefined ? 'DATE1' : (rawRows[0].TradeDate !== undefined ? 'TradeDate' : 'TRADE_DATE');
   const dateCheck = dateField in rawRows[0] ? confirmTradeDate(rawRows, ymd, dateField) : { ok: true, reason: 'no date column to cross-check (older format)' };
   return {

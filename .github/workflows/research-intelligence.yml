@@ -1,0 +1,51 @@
+name: VIKRAM Research Intelligence
+
+# Regenerates the canonical data/researchIntelligence.json artifact (the per-symbol historical
+# evidence rollup that Hidden Gems and Opportunity Radar join against — see
+# backtest/lib/researchIntelligence.js and FORENSIC_INTEGRATION_REPORT.md) whenever the real
+# backtest result changes. Pure aggregation over already-committed real ASM output — no NSE
+# network access needed, no fabricated data.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'backtest/REAL_1YEAR_BACKTEST_RESULT.json'
+      - 'backtest/lib/researchIntelligence.js'
+      - 'backtest/scripts/buildResearchIntelligence.js'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: research-intelligence
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Validate source
+        run: |
+          node --check backtest/lib/researchIntelligence.js
+          node --check backtest/scripts/buildResearchIntelligence.js
+      - name: Run research-intelligence unit tests
+        run: node backtest/test/researchIntelligence.test.js
+      - name: Rebuild canonical research intelligence artifact
+        run: node backtest/scripts/buildResearchIntelligence.js
+      - name: Commit if changed
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/researchIntelligence.json
+          if git diff --cached --quiet; then
+            echo 'No research-intelligence changes to commit.'
+          else
+            git commit -m 'chore: refresh canonical research intelligence (Hidden Gems / Opportunity Radar historical evidence)'
+            git push
+          fi

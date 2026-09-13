@@ -11,6 +11,7 @@ const {liveMarketDataStatus}=require('./liveData/gate');
 const {TokenManager}=require('./liveData/tokenManager');
 const liveTokenManager=new TokenManager();
 const app=express(); app.disable('x-powered-by'); app.use(express.json({limit:'100kb'}));
+const fs=require('node:fs');
 
 // --- Production integration: CORS -----------------------------------------------------------
 // This service serves the frontend itself (see express.static below), so same-origin requests
@@ -113,8 +114,27 @@ app.get('/api/scanner/all',async(req,res)=>{try{const period=normalizePeriod(req
 // signal. institutionalData/newsData are always null here because no real feed is connected yet
 // (never fabricated) — most results will genuinely read DATA_INSUFFICIENT as a result, which is
 // the correct, honest behavior, not a bug.
+//
+// historicalEvidence is loaded from the canonical Research Intelligence artifact
+// (data/researchIntelligence.json, built by backtest/lib/researchIntelligence.js from real ASM
+// output — see FORENSIC_INTEGRATION_REPORT.md) and attached per symbol. This is the join that
+// was previously missing: Hidden Gems' current-signal classification now travels alongside real
+// historical evidence for the same symbol, with no CSV export/import step and no change to the
+// classification logic itself (see hiddenGems/engine.js's evaluate() header note).
+const RESEARCH_INTELLIGENCE_PATH=path.join(__dirname,'..','..','data','researchIntelligence.json');
+function loadResearchIntelligence(){
+  try{
+    const raw=fs.readFileSync(RESEARCH_INTELLIGENCE_PATH,'utf8');
+    const parsed=JSON.parse(raw);
+    return parsed && parsed.symbols ? parsed.symbols : {};
+  }catch(e){
+    // Genuinely absent/unreadable artifact -> no evidence available. Never fabricated, never fatal.
+    return {};
+  }
+}
 app.get('/api/hidden-gems',async(req,res)=>{try{
   const hiddenGems=require('../../hiddenGems/engine');
+  const evidenceBySymbol=loadResearchIntelligence();
   const confirmedQ=await pool.query(`SELECT symbol FROM scanner_results WHERE verdict='ACCUMULATION CONFIRMED' ORDER BY symbol LIMIT 500`);
   const symbols=confirmedQ.rows.map(r=>r.symbol);
   if(!symbols.length)return res.json({researchOnly:true,validated:false,configVersion:require('../../hiddenGems/config').configVersion,results:[],note:'No ACCUMULATION CONFIRMED symbols are currently materialized.'});
@@ -122,13 +142,11 @@ app.get('/api/hidden-gems',async(req,res)=>{try{
   const bySymbol=new Map();for(const r of q.rows){if(!bySymbol.has(r.symbol))bySymbol.set(r.symbol,[]);bySymbol.get(r.symbol).push(r);}
   const results=symbols.map(symbol=>{
     const history=bySymbol.get(symbol)||[];
-    if(!history.length)return {symbol,classification:'DATA_INSUFFICIENT',reason:'No history available.'};
+    if(!history.length)return {symbol,classification:'DATA_INSUFFICIENT',reason:'No history available.',historicalEvidence:evidenceBySymbol[symbol]||null};
     const current=history.at(-1);
-    // institutionalData and newsData are always null: no real feed is connected. This is the
-    // honest state, not a placeholder to be silently filled in later.
-    return hiddenGems.evaluate({symbol,history,current,futures:{available:false,derivativesSupported:false,trade_date:current.trade_date},institutionalData:null,newsData:null});
+    return hiddenGems.evaluate({symbol,history,current,futures:{available:false,derivativesSupported:false,trade_date:current.trade_date},institutionalData:null,newsData:null,historicalEvidence:evidenceBySymbol[symbol]||null});
   });
-  res.json({researchOnly:true,validated:false,configVersion:results[0]?.configVersion||null,universeSize:symbols.length,results,asOf:new Date().toISOString()});
+  res.json({researchOnly:true,validated:false,configVersion:results[0]?.configVersion||null,universeSize:symbols.length,historicalEvidenceAvailable:Object.keys(evidenceBySymbol).length>0,results,asOf:new Date().toISOString()});
 }catch(e){res.status(500).json({error:'Hidden Gems research pass failed. No classification was fabricated.',detail:e.message});}});
 app.post('/api/scanner/query',async(req,res)=>{try{res.json(await runQuery(pool,req.body?.rule,{symbols:req.body?.symbols}));}catch(e){const status=Number(e.statusCode)||500;res.status(status).json({error:status===400?e.message:'Rule query failed. No market data was fabricated.'});}});
 // --- Authentication (public routes: anyone may attempt to register/login) ---
