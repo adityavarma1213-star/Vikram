@@ -35,11 +35,11 @@ async function fetchCm(date) {
     try {
       const buf = await get(url); let rows;
       if (url.endsWith('.zip')) {
-        const zip = await unzipper.Open.buffer(buf); const file = zip.files.find(f => /\.csv$/i.test(f.path)); if (!file) throw new Error('No CSV found in CM archive'); rows = parseCsv(await file.buffer()); requireColumns(rows, 'NSE UDiFF CM', ['TradDt', 'TckrSymb', 'SctySrs', 'ClsPric', 'PrvsClsgPric', 'TtlTradgVol']);
+        const zip = await unzipper.Open.buffer(buf); const file = zip.files.find(f => /\.csv$/i.test(f.path)); if (!file) throw new Error('No CSV found in CM archive'); rows = parseCsv(await file.buffer()); requireColumns(rows, 'NSE UDiFF CM', ['TradDt', 'TckrSymb', 'SctySrs', 'ClsPric', 'PrvsClsgPric', 'TtlTradgVol', 'DlvryQty', 'DlvryPct']); // hardened: same fix as backtest/nseDownloader.js -- a missing/renamed delivery column now throws instead of silently becoming 0 (see 2026-09-07..11 delivery=0% anomaly)
         const tradeDate = sourceTradeDate(rows, date, 'NSE UDiFF CM');
         return rows.filter(r => clean(r.SctySrs) === 'EQ').map(r => ({ symbol: clean(r.TckrSymb), trade_date: tradeDate, close: num(r.ClsPric), last_price: num(r.LastPric), prev_close: num(r.PrvsClsgPric), volume: num(r.TtlTradgVol), deliv_qty: num(r.DlvryQty), deliv_per: num(r.DlvryPct) })).filter(r => r.symbol);
       }
-      rows = parseCsv(buf); requireColumns(rows, 'NSE security-wise bhavcopy', ['SYMBOL', 'SERIES', 'CLOSE_PRICE', 'PREV_CLOSE', 'TTL_TRD_QNTY']);
+      rows = parseCsv(buf); requireColumns(rows, 'NSE security-wise bhavcopy', ['SYMBOL', 'SERIES', 'CLOSE_PRICE', 'PREV_CLOSE', 'TTL_TRD_QNTY', 'DELIV_QTY', 'DELIV_PER']); // hardened: same fix as backtest/nseDownloader.js
       const tradeDate = clean(rows.find(r => clean(r.DATE1 || r.TradeDate || r.TRADE_DATE))?.DATE1 || rows.find(r => clean(r.DATE1 || r.TradeDate || r.TRADE_DATE))?.TradeDate || rows.find(r => clean(r.DATE1 || r.TradeDate || r.TRADE_DATE))?.TRADE_DATE);
       if (tradeDate && tradeDate.slice(0, 10) !== formatYmd(date)) throw new Error(`NSE security-wise bhavcopy: archive returned ${tradeDate.slice(0, 10)} while ${formatYmd(date)} was requested`);
       return rows.filter(r => clean(r.SERIES) === 'EQ').map(r => ({ symbol: clean(r.SYMBOL), trade_date: formatYmd(date), close: num(r.CLOSE_PRICE), last_price: num(r.LAST_PRICE), prev_close: num(r.PREV_CLOSE), volume: num(r.TTL_TRD_QNTY), deliv_qty: num(r.DELIV_QTY), deliv_per: num(r.DELIV_PER) })).filter(r => r.symbol);
