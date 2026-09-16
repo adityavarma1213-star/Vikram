@@ -1,17 +1,17 @@
 {
   "status": "VERIFIED",
-  "generatedAt": "2026-09-13T04:32:20.771Z",
+  "generatedAt": "2026-09-16T21:05:14.454Z",
   "source": "data/market-history/*.json (real NSE EOD bhavcopy-derived files)",
   "dateRange": {
     "first": "2025-09-02",
-    "last": "2026-09-11"
+    "last": "2026-09-15"
   },
-  "tradingSessions": 268,
+  "tradingSessions": 269,
   "cm": {
-    "daysWithData": 268,
+    "daysWithData": 269,
     "daysWithoutData": 0,
-    "totalRows": 642710,
-    "rowsWithDeliveryValuePresent": 642710,
+    "totalRows": 645362,
+    "rowsWithDeliveryValuePresent": 645362,
     "deliveryFieldCoveragePct": 100,
     "emptyDates": [],
     "suspectedDuplicateSessions": [
@@ -135,10 +135,10 @@
     ]
   },
   "fo": {
-    "daysWithData": 255,
+    "daysWithData": 256,
     "daysWithoutData": 13,
-    "totalRows": 158898,
-    "rowsWithOiPresent": 158898,
+    "totalRows": 159545,
+    "rowsWithOiPresent": 159545,
     "oiFieldCoveragePct": 100,
     "emptyDates": [
       "2025-10-22",
@@ -180,13 +180,18 @@
     {
       "date": "2026-09-11",
       "issue": "2637 of 2637 CM rows (100%) report exactly 0% delivery — verified anomaly, not fabricated, not silently corrected"
+    },
+    {
+      "date": "2026-09-15",
+      "issue": "2652 of 2652 CM rows (100%) report exactly 0% delivery — verified anomaly, not fabricated, not silently corrected"
     }
   ],
   "unaccountedWeekdays": {
     "status": "DATA_INSUFFICIENT_TO_CLASSIFY",
     "reason": "No NSE trading-holiday calendar exists in this repository, so a weekday with no stored file cannot be distinguished from a genuine market holiday. Listed for disclosure only — not asserted to be a gap or an error.",
     "dates": [
-      "2025-10-02"
+      "2025-10-02",
+      "2026-09-14"
     ]
   }
 }

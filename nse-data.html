@@ -116,7 +116,17 @@
     </div>
   </section>
 
+  <section class="dashboard-card" id="datasetDownload">
+    <h2 class="card-headline">Download Existing Dataset</h2>
+    <p class="text-muted" style="margin-top:-6px">Packages only the real files already stored and already served by this deployment — no NSE request happens here, and no date is invented if it's missing.</p>
+    <p id="datasetStatusLine" class="text-muted" style="margin:10px 0">Loading…</p>
+    <button id="downloadAllZipBtn" class="btn-primary" disabled>Download all as ZIP</button>
+    <p id="downloadAllStatus" class="text-muted" style="font-size:0.82rem;margin-top:8px"></p>
+    <div id="datasetFileList" class="table-scroll" style="margin-top:14px;max-height:260px;overflow-y:auto;font-size:0.85rem"></div>
+  </section>
+
 </main>
+<script src="js/zipStore.js"></script>
 <script src="js/nseData.js"></script>
 <script src="js/vikramAccess.js" defer></script>
 <script src="js/vikramGuide.js" defer></script>

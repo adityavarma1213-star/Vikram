@@ -198,6 +198,83 @@
     }
   }
 
+  // ---------- Download Existing Dataset (distinct from live acquisition) ----------
+  // Packages ONLY the real data/market-history/*.json files already stored in this deployment
+  // and already served statically (the same way data/nse-coverage-report.json and
+  // data/scanner.json are already fetched elsewhere in this app). Never contacts NSE, never
+  // estimates a missing date, never fabricates a file that isn't in the manifest.
+  async function loadMarketHistoryManifest() {
+    const res = await fetch('data/market-history-manifest.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  }
+
+  function formatBytes(n) {
+    if (n == null) return 'N/A';
+    if (n < 1024 * 1024) return `${(n / 1024).toFixed(0)} KB`;
+    return `${(n / (1024 * 1024)).toFixed(1)} MB`;
+  }
+
+  function renderDatasetDownload(manifest) {
+    const statusLine = $('datasetStatusLine');
+    const zipBtn = $('downloadAllZipBtn');
+    const fileList = $('datasetFileList');
+    if (!statusLine || !zipBtn || !fileList) return;
+    if (manifest.status !== 'VERIFIED' || !manifest.files || !manifest.files.length) {
+      statusLine.textContent = `${manifest.status || 'DATA INSUFFICIENT'} — ${manifest.reason || 'no stored market-history files found.'}`;
+      fileList.innerHTML = '<p>No files available.</p>';
+      return;
+    }
+    statusLine.textContent = `${manifest.fileCount} real daily file(s) already stored, ${manifest.dateRange.first} \u2192 ${manifest.dateRange.last} (${formatBytes(manifest.totalBytes)} total). Manifest generated ${esc(manifest.generatedAt)}.`;
+    fileList.innerHTML = manifest.files.map(f =>
+      `<div style="display:flex;justify-content:space-between;gap:10px;padding:3px 0"><a href="data/market-history/${esc(f.name)}" download="${esc(f.name)}">${esc(f.date)}</a><span>${formatBytes(f.bytes)}</span></div>`
+    ).join('');
+
+    if (typeof window.VikramZip === 'undefined') {
+      zipBtn.disabled = true;
+      zipBtn.title = 'ZIP packaging script did not load';
+      return;
+    }
+    zipBtn.disabled = false;
+    zipBtn.textContent = `Download all as ZIP (${formatBytes(manifest.totalBytes)})`;
+    zipBtn.addEventListener('click', () => downloadAllAsZip(manifest));
+  }
+
+  async function downloadAllAsZip(manifest) {
+    const zipBtn = $('downloadAllZipBtn');
+    const statusEl = $('downloadAllStatus');
+    zipBtn.disabled = true;
+    const originalLabel = zipBtn.textContent;
+    try {
+      const entries = [];
+      for (let i = 0; i < manifest.files.length; i++) {
+        const f = manifest.files[i];
+        statusEl.textContent = `Fetching ${i + 1}/${manifest.files.length}: ${f.name}\u2026`;
+        const res = await fetch(`data/market-history/${f.name}`, { cache: 'no-store' });
+        if (!res.ok) throw new Error(`Failed to fetch ${f.name}: HTTP ${res.status}`);
+        const buf = new Uint8Array(await res.arrayBuffer());
+        entries.push({ name: `market-history/${f.name}`, data: buf });
+      }
+      statusEl.textContent = 'Packaging ZIP\u2026';
+      const zipBytes = window.VikramZip.buildStoreZip(entries);
+      const blob = new Blob([zipBytes], { type: 'application/zip' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `vikram-market-history-${manifest.dateRange.first}-to-${manifest.dateRange.last}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+      statusEl.textContent = `Done \u2014 ${manifest.fileCount} real file(s), ${formatBytes(manifest.totalBytes)}, unmodified.`;
+    } catch (error) {
+      statusEl.textContent = `ERROR \u2014 ${error.message}`;
+    } finally {
+      zipBtn.disabled = false;
+      zipBtn.textContent = originalLabel;
+    }
+  }
+
   async function init() {
     renderBackendStatusLine();
     renderAcquisitionControl();
@@ -208,6 +285,14 @@
       $('coverageStatusLine').textContent = `VERIFICATION BLOCKED — ${error.message}`;
     }
     loadIngestionRuns();
+    try {
+      const manifest = await loadMarketHistoryManifest();
+      renderDatasetDownload(manifest);
+    } catch (error) {
+      const statusLine = $('datasetStatusLine'), fileList = $('datasetFileList');
+      if (statusLine) statusLine.textContent = `VERIFICATION BLOCKED — ${error.message}`;
+      if (fileList) fileList.innerHTML = '<p>Unable to load the file manifest.</p>';
+    }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
