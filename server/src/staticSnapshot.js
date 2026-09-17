@@ -22,6 +22,36 @@ function parseCsv(buf) { return parse(buf.toString('utf8').replace(/^\uFEFF/, ''
 function requireColumns(rows, source, columns) { if (!rows.length) throw new Error(`${source}: empty CSV`); const headers = new Set(Object.keys(rows[0])); const missing = columns.filter(column => !headers.has(column)); if (missing.length) throw new Error(`${source}: schema mismatch; missing columns: ${missing.join(', ')}`); }
 function sourceTradeDate(rows, requestedDate, source) { const actual = clean(rows.find(r => clean(r.TradDt))?.TradDt); if (!actual) throw new Error(`${source}: missing TradDt source date`); if (actual.slice(0, 10) !== formatYmd(requestedDate)) throw new Error(`${source}: archive returned ${actual.slice(0, 10)} while ${formatYmd(requestedDate)} was requested`); return actual.slice(0, 10); }
 async function get(url) { const response = await fetch(url, { headers: HEADERS }); if (!response.ok) throw new Error(`NSE ${response.status} for ${url}`); return Buffer.from(await response.arrayBuffer()); }
+
+// Raw-byte preservation (added 2026-09-16, investigating the recurring delivery=0% anomaly --
+// see REMEDIATION_STATUS.md). This is the ACTUAL live production path that produced the real
+// data/market-history/2026-09-07..15.json anomaly; it never had raw-byte capture before, unlike
+// backtest/nseDownloader.js and server/src/ingest.js which already do. The delivery-column
+// hardening added to this file in an earlier session did NOT resolve the anomaly (2026-09-15's
+// data was ingested after that fix went live and still shows it) -- proving the source columns
+// ARE present and the fix's hypothesis was wrong. This does not diagnose the true cause (this
+// sandbox has no live NSE network access to inspect a real response), but it means the NEXT
+// scheduled run -- which DOES run with real network access via GitHub Actions -- will capture
+// the actual bytes NSE returns, finally making a real diagnosis possible instead of guessing.
+const crypto = require('crypto');
+const RAW_ARCHIVE_DIR = path.join(DATA_DIR, 'raw-archive');
+function preserveRaw(segment, dateStr, url, buffer) {
+  try {
+    const dir = path.join(RAW_ARCHIVE_DIR, segment);
+    fs.mkdirSync(dir, { recursive: true });
+    const ext = url.endsWith('.zip') ? '.zip' : '.csv';
+    fs.writeFileSync(path.join(dir, `${dateStr}${ext}`), buffer);
+    const sha256 = crypto.createHash('sha256').update(buffer).digest('hex');
+    const manifestPath = path.join(RAW_ARCHIVE_DIR, 'manifest.json');
+    let manifest = [];
+    try { manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8')); } catch { /* first write */ }
+    manifest = manifest.filter(m => !(m.segment === segment && m.tradeDate === dateStr));
+    manifest.push({ segment, tradeDate: dateStr, sourceUrl: url, sha256, byteSize: buffer.length, acquiredAt: new Date().toISOString() });
+    fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+  } catch (e) {
+    console.warn(`Raw-byte preservation failed for ${segment} ${dateStr} (non-fatal): ${e.message}`);
+  }
+}
 async function fetchUniverse() {
   const rows = parseCsv(await get(NSE_EQUITY_UNIVERSE));
   requireColumns(rows, 'NSE equity universe', ['SYMBOL', 'NAME OF COMPANY', 'SERIES']);
@@ -34,6 +64,7 @@ async function fetchCm(date) {
   for (const url of urls) {
     try {
       const buf = await get(url); let rows;
+      preserveRaw('CM', formatYmd(date), url, buf);
       if (url.endsWith('.zip')) {
         const zip = await unzipper.Open.buffer(buf); const file = zip.files.find(f => /\.csv$/i.test(f.path)); if (!file) throw new Error('No CSV found in CM archive'); rows = parseCsv(await file.buffer()); requireColumns(rows, 'NSE UDiFF CM', ['TradDt', 'TckrSymb', 'SctySrs', 'ClsPric', 'PrvsClsgPric', 'TtlTradgVol', 'DlvryQty', 'DlvryPct']); // hardened: same fix as backtest/nseDownloader.js -- a missing/renamed delivery column now throws instead of silently becoming 0 (see 2026-09-07..11 delivery=0% anomaly)
         const tradeDate = sourceTradeDate(rows, date, 'NSE UDiFF CM');
@@ -49,7 +80,9 @@ async function fetchCm(date) {
 }
 async function fetchFo(date) {
   const url = `https://nsearchives.nseindia.com/content/fo/BhavCopy_NSE_FO_0_0_0_${formatYmdCompact(date)}_F_0000.csv.zip`;
-  const zip = await unzipper.Open.buffer(await get(url)); const file = zip.files.find(f => /\.csv$/i.test(f.path)); if (!file) throw new Error('No CSV found in NSE F&O archive');
+  const rawBuf = await get(url);
+  preserveRaw('FO', formatYmd(date), url, rawBuf);
+  const zip = await unzipper.Open.buffer(rawBuf); const file = zip.files.find(f => /\.csv$/i.test(f.path)); if (!file) throw new Error('No CSV found in NSE F&O archive');
   const rows = parseCsv(await file.buffer()); requireColumns(rows, 'NSE F&O UDiFF', ['TradDt', 'TckrSymb', 'Sgmt', 'FinInstrmTp', 'XpryDt', 'OpnIntrst', 'ChngInOpnIntrst']);
   const tradeDate = sourceTradeDate(rows, date, 'NSE F&O UDiFF');
   const futures = rows.filter(r => clean(r.Sgmt)?.toUpperCase() === 'FO').filter(r => ['STF', 'IDF'].includes(clean(r.FinInstrmTp)?.toUpperCase())).filter(r => ['XX', null].includes(clean(r.OptnTp)?.toUpperCase() || null)).map(r => ({ symbol: clean(r.TckrSymb), trade_date: tradeDate, expiry: clean(r.XpryDt), close: num(r.ClsPric), oi: num(r.OpnIntrst), change_oi: num(r.ChngInOpnIntrst), available: true })).filter(r => r.symbol && r.expiry);

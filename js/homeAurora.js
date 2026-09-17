@@ -48,9 +48,13 @@
       const res = await fetch('data/nse-coverage-report.json', { cache: 'no-store' });
       const d = await res.json();
       const cell = (label, valueHtml) => `<div><div style="color:var(--aurora-text-muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em">${esc(label)}</div><div style="margin-top:4px;font-size:.9rem;font-weight:700">${valueHtml}</div></div>`;
+      const recentFlags = (d.dataQualityFlags || []).filter(f => f.issue && f.issue.includes('0% delivery'));
       body.innerHTML = [
         cell('EOD Data', `${statusBadge('VERIFIED')} <span style="color:var(--aurora-text-muted);font-weight:400"> through ${esc(d.dateRange && d.dateRange.last)}</span>`),
         cell('Price Data', statusBadge('VERIFIED') + ' <span style="color:var(--aurora-text-muted);font-weight:400">EOD — never shown as live</span>'),
+        cell('Delivery Data', recentFlags.length
+          ? `${statusBadge('DATA_INSUFFICIENT')} <span style="color:var(--aurora-text-muted);font-weight:400">${esc(recentFlags.length)} recent date(s) show 100% zero delivery — cause unresolved, see REMEDIATION_STATUS.md</span>`
+          : statusBadge('VERIFIED')),
         cell('Corporate Actions', statusBadge('DATA_INSUFFICIENT')),
         cell('Institutional', statusBadge('DATA_INSUFFICIENT')),
         cell('News & Events', statusBadge('DATA_INSUFFICIENT')),
