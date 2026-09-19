@@ -151,12 +151,16 @@
       <div class="filter-controls aurora-filter-toolbar" aria-label="Scanner filters">
         <label class="filter-chip">Universe<select id="universeFilter"><option value="ALL">All Stocks</option><option value="NIFTY 50">Nifty 50</option><option value="NIFTY 200">Nifty 200</option><option value="NIFTY 500">Nifty 500</option></select></label>
         <span id="universeStatusLine" class="universe-status-line" aria-live="polite">—</span>
-        <label class="filter-chip">Verdict<select id="verdictFilter"><option value="ALL">All Verdicts</option><option value="ACCUMULATION CONFIRMED">Confirmed</option><option value="ACCUMULATION STARTING">Starting</option><option value="QUIET ABSORPTION">Quiet Absorption</option><option value="DISTRIBUTION">Distribution</option></select></label>
+        <label class="filter-chip">Verdict<select id="verdictFilter"><option value="ALL">All Verdicts</option><option value="ACCUMULATION CONFIRMED">Confirmed</option><option value="ACCUMULATION STARTING">Starting</option><option value="UNCONFIRMED / MIXED">Unconfirmed / Mixed</option><option value="DISTRIBUTION">Distribution</option></select></label>
         <label class="filter-chip">Score<select id="scoreFilter"><option value="0">Any</option><option value="75">\u2265 75</option><option value="55">\u2265 55</option><option value="50">\u2265 50</option></select></label>
         <label class="filter-chip sort-chip">Sort<select id="sortSelect"><option value="score:desc">Score (High\u2192Low)</option><option value="score:asc">Score (Low\u2192High)</option><option value="close:desc">Price (High\u2192Low)</option><option value="close:asc">Price (Low\u2192High)</option><option value="volumeRatio:desc">Volume (High\u2192Low)</option><option value="deliveryPct:desc">Delivery (High\u2192Low)</option><option value="symbol:asc">Stock (A\u2192Z)</option></select></label>
         <input id="tableSearch" type="search" placeholder="Search symbol or name" class="table-search-input">
       </div>
-      <div id="scannerCards" class="discovery-card-list"><p class="empty-cell">Loading verified scanner snapshot\u2026</p></div>
+      <div id="scannerSummaryCards" class="grid-layout cols-3" style="margin:16px 0"></div>
+      <div id="verdictLegend" style="display:flex;flex-wrap:wrap;gap:14px;font-size:11px;color:var(--text-muted);margin-bottom:12px"></div>
+      <div class="table-scroll" style="overflow-x:auto">
+        <div id="scannerCards" class="discovery-card-list"><p class="empty-cell">Loading verified scanner snapshot\u2026</p></div>
+      </div>
       <div id="tablePagination" class="scanner-meta" style="justify-content:space-between"></div>
     </section>
 
@@ -386,28 +390,55 @@
       if (prevBtn) prevBtn.addEventListener('click', () => { tablePage -= 1; render(); });
       if (nextBtn) nextBtn.addEventListener('click', () => { tablePage += 1; render(); });
     }
+    // Summary cards + verdict legend: computed over the UNIVERSE+VERDICT+SCORE filtered set
+    // (filteredForUniverse), NOT the paginated page and NOT narrowed further by the free-text
+    // search -- these are meant to answer "how many candidates match my filters", the same
+    // scope the "N stocks" status line above already uses, not "how many are on this page".
+    const summaryCardsEl = document.getElementById('scannerSummaryCards');
+    const legendEl = document.getElementById('verdictLegend');
+    if (summaryCardsEl) {
+      const score75 = filteredForUniverse.filter(r => (Number(r.score) || 0) >= 75).length;
+      const starting = filteredForUniverse.filter(r => r.verdict === 'ACCUMULATION STARTING').length;
+      const confirmed = filteredForUniverse.filter(r => r.verdict === 'ACCUMULATION CONFIRMED').length;
+      const cell = (label, value, sub) => `<div class="aurora-section" style="margin:0;padding:14px 16px"><div style="font-size:22px;font-weight:800">${value}</div><div style="font-size:12px;font-weight:700;color:var(--text-primary)">${label}</div><div style="font-size:11px;color:var(--text-muted)">${sub}</div></div>`;
+      summaryCardsEl.innerHTML = [
+        cell('Score 75+ Candidates', score75, `out of ${filteredForUniverse.length.toLocaleString('en-IN')} stocks`),
+        cell('Accumulation Started', starting, 'showing early accumulation signals'),
+        cell('Accumulation Confirmed', confirmed, confirmed === 0 ? 'none currently meet the confirmed gate (see NSE Data & Research for delivery-data status)' : 'stronger conviction opportunities')
+      ].join('');
+    }
+    if (legendEl) {
+      const dot = (color, label) => `<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:${color};display:inline-block"></span>${label}</span>`;
+      legendEl.innerHTML = [
+        dot('var(--aurora-verified, #34d399)', 'Accumulation Confirmed'),
+        dot('var(--aurora-gps, #22d3ee)', 'Accumulation Started'),
+        dot('var(--aurora-risk, #f2b134)', 'Unconfirmed / Mixed'),
+        dot('var(--aurora-negative, #e2626b)', 'Distribution')
+      ].join('');
+    }
+
     if (!scannerCards) return;
-    scannerCards.innerHTML = visible.length ? visible.map(r => {
-      const changePct = r.metrics?.priceChangePct;
-      const changeClass = changePct == null ? '' : (changePct >= 0 ? 'status-confirmed' : 'status-distribution');
-      return `<details class="discovery-card">
-        <summary>
-          <span class="dc-name"><strong>${text(r.companyName || r.symbol)}</strong><span class="dc-symbol">${text(r.symbol)}</span></span>
-          <span class="dc-price">${text(r.metrics?.close)}<span class="${changeClass}">${changePct == null ? '' : ` ${changePct >= 0 ? '+' : ''}${Number(changePct).toFixed(2)}%`}</span></span>
-          <span class="dc-score">Score <strong>${text(r.score)}</strong></span>
-          <span class="${verdictClass(r.verdict)} dc-verdict">${text(r.verdict)}</span>
-        </summary>
-        <div class="dc-detail">
-          <div class="dc-metrics">
-            <span>Volume: ${r.metrics?.volumeRatio == null ? 'N/A' : `${Number(r.metrics.volumeRatio).toFixed(2)}x`}</span>
-            <span>Delivery: ${r.metrics?.deliveryPct == null ? 'N/A' : `${Number(r.metrics.deliveryPct).toFixed(1)}%`}</span>
-            <span>OBV: ${r.metrics?.obvTrend == null ? 'N/A' : (Number(r.metrics.obvTrend) > 0 ? 'Rising' : Number(r.metrics.obvTrend) < 0 ? 'Falling' : 'Flat')}</span>
-            <span>Futures OI: ${r.metrics?.hasDerivatives ? (r.metrics?.changeOi == null ? 'N/A' : Number(r.metrics.changeOi).toLocaleString('en-IN')) : 'N/A'}</span>
-          </div>
-          ${detectionCell(r)}
-        </div>
-      </details>`;
-    }).join('') : '<p class="empty-cell">No verified rows match these filters.</p>';
+    scannerCards.innerHTML = visible.length ? `<table style="width:100%;border-collapse:collapse;font-size:0.85rem;min-width:820px">
+      <thead><tr style="text-align:left;color:var(--text-muted);font-size:0.72rem;text-transform:uppercase">
+        <th style="padding:6px 8px">Stock</th><th style="padding:6px 8px">Price</th><th style="padding:6px 8px">Today</th><th style="padding:6px 8px">Score</th><th style="padding:6px 8px">Volume</th><th style="padding:6px 8px">Delivery %</th><th style="padding:6px 8px">OBV Trend</th><th style="padding:6px 8px">Futures OI</th><th style="padding:6px 8px">OI Change</th><th style="padding:6px 8px">Verdict</th></tr></thead>
+      <tbody>${visible.map(r => {
+        const changePct = r.metrics?.priceChangePct;
+        const changeClass = changePct == null ? '' : (changePct >= 0 ? 'status-confirmed' : 'status-distribution');
+        return `<tr style="border-top:1px solid var(--border-color)">
+          <td style="padding:7px 8px"><strong>${text(r.companyName || r.symbol)}</strong><div style="color:var(--text-muted);font-size:11px">${text(r.symbol)}</div></td>
+          <td style="padding:7px 8px">${text(r.metrics?.close)}</td>
+          <td style="padding:7px 8px" class="${changeClass}">${changePct == null ? 'N/A' : `${changePct >= 0 ? '+' : ''}${Number(changePct).toFixed(2)}%`}</td>
+          <td style="padding:7px 8px"><strong>${text(r.score)}</strong></td>
+          <td style="padding:7px 8px">${r.metrics?.volumeRatio == null ? 'N/A' : `${Number(r.metrics.volumeRatio).toFixed(2)}x`}</td>
+          <td style="padding:7px 8px">${r.metrics?.deliveryPct == null ? 'N/A' : `${Number(r.metrics.deliveryPct).toFixed(1)}%`}</td>
+          <td style="padding:7px 8px">${r.metrics?.obvTrend == null ? 'N/A' : (Number(r.metrics.obvTrend) > 0 ? 'Rising' : Number(r.metrics.obvTrend) < 0 ? 'Falling' : 'Flat')}</td>
+          <td style="padding:7px 8px">${r.metrics?.futuresOi == null ? 'N/A' : Number(r.metrics.futuresOi).toLocaleString('en-IN')}</td>
+          <td style="padding:7px 8px">${r.metrics?.changeOi == null ? 'N/A' : Number(r.metrics.changeOi).toLocaleString('en-IN')}</td>
+          <td style="padding:7px 8px"><span class="${verdictClass(r.verdict)} dc-verdict">${text(r.verdict)}</span></td>
+        </tr>
+        <tr style="border-top:none"><td colspan="10" style="padding:0 8px 10px">${detectionCell(r)}</td></tr>`;
+      }).join('')}</tbody>
+    </table>` : '<p class="empty-cell">No verified rows match these filters.</p>';
   }
   function go(symbol) { const q = String(symbol || '').trim().toUpperCase(); if (q) window.location.href = `index.html?symbol=${encodeURIComponent(q)}#companyOverview`; }
   function showSuggestions() {

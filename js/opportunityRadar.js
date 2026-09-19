@@ -24,7 +24,12 @@
     if (row.verdict === 'ACCUMULATION STARTING') cats.push('STARTING');
     if (m.volumeRatio != null && m.volumeRatio >= 2) cats.push('VOLUME_BREAKOUT');
     if (m.deliveryPct != null && m.deliveryPct >= 60) cats.push('HIGH_DELIVERY');
-    if (m.hasDerivatives && m.changeOi != null && m.changeOi > 0) cats.push('OI_BUILD_UP');
+    // hasDerivatives was never set anywhere in the real data pipeline (accumulation/engine.js,
+    // accumulation/api.js, js/app.js) -- it always evaluated undefined/false, silently
+    // suppressing this category even for symbols with real, non-null changeOi. changeOi != null
+    // is already the correct, sufficient check on its own (a real value only exists when the
+    // symbol genuinely has derivatives data for this date). Fixed 2026-09-16.
+    if (m.changeOi != null && m.changeOi > 0) cats.push('OI_BUILD_UP');
     return cats;
   }
 
@@ -39,7 +44,7 @@
     const base = Number(row.score) || 0;
     const volumeBoost = m.volumeRatio != null ? Math.min(Number(m.volumeRatio), 5) * 2 : 0;
     const deliveryBoost = m.deliveryPct != null ? Number(m.deliveryPct) / 10 : 0;
-    const oiBoost = m.hasDerivatives && m.changeOi != null && m.changeOi > 0 ? 5 : 0;
+    const oiBoost = m.changeOi != null && m.changeOi > 0 ? 5 : 0; // see categoriesFor() above for why hasDerivatives was removed
     return base + volumeBoost + deliveryBoost + oiBoost;
   }
 
@@ -72,7 +77,7 @@
         volumeRatio: row.metrics?.volumeRatio ?? null,
         deliveryPct: row.metrics?.deliveryPct ?? null,
         obvTrend: row.metrics?.obvTrend ?? null,
-        changeOi: row.metrics?.hasDerivatives ? (row.metrics?.changeOi ?? null) : null
+        changeOi: row.metrics?.changeOi ?? null // hasDerivatives removed -- see categoriesFor() header comment
       },
       level4: { deepLinkAnchor: `#scannerSurface`, note: 'Open the full Accumulation Scanner row for complete history and detection context.' }
     };

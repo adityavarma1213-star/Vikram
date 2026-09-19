@@ -59,4 +59,20 @@ assert.equal(matchesCategory(rows[1], 'VOLUME_BREAKOUT'), true);
   assert.equal(disclosure.level3.changeOi, null);
 }
 
+// 8. Regression guard, fixed 2026-09-16: hasDerivatives was never set anywhere in the real data
+// pipeline (always undefined/false), which previously suppressed OI_BUILD_UP and the OI rank
+// boost even for symbols with real, non-null, positive changeOi. A row with hasDerivatives
+// explicitly false (or absent) but a real changeOi must now correctly get OI_BUILD_UP and the
+// boost, since changeOi != null is already sufficient on its own to mean "real derivatives data
+// exists for this symbol on this date".
+{
+  const rowNoDerivFlag = { symbol: 'DDD', score: 50, verdict: 'ACCUMULATION STARTING', why: [], metrics: { volumeRatio: 1.0, deliveryPct: 20, hasDerivatives: false, changeOi: 8000 } };
+  assert.ok(categoriesFor(rowNoDerivFlag).includes('OI_BUILD_UP'), 'a row with real positive changeOi must get OI_BUILD_UP regardless of the dead hasDerivatives field');
+  const withOi = rankScore(rowNoDerivFlag);
+  const withoutOi = rankScore({ ...rowNoDerivFlag, metrics: { ...rowNoDerivFlag.metrics, changeOi: null } });
+  assert.ok(withOi > withoutOi, 'real positive changeOi must contribute the OI rank boost regardless of hasDerivatives');
+  const disclosure = buildDisclosure(rowNoDerivFlag);
+  assert.equal(disclosure.level3.changeOi, 8000, 'disclosure must surface the real changeOi value, not null, when hasDerivatives is false/absent');
+}
+
 console.log('opportunityRadar.test.js: PASS');
