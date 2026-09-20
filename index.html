@@ -32,6 +32,13 @@
 @media(max-width:1050px){.workspace-layout{grid-template-columns:190px 1fr}.right-feed{display:none}.hero-slogan{display:none}}
 @media(max-width:1100px){.scanner-table{min-width:760px;table-layout:auto}.scanner-table th,.scanner-table td{white-space:nowrap}.scanner-table-wrap{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable}}
 @media(max-width:760px){.workspace-layout{display:block}.sidebar{display:none}.navbar{height:auto;min-height:60px;flex-wrap:wrap;padding:9px 12px}.brand-lockup{min-width:auto}.nav-tagline{display:none}.profile-badge{margin-left:auto}.main-content{padding:12px}.indices-grid,.action-modules-grid,.overview-grid{grid-template-columns:1fr}.hero-panoramic{padding:21px}.hero-panoramic h1{font-size:39px}.suggestions-dropdown{right:0}.hero-search{flex-direction:column}.hero-search button{width:100%}}
+
+/* VIKRAM scanner filter refresh — UI only; existing filter/data logic is preserved. */
+.scanner-filter-panel{margin:14px 0 16px;padding:14px 16px;border:1px solid var(--border-subtle);border-radius:16px;background:color-mix(in srgb,var(--bg-card-2) 72%,transparent);box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.scanner-filter-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.scanner-filter-title{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--text-main)}.scanner-filter-subtitle{font-size:10px;color:var(--text-muted);margin-top:3px}.scanner-filter-actions{display:flex;align-items:center;gap:8px}.filter-match-count{font-size:10px;font-weight:800;color:var(--accent-cyan);white-space:nowrap}.clear-filters-btn{border:1px solid var(--border-subtle);background:transparent;color:var(--text-muted);border-radius:9px;padding:7px 10px;font-size:10px;font-weight:800;cursor:pointer}.clear-filters-btn:hover{color:var(--text-main);border-color:var(--accent-cyan)}
+.aurora-filter-toolbar.scanner-filter-controls{margin:0;display:grid;grid-template-columns:repeat(4,minmax(120px,1fr)) minmax(180px,1.5fr);gap:9px}.scanner-filter-controls .filter-chip{display:flex;flex-direction:column;gap:5px;min-width:0;font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}.scanner-filter-controls .filter-chip select,.scanner-filter-controls .table-search-input{width:100%;box-sizing:border-box;height:38px}.scanner-filter-controls .table-search-input{border:1px solid var(--border-subtle);background:var(--bg-card-2);color:var(--text-main);border-radius:9px;padding:8px 10px;font-size:11px;font-weight:700;outline:none}.scanner-filter-controls .table-search-input:focus,.scanner-filter-controls select:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-cyan) 18%,transparent)}
+.scanner-quick-filters{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:11px}.quick-filter-label{font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-right:2px}.quick-filter-btn{border:1px solid var(--border-subtle);background:transparent;color:var(--text-muted);border-radius:999px;padding:7px 11px;font-size:10px;font-weight:800;cursor:pointer;transition:.15s ease}.quick-filter-btn:hover{color:var(--text-main);border-color:var(--accent-cyan);transform:translateY(-1px)}.quick-filter-btn.active{background:color-mix(in srgb,var(--accent-cyan) 14%,var(--bg-card-2));border-color:var(--accent-cyan);color:var(--accent-cyan)}
+@media(max-width:900px){.aurora-filter-toolbar.scanner-filter-controls{grid-template-columns:repeat(2,minmax(140px,1fr))}.scanner-filter-head{align-items:flex-start;flex-direction:column}}@media(max-width:520px){.aurora-filter-toolbar.scanner-filter-controls{grid-template-columns:1fr}.scanner-filter-actions{width:100%;justify-content:space-between}}
 </style>
 </head>
 <body data-vikram-page="home">
@@ -148,13 +155,28 @@
     <section class="scanner-container-surface" id="scannerSurface">
       <div class="surface-tabs" role="tablist"><button class="surface-tab active" type="button" role="tab" aria-selected="true">★ Top Opportunities</button><button class="surface-tab" type="button" role="tab" aria-selected="false" disabled title="Not available yet — no UI exists to add symbols to a watchlist">Watchlist <span class="tab-unavailable">Not available yet</span></button><button class="surface-tab" type="button" role="tab" aria-selected="false" disabled title="Not available yet — no UI exists to add symbols to a portfolio">My Portfolio <span class="tab-unavailable">Not available yet</span></button><button class="surface-tab" type="button" role="tab" aria-selected="false" disabled title="Not available yet — no live news feed is connected">Market News <span class="tab-unavailable">Not available yet</span></button></div>
       <div class="scanner-meta" id="scannerMeta"><span>Scanner Data Date: <strong id="scannerDataDate">—</strong></span><span>Data Age: <strong id="scannerDataAge">—</strong></span></div>
-      <div class="filter-controls aurora-filter-toolbar" aria-label="Scanner filters">
-        <label class="filter-chip">Universe<select id="universeFilter"><option value="ALL">All Stocks</option><option value="NIFTY 50">Nifty 50</option><option value="NIFTY 200">Nifty 200</option><option value="NIFTY 500">Nifty 500</option></select></label>
-        <span id="universeStatusLine" class="universe-status-line" aria-live="polite">—</span>
-        <label class="filter-chip">Verdict<select id="verdictFilter"><option value="ALL">All Verdicts</option><option value="ACCUMULATION CONFIRMED">Confirmed</option><option value="ACCUMULATION STARTING">Starting</option><option value="UNCONFIRMED / MIXED">Unconfirmed / Mixed</option><option value="DISTRIBUTION">Distribution</option></select></label>
-        <label class="filter-chip">Score<select id="scoreFilter"><option value="0">Any</option><option value="75">≥ 75</option><option value="55">≥ 55</option><option value="50">≥ 50</option></select></label>
-        <label class="filter-chip sort-chip">Sort<select id="sortSelect"><option value="score:desc">Score (High→Low)</option><option value="score:asc">Score (Low→High)</option><option value="close:desc">Price (High→Low)</option><option value="close:asc">Price (Low→High)</option><option value="volumeRatio:desc">Volume (High→Low)</option><option value="deliveryPct:desc">Delivery (High→Low)</option><option value="symbol:asc">Stock (A→Z)</option></select></label>
-        <input id="tableSearch" type="search" placeholder="Search symbol or name" class="table-search-input">
+      <div class="scanner-filter-panel" aria-label="Scanner filters">
+        <div class="scanner-filter-head">
+          <div><div class="scanner-filter-title">Research Filters</div><div class="scanner-filter-subtitle">Narrow the verified scanner universe without changing the underlying VIKRAM score or data.</div></div>
+          <div class="scanner-filter-actions"><span id="filterMatchCount" class="filter-match-count">All verified stocks</span><button id="clearScannerFilters" class="clear-filters-btn" type="button">Reset filters</button></div>
+        </div>
+        <div class="filter-controls aurora-filter-toolbar scanner-filter-controls">
+          <label class="filter-chip">Universe<select id="universeFilter"><option value="ALL">All Stocks</option><option value="NIFTY 50">Nifty 50</option><option value="NIFTY 200">Nifty 200</option><option value="NIFTY 500">Nifty 500</option></select></label>
+          <label class="filter-chip">Verdict<select id="verdictFilter"><option value="ALL">All Verdicts</option><option value="ACCUMULATION CONFIRMED">Confirmed</option><option value="ACCUMULATION STARTING">Starting</option><option value="UNCONFIRMED / MIXED">Unconfirmed / Mixed</option><option value="DISTRIBUTION">Distribution</option></select></label>
+          <label class="filter-chip">Minimum Score<select id="scoreFilter"><option value="0">Any Score</option><option value="75">75+</option><option value="55">55+</option><option value="50">50+</option></select></label>
+          <label class="filter-chip">Sort<select id="sortSelect"><option value="score:desc">Score (High→Low)</option><option value="score:asc">Score (Low→High)</option><option value="close:desc">Price (High→Low)</option><option value="close:asc">Price (Low→High)</option><option value="volumeRatio:desc">Volume (High→Low)</option><option value="deliveryPct:desc">Delivery (High→Low)</option><option value="symbol:asc">Stock (A→Z)</option></select></label>
+          <label class="filter-chip">Search<input id="tableSearch" type="search" placeholder="Search symbol or name" class="table-search-input" aria-label="Search symbol or name"></label>
+        </div>
+        <div class="scanner-quick-filters" aria-label="Quick filters">
+          <span class="quick-filter-label">Quick filters</span>
+          <button type="button" class="quick-filter-btn active" data-quick-filter="ALL">All</button>
+          <button type="button" class="quick-filter-btn" data-quick-filter="75">Score 75+</button>
+          <button type="button" class="quick-filter-btn" data-quick-filter="ACCUMULATION STARTING">Accumulation Started</button>
+          <button type="button" class="quick-filter-btn" data-quick-filter="ACCUMULATION CONFIRMED">Confirmed</button>
+          <button type="button" class="quick-filter-btn" data-quick-filter="UNCONFIRMED / MIXED">Unconfirmed / Mixed</button>
+          <button type="button" class="quick-filter-btn" data-quick-filter="DISTRIBUTION">Distribution</button>
+        </div>
+        <div id="universeStatusLine" class="universe-status-line" aria-live="polite" style="margin-top:9px">—</div>
       </div>
       <div id="scannerSummaryCards" class="grid-layout cols-3" style="margin:16px 0"></div>
       <div id="verdictLegend" style="display:flex;flex-wrap:wrap;gap:14px;font-size:11px;color:var(--text-muted);margin-bottom:12px"></div>
@@ -439,6 +461,7 @@
         <tr style="border-top:none"><td colspan="10" style="padding:0 8px 10px">${detectionCell(r)}</td></tr>`;
       }).join('')}</tbody>
     </table>` : '<p class="empty-cell">No verified rows match these filters.</p>';
+    updateFilterUI(totalRows);
   }
   function go(symbol) { const q = String(symbol || '').trim().toUpperCase(); if (q) window.location.href = `index.html?symbol=${encodeURIComponent(q)}#companyOverview`; }
   function showSuggestions() {
@@ -454,7 +477,34 @@
   search.addEventListener('focus', showSuggestions);
   document.addEventListener('click', e => { if (!e.target.closest('.hero-search')) suggestions.hidden = true; });
   document.querySelectorAll('.ticker-pill').forEach(btn => btn.addEventListener('click', () => { search.value = btn.dataset.symbol; go(btn.dataset.symbol); }));
-  [universe,verdict,score].forEach(el => el.addEventListener('change', render));
+  const filterMatchCount = document.getElementById('filterMatchCount');
+  const quickFilterButtons = Array.from(document.querySelectorAll('[data-quick-filter]'));
+  function updateFilterUI(matchCount) {
+    if (filterMatchCount) filterMatchCount.textContent = matchCount == null ? 'All verified stocks' : `${matchCount.toLocaleString('en-IN')} matching stocks`;
+    quickFilterButtons.forEach(btn => {
+      const q = btn.dataset.quickFilter;
+      const active = q === 'ALL'
+        ? universe.value === 'ALL' && verdict.value === 'ALL' && Number(score.value || 0) === 0 && !(tableSearch?.value || '').trim()
+        : q === verdict.value || (q === score.value && universe.value === 'ALL' && verdict.value === 'ALL');
+      btn.classList.toggle('active', active);
+    });
+  }
+  quickFilterButtons.forEach(btn => btn.addEventListener('click', () => {
+    const q = btn.dataset.quickFilter;
+    if (q === 'ALL') { universe.value = 'ALL'; verdict.value = 'ALL'; score.value = '0'; if (tableSearch) tableSearch.value = ''; }
+    else if (/^\d+$/.test(q)) { verdict.value = 'ALL'; score.value = q; }
+    else { verdict.value = q; score.value = '0'; }
+    tablePage = 1; render();
+  }));
+  const clearScannerFilters = document.getElementById('clearScannerFilters');
+  if (clearScannerFilters) clearScannerFilters.addEventListener('click', () => {
+    universe.value = 'ALL'; verdict.value = 'ALL'; score.value = '0';
+    if (tableSearch) tableSearch.value = '';
+    sortState = { key: 'score', direction: 'desc' };
+    if (sortSelect) sortSelect.value = 'score:desc';
+    tablePage = 1; render();
+  });
+  [universe,verdict,score].forEach(el => el.addEventListener('change', () => { tablePage = 1; render(); }));
   document.querySelectorAll('.surface-tab:not(:disabled)').forEach(tab => tab.addEventListener('click', () => { document.querySelectorAll('.surface-tab').forEach(x => { x.classList.remove('active'); x.setAttribute('aria-selected', 'false'); }); tab.classList.add('active'); tab.setAttribute('aria-selected', 'true'); }));
   const d = new Date(); document.getElementById('feedDate').textContent = d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
   const dataDateEl = document.getElementById('scannerDataDate');
