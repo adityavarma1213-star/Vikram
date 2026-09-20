@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://adityavarma1213-star.github.io/Vikram/sitemap.xml

@@ -1,0 +1,15 @@
+# VIKRAM
+
+> Evidence-first Indian equity research and market-intelligence platform.
+
+## Primary
+- Website: https://adityavarma1213-star.github.io/Vikram/
+- Research: https://adityavarma1213-star.github.io/Vikram/research.html
+- Opportunity Radar: https://adityavarma1213-star.github.io/Vikram/#opportunityRadar
+- Accumulation Scanner: https://adityavarma1213-star.github.io/Vikram/#scannerSurface
+
+## Principles
+VIKRAM emphasizes verified data, provenance, historical validation, explicit data limitations, explainable analysis, and no fabricated market values.
+
+## Important
+VIKRAM is a research tool and does not provide investment advice.
