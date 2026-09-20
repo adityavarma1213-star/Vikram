@@ -152,14 +152,14 @@
         <label class="filter-chip">Universe<select id="universeFilter"><option value="ALL">All Stocks</option><option value="NIFTY 50">Nifty 50</option><option value="NIFTY 200">Nifty 200</option><option value="NIFTY 500">Nifty 500</option></select></label>
         <span id="universeStatusLine" class="universe-status-line" aria-live="polite">—</span>
         <label class="filter-chip">Verdict<select id="verdictFilter"><option value="ALL">All Verdicts</option><option value="ACCUMULATION CONFIRMED">Confirmed</option><option value="ACCUMULATION STARTING">Starting</option><option value="UNCONFIRMED / MIXED">Unconfirmed / Mixed</option><option value="DISTRIBUTION">Distribution</option></select></label>
-        <label class="filter-chip">Score<select id="scoreFilter"><option value="0">Any</option><option value="75">\u2265 75</option><option value="55">\u2265 55</option><option value="50">\u2265 50</option></select></label>
-        <label class="filter-chip sort-chip">Sort<select id="sortSelect"><option value="score:desc">Score (High\u2192Low)</option><option value="score:asc">Score (Low\u2192High)</option><option value="close:desc">Price (High\u2192Low)</option><option value="close:asc">Price (Low\u2192High)</option><option value="volumeRatio:desc">Volume (High\u2192Low)</option><option value="deliveryPct:desc">Delivery (High\u2192Low)</option><option value="symbol:asc">Stock (A\u2192Z)</option></select></label>
+        <label class="filter-chip">Score<select id="scoreFilter"><option value="0">Any</option><option value="75">≥ 75</option><option value="55">≥ 55</option><option value="50">≥ 50</option></select></label>
+        <label class="filter-chip sort-chip">Sort<select id="sortSelect"><option value="score:desc">Score (High→Low)</option><option value="score:asc">Score (Low→High)</option><option value="close:desc">Price (High→Low)</option><option value="close:asc">Price (Low→High)</option><option value="volumeRatio:desc">Volume (High→Low)</option><option value="deliveryPct:desc">Delivery (High→Low)</option><option value="symbol:asc">Stock (A→Z)</option></select></label>
         <input id="tableSearch" type="search" placeholder="Search symbol or name" class="table-search-input">
       </div>
       <div id="scannerSummaryCards" class="grid-layout cols-3" style="margin:16px 0"></div>
       <div id="verdictLegend" style="display:flex;flex-wrap:wrap;gap:14px;font-size:11px;color:var(--text-muted);margin-bottom:12px"></div>
       <div class="table-scroll" style="overflow-x:auto">
-        <div id="scannerCards" class="discovery-card-list"><p class="empty-cell">Loading verified scanner snapshot\u2026</p></div>
+        <div id="scannerCards" class="discovery-card-list"><p class="empty-cell">Loading verified scanner snapshot…</p></div>
       </div>
       <div id="tablePagination" class="scanner-meta" style="justify-content:space-between"></div>
     </section>
@@ -171,20 +171,20 @@
       <select id="radarCategory" style="margin:8px 0"><option value="ALL">All</option><option value="CONFIRMED">Confirmed</option><option value="STARTING">Starting</option><option value="VOLUME_BREAKOUT">Volume Breakout</option><option value="HIGH_DELIVERY">High Delivery</option><option value="OI_BUILD_UP">OI Build-Up</option></select>
       <div id="radarList"></div>
     </section>
-    <section id="hiddenGems" class="overview-card" style="margin-top:18px"><h2>Hidden Gems <span class="research-badge">RESEARCH \u2014 NOT VALIDATED</span></h2>
+    <section id="hiddenGems" class="overview-card" style="margin-top:18px"><h2>Hidden Gems <span class="research-badge">RESEARCH — NOT VALIDATED</span></h2>
       <p style="color:var(--text-muted)">Every threshold here is provisional and has not been backtested (see docs/hidden-gems/). This is NOT a trading signal or recommendation. Institutional/news evidence is genuinely unavailable, so most results honestly read DATA INSUFFICIENT rather than a fabricated classification.</p>
       <div id="hiddenGemsMeta" class="research-meta" aria-live="polite"></div>
       <div id="hiddenGemsList"></div>
-      <p class="research-cta">Want to see how past ACCUMULATION CONFIRMED signals actually performed? <a href="research.html#asm">Open 1-Year Research \u2192 Accumulation Success Matrix</a></p>
+      <p class="research-cta">Want to see how past ACCUMULATION CONFIRMED signals actually performed? <a href="research.html#asm">Open 1-Year Research → Accumulation Success Matrix</a></p>
     </section>
     <section id="portfolio" class="overview-card" style="margin-top:18px"><h2>Portfolio</h2><p style="color:var(--text-muted)">Verified values only; unavailable data remains N/A.</p></section>
     <section id="vikramLite" class="overview-card" style="margin-top:18px"><h2>VIKRAM Lite</h2><p style="color:var(--text-muted)">Lightweight verified market view.</p></section>
     <section id="learningHub" class="overview-card" style="margin-top:18px"><h2>Learning Hub</h2><p style="color:var(--text-muted)">Research education surface.</p></section>
-    <section id="analytics" class="overview-card" style="margin-top:18px"><h2>Analytics</h2><p style="color:var(--text-muted)">Aggregate statistics computed from the same verified scanner data above \u2014 no separate data source, no invented metrics.</p>
+    <section id="analytics" class="overview-card" style="margin-top:18px"><h2>Analytics</h2><p style="color:var(--text-muted)">Aggregate statistics computed from the same verified scanner data above — no separate data source, no invented metrics.</p>
       <div id="analyticsBody"></div>
     </section>
     <section id="settings" class="overview-card" style="margin-top:18px"><h2>Settings</h2><p style="color:var(--text-muted)">Use the Theme menu above to change the VIKRAM experience.</p>
-      <div id="liveDataStatus" class="text-muted" style="margin-top:8px">Live market data status: checking\u2026</div>
+      <div id="liveDataStatus" class="text-muted" style="margin-top:8px">Live market data status: checking…</div>
     </section>
     <div id="loadingContainer" class="hidden"></div><div id="errorContainer" class="hidden"></div>
   </main>
