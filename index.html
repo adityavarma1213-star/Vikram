@@ -39,7 +39,15 @@
 .aurora-filter-toolbar.scanner-filter-controls{margin:0;display:grid;grid-template-columns:repeat(4,minmax(120px,1fr)) minmax(180px,1.5fr);gap:9px}.scanner-filter-controls .filter-chip{display:flex;flex-direction:column;gap:5px;min-width:0;font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}.scanner-filter-controls .filter-chip select,.scanner-filter-controls .table-search-input{width:100%;box-sizing:border-box;height:38px}.scanner-filter-controls .table-search-input{border:1px solid var(--border-subtle);background:var(--bg-card-2);color:var(--text-main);border-radius:9px;padding:8px 10px;font-size:11px;font-weight:700;outline:none}.scanner-filter-controls .table-search-input:focus,.scanner-filter-controls select:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-cyan) 18%,transparent)}
 .scanner-quick-filters{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:11px}.quick-filter-label{font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-right:2px}.quick-filter-btn{border:1px solid var(--border-subtle);background:transparent;color:var(--text-muted);border-radius:999px;padding:7px 11px;font-size:10px;font-weight:800;cursor:pointer;transition:.15s ease}.quick-filter-btn:hover{color:var(--text-main);border-color:var(--accent-cyan);transform:translateY(-1px)}.quick-filter-btn.active{background:color-mix(in srgb,var(--accent-cyan) 14%,var(--bg-card-2));border-color:var(--accent-cyan);color:var(--accent-cyan)}
 @media(max-width:900px){.aurora-filter-toolbar.scanner-filter-controls{grid-template-columns:repeat(2,minmax(140px,1fr))}.scanner-filter-head{align-items:flex-start;flex-direction:column}}@media(max-width:520px){.aurora-filter-toolbar.scanner-filter-controls{grid-template-columns:1fr}.scanner-filter-actions{width:100%;justify-content:space-between}}
-</style>
+
+/* Opportunity Radar — visual refresh based on the supplied final design reference. UI only; filter/data logic unchanged. */
+.vikram-radar-surface{padding:12px 14px 16px!important;border:1px solid var(--border-subtle);border-radius:18px;background:linear-gradient(145deg,color-mix(in srgb,var(--bg-card) 96%,transparent),color-mix(in srgb,var(--bg-card-2) 88%,transparent));box-shadow:0 14px 35px rgba(0,0,0,.18)}
+.radar-heading{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:12px 4px 14px}.radar-title-wrap{display:flex;align-items:center;gap:12px}.radar-icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,#152b55,#07172f);font-size:22px;border:1px solid var(--border-subtle)}.radar-title-wrap h2{margin:0;font-size:21px;letter-spacing:-.02em}.radar-title-wrap p{margin:3px 0 0;color:var(--text-muted);font-size:11px}.radar-date-block{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:flex-end;font-size:10px;color:var(--text-muted)}.radar-date-block strong{color:var(--text-main)}.radar-verified-badge{padding:7px 12px;border-radius:999px;border:1px solid #8b5cf6;color:#c4b5fd;background:rgba(139,92,246,.12);font-weight:900;letter-spacing:.06em}
+.radar-filter-bar{display:grid;grid-template-columns:1.05fr .55fr 1.05fr .85fr 1.05fr 1.6fr;gap:9px;align-items:stretch;padding:11px;border:1px solid var(--border-subtle);border-radius:14px;background:color-mix(in srgb,var(--bg-card-2) 80%,transparent)}.radar-filter-chip{display:flex;align-items:center;gap:8px;min-width:0;padding:7px 9px;border:1px solid var(--border-subtle);border-radius:11px;background:color-mix(in srgb,var(--bg-card) 62%,transparent)}.radar-filter-chip>span{font-size:9px;font-weight:900;letter-spacing:.07em;color:var(--text-muted)}.radar-filter-chip select{min-width:0;flex:1;border:0;background:transparent;color:var(--text-main);font-size:11px;font-weight:800;outline:0}.radar-universe-status{display:flex;flex-direction:column;justify-content:center;padding:5px 2px;color:var(--text-main);font-size:10px}.radar-universe-status small{font-size:8px;color:#34d399;font-weight:900;letter-spacing:.05em;margin-top:2px}.radar-search-wrap{display:flex;align-items:center;gap:7px;border:1px solid var(--border-subtle);border-radius:11px;padding:0 11px;background:color-mix(in srgb,var(--bg-card) 62%,transparent)}.radar-search-wrap input{width:100%;height:38px;border:0;outline:0;background:transparent;color:var(--text-main);font-size:11px}.radar-search-icon{font-size:18px;color:var(--text-muted)}.radar-filter-actions{display:flex;justify-content:flex-end;align-items:center;gap:10px;min-height:26px}.filter-match-count{font-size:10px;font-weight:800;color:var(--accent-cyan)}.clear-filters-btn{border:1px solid var(--border-subtle);background:transparent;color:var(--text-muted);border-radius:8px;padding:5px 9px;font-size:9px;font-weight:800;cursor:pointer}.clear-filters-btn:hover{border-color:var(--accent-cyan);color:var(--text-main)}
+.radar-summary-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.radar-summary-card{min-height:74px;padding:12px 13px;border:1px solid var(--border-subtle);border-radius:12px;background:linear-gradient(145deg,color-mix(in srgb,var(--bg-card-2) 92%,transparent),color-mix(in srgb,var(--bg-card) 92%,transparent));position:relative;overflow:hidden}.radar-summary-card .rsc-icon{position:absolute;right:12px;top:13px;font-size:21px}.radar-summary-card .rsc-value{font-size:21px;font-weight:900;line-height:1}.radar-summary-card .rsc-label{font-size:11px;font-weight:800;margin-top:6px;color:var(--text-main)}.radar-summary-card .rsc-sub{font-size:9px;color:var(--text-muted);margin-top:3px}.radar-summary-card.cyan{border-color:rgba(34,211,238,.35)}.radar-summary-card.green{border-color:rgba(52,211,153,.35)}.radar-summary-card.purple{border-color:rgba(167,139,250,.35)}.radar-summary-card.blue{border-color:rgba(59,130,246,.35)}.radar-summary-card.orange{border-color:rgba(245,158,11,.35)}
+.radar-legend{display:flex;flex-wrap:wrap;gap:16px;padding:3px 5px 10px;font-size:10px;color:var(--text-muted)}.radar-legend span{display:inline-flex;align-items:center;gap:6px}.radar-legend i{width:9px;height:9px;border-radius:50%;display:inline-block}.radar-table-scroll{border:1px solid var(--border-subtle);border-radius:13px;background:color-mix(in srgb,var(--bg-card) 70%,transparent)}.radar-table-scroll table{min-width:1080px!important;font-size:11px!important}.radar-table-scroll th{padding:8px!important;color:var(--text-muted);font-size:9px!important;letter-spacing:.04em;border-bottom:1px solid var(--border-subtle)}.radar-table-scroll td{padding:8px!important;border-top:1px solid color-mix(in srgb,var(--border-subtle) 70%,transparent)}.radar-rank{font-weight:900;color:var(--text-muted)}.radar-score-pill{display:inline-flex;min-width:31px;justify-content:center;padding:4px 8px;border-radius:999px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.35);color:#6ee7b7;font-weight:900}.radar-action-btn{border:0;background:transparent;color:#c084fc;font-weight:900;cursor:pointer;font-size:13px}.radar-pagination{padding-top:9px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:1100px){.radar-filter-bar{grid-template-columns:repeat(3,minmax(0,1fr))}.radar-summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.radar-heading{align-items:flex-start;flex-direction:column}.radar-date-block{justify-content:flex-start}}@media(max-width:650px){.radar-filter-bar{grid-template-columns:1fr 1fr}.radar-summary-grid{grid-template-columns:1fr 1fr}.radar-date-block{gap:8px}.radar-title-wrap h2{font-size:18px}}@media(max-width:430px){.radar-filter-bar{grid-template-columns:1fr}.radar-summary-grid{grid-template-columns:1fr}}
+<style>.radar-legend .legend-confirmed{background:#34d399}.radar-legend .legend-starting{background:#22d3ee}.radar-legend .legend-mixed{background:#f2b134}.radar-legend .legend-distribution{background:#e2626b}</style></style>
 </head>
 <body data-vikram-page="home">
 <header class="navbar">
@@ -152,38 +160,43 @@
       <p class="desc">NOT YET IMPLEMENTED — VIKRAM has no news/sector-commentary feed yet. This section intentionally shows nothing fabricated rather than invented headlines.</p>
     </section>
 
-    <section class="scanner-container-surface" id="scannerSurface">
-      <div class="surface-tabs" role="tablist"><button class="surface-tab active" type="button" role="tab" aria-selected="true">★ Top Opportunities</button><button class="surface-tab" type="button" role="tab" aria-selected="false" disabled title="Not available yet — no UI exists to add symbols to a watchlist">Watchlist <span class="tab-unavailable">Not available yet</span></button><button class="surface-tab" type="button" role="tab" aria-selected="false" disabled title="Not available yet — no UI exists to add symbols to a portfolio">My Portfolio <span class="tab-unavailable">Not available yet</span></button><button class="surface-tab" type="button" role="tab" aria-selected="false" disabled title="Not available yet — no live news feed is connected">Market News <span class="tab-unavailable">Not available yet</span></button></div>
-      <div class="scanner-meta" id="scannerMeta"><span>Scanner Data Date: <strong id="scannerDataDate">—</strong></span><span>Data Age: <strong id="scannerDataAge">—</strong></span></div>
-      <div class="scanner-filter-panel" aria-label="Scanner filters">
-        <div class="scanner-filter-head">
-          <div><div class="scanner-filter-title">Research Filters</div><div class="scanner-filter-subtitle">Narrow the verified scanner universe without changing the underlying VIKRAM score or data.</div></div>
-          <div class="scanner-filter-actions"><span id="filterMatchCount" class="filter-match-count">All verified stocks</span><button id="clearScannerFilters" class="clear-filters-btn" type="button">Reset filters</button></div>
-        </div>
-        <div class="filter-controls aurora-filter-toolbar scanner-filter-controls">
-          <label class="filter-chip">Universe<select id="universeFilter"><option value="ALL">All Stocks</option><option value="NIFTY 50">Nifty 50</option><option value="NIFTY 200">Nifty 200</option><option value="NIFTY 500">Nifty 500</option></select></label>
-          <label class="filter-chip">Verdict<select id="verdictFilter"><option value="ALL">All Verdicts</option><option value="ACCUMULATION CONFIRMED">Confirmed</option><option value="ACCUMULATION STARTING">Starting</option><option value="UNCONFIRMED / MIXED">Unconfirmed / Mixed</option><option value="DISTRIBUTION">Distribution</option></select></label>
-          <label class="filter-chip">Minimum Score<select id="scoreFilter"><option value="0">Any Score</option><option value="75">75+</option><option value="55">55+</option><option value="50">50+</option></select></label>
-          <label class="filter-chip">Sort<select id="sortSelect"><option value="score:desc">Score (High→Low)</option><option value="score:asc">Score (Low→High)</option><option value="close:desc">Price (High→Low)</option><option value="close:asc">Price (Low→High)</option><option value="volumeRatio:desc">Volume (High→Low)</option><option value="deliveryPct:desc">Delivery (High→Low)</option><option value="symbol:asc">Stock (A→Z)</option></select></label>
-          <label class="filter-chip">Search<input id="tableSearch" type="search" placeholder="Search symbol or name" class="table-search-input" aria-label="Search symbol or name"></label>
-        </div>
-        <div class="scanner-quick-filters" aria-label="Quick filters">
-          <span class="quick-filter-label">Quick filters</span>
-          <button type="button" class="quick-filter-btn active" data-quick-filter="ALL">All</button>
-          <button type="button" class="quick-filter-btn" data-quick-filter="75">Score 75+</button>
-          <button type="button" class="quick-filter-btn" data-quick-filter="ACCUMULATION STARTING">Accumulation Started</button>
-          <button type="button" class="quick-filter-btn" data-quick-filter="ACCUMULATION CONFIRMED">Confirmed</button>
-          <button type="button" class="quick-filter-btn" data-quick-filter="UNCONFIRMED / MIXED">Unconfirmed / Mixed</button>
-          <button type="button" class="quick-filter-btn" data-quick-filter="DISTRIBUTION">Distribution</button>
-        </div>
-        <div id="universeStatusLine" class="universe-status-line" aria-live="polite" style="margin-top:9px">—</div>
+    <section class="scanner-container-surface vikram-radar-surface" id="scannerSurface">
+      <div class="surface-tabs" role="tablist">
+        <button class="surface-tab active" type="button" role="tab" aria-selected="true">★ Top Opportunities</button>
+        <button class="surface-tab" type="button" role="tab" aria-selected="false" disabled title="Not available yet">♙ Watchlist</button>
+        <button class="surface-tab" type="button" role="tab" aria-selected="false" disabled title="Not available yet">♙ My Portfolio</button>
+        <button class="surface-tab" type="button" role="tab" aria-selected="false" disabled title="Not available yet">♙ Sector View</button>
+        <button class="surface-tab" type="button" role="tab" aria-selected="false" disabled title="Not available yet">☆ Market News</button>
       </div>
-      <div id="scannerSummaryCards" class="grid-layout cols-3" style="margin:16px 0"></div>
-      <div id="verdictLegend" style="display:flex;flex-wrap:wrap;gap:14px;font-size:11px;color:var(--text-muted);margin-bottom:12px"></div>
-      <div class="table-scroll" style="overflow-x:auto">
+      <div class="radar-heading">
+        <div class="radar-title-wrap">
+          <div class="radar-icon" aria-hidden="true">🎯</div>
+          <div><h2>Opportunity Radar</h2><p>Cross-factor candidates from the verified Accumulation Scanner · score 75+ · evidence-driven opportunities</p></div>
+        </div>
+        <div class="radar-date-block">
+          <span>Scanner Data Date: <strong id="scannerDataDate">—</strong></span>
+          <span>Data Age: <strong id="scannerDataAge">—</strong></span>
+          <span class="radar-verified-badge">EOD VERIFIED</span>
+        </div>
+      </div>
+
+      <div class="radar-filter-bar" aria-label="Scanner filters">
+        <label class="radar-filter-chip"><span>UNIVERSE</span><select id="universeFilter"><option value="ALL">All Stocks</option><option value="NIFTY 50">Nifty 50</option><option value="NIFTY 200">Nifty 200</option><option value="NIFTY 500">Nifty 500</option></select></label>
+        <div class="radar-universe-status"><strong id="universeStatusLine">—</strong><small>EOD VERIFIED</small></div>
+        <label class="radar-filter-chip"><span>VERDICT</span><select id="verdictFilter"><option value="ALL">All Verdicts</option><option value="ACCUMULATION CONFIRMED">Confirmed</option><option value="ACCUMULATION STARTING">Starting</option><option value="UNCONFIRMED / MIXED">Unconfirmed / Mixed</option><option value="DISTRIBUTION">Distribution</option></select></label>
+        <label class="radar-filter-chip"><span>SCORE</span><select id="scoreFilter"><option value="0">Any</option><option value="75">≥ 75</option><option value="55">≥ 55</option><option value="50">≥ 50</option></select></label>
+        <label class="radar-filter-chip"><span>SORT</span><select id="sortSelect"><option value="score:desc">Score – High to Low</option><option value="score:asc">Score – Low to High</option><option value="close:desc">Price – High to Low</option><option value="close:asc">Price – Low to High</option><option value="volumeRatio:desc">Volume – High to Low</option><option value="deliveryPct:desc">Delivery – High to Low</option><option value="symbol:asc">Stock – A to Z</option></select></label>
+        <label class="radar-search-wrap"><span class="sr-only">Search</span><span class="radar-search-icon">⌕</span><input id="tableSearch" type="search" placeholder="Search symbol or company name..." aria-label="Search symbol or company name"></label>
+      </div>
+      <div class="radar-filter-actions"><span id="filterMatchCount" class="filter-match-count">All verified stocks</span><button id="clearScannerFilters" class="clear-filters-btn" type="button">Reset filters</button></div>
+
+      <div id="scannerSummaryCards" class="radar-summary-grid" style="margin:14px 0"></div>
+      <div id="verdictLegend" class="radar-legend" aria-label="Verdict legend"></div>
+
+      <div class="table-scroll radar-table-scroll" style="overflow-x:auto">
         <div id="scannerCards" class="discovery-card-list"><p class="empty-cell">Loading verified scanner snapshot…</p></div>
       </div>
-      <div id="tablePagination" class="scanner-meta" style="justify-content:space-between"></div>
+      <div id="tablePagination" class="scanner-meta radar-pagination" style="justify-content:space-between"></div>
     </section>
 
     <section id="companyOverview" class="company-overview">
@@ -422,45 +435,56 @@
       const score75 = filteredForUniverse.filter(r => (Number(r.score) || 0) >= 75).length;
       const starting = filteredForUniverse.filter(r => r.verdict === 'ACCUMULATION STARTING').length;
       const confirmed = filteredForUniverse.filter(r => r.verdict === 'ACCUMULATION CONFIRMED').length;
-      const cell = (label, value, sub) => `<div class="aurora-section" style="margin:0;padding:14px 16px"><div style="font-size:22px;font-weight:800">${value}</div><div style="font-size:12px;font-weight:700;color:var(--text-primary)">${label}</div><div style="font-size:11px;color:var(--text-muted)">${sub}</div></div>`;
+      const dateLabel = scannerAsOf || 'N/A';
+      const card = (cls, icon, value, label, sub) => `<div class="radar-summary-card ${cls}"><span class="rsc-icon">${icon}</span><div class="rsc-value">${value}</div><div class="rsc-label">${label}</div><div class="rsc-sub">${sub}</div></div>`;
       summaryCardsEl.innerHTML = [
-        cell('Score 75+ Candidates', score75, `out of ${filteredForUniverse.length.toLocaleString('en-IN')} stocks`),
-        cell('Accumulation Started', starting, 'showing early accumulation signals'),
-        cell('Accumulation Confirmed', confirmed, confirmed === 0 ? 'none currently meet the confirmed gate (see NSE Data & Research for delivery-data status)' : 'stronger conviction opportunities')
+        card('cyan','↗',score75.toLocaleString('en-IN'),'Score 75+ Candidates',`out of ${filteredForUniverse.length.toLocaleString('en-IN')} stocks`),
+        card('blue','◉',starting.toLocaleString('en-IN'),'Accumulation Started','showing early accumulation signals'),
+        card('green','✓',confirmed.toLocaleString('en-IN'),'Accumulation Confirmed',confirmed===0?'none currently meet the confirmed gate':'stronger conviction opportunities'),
+        card('purple','◌','N/A','Watchlist Candidates','Watchlist UI not available yet'),
+        card('orange','▣',dateLabel,'Verified data date',`Data age: ${dataAgeEl?.textContent || 'N/A'}`)
       ].join('');
     }
     if (legendEl) {
-      const dot = (color, label) => `<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:${color};display:inline-block"></span>${label}</span>`;
+      const dot = (cls, label) => `<span><i class="${cls}"></i>${label}</span>`;
       legendEl.innerHTML = [
-        dot('var(--aurora-verified, #34d399)', 'Accumulation Confirmed'),
-        dot('var(--aurora-gps, #22d3ee)', 'Accumulation Started'),
-        dot('var(--aurora-risk, #f2b134)', 'Unconfirmed / Mixed'),
-        dot('var(--aurora-negative, #e2626b)', 'Distribution')
+        dot('legend-confirmed','Accumulation Confirmed'),
+        dot('legend-starting','Accumulation Started'),
+        dot('legend-mixed','Unconfirmed / Mixed'),
+        dot('legend-distribution','Distribution')
       ].join('');
     }
 
     if (!scannerCards) return;
-    scannerCards.innerHTML = visible.length ? `<table style="width:100%;border-collapse:collapse;font-size:0.85rem;min-width:820px">
-      <thead><tr style="text-align:left;color:var(--text-muted);font-size:0.72rem;text-transform:uppercase">
-        <th style="padding:6px 8px">Stock</th><th style="padding:6px 8px">Price</th><th style="padding:6px 8px">Today</th><th style="padding:6px 8px">Score</th><th style="padding:6px 8px">Volume</th><th style="padding:6px 8px">Delivery %</th><th style="padding:6px 8px">OBV Trend</th><th style="padding:6px 8px">Futures OI</th><th style="padding:6px 8px">OI Change</th><th style="padding:6px 8px">Verdict</th></tr></thead>
-      <tbody>${visible.map(r => {
+    scannerCards.innerHTML = visible.length ? `<table style="width:100%;border-collapse:collapse;min-width:1080px">
+      <thead><tr style="text-align:left">
+        <th>RANK ↕</th><th>STOCK ↕</th><th>PRICE (₹) ↕</th><th>SCORE ↕</th><th>TODAY ↕</th><th>VOLUME ↕</th><th>DELIVERY % ↕</th><th>OBV TREND ↕</th><th>FUTURES OI ↕</th><th>OI CHANGE ↕</th><th>VERDICT ↕</th><th>ACTIONS</th>
+      </tr></thead>
+      <tbody>${visible.map((r, i) => {
         const changePct = r.metrics?.priceChangePct;
         const changeClass = changePct == null ? '' : (changePct >= 0 ? 'status-confirmed' : 'status-distribution');
-        return `<tr style="border-top:1px solid var(--border-color)">
-          <td style="padding:7px 8px"><strong>${text(r.companyName || r.symbol)}</strong><div style="color:var(--text-muted);font-size:11px">${text(r.symbol)}</div></td>
-          <td style="padding:7px 8px">${text(r.metrics?.close)}</td>
-          <td style="padding:7px 8px" class="${changeClass}">${changePct == null ? 'N/A' : `${changePct >= 0 ? '+' : ''}${Number(changePct).toFixed(2)}%`}</td>
-          <td style="padding:7px 8px"><strong>${text(r.score)}</strong></td>
-          <td style="padding:7px 8px">${r.metrics?.volumeRatio == null ? 'N/A' : `${Number(r.metrics.volumeRatio).toFixed(2)}x`}</td>
-          <td style="padding:7px 8px">${r.metrics?.deliveryPct == null ? 'N/A' : `${Number(r.metrics.deliveryPct).toFixed(1)}%`}</td>
-          <td style="padding:7px 8px">${r.metrics?.obvTrend == null ? 'N/A' : (Number(r.metrics.obvTrend) > 0 ? 'Rising' : Number(r.metrics.obvTrend) < 0 ? 'Falling' : 'Flat')}</td>
-          <td style="padding:7px 8px">${r.metrics?.futuresOi == null ? 'N/A' : Number(r.metrics.futuresOi).toLocaleString('en-IN')}</td>
-          <td style="padding:7px 8px">${r.metrics?.changeOi == null ? 'N/A' : Number(r.metrics.changeOi).toLocaleString('en-IN')}</td>
-          <td style="padding:7px 8px"><span class="${verdictClass(r.verdict)} dc-verdict">${text(r.verdict)}</span></td>
-        </tr>
-        <tr style="border-top:none"><td colspan="10" style="padding:0 8px 10px">${detectionCell(r)}</td></tr>`;
+        const score = Number(r.score) || 0;
+        const rank = ((page - 1) * TABLE_PAGE_SIZE) + i + 1;
+        const scoreClass = score >= 75 ? 'radar-score-pill' : '';
+        const oi = r.metrics?.futuresOi == null ? '—' : Number(r.metrics.futuresOi).toLocaleString('en-IN');
+        const oiChange = r.metrics?.changeOi == null ? '—' : Number(r.metrics.changeOi).toLocaleString('en-IN');
+        return `<tr>
+          <td class="radar-rank">${rank}</td>
+          <td><strong>${text(r.companyName || r.symbol)}</strong><div style="color:var(--text-muted);font-size:10px">${text(r.symbol)}</div></td>
+          <td>${text(r.metrics?.close)}</td>
+          <td><span class="${scoreClass}">${text(r.score)}</span></td>
+          <td class="${changeClass}">${changePct == null ? 'N/A' : `${changePct >= 0 ? '+' : ''}${Number(changePct).toFixed(2)}%`}</td>
+          <td>${r.metrics?.volumeRatio == null ? 'N/A' : `${Number(r.metrics.volumeRatio).toFixed(2)}x`}</td>
+          <td>${r.metrics?.deliveryPct == null ? 'N/A' : `${Number(r.metrics.deliveryPct).toFixed(1)}%`}</td>
+          <td>${r.metrics?.obvTrend == null ? 'N/A' : (Number(r.metrics.obvTrend) > 0 ? '↗ Rising' : Number(r.metrics.obvTrend) < 0 ? '↘ Falling' : '→ Flat')}</td>
+          <td>${oi}</td>
+          <td class="${Number(r.metrics?.changeOi)>0?'status-confirmed':Number(r.metrics?.changeOi)<0?'status-distribution':''}">${oiChange}</td>
+          <td><span class="${verdictClass(r.verdict)} dc-verdict">${text(r.verdict)}</span></td>
+          <td><button class="radar-action-btn" type="button" data-radar-symbol="${esc(r.symbol)}" title="Open research">↗</button></td>
+        </tr>`;
       }).join('')}</tbody>
     </table>` : '<p class="empty-cell">No verified rows match these filters.</p>';
+    scannerCards.querySelectorAll('[data-radar-symbol]').forEach(btn => btn.addEventListener('click', () => go(btn.dataset.radarSymbol)));
     updateFilterUI(totalRows);
   }
   function go(symbol) { const q = String(symbol || '').trim().toUpperCase(); if (q) window.location.href = `index.html?symbol=${encodeURIComponent(q)}#companyOverview`; }
