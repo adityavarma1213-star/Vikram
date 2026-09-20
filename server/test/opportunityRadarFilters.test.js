@@ -35,16 +35,24 @@ assert.ok(index.includes("tableSearch) tableSearch.addEventListener('input'"));
 assert.ok(index.includes("clearScannerFilters"));
 assert.ok(index.includes("data-quick-filter"));
 
-// Forensic UI finding: native selects must remain real, visible, pointer-enabled controls.
-// The prior absolute/near-transparent select hitbox was browser-fragile and is prohibited here.
-const filterCssStart = index.indexOf('.radar-filter-chip select{');
-assert.ok(filterCssStart >= 0, 'radar filter select CSS must exist');
-const filterCss = index.slice(filterCssStart, filterCssStart + 700);
-assert.ok(filterCss.includes('position:relative'), 'filter select must use normal flow positioning');
-assert.ok(filterCss.includes('pointer-events:auto'), 'filter select must accept pointer events');
-assert.ok(filterCss.includes('opacity:1'), 'filter select must remain visible');
-assert.equal(filterCss.includes('position:absolute'), false, 'filter select must not use fragile absolute hitbox');
-assert.equal(filterCss.includes('opacity:.02'), false, 'filter select must not use fragile transparent hitbox');
+// Forensic UI finding: the deployed page must not depend on a browser-native select hitbox.
+// Visible deterministic buttons own the click target; canonical selects remain as state controls.
+for (const id of ['universeFilterTrigger', 'verdictFilterTrigger', 'scoreFilterTrigger', 'sortSelectTrigger']) {
+  assert.equal((index.match(new RegExp('id="' + id + '"', 'g')) || []).length, 1, id + ' trigger must exist exactly once');
+}
+for (const id of ['universeFilterMenu', 'verdictFilterMenu', 'scoreFilterMenu', 'sortSelectMenu']) {
+  assert.equal((index.match(new RegExp('id="' + id + '"', 'g')) || []).length, 1, id + ' menu must exist exactly once');
+}
+assert.ok(index.includes('class="radar-filter-trigger"'), 'visible filter triggers must be real buttons');
+assert.ok(index.includes('class="radar-filter-menu"'), 'filter menus must be present');
+assert.ok(index.includes('setupRadarFilterMenu('), 'custom filter menu setup must be wired');
+assert.ok(index.includes('select.dispatchEvent(new Event(\'change\''), 'custom menu must update canonical select state');
+const nativeCssStart = index.indexOf('.radar-native-select{');
+assert.ok(nativeCssStart >= 0, 'canonical native select CSS must exist');
+const nativeCss = index.slice(nativeCssStart, nativeCssStart + 500);
+assert.ok(nativeCss.includes('pointer-events:none'), 'hidden canonical select must not steal pointer events');
+assert.ok(nativeCss.includes('opacity:0'), 'hidden canonical select must not be visible');
+assert.ok(index.includes('radar-filter-option'), 'menu options must be real buttons');
 
 // The scanner logic must use exact universe membership and separate text filtering from sorting.
 assert.ok(index.includes('window.VikramUniverseMembership.matchesUniverse'));
