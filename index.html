@@ -461,7 +461,28 @@
   }
   renderLiveDataStatus();
 
+  // Keep the visible radar filter triggers synchronized with the canonical select state.
+  // Reset/quick-filter actions update the selects directly and intentionally do not depend on
+  // synthetic native-select change events. render() is the single synchronization point.
+  function syncRadarTriggers() {
+    const pairs = [
+      ['universeFilter', 'universeFilterTrigger'],
+      ['verdictFilter', 'verdictFilterTrigger'],
+      ['scoreFilter', 'scoreFilterTrigger'],
+      ['sortSelect', 'sortSelectTrigger']
+    ];
+    pairs.forEach(([selectId, triggerId]) => {
+      const select = document.getElementById(selectId);
+      const trigger = document.getElementById(triggerId);
+      if (!select || !trigger) return;
+      const label = select.options[select.selectedIndex]?.textContent || '';
+      if (trigger.firstChild) trigger.firstChild.textContent = label;
+      trigger.setAttribute('aria-label', label);
+    });
+  }
+
   function render() {
+    syncRadarTriggers();
     const u = universe.value, v = verdict.value, min = Number(score.value || 0);
     const inUniverse = r => window.VikramUniverseMembership.matchesUniverse(r, u);
     // Blueprint requirement: show universe + EOD status/date + constituent count, sourced only
