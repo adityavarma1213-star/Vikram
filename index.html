@@ -610,8 +610,12 @@
       trigger.childNodes[0].textContent = select.options[select.selectedIndex]?.textContent || '';
       menu.querySelectorAll('.radar-filter-option').forEach(option => option.addEventListener('click', event => {
         event.stopPropagation();
+        // Apply the filter directly. The visible menu is the real interaction surface;
+        // do not depend on a synthetic native-select change event to trigger the canonical render.
+        // The filter state and exact-match rules remain unchanged.
         select.value = option.dataset.value;
-        select.dispatchEvent(new Event('change', { bubbles: true }));
+        tablePage = 1;
+        render();
         renderMenu();
         close();
       }));
