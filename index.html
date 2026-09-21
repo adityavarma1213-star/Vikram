@@ -481,6 +481,14 @@
     });
   }
 
+  // Verdict filtering is presentation-layer matching only. Normalize whitespace/case so a
+  // verified engine verdict such as "ACCUMULATION STARTING" still matches if a serialized
+  // snapshot contains harmless formatting differences. This does NOT change the engine enum,
+  // thresholds, scores, or verdict assignment.
+  const normalizeVerdictFilterValue = value => String(value ?? '').trim().replace(/\\s+/g, ' ').toUpperCase();
+  const verdictMatches = (rowVerdict, selectedVerdict) => selectedVerdict === 'ALL'
+    || normalizeVerdictFilterValue(rowVerdict) === normalizeVerdictFilterValue(selectedVerdict);
+
   function render() {
     syncRadarTriggers();
     const u = universe.value, v = verdict.value, min = Number(score.value || 0);
@@ -492,7 +500,7 @@
     }
     // FILTER step: universe/verdict/score/search narrow which rows are included. Order is
     // untouched here — that is entirely the SORT step below, which never changes membership.
-    const filteredForUniverse = rows.filter(r => inUniverse(r) && (v === 'ALL' || r.verdict === v) && (Number(r.score) || 0) >= min);
+    const filteredForUniverse = rows.filter(r => inUniverse(r) && verdictMatches(r.verdict, v) && (Number(r.score) || 0) >= min);
     const { filterRows, sortRows, paginate } = window.VikramTableControls || {};
     const textFiltered = filterRows ? filterRows(filteredForUniverse, tableSearch ? tableSearch.value : '') : filteredForUniverse;
     // SORT step: reorders the already-filtered set; never adds or removes a row.
@@ -518,8 +526,8 @@
     const legendEl = document.getElementById('verdictLegend');
     if (summaryCardsEl) {
       const score75 = filteredForUniverse.filter(r => (Number(r.score) || 0) >= 75).length;
-      const starting = filteredForUniverse.filter(r => r.verdict === 'ACCUMULATION STARTING').length;
-      const confirmed = filteredForUniverse.filter(r => r.verdict === 'ACCUMULATION CONFIRMED').length;
+      const starting = filteredForUniverse.filter(r => verdictMatches(r.verdict, 'ACCUMULATION STARTING')).length;
+      const confirmed = filteredForUniverse.filter(r => verdictMatches(r.verdict, 'ACCUMULATION CONFIRMED')).length;
       const dateLabel = scannerAsOf || 'N/A';
       const card = (cls, icon, value, label, sub) => `<div class="radar-summary-card ${cls}"><span class="rsc-icon">${icon}</span><div class="rsc-value">${value}</div><div class="rsc-label">${label}</div><div class="rsc-sub">${sub}</div></div>`;
       summaryCardsEl.innerHTML = [
