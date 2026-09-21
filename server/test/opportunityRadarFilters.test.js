@@ -56,6 +56,11 @@ assert.ok(nativeCss.includes('opacity:0'), 'hidden canonical select must not be 
 assert.ok(index.includes('radar-filter-option'), 'menu options must be real buttons');
 
 // The scanner logic must use exact universe membership and separate text filtering from sorting.
+// Verdict matching must be normalization-tolerant at the UI boundary; the engine enum itself is unchanged.
+assert.ok(index.includes('normalizeVerdictFilterValue'), 'verdict filter normalization helper must exist');
+assert.ok(index.includes('verdictMatches(r.verdict, v)'), 'render must use normalized verdict matching');
+assert.ok(index.includes("replace(/\\\\s+/g, ' ')") || index.includes("replace(/\\s+/g, ' ')"), 'verdict normalization must collapse whitespace');
+
 assert.ok(index.includes('window.VikramUniverseMembership.matchesUniverse'));
 assert.ok(index.includes('window.VikramTableControls.filterRows') || index.includes('filterRows ? filterRows'));
 assert.ok(index.includes('sortRows(textFiltered, sortState.key, sortState.direction)'));
