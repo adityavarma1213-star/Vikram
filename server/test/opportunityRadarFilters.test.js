@@ -46,7 +46,8 @@ for (const id of ['universeFilterMenu', 'verdictFilterMenu', 'scoreFilterMenu', 
 assert.ok(index.includes('class="radar-filter-trigger"'), 'visible filter triggers must be real buttons');
 assert.ok(index.includes('class="radar-filter-menu"'), 'filter menus must be present');
 assert.ok(index.includes('setupRadarFilterMenu('), 'custom filter menu setup must be wired');
-assert.ok(index.includes('select.dispatchEvent(new Event(\'change\''), 'custom menu must update canonical select state');
+assert.ok(index.includes('select.value = option.dataset.value;'), 'custom menu must update canonical select state');
+assert.ok(index.includes('tablePage = 1;\n        render();'), 'custom menu selection must directly re-render the canonical filtered rows');
 const nativeCssStart = index.indexOf('.radar-native-select{');
 assert.ok(nativeCssStart >= 0, 'canonical native select CSS must exist');
 const nativeCss = index.slice(nativeCssStart, nativeCssStart + 500);
