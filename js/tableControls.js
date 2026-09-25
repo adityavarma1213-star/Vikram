@@ -24,7 +24,15 @@
     close: r => Number(r.metrics?.close) || 0,
     priceChangePct: r => Number(r.metrics?.priceChangePct) || 0,
     volumeRatio: r => Number(r.metrics?.volumeRatio) || 0,
-    deliveryPct: r => Number(r.metrics?.deliveryPct) || 0
+    deliveryPct: r => Number(r.metrics?.deliveryPct) || 0,
+    // futuresOi/changeOi are frequently null (no F&O contract for that symbol \u2014 a genuine
+    // "Missing", not a real zero; the table still shows "\u2014" for these rows). ||0 here only
+    // affects SORT ORDER (where in the list a missing-data row lands), matching the exact same
+    // convention every accessor above already uses for its own nulls \u2014 it never changes what is
+    // displayed for that row (still "\u2014") or any score/verdict computation, so Missing \u2260 Zero
+    // is unaffected.
+    futuresOi: r => Number(r.metrics?.futuresOi) || 0,
+    changeOi: r => Number(r.metrics?.changeOi) || 0
   };
 
   // Stable sort by a known column key. Unknown keys return the input order unchanged (never

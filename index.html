@@ -65,24 +65,40 @@
 /* Opportunity Radar — visual refresh based on the supplied final design reference. UI only; filter/data logic unchanged. */
 .vikram-radar-surface{padding:12px 14px 16px!important;border:1px solid var(--border-subtle);border-radius:18px;background:linear-gradient(145deg,color-mix(in srgb,var(--bg-card) 96%,transparent),color-mix(in srgb,var(--bg-card-2) 88%,transparent));box-shadow:0 14px 35px rgba(0,0,0,.18)}
 .radar-heading{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:12px 4px 14px}.radar-title-wrap{display:flex;align-items:center;gap:12px}.radar-icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,#152b55,#07172f);font-size:22px;border:1px solid var(--border-subtle)}.radar-title-wrap h2{margin:0;font-size:21px;letter-spacing:-.02em}.radar-title-wrap p{margin:3px 0 0;color:var(--text-muted);font-size:11px}.radar-date-block{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:flex-end;font-size:10px;color:var(--text-muted)}.radar-date-block strong{color:var(--text-main)}.radar-verified-badge{padding:7px 12px;border-radius:999px;border:1px solid #8b5cf6;color:#c4b5fd;background:rgba(139,92,246,.12);font-weight:900;letter-spacing:.06em}
-.radar-filter-bar{display:grid;grid-template-columns:1fr 1.05fr .85fr 1.05fr 1.6fr;gap:9px;align-items:stretch;padding:11px;border:1px solid var(--border-subtle);border-radius:14px;background:color-mix(in srgb,var(--bg-card-2) 80%,transparent)}.radar-filter-chip{display:flex;align-items:center;gap:8px;min-width:0;padding:7px 9px;border:1px solid var(--border-subtle);border-radius:11px;background:color-mix(in srgb,var(--bg-card) 62%,transparent)}.radar-filter-chip>span{font-size:9px;font-weight:900;letter-spacing:.07em;color:var(--text-muted)}.vikram-radar-surface{position:relative;z-index:1000;isolation:isolate;pointer-events:auto}.radar-filter-bar{position:relative;z-index:1001;isolation:isolate;pointer-events:auto}.radar-filter-chip{position:relative;z-index:1002;pointer-events:auto;cursor:pointer}.radar-filter-chip select{position:relative;z-index:1003;display:block;width:100%;min-width:0;flex:1;height:38px;border:0;background:transparent;color:var(--text-main);font-size:11px;font-weight:800;outline:0;pointer-events:auto;cursor:pointer;opacity:1;appearance:auto;-webkit-appearance:auto}.radar-filter-chip select option{background:#101d34;color:#fff};.radar-filter-chip{touch-action:manipulation;user-select:none;-webkit-user-select:none}
-.radar-filter-chip>label{display:block;flex:0 0 auto;margin:0;font-size:9px;font-weight:900;letter-spacing:.07em;color:var(--text-muted);cursor:pointer;pointer-events:auto}
-.radar-filter-chip>select{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-.radar-filter-chip[data-radar-filter-wrap]{cursor:pointer}
-.radar-filter-chip[data-radar-filter-wrap] select{cursor:pointer}.radar-filter-chip:focus-within{border-color:var(--accent-cyan);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-cyan) 18%,transparent)}
-/* Deterministic filter menus: visible buttons own the click target; existing selects remain the
-   canonical state controls. This avoids browser-native select hitbox differences on static Pages. */
+.vikram-radar-surface{position:relative;z-index:1000}
+/* Deterministic column menus: visible buttons own the click target; the hidden selects remain the
+   canonical state controls (unchanged from before — same clip-hidden pattern, just no visible
+   chip/trigger wrapping them any more). */
 .radar-native-select{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;opacity:0!important;pointer-events:none!important}
-.radar-filter-trigger{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;height:38px;min-width:0;border:0;background:transparent;color:var(--text-main);padding:0 2px;font:inherit;font-size:11px;font-weight:800;text-align:left;cursor:pointer;touch-action:manipulation}
-.radar-filter-trigger::after{content:"▾";font-size:10px;color:var(--text-muted);margin-left:auto}
-.radar-filter-menu{position:absolute;left:6px;right:6px;top:calc(100% + 5px);z-index:11000;display:none;min-width:180px;max-height:280px;overflow:auto;padding:5px;border:1px solid var(--border-subtle);border-radius:11px;background:var(--bg-card);box-shadow:0 16px 36px rgba(0,0,0,.28)}
-.radar-filter-menu.open{display:grid;gap:2px}
+/* New minimal toolbar: Universe pills + note + search only — Verdict/Score/Sort have no visible
+   control here any more; their UI is entirely in the table headers (see .radar-col-menu below). */
+.radar-mini-toolbar{display:flex;flex-direction:column;gap:9px;padding:11px;border:1px solid var(--border-subtle);border-radius:14px;background:color-mix(in srgb,var(--bg-card-2) 80%,transparent)}
+.radar-universe-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.radar-universe-pills{display:flex;flex-wrap:wrap;gap:6px}
+.radar-universe-pill{border:1px solid var(--border-subtle);background:color-mix(in srgb,var(--bg-card) 62%,transparent);color:var(--text-muted);border-radius:999px;padding:7px 12px;font-size:10px;font-weight:800;cursor:pointer;touch-action:manipulation}
+.radar-universe-pill:hover{border-color:var(--accent-cyan);color:var(--text-main)}
+.radar-universe-pill.active{background:color-mix(in srgb,var(--accent-cyan) 16%,var(--bg-card-2));border-color:var(--accent-cyan);color:var(--accent-cyan)}
+.radar-universe-status{display:flex;flex-direction:column;justify-content:center;padding:5px 2px;color:var(--text-main);font-size:10px}.radar-universe-status small{font-size:8px;color:#34d399;font-weight:900;letter-spacing:.05em;margin-top:2px}
+.radar-universe-note{margin:0;font-size:9px;line-height:1.5;color:var(--text-muted)}
+.radar-search-wrap{display:flex;align-items:center;gap:7px;border:1px solid var(--border-subtle);border-radius:11px;padding:0 11px;background:color-mix(in srgb,var(--bg-card) 62%,transparent);max-width:360px}.radar-search-wrap input{width:100%;height:38px;border:0;outline:0;background:transparent;color:var(--text-main);font-size:11px}.radar-search-icon{font-size:18px;color:var(--text-muted)}
+.radar-filter-actions{display:flex;justify-content:flex-end;align-items:center;gap:10px;min-height:26px}.filter-match-count{font-size:10px;font-weight:800;color:var(--accent-cyan)}.clear-filters-btn{border:1px solid var(--border-subtle);background:transparent;color:var(--text-muted);border-radius:8px;padding:5px 9px;font-size:9px;font-weight:800;cursor:pointer}.clear-filters-btn:hover{border-color:var(--accent-cyan);color:var(--text-main)}
+/* Interactive table headers: click opens a menu (below), never sorts/filters on click alone. */
+.radar-table-scroll th[data-col-menu]{cursor:pointer;user-select:none;touch-action:manipulation}
+.radar-table-scroll th[data-col-menu]:hover,.radar-table-scroll th[data-col-menu]:focus-visible{color:var(--accent-cyan);outline:none}
+.radar-table-scroll th.radar-th-active{color:var(--accent-cyan)}
+/* The ONE shared column-menu instance — position:fixed and appended to <body> (not inside the
+   horizontally-scrolling table), with its top/left computed and viewport-clamped in JS, so it can
+   never be clipped by .radar-table-scroll{overflow-x:auto} or run off-screen at any column or width. */
+.radar-col-menu{position:fixed;z-index:20000;display:none;min-width:210px;max-width:min(320px,92vw);max-height:min(320px,70vh);overflow:auto;padding:5px;border:1px solid var(--border-subtle);border-radius:11px;background:var(--bg-card);box-shadow:0 16px 36px rgba(0,0,0,.35)}
+.radar-col-menu:not([hidden]){display:grid;gap:2px}
+.radar-col-menu-heading{font-size:9px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);padding:7px 8px 3px}
+.radar-col-menu-divider{height:1px;background:var(--border-subtle);margin:4px 2px}
 .radar-filter-option{display:block;width:100%;border:0;border-radius:8px;background:transparent;color:var(--text-main);padding:9px 10px;font-size:10px;font-weight:800;text-align:left;cursor:pointer}
 .radar-filter-option:hover,.radar-filter-option[aria-selected="true"]{background:var(--bg-card-2);color:var(--accent-cyan)}
-.radar-universe-status{display:flex;flex-direction:column;justify-content:center;padding:5px 2px;color:var(--text-main);font-size:10px}.radar-universe-status small{font-size:8px;color:#34d399;font-weight:900;letter-spacing:.05em;margin-top:2px}.radar-search-wrap{display:flex;align-items:center;gap:7px;border:1px solid var(--border-subtle);border-radius:11px;padding:0 11px;background:color-mix(in srgb,var(--bg-card) 62%,transparent)}.radar-search-wrap input{width:100%;height:38px;border:0;outline:0;background:transparent;color:var(--text-main);font-size:11px;position:relative;z-index:20;pointer-events:auto}.radar-search-icon{font-size:18px;color:var(--text-muted)}.radar-filter-actions{display:flex;justify-content:flex-end;align-items:center;gap:10px;min-height:26px}.filter-match-count{font-size:10px;font-weight:800;color:var(--accent-cyan)}.clear-filters-btn{border:1px solid var(--border-subtle);background:transparent;color:var(--text-muted);border-radius:8px;padding:5px 9px;font-size:9px;font-weight:800;cursor:pointer}.clear-filters-btn:hover{border-color:var(--accent-cyan);color:var(--text-main)}
+@media(max-width:650px){.radar-mini-toolbar{padding:9px}.radar-search-wrap{max-width:none}}
 .radar-summary-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.radar-summary-card{min-height:74px;padding:12px 13px;border:1px solid var(--border-subtle);border-radius:12px;background:linear-gradient(145deg,color-mix(in srgb,var(--bg-card-2) 92%,transparent),color-mix(in srgb,var(--bg-card) 92%,transparent));position:relative;overflow:hidden}.radar-summary-card .rsc-icon{position:absolute;right:12px;top:13px;font-size:21px}.radar-summary-card .rsc-value{font-size:21px;font-weight:900;line-height:1}.radar-summary-card .rsc-label{font-size:11px;font-weight:800;margin-top:6px;color:var(--text-main)}.radar-summary-card .rsc-sub{font-size:9px;color:var(--text-muted);margin-top:3px}.radar-summary-card.cyan{border-color:rgba(34,211,238,.35)}.radar-summary-card.green{border-color:rgba(52,211,153,.35)}.radar-summary-card.purple{border-color:rgba(167,139,250,.35)}.radar-summary-card.blue{border-color:rgba(59,130,246,.35)}.radar-summary-card.orange{border-color:rgba(245,158,11,.35)}
 .radar-legend{display:flex;flex-wrap:wrap;gap:16px;padding:3px 5px 10px;font-size:10px;color:var(--text-muted)}.radar-legend span{display:inline-flex;align-items:center;gap:6px}.radar-legend i{width:9px;height:9px;border-radius:50%;display:inline-block}.radar-table-scroll{border:1px solid var(--border-subtle);border-radius:13px;background:color-mix(in srgb,var(--bg-card) 70%,transparent)}.radar-table-scroll table{min-width:1080px!important;font-size:11px!important}.radar-table-scroll th{padding:8px!important;color:var(--text-muted);font-size:9px!important;letter-spacing:.04em;border-bottom:1px solid var(--border-subtle)}.radar-table-scroll td{padding:8px!important;border-top:1px solid color-mix(in srgb,var(--border-subtle) 70%,transparent)}.radar-rank{font-weight:900;color:var(--text-muted)}.radar-score-pill{display:inline-flex;min-width:31px;justify-content:center;padding:4px 8px;border-radius:999px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.35);color:#6ee7b7;font-weight:900}.radar-action-btn{border:0;background:transparent;color:#c084fc;font-weight:900;cursor:pointer;font-size:13px}.radar-pagination{padding-top:9px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-@media(max-width:1100px){.radar-filter-bar{grid-template-columns:repeat(3,minmax(0,1fr))}.radar-summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.radar-heading{align-items:flex-start;flex-direction:column}.radar-date-block{justify-content:flex-start}}@media(max-width:650px){.radar-filter-bar{grid-template-columns:1fr 1fr}.radar-summary-grid{grid-template-columns:1fr 1fr}.radar-date-block{gap:8px}.radar-title-wrap h2{font-size:18px}}@media(max-width:430px){.radar-filter-bar{grid-template-columns:1fr}.radar-summary-grid{grid-template-columns:1fr}}
+@media(max-width:1100px){.radar-summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.radar-heading{align-items:flex-start;flex-direction:column}.radar-date-block{justify-content:flex-start}}@media(max-width:650px){.radar-summary-grid{grid-template-columns:1fr 1fr}.radar-date-block{gap:8px}.radar-title-wrap h2{font-size:18px}}@media(max-width:430px){.radar-summary-grid{grid-template-columns:1fr}}
 .radar-legend .legend-confirmed{background:#34d399}.radar-legend .legend-starting{background:#22d3ee}.radar-legend .legend-mixed{background:#f2b134}.radar-legend .legend-distribution{background:#e2626b}</style>
 </head>
 <body data-vikram-page="home">
@@ -216,27 +232,25 @@
         </div>
       </div>
 
-      <div class="radar-filter-bar" aria-label="Scanner filters">
-        <select id="universeFilter" class="radar-native-select" data-radar-filter aria-hidden="true" tabindex="-1" style="display:none"><option value="ALL">All Stocks</option><option value="NIFTY 50">Nifty 50</option><option value="NIFTY 200">Nifty 200</option><option value="NIFTY 500">Nifty 500</option></select>
-        <div class="radar-universe-status"><strong id="universeStatusLine">—</strong><small>EOD VERIFIED</small></div>
-        <div class="radar-filter-chip" data-radar-filter-wrap="verdict">
-          <label for="verdictFilterTrigger">VERDICT</label>
-          <button id="verdictFilterTrigger" class="radar-filter-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">All Verdicts</button>
-          <select id="verdictFilter" class="radar-native-select" data-radar-filter aria-hidden="true" tabindex="-1"><option value="ALL">All Verdicts</option><option value="ACCUMULATION CONFIRMED">Confirmed</option><option value="ACCUMULATION STARTING">Starting</option><option value="UNCONFIRMED / MIXED">Unconfirmed / Mixed</option><option value="DISTRIBUTION">Distribution</option></select>
-          <div id="verdictFilterMenu" class="radar-filter-menu" role="listbox" aria-label="Verdict"></div>
+      <div class="radar-mini-toolbar" aria-label="Universe and search">
+        <select id="universeFilter" class="radar-native-select" data-radar-filter aria-hidden="true" tabindex="-1"><option value="ALL">All Stocks</option><option value="NIFTY 50">Nifty 50</option><option value="NIFTY 200">Nifty 200</option><option value="NIFTY 500">Nifty 500</option></select>
+        <select id="verdictFilter" class="radar-native-select" data-radar-filter aria-hidden="true" tabindex="-1"><option value="ALL">All Verdicts</option><option value="ACCUMULATION CONFIRMED">Confirmed</option><option value="ACCUMULATION STARTING">Starting</option><option value="UNCONFIRMED / MIXED">Unconfirmed / Mixed</option><option value="DISTRIBUTION">Distribution</option></select>
+        <select id="scoreFilter" class="radar-native-select" data-radar-filter aria-hidden="true" tabindex="-1"><option value="0">Any</option><option value="75">≥ 75</option><option value="55">≥ 55</option><option value="50">≥ 50</option></select>
+        <select id="sortSelect" class="radar-native-select" data-radar-filter aria-hidden="true" tabindex="-1"><option value="score:desc">Score – High to Low</option><option value="score:asc">Score – Low to High</option><option value="close:desc">Price – High to Low</option><option value="close:asc">Price – Low to High</option><option value="priceChangePct:desc">Today's Change – High to Low</option><option value="priceChangePct:asc">Today's Change – Low to High</option><option value="volumeRatio:desc">Volume – High to Low</option><option value="volumeRatio:asc">Volume – Low to High</option><option value="deliveryPct:desc">Delivery – High to Low</option><option value="deliveryPct:asc">Delivery – Low to High</option><option value="futuresOi:desc">Futures OI – High to Low</option><option value="futuresOi:asc">Futures OI – Low to High</option><option value="changeOi:desc">OI Change – High to Low</option><option value="changeOi:asc">OI Change – Low to High</option><option value="symbol:asc">Stock – A to Z</option><option value="symbol:desc">Stock – Z to A</option></select>
+        <select id="obvFilter" class="radar-native-select" data-radar-filter aria-hidden="true" tabindex="-1"><option value="ALL">All</option><option value="RISING">Rising</option><option value="FALLING">Falling</option><option value="FLAT">Flat</option></select>
+        <select id="volumeFilter" class="radar-native-select" data-radar-filter aria-hidden="true" tabindex="-1"><option value="ALL">All</option><option value="BREAKOUT">Volume Breakout (≥ 2x avg)</option></select>
+        <select id="deliveryFilter" class="radar-native-select" data-radar-filter aria-hidden="true" tabindex="-1"><option value="ALL">All</option><option value="HIGH">High Delivery (≥ 60%)</option></select>
+        <select id="oiChangeFilter" class="radar-native-select" data-radar-filter aria-hidden="true" tabindex="-1"><option value="ALL">All</option><option value="BUILDUP">OI Build-up (real data only)</option></select>
+        <div class="radar-universe-row">
+          <div class="radar-universe-pills" role="group" aria-label="NSE universe">
+            <button type="button" class="radar-universe-pill" data-universe-value="ALL">All NSE Stocks</button>
+            <button type="button" class="radar-universe-pill" data-universe-value="NIFTY 50">NIFTY 50</button>
+            <button type="button" class="radar-universe-pill" data-universe-value="NIFTY 200">NIFTY 200</button>
+            <button type="button" class="radar-universe-pill" data-universe-value="NIFTY 500">NIFTY 500</button>
+          </div>
+          <div class="radar-universe-status"><strong id="universeStatusLine">—</strong><small>EOD VERIFIED</small></div>
         </div>
-        <div class="radar-filter-chip" data-radar-filter-wrap="score">
-          <label for="scoreFilterTrigger">SCORE</label>
-          <button id="scoreFilterTrigger" class="radar-filter-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">Any</button>
-          <select id="scoreFilter" class="radar-native-select" data-radar-filter aria-hidden="true" tabindex="-1"><option value="0">Any</option><option value="75">≥ 75</option><option value="55">≥ 55</option><option value="50">≥ 50</option></select>
-          <div id="scoreFilterMenu" class="radar-filter-menu" role="listbox" aria-label="Score"></div>
-        </div>
-        <div class="radar-filter-chip" data-radar-filter-wrap="sort">
-          <label for="sortSelectTrigger">SORT</label>
-          <button id="sortSelectTrigger" class="radar-filter-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">Score – High to Low</button>
-          <select id="sortSelect" class="radar-native-select" data-radar-filter aria-hidden="true" tabindex="-1"><option value="score:desc">Score – High to Low</option><option value="score:asc">Score – Low to High</option><option value="close:desc">Price – High to Low</option><option value="close:asc">Price – Low to High</option><option value="priceChangePct:desc">Today's Change – High to Low</option><option value="priceChangePct:asc">Today's Change – Low to High</option><option value="volumeRatio:desc">Volume – High to Low</option><option value="volumeRatio:asc">Volume – Low to High</option><option value="deliveryPct:desc">Delivery – High to Low</option><option value="deliveryPct:asc">Delivery – Low to High</option><option value="symbol:asc">Stock – A to Z</option><option value="symbol:desc">Stock – Z to A</option></select>
-          <div id="sortSelectMenu" class="radar-filter-menu" role="listbox" aria-label="Sort"></div>
-        </div>
+        <p class="radar-universe-note">NIFTY 100 / Next 50 / Midcap 150 / Smallcap 250 / Microcap 250 / Total Market, and F&amp;O-only / Cash-only filters: <strong>DATA NOT AVAILABLE</strong> — VIKRAM's index-membership source (server/src/indexUniverses.js) currently fetches only NIFTY 50/200/500 constituent lists. Not shown rather than faked.</p>
         <div class="radar-search-wrap"><label class="sr-only" for="tableSearch">Search</label><span class="radar-search-icon">⌕</span><input id="tableSearch" type="search" placeholder="Search symbol or company name..." aria-label="Search symbol or company name"></div>
       </div>
       <div class="radar-filter-actions"><span id="filterMatchCount" class="filter-match-count">All verified stocks</span><button id="clearScannerFilters" class="clear-filters-btn" type="button">Reset filters</button></div>
@@ -320,30 +334,165 @@
   // has changed size/order.
   if (tableSearch) tableSearch.addEventListener('input', () => { tablePage = 1; render(); });
   if (sortSelect) sortSelect.addEventListener('change', () => { tablePage = 1; render(); });
-  // Column-header sorting uses the SAME canonical #sortSelect state as the dropdown.
-  const SORTABLE_DEFAULT_DIR = { symbol: 'asc', close: 'desc', score: 'desc', priceChangePct: 'desc', volumeRatio: 'desc', deliveryPct: 'desc' };
-  function activateHeaderSort(key) {
-    if (!sortSelect || !(key in SORTABLE_DEFAULT_DIR)) return;
-    const [curKey, curDir] = (sortSelect.value || 'score:desc').split(':');
-    const direction = curKey === key ? (curDir === 'asc' ? 'desc' : 'asc') : SORTABLE_DEFAULT_DIR[key];
-    const optionValue = `${key}:${direction}`;
-    if (![...sortSelect.options].some(o => o.value === optionValue)) return;
-    sortSelect.value = optionValue;
-    sortSelect.dispatchEvent(new Event('change'));
+  const obvFilter = document.getElementById('obvFilter');
+  const volumeFilter = document.getElementById('volumeFilter');
+  const deliveryFilter = document.getElementById('deliveryFilter');
+  const oiChangeFilter = document.getElementById('oiChangeFilter');
+  [obvFilter, volumeFilter, deliveryFilter, oiChangeFilter].forEach(el => { if (el) el.addEventListener('change', () => { tablePage = 1; render(); }); });
+
+  // ==========================================================================
+  // Column-header menus \u2014 THE ONLY filter/sort UI for the Opportunity Radar
+  // table (the old separate Verdict/Score/Sort bar above the table is gone).
+  // Every entry below either points at an EXISTING canonical <select> (Verdict,
+  // Score, Sort) or, for the four new filters (OBV Trend, Volume Breakout,
+  // High Delivery, OI Build-up), at a value/semantic ALREADY computed and
+  // unit-tested elsewhere in this codebase:
+  //   - OBV Trend Rising/Falling/Flat: the exact sign test already used to
+  //     render this column's "\u2197 Rising / \u2198 Falling / \u2192 Flat" text below.
+  //   - Volume Breakout (>=2x), High Delivery (>=60%), OI Build-up (>0):
+  //     the exact thresholds already defined and tested in
+  //     js/opportunityRadar.js's categoriesFor() (VOLUME_BREAKOUT/HIGH_DELIVERY/
+  //     OI_BUILD_UP), reused here rather than inventing new ones.
+  // STOCK / PRICE / TODAY / FUTURES OI have no existing filter model anywhere
+  // in the codebase \u2014 they are sort-only by design, not an oversight; see the
+  // written report for why each one stops at sort rather than inventing a
+  // filter bucket. RANK and ACTIONS are not data fields and are not interactive.
+  // ==========================================================================
+  const COLUMN_MENUS = {
+    verdict:   { label: 'VERDICT',      filterSelectId: 'verdictFilter' },
+    score:     { label: 'SCORE',        filterSelectId: 'scoreFilter', sortKey: 'score' },
+    stock:     { label: 'STOCK',        sortKey: 'symbol' },
+    price:     { label: 'PRICE (\u20b9)',    sortKey: 'close' },
+    today:     { label: 'TODAY',        sortKey: 'priceChangePct' },
+    volume:    { label: 'VOLUME',       filterSelectId: 'volumeFilter', sortKey: 'volumeRatio' },
+    delivery:  { label: 'DELIVERY %',   filterSelectId: 'deliveryFilter', sortKey: 'deliveryPct' },
+    obv:       { label: 'OBV TREND',    filterSelectId: 'obvFilter' },
+    futuresOi: { label: 'FUTURES OI',   sortKey: 'futuresOi' },
+    oiChange:  { label: 'OI CHANGE',    filterSelectId: 'oiChangeFilter', sortKey: 'changeOi' }
+  };
+  const SORT_LABELS = {
+    symbol: ['Stock: A \u2192 Z', 'Stock: Z \u2192 A'],
+    close: ['Price: High \u2192 Low', 'Price: Low \u2192 High'],
+    score: ['Score: High \u2192 Low', 'Score: Low \u2192 High'],
+    priceChangePct: ["Today's Change: High \u2192 Low", "Today's Change: Low \u2192 High"],
+    volumeRatio: ['Volume: High \u2192 Low', 'Volume: Low \u2192 High'],
+    deliveryPct: ['Delivery: High \u2192 Low', 'Delivery: Low \u2192 High'],
+    futuresOi: ['Futures OI: High \u2192 Low', 'Futures OI: Low \u2192 High'],
+    changeOi: ['OI Change: High \u2192 Low', 'OI Change: Low \u2192 High']
+  };
+
+  // ONE shared menu element, appended once to <body> as position:fixed and repositioned under
+  // whichever header was clicked. Deliberately NOT nested inside the horizontally-scrolling table
+  // wrapper (.radar-table-scroll{overflow-x:auto}) \u2014 an absolutely-positioned descendant of an
+  // overflow-x:auto container is still clipped by it, which is exactly what would happen to menus
+  // opened from the right-hand columns (OI CHANGE, VERDICT) if this lived inside the table. Being
+  // outside it and position:fixed, with its position computed and clamped to the viewport in
+  // positionColMenu(), is what satisfies "must not be clipped / must not render outside the
+  // viewport" at any column and any width. Only one instance exists, so only one menu can ever be
+  // open at a time by construction.
+  let colMenuEl = null, colMenuOpenKey = null, colMenuOpts = [], colMenuOpenTh = null;
+  function ensureColMenuEl() {
+    if (colMenuEl) return colMenuEl;
+    colMenuEl = document.createElement('div');
+    colMenuEl.id = 'radarColumnMenu';
+    colMenuEl.className = 'radar-col-menu';
+    colMenuEl.setAttribute('role', 'listbox');
+    colMenuEl.hidden = true;
+    document.body.appendChild(colMenuEl);
+    return colMenuEl;
+  }
+  function closeColMenu() {
+    if (!colMenuEl) return;
+    colMenuEl.hidden = true;
+    colMenuOpenKey = null;
+    colMenuOpenTh = null;
+    document.querySelectorAll('th[data-col-menu][aria-expanded="true"]').forEach(t => t.setAttribute('aria-expanded', 'false'));
+  }
+  function buildColMenuOptions(key) {
+    const cfg = COLUMN_MENUS[key];
+    const opts = [];
+    if (!cfg) return opts;
+    if (cfg.filterSelectId) {
+      const sel = document.getElementById(cfg.filterSelectId);
+      if (sel) Array.from(sel.options).forEach(o => opts.push({
+        group: 'filter', text: o.textContent, active: o.value === sel.value,
+        onSelect: () => { sel.value = o.value; sel.dispatchEvent(new Event('change')); }
+      }));
+    }
+    if (cfg.sortKey && sortSelect) {
+      const [curKey, curDir] = (sortSelect.value || 'score:desc').split(':');
+      const labels = SORT_LABELS[cfg.sortKey] || [cfg.label + ': high to low', cfg.label + ': low to high'];
+      ['desc', 'asc'].forEach((dir, i) => {
+        const value = `${cfg.sortKey}:${dir}`;
+        if (![...sortSelect.options].some(o => o.value === value)) return; // no matching option: never diverge from the canonical select
+        opts.push({ group: 'sort', text: labels[i], active: curKey === cfg.sortKey && curDir === dir, onSelect: () => { sortSelect.value = value; sortSelect.dispatchEvent(new Event('change')); } });
+      });
+    }
+    return opts;
+  }
+  function positionColMenu(th) {
+    if (!colMenuEl || colMenuEl.hidden) return;
+    const r = th.getBoundingClientRect();
+    const menuW = Math.max(colMenuEl.offsetWidth, 200);
+    const left = Math.min(Math.max(8, r.left), Math.max(8, window.innerWidth - menuW - 8));
+    let top = r.bottom + 4;
+    if (top + colMenuEl.offsetHeight > window.innerHeight - 8) top = Math.max(8, r.top - colMenuEl.offsetHeight - 4);
+    colMenuEl.style.left = left + 'px';
+    colMenuEl.style.top = top + 'px';
+  }
+  function openColMenu(th, key) {
+    const cfg = COLUMN_MENUS[key];
+    if (!cfg) return;
+    const menu = ensureColMenuEl();
+    colMenuOpts = buildColMenuOptions(key);
+    let html = ''; let lastGroup = null;
+    colMenuOpts.forEach(o => {
+      if (o.group !== lastGroup) { if (lastGroup !== null) html += '<div class="radar-col-menu-divider"></div>'; html += `<div class="radar-col-menu-heading">${o.group === 'sort' ? 'Sort' : 'Filter'}</div>`; }
+      lastGroup = o.group;
+      html += `<button type="button" class="radar-filter-option" role="option" aria-selected="${o.active}">${esc(o.text)}</button>`;
+    });
+    menu.innerHTML = html || '<div class="radar-col-menu-heading">No options for this column</div>';
+    Array.from(menu.querySelectorAll('.radar-filter-option')).forEach((btn, i) => btn.addEventListener('click', e => {
+      e.stopPropagation();
+      colMenuOpts[i].onSelect();
+      tablePage = 1;
+      closeColMenu();
+      render();
+    }));
+    menu.hidden = false;
+    colMenuOpenKey = key;
+    colMenuOpenTh = th;
+    th.setAttribute('aria-expanded', 'true');
+    positionColMenu(th);
+  }
+  function toggleColMenu(th, key) {
+    if (colMenuOpenKey === key) { closeColMenu(); return; }
+    openColMenu(th, key);
   }
   if (scannerCards) {
     scannerCards.addEventListener('click', e => {
-      const th = e.target.closest('th[data-sort-key]');
-      if (th) activateHeaderSort(th.getAttribute('data-sort-key'));
+      const th = e.target.closest('th[data-col-menu]');
+      if (th) toggleColMenu(th, th.getAttribute('data-col-menu'));
     });
     scannerCards.addEventListener('keydown', e => {
-      if (e.key !== 'Enter' && e.key !== ' ') return;
-      const th = e.target.closest('th[data-sort-key]');
+      const th = e.target.closest('th[data-col-menu]');
       if (!th) return;
-      e.preventDefault();
-      activateHeaderSort(th.getAttribute('data-sort-key'));
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleColMenu(th, th.getAttribute('data-col-menu')); }
+      else if (e.key === 'Escape' && colMenuOpenKey) { e.preventDefault(); closeColMenu(); }
     });
   }
+  document.addEventListener('click', e => { if (colMenuEl && !colMenuEl.hidden && !e.target.closest('.radar-col-menu') && !e.target.closest('th[data-col-menu]')) closeColMenu(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeColMenu(); });
+  // A <th tabindex="0"> receiving focus/click near .radar-table-scroll's edge makes the BROWSER
+  // auto-scroll the table to bring it fully into view — a normal side effect of the very click
+  // that opens the menu, not a reason to close it. Reposition the fixed menu under its header on
+  // scroll instead (it also then tracks the header if the page itself scrolls); resize is rarer
+  // and heavier, so it still just closes.
+  window.addEventListener('scroll', () => { if (colMenuOpenTh && document.contains(colMenuOpenTh)) positionColMenu(colMenuOpenTh); else closeColMenu(); }, true);
+  window.addEventListener('resize', () => closeColMenu());
+  document.querySelectorAll('.radar-universe-pill').forEach(btn => btn.addEventListener('click', () => {
+    universe.value = btn.dataset.universeValue; tablePage = 1; render();
+  }));
   const esc = value => String(value ?? '').replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const text = value => value == null || value === '' ? 'N/A' : esc(value);
   // Exact-match CSS class for the Verdict column (js/verdictDisplay.js).
@@ -475,25 +624,6 @@
   }
   renderLiveDataStatus();
 
-  // Keep the visible radar filter triggers synchronized with the canonical select state.
-  // Reset/quick-filter actions update the selects directly and intentionally do not depend on
-  // synthetic native-select change events. render() is the single synchronization point.
-  function syncRadarTriggers() {
-    const pairs = [
-      ['verdictFilter', 'verdictFilterTrigger'],
-      ['scoreFilter', 'scoreFilterTrigger'],
-      ['sortSelect', 'sortSelectTrigger']
-    ];
-    pairs.forEach(([selectId, triggerId]) => {
-      const select = document.getElementById(selectId);
-      const trigger = document.getElementById(triggerId);
-      if (!select || !trigger) return;
-      const label = select.options[select.selectedIndex]?.textContent || '';
-      if (trigger.firstChild) trigger.firstChild.textContent = label;
-      trigger.setAttribute('aria-label', label);
-    });
-  }
-
   // Verdict filtering is presentation-layer matching only. Normalize whitespace/case so a
   // verified engine verdict such as "ACCUMULATION STARTING" still matches if a serialized
   // snapshot contains harmless formatting differences. This does NOT change the engine enum,
@@ -502,17 +632,42 @@
   const verdictMatches = (rowVerdict, selectedVerdict) => selectedVerdict === 'ALL'
     || normalizeVerdictFilterValue(rowVerdict) === normalizeVerdictFilterValue(selectedVerdict);
 
-  function sortTh(key, label, curKey, curDir) {
-    const active = curKey === key;
-    const glyph = active ? (curDir === 'asc' ? ' ↑' : ' ↓') : ' ↕';
-    const ariaSort = active ? (curDir === 'asc' ? 'ascending' : 'descending') : 'none';
-    return `<th data-sort-key="${key}" tabindex="0" role="button" aria-sort="${ariaSort}" style="cursor:pointer;user-select:none" title="Sort by ${esc(label)}">${esc(label)}${glyph}</th>`;
+  function colTh(key) {
+    const cfg = COLUMN_MENUS[key];
+    const [sortKey, sortDirection] = (sortSelect && sortSelect.value ? sortSelect.value : 'score:desc').split(':');
+    const filterSel = cfg.filterSelectId ? document.getElementById(cfg.filterSelectId) : null;
+    const filterActive = !!(filterSel && filterSel.value !== 'ALL');
+    const sortActive = cfg.sortKey && sortKey === cfg.sortKey;
+    const arrow = sortActive ? (sortDirection === 'asc' ? ' ↑' : ' ↓') : ' ▾';
+    const dot = filterActive ? ' ●' : '';
+    const ariaSort = sortActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none';
+    const cls = (filterActive || sortActive) ? ' class="radar-th-active"' : '';
+    return `<th${cls} data-col-menu="${key}" tabindex="0" role="button" aria-haspopup="listbox" aria-expanded="false" aria-sort="${ariaSort}" style="cursor:pointer;user-select:none" title="${esc(cfg.label)} — click for filter/sort options">${esc(cfg.label)}${arrow}${dot}</th>`;
   }
   function render() {
-    syncRadarTriggers();
+    closeColMenu(); // thead is rebuilt below; never leave a menu pointing at a detached <th>
     const [sortKey, sortDirection] = (sortSelect && sortSelect.value ? sortSelect.value : 'score:desc').split(':');
     const u = universe.value, v = verdict.value, min = Number(score.value || 0);
     const inUniverse = r => window.VikramUniverseMembership.matchesUniverse(r, u);
+    document.querySelectorAll('.radar-universe-pill').forEach(btn => btn.classList.toggle('active', btn.dataset.universeValue === u));
+    // OBV Trend / Volume Breakout / High Delivery / OI Build-up: same sign/threshold tests already
+    // used elsewhere (row rendering below; js/opportunityRadar.js categoriesFor()) — not new
+    // semantics. Missing (null) values only ever match "All", never a specific bucket — a stock
+    // with no F&O data is not silently counted as "no OI build-up", it is excluded from that
+    // opt-in filter entirely, consistent with Missing ≠ Zero.
+    const obvVal = obvFilter ? obvFilter.value : 'ALL';
+    const matchesObv = r => {
+      if (obvVal === 'ALL') return true;
+      const t = r.metrics?.obvTrend; if (t == null) return false;
+      const n = Number(t);
+      return obvVal === 'RISING' ? n > 0 : obvVal === 'FALLING' ? n < 0 : obvVal === 'FLAT' ? n === 0 : true;
+    };
+    const volumeVal = volumeFilter ? volumeFilter.value : 'ALL';
+    const matchesVolume = r => volumeVal !== 'BREAKOUT' || (r.metrics?.volumeRatio != null && Number(r.metrics.volumeRatio) >= 2);
+    const deliveryVal = deliveryFilter ? deliveryFilter.value : 'ALL';
+    const matchesDelivery = r => deliveryVal !== 'HIGH' || (r.metrics?.deliveryPct != null && Number(r.metrics.deliveryPct) >= 60);
+    const oiChangeVal = oiChangeFilter ? oiChangeFilter.value : 'ALL';
+    const matchesOiChange = r => oiChangeVal !== 'BUILDUP' || (r.metrics?.changeOi != null && Number(r.metrics.changeOi) > 0);
     // Blueprint requirement: show universe + EOD status/date + constituent count, sourced only
     // from what the verified snapshot actually reports — never a guessed/fabricated count.
     if (universeStatusLine) {
@@ -520,7 +675,7 @@
     }
     // FILTER step: universe/verdict/score/search narrow which rows are included. Order is
     // untouched here — that is entirely the SORT step below, which never changes membership.
-    const filteredForUniverse = rows.filter(r => inUniverse(r) && verdictMatches(r.verdict, v) && (Number(r.score) || 0) >= min);
+    const filteredForUniverse = rows.filter(r => inUniverse(r) && verdictMatches(r.verdict, v) && (Number(r.score) || 0) >= min && matchesObv(r) && matchesVolume(r) && matchesDelivery(r) && matchesOiChange(r));
     const { filterRows, sortRows, paginate } = window.VikramTableControls || {};
     const textFiltered = filterRows ? filterRows(filteredForUniverse, tableSearch ? tableSearch.value : '') : filteredForUniverse;
     // SORT step: reorders the already-filtered set; never adds or removes a row.
@@ -569,11 +724,17 @@
     }
 
     if (!scannerCards) return;
-    scannerCards.innerHTML = visible.length ? `<table style="width:100%;border-collapse:collapse;min-width:1080px">
-      <thead><tr style="text-align:left">
-        <th>RANK</th>${sortTh('symbol','STOCK',sortKey,sortDirection)}${sortTh('close','PRICE (₹)',sortKey,sortDirection)}${sortTh('score','SCORE',sortKey,sortDirection)}${sortTh('priceChangePct','TODAY',sortKey,sortDirection)}${sortTh('volumeRatio','VOLUME',sortKey,sortDirection)}${sortTh('deliveryPct','DELIVERY %',sortKey,sortDirection)}<th>OBV TREND</th><th>FUTURES OI</th><th>OI CHANGE</th><th>VERDICT</th><th>ACTIONS</th>
-      </tr></thead>
-      <tbody>${visible.map((r, i) => {
+    // Headers stay in the DOM even with zero matching rows. They are now the ONLY way to change a
+    // filter (the old separate bar is gone), so a user who filters down to zero rows must still be
+    // able to click e.g. VERDICT and pick a different option directly -- not lose every header and
+    // be forced to hit the global Reset just to undo one filter. "No verified rows match these
+    // filters." becomes a full-width message row inside <tbody> instead of replacing the table.
+    const headRow = `<thead><tr style="text-align:left">
+        <th>RANK</th>${colTh('stock')}${colTh('price')}${colTh('score')}${colTh('today')}${colTh('volume')}${colTh('delivery')}${colTh('obv')}${colTh('futuresOi')}${colTh('oiChange')}${colTh('verdict')}<th>ACTIONS</th>
+      </tr></thead>`;
+    scannerCards.innerHTML = `<table style="width:100%;border-collapse:collapse;min-width:1080px">
+      ${headRow}
+      <tbody>${visible.length ? visible.map((r, i) => {
         const changePct = r.metrics?.priceChangePct;
         const changeClass = changePct == null ? '' : (changePct >= 0 ? 'status-confirmed' : 'status-distribution');
         const score = Number(r.score) || 0;
@@ -595,8 +756,8 @@
           <td><span class="${verdictClass(r.verdict)} dc-verdict">${text(r.verdict)}</span></td>
           <td><button class="radar-action-btn" type="button" data-radar-symbol="${esc(r.symbol)}" title="Open research">↗</button></td>
         </tr>`;
-      }).join('')}</tbody>
-    </table>` : '<p class="empty-cell">No verified rows match these filters.</p>';
+      }).join('') : '<tr><td colspan="12" class="empty-cell">No verified rows match these filters.</td></tr>'}</tbody>
+    </table>`;
     scannerCards.querySelectorAll('[data-radar-symbol]').forEach(btn => btn.addEventListener('click', () => go(btn.dataset.radarSymbol)));
     updateFilterUI(totalRows);
   }
@@ -636,58 +797,13 @@
   const clearScannerFilters = document.getElementById('clearScannerFilters');
   if (clearScannerFilters) clearScannerFilters.addEventListener('click', () => {
     universe.value = 'ALL'; verdict.value = 'ALL'; score.value = '0';
+    [obvFilter, volumeFilter, deliveryFilter, oiChangeFilter].forEach(el => { if (el) el.value = 'ALL'; });
     if (tableSearch) tableSearch.value = '';
     if (sortSelect) sortSelect.value = 'score:desc';
     tablePage = 1; render();
   });
   [universe,verdict,score].forEach(el => el.addEventListener('change', () => { tablePage = 1; render(); }));
-  // Deterministic filter-menu contract: visible buttons own the click target and update the
-  // existing canonical selects. This removes dependence on browser-native select hitboxes.
-  function setupRadarFilterMenu(selectId, triggerId, menuId) {
-    const select = document.getElementById(selectId);
-    const trigger = document.getElementById(triggerId);
-    const menu = document.getElementById(menuId);
-    if (!select || !trigger || !menu) return;
-    const close = () => { menu.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); };
-    const renderMenu = () => {
-      menu.innerHTML = Array.from(select.options).map(option =>
-        '<button type="button" class="radar-filter-option" role="option" data-value="' +
-        esc(option.value) + '" aria-selected="' + (option.value === select.value ? 'true' : 'false') + '">' +
-        esc(option.textContent) + '</button>'
-      ).join('');
-      trigger.childNodes[0].textContent = select.options[select.selectedIndex]?.textContent || '';
-      menu.querySelectorAll('.radar-filter-option').forEach(option => option.addEventListener('click', event => {
-        event.stopPropagation();
-        // Apply the filter directly. The visible menu is the real interaction surface;
-        // do not depend on a synthetic native-select change event to trigger the canonical render.
-        // The filter state and exact-match rules remain unchanged.
-        select.value = option.dataset.value;
-        tablePage = 1;
-        render();
-        renderMenu();
-        close();
-      }));
-    };
-    trigger.addEventListener('click', event => {
-      event.stopPropagation();
-      document.querySelectorAll('.radar-filter-menu.open').forEach(other => { if (other !== menu) other.classList.remove('open'); });
-      const open = !menu.classList.contains('open');
-      menu.classList.toggle('open', open);
-      trigger.setAttribute('aria-expanded', String(open));
-      if (open) renderMenu();
-    });
-    select.addEventListener('change', renderMenu);
-    renderMenu();
-  }
-  setupRadarFilterMenu('verdictFilter','verdictFilterTrigger','verdictFilterMenu');
-  setupRadarFilterMenu('scoreFilter','scoreFilterTrigger','scoreFilterMenu');
-  setupRadarFilterMenu('sortSelect','sortSelectTrigger','sortSelectMenu');
-  document.addEventListener('click', event => {
-    if (!event.target.closest('.radar-filter-chip[data-radar-filter-wrap]')) {
-      document.querySelectorAll('.radar-filter-menu.open').forEach(menu => menu.classList.remove('open'));
-      document.querySelectorAll('.radar-filter-trigger[aria-expanded="true"]').forEach(btn => btn.setAttribute('aria-expanded','false'));
-    }
-  });
+
   document.querySelectorAll('.surface-tab:not(:disabled)').forEach(tab => tab.addEventListener('click', () => { document.querySelectorAll('.surface-tab').forEach(x => { x.classList.remove('active'); x.setAttribute('aria-selected', 'false'); }); tab.classList.add('active'); tab.setAttribute('aria-selected', 'true'); }));
   const d = new Date(); document.getElementById('feedDate').textContent = d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
   const dataDateEl = document.getElementById('scannerDataDate');
