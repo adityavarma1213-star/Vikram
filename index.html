@@ -89,7 +89,7 @@
 /* The ONE shared column-menu instance — position:fixed and appended to <body> (not inside the
    horizontally-scrolling table), with its top/left computed and viewport-clamped in JS, so it can
    never be clipped by .radar-table-scroll{overflow-x:auto} or run off-screen at any column or width. */
-.radar-col-menu{position:fixed;z-index:20000;display:none;min-width:210px;max-width:min(320px,92vw);max-height:min(320px,70vh);overflow:auto;padding:5px;border:1px solid var(--border-subtle);border-radius:11px;background:var(--bg-card);box-shadow:0 16px 36px rgba(0,0,0,.35)}
+.radar-col-menu{position:fixed;z-index:20000;display:none;min-width:210px;max-width:min(320px,92vw);max-height:min(320px,70vh);overflow:auto;padding:5px;border:1px solid var(--border-subtle);border-radius:11px;background:var(--bg-solid,var(--bg-card));box-shadow:0 16px 36px rgba(0,0,0,.35)}
 .radar-col-menu:not([hidden]){display:grid;gap:2px}
 .radar-col-menu-heading{font-size:9px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);padding:7px 8px 3px}
 .radar-col-menu-divider{height:1px;background:var(--border-subtle);margin:4px 2px}
@@ -628,7 +628,7 @@
   // verified engine verdict such as "ACCUMULATION STARTING" still matches if a serialized
   // snapshot contains harmless formatting differences. This does NOT change the engine enum,
   // thresholds, scores, or verdict assignment.
-  const normalizeVerdictFilterValue = value => String(value ?? '').trim().replace(/\\s+/g, ' ').toUpperCase();
+  const normalizeVerdictFilterValue = value => String(value ?? '').trim().replace(/\s+/g, ' ').toUpperCase();
   const verdictMatches = (rowVerdict, selectedVerdict) => selectedVerdict === 'ALL'
     || normalizeVerdictFilterValue(rowVerdict) === normalizeVerdictFilterValue(selectedVerdict);
 
