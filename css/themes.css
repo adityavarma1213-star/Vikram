@@ -20,7 +20,9 @@ html[data-theme="duology"][data-mode="light"]{--bg-page:#fff4fa;--bg-card:#fff;-
 html[data-mode="system"]{color-scheme:light dark}
 @media(prefers-color-scheme:dark){html[data-mode="system"]{--bg-page:#07111d;--bg-card:#0d1d2c;--bg-solid:#0d1d2c;--bg-card-2:#12283b;--border-subtle:rgba(148,163,184,.18);--text-main:#eef7ff;--text-muted:#91a5b8;--accent-cyan:#39d7ff;--green:#39e6a4;--red:#ff6576;--hero-bg:linear-gradient(135deg,#06111d,#0b3144 52%,#123c42)}}
 @media(prefers-color-scheme:light){html[data-mode="system"]{--bg-page:#f3f8fb;--bg-card:#fff;--bg-solid:#fff;--bg-card-2:#eef5f8;--border-subtle:#d8e4ea;--text-main:#102131;--text-muted:#617486;--accent-cyan:#087fba;--green:#13875e;--red:#c83d4a;--hero-bg:linear-gradient(135deg,#dff4fb,#eaf5f0 52%,#dceef5)}}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg-page);color:var(--text-main);font-family:Inter,ui-sans-serif,system-ui,sans-serif}.workspace-layout{display:grid;grid-template-columns:210px 1fr 260px;min-height:calc(100vh - 60px)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg-page);color:var(--text-main);font-family:Inter,ui-sans-serif,system-ui,sans-serif}
+html[data-theme="aurora"][data-mode="light"] body{background:linear-gradient(160deg,#eef2ff 0%,#f3f8fb 45%,#f5f0ff 100%) fixed}
+.workspace-layout{display:grid;grid-template-columns:210px 1fr 260px;min-height:calc(100vh - 60px)}
 .vikram-theme-control{display:flex;align-items:center;gap:8px}.vikram-theme-control select,.vikram-theme-control button{font:inherit}.theme-menu{position:absolute;right:0;top:calc(100% + 8px);z-index:1000;min-width:190px;padding:8px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-solid,var(--bg-card));box-shadow:var(--shadow-lg)}
 @media(max-width:1180px){.workspace-layout{grid-template-columns:190px 1fr}.right-feed{display:none}}@media(max-width:820px){.workspace-layout{display:block}.sidebar{display:none}.main-content{min-width:0}.navbar{padding:0 14px}.nav-tagline{display:none}}
 
