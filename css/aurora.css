@@ -5,13 +5,21 @@
    keep working exactly as before if this file is absent. */
 
 :root{
-  --aurora-bg: #070b18;
-  --aurora-bg-elevated: #0d1326;
-  --aurora-card: #10182f;
-  --aurora-border: rgba(255,255,255,.08);
-  --aurora-text: #eef1fb;
-  --aurora-text-muted: #8891b3;
+  /* Aliased to the existing per-theme tokens in themes.css, which already vary correctly across
+     all 6 themes (Aurora/Galaxy/Calm/Academic/NeoGlass/Duology) x Light/Dark/System (18 combos).
+     This is what makes the Home screen's hero/cards/sections respond to the theme selector at all
+     -- previously these were hardcoded fixed colors that only reacted to light/dark, so every
+     theme rendered identical (Aurora-only) Home-screen colors. */
+  --aurora-bg: var(--bg-page);
+  --aurora-bg-elevated: var(--bg-card-2);
+  --aurora-card: var(--bg-card);
+  --aurora-border: var(--border-subtle);
+  --aurora-text: var(--text-main);
+  --aurora-text-muted: var(--text-muted);
 
+  /* Feature-category accent colors -- deliberately fixed across all themes/modes, the same way
+     Verdict/Score badges use fixed functional colors (green=confirmed, red=distribution)
+     regardless of theme. These identify WHAT a card is, not which theme is active. */
   --aurora-research: #14b8a6;   /* emerald/teal */
   --aurora-discover: #6366f1;   /* blue/indigo/violet */
   --aurora-gems: #a855f7;       /* violet/lavender */
@@ -29,60 +37,24 @@
   --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px;
 }
 
-/* Aurora LIGHT: same accent hues (they read fine on white), swapped backgrounds/text/borders.
-   Applies whenever the site is in Light mode, however that mode was reached (explicit choice,
-   or System mode following a light OS preference) -- Dark and unset System-dark stay on the
-   :root palette above. */
-html[data-mode="light"],
-html[data-mode="system"]:not([data-mode="dark"]){
-  --aurora-bg: #eef2ff;
-  --aurora-bg-elevated: #f7f8ff;
-  --aurora-card: #ffffff;
-  --aurora-border: rgba(15,23,42,.08);
-  --aurora-text: #0f1729;
-  --aurora-text-muted: #5b6b85;
-}
-@media(prefers-color-scheme:light){
-  html[data-mode="system"]{
-    --aurora-bg: #eef2ff;
-    --aurora-bg-elevated: #f7f8ff;
-    --aurora-card: #ffffff;
-    --aurora-border: rgba(15,23,42,.08);
-    --aurora-text: #0f1729;
-    --aurora-text-muted: #5b6b85;
-  }
-}
-@media(prefers-color-scheme:dark){
-  html[data-mode="system"]{
-    --aurora-bg: #070b18;
-    --aurora-bg-elevated: #0d1326;
-    --aurora-card: #10182f;
-    --aurora-border: rgba(255,255,255,.08);
-    --aurora-text: #eef1fb;
-    --aurora-text-muted: #8891b3;
-  }
-}
-
 .aurora-page{background:var(--aurora-bg);color:var(--aurora-text)}
 
 .aurora-hero{
   position:relative;overflow:hidden;border-radius:20px;padding:var(--sp-7) var(--sp-6);
   background:
-    radial-gradient(80% 120% at 15% 20%, rgba(34,211,238,.25), transparent 60%),
-    radial-gradient(70% 100% at 85% 0%, rgba(168,85,247,.22), transparent 55%),
-    radial-gradient(60% 90% at 60% 100%, rgba(212,175,106,.14), transparent 60%),
-    linear-gradient(180deg, #0a1024, #070b18);
+    radial-gradient(80% 120% at 15% 20%, color-mix(in srgb,var(--accent-cyan) 30%,transparent), transparent 60%),
+    radial-gradient(70% 100% at 85% 0%, color-mix(in srgb,var(--green) 24%,transparent), transparent 55%),
+    linear-gradient(180deg, color-mix(in srgb,var(--bg-page) 85%,black), var(--bg-page));
   border:1px solid var(--aurora-border);
 }
 html[data-mode="light"] .aurora-hero,
 html[data-mode="system"]:not([data-mode="dark"]) .aurora-hero{
   background:
-    radial-gradient(80% 120% at 15% 20%, rgba(34,211,238,.16), transparent 60%),
-    radial-gradient(70% 100% at 85% 0%, rgba(168,85,247,.14), transparent 55%),
-    radial-gradient(60% 90% at 60% 100%, rgba(212,175,106,.10), transparent 60%),
-    linear-gradient(180deg, #f5f7ff, #eef2ff);
+    radial-gradient(80% 120% at 15% 20%, color-mix(in srgb,var(--accent-cyan) 16%,transparent), transparent 60%),
+    radial-gradient(70% 100% at 85% 0%, color-mix(in srgb,var(--green) 13%,transparent), transparent 55%),
+    linear-gradient(180deg, color-mix(in srgb,var(--bg-page) 94%,white), var(--bg-page));
 }
-@media(prefers-color-scheme:dark){html[data-mode="system"] .aurora-hero{background:radial-gradient(80% 120% at 15% 20%, rgba(34,211,238,.25), transparent 60%),radial-gradient(70% 100% at 85% 0%, rgba(168,85,247,.22), transparent 55%),radial-gradient(60% 90% at 60% 100%, rgba(212,175,106,.14), transparent 60%),linear-gradient(180deg, #0a1024, #070b18)}}
+@media(prefers-color-scheme:dark){html[data-mode="system"] .aurora-hero{background:radial-gradient(80% 120% at 15% 20%, color-mix(in srgb,var(--accent-cyan) 30%,transparent), transparent 60%),radial-gradient(70% 100% at 85% 0%, color-mix(in srgb,var(--green) 24%,transparent), transparent 55%),linear-gradient(180deg, color-mix(in srgb,var(--bg-page) 85%,black), var(--bg-page))}}
 .aurora-hero .eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;color:var(--aurora-gps)}
 .aurora-hero h1{font-size:clamp(1.9rem,3.2vw,2.6rem);margin:var(--sp-2) 0 var(--sp-1);font-weight:800;letter-spacing:-.01em}
 .aurora-hero p.sub{color:var(--aurora-text-muted);font-size:1.05rem;margin:0 0 var(--sp-5)}
