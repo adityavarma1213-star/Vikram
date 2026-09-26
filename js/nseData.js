@@ -169,14 +169,41 @@
     }
   }
 
-  async function loadIngestionRuns() {
+  // Loading ingestion history is an admin-only action gated behind requireAdmin() on the
+  // server. It must NEVER trigger a credential prompt during normal, anonymous page load —
+  // only an explicit "Sign in" click may call ensureAuth() (and, transitively, window.prompt).
+  function renderIngestionSignInPrompt() {
     const tbody = document.querySelector('#ingestionRunsTable tbody');
     const lastRunGrid = $('lastRunGrid');
+    tbody.innerHTML = '<tr><td colspan="6" class="text-muted">Ingestion history requires an admin sign-in. <button id="ingestionSignInBtn" class="btn btn-secondary" style="margin-left:8px;padding:2px 10px">Sign in</button></td></tr>';
+    lastRunGrid.innerHTML = '<p class="text-muted">Sign in as an admin to view the last successful run.</p>';
+    const btn = document.getElementById('ingestionSignInBtn');
+    if (btn) btn.addEventListener('click', () => loadIngestionRunsAuthenticated(), { once: true });
+  }
+
+  async function loadIngestionRuns() {
     if (!LIVE_BACKEND_CONFIGURED) {
+      const tbody = document.querySelector('#ingestionRunsTable tbody');
+      const lastRunGrid = $('lastRunGrid');
       tbody.innerHTML = '<tr><td colspan="6" class="text-muted">VERIFICATION BLOCKED — requires a live backend with database access, not available on this static deployment.</td></tr>';
       lastRunGrid.innerHTML = '<p class="text-muted">VERIFICATION BLOCKED — requires a live backend with database access.</p>';
       return;
     }
+    // A live backend is configured, but that alone must not trigger a password prompt. Only
+    // proceed automatically if this browser already has a cached admin session token; otherwise
+    // show an explicit sign-in control instead of calling ensureAuth() for the visitor.
+    if (!localStorage.getItem(TOKEN_KEY)) {
+      renderIngestionSignInPrompt();
+      return;
+    }
+    await loadIngestionRunsAuthenticated();
+  }
+
+  async function loadIngestionRunsAuthenticated() {
+    const tbody = document.querySelector('#ingestionRunsTable tbody');
+    const lastRunGrid = $('lastRunGrid');
+    tbody.innerHTML = '<tr><td colspan="6" class="text-muted">Loading…</td></tr>';
+    lastRunGrid.innerHTML = '<p class="text-muted">Loading…</p>';
     try {
       const data = await authedFetch('/api/admin/ingestion-runs');
       const runs = data.runs || [];
