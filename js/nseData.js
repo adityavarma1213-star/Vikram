@@ -1,23 +1,69 @@
 // VIKRAM — NSE Data Management page.
 //
-// This page is intentionally STATIC / READ-ONLY. It never talks to the live backend and never
-// asks for credentials. It only reads data already committed to this repository:
-//   - data/nse-coverage-report.json (coverage), a pre-computed artifact built directly from the
-//     real data/market-history files by scripts/buildNseCoverageReport.js.
-//   - data/market-history-manifest.json + data/market-history/*.json (existing dataset
-//     download), served as plain static files.
-// Nothing here is recomputed, estimated, or fabricated in the browser.
+// Coverage section always works, even on a static-only deployment: it reads
+// data/nse-coverage-report.json, a pre-computed artifact built directly from the real
+// data/market-history files by scripts/buildNseCoverageReport.js. Nothing is recomputed or
+// estimated in the browser.
 //
-// Live NSE acquisition (server/src/ingest.js, gated behind requireAdmin()/ADMIN_EMAILS/
-// AUTH_SECRET on the backend) is a separate, admin-only concern and is intentionally NOT
-// reachable from this page — see nse-data.html's "Acquire / Download NSE Data" section for the
-// static notice explaining that. That backend and its authentication are untouched by this file.
+// Acquisition section is honest about what this page can and cannot do:
+//   - If no live backend is configured (the common case — see accumulation/api.js's own
+//     isStaticPages detection, reused here), the "Acquire Latest Available NSE Session" button is
+//     disabled and the
+//     page explains exactly why, plus the real manual command that would run it.
+//   - If a live backend IS configured, the button calls the real, unmodified
+//     POST /api/admin/ingest/run route, which runs the exact same server/src/ingest.js code the
+//     scheduled cron job uses. It is never a mock — a real result (or a real failure) comes back.
 (function () {
   'use strict';
 
   const $ = id => document.getElementById(id);
   const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const text = v => (v === null || v === undefined || v === '') ? 'N/A' : esc(v);
+
+  const API_BASE = (window.ACCUMULATION_API_BASE || '').replace(/\/$/, '');
+  const IS_STATIC_PAGES = !API_BASE && /github\.io$/i.test(location.hostname);
+  const LIVE_BACKEND_CONFIGURED = !!API_BASE && !IS_STATIC_PAGES;
+
+  // Same token/email keys and same "prompt once, cache token" pattern as js/alertsUI.js — this
+  // is not a new auth system, it reuses the one already shipped for Alerts.
+  const TOKEN_KEY = 'vikram-auth-token';
+  const EMAIL_KEY = 'vikram-auth-email';
+
+  async function ensureAuth() {
+    const cached = localStorage.getItem(TOKEN_KEY);
+    if (cached) return cached;
+    const email = (localStorage.getItem(EMAIL_KEY) || window.prompt('Email for VIKRAM (required to trigger acquisition):') || '').trim();
+    if (!email) throw new Error('Email is required to trigger acquisition.');
+    const password = window.prompt('Password (minimum 8 characters):') || '';
+    if (password.length < 8) throw new Error('Password must be at least 8 characters.');
+    localStorage.setItem(EMAIL_KEY, email);
+    const body = JSON.stringify({ email, password });
+    let res = await fetch(API_BASE + '/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body });
+    if (res.status === 401) res = await fetch(API_BASE + '/api/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body });
+    const out = await res.json().catch(() => ({}));
+    if (!res.ok || !out.token) throw new Error(out.error || 'Sign-in to the VIKRAM backend failed.');
+    localStorage.setItem(TOKEN_KEY, out.token);
+    return out.token;
+  }
+
+  // Production integration: bound every backend call (see accumulation/api.js for the same
+  // pattern) so an unreachable backend fails fast with an honest message instead of hanging.
+  async function fetchWithTimeout(url, options, timeoutMs) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs || 15000);
+    try { return await fetch(url, { ...options, signal: controller.signal }); }
+    catch (e) { if (e.name === 'AbortError') throw new Error('SERVICE_UNAVAILABLE: backend did not respond in time.'); throw e; }
+    finally { clearTimeout(timer); }
+  }
+
+  async function authedFetch(path, options = {}) {
+    const token = await ensureAuth();
+    const res = await fetchWithTimeout(API_BASE + path, { ...options, headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`, ...(options.headers || {}) } });
+    if (res.status === 401) { localStorage.removeItem(TOKEN_KEY); throw new Error('Your session expired — please retry.'); }
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.reason || body.error || `Request failed (${res.status})`);
+    return body;
+  }
 
   // ---------- Coverage ----------
   async function loadCoverageReport() {
@@ -73,12 +119,117 @@
       : 'None — every weekday in range has a stored file.';
   }
 
-  // ---------- Download Existing Dataset ----------
+  // ---------- Acquisition ----------
+  function renderBackendStatusLine() {
+    $('backendStatusLine').textContent = LIVE_BACKEND_CONFIGURED
+      ? `Live backend detected at ${API_BASE} — acquisition can be triggered from this page.`
+      : 'No live backend is configured on this deployment (this is the static site) — acquisition cannot be triggered from here. See the manual command below.';
+  }
+
+  function renderAcquisitionControl() {
+    const el = $('acquisitionControl');
+    if (!LIVE_BACKEND_CONFIGURED) {
+      el.innerHTML = `
+        <button class="btn btn-primary acquire-btn" disabled title="No live backend configured on this deployment">Acquire Latest Available NSE Session</button>
+        <p class="text-muted" style="font-size:0.8rem;margin-top:10px">To run it manually against a deployment that has a database and the required environment variables: <code>DATABASE_URL=... AUTH_SECRET=... node server/src/ingest.js</code> (from the <code>server/</code> directory). This is the exact same code this button would call if a live backend were connected. It acquires only the single most recent not-yet-stored NSE trading day — there is no arbitrary historical backfill in this codebase.</p>`;
+      return;
+    }
+    el.innerHTML = `<button id="runIngestBtn" class="btn btn-primary acquire-btn">Acquire Latest Available NSE Session</button>
+      <p class="text-muted" style="font-size:0.8rem;margin-top:8px">Fetches the most recent not-yet-stored NSE trading day (CM + F&amp;O) and re-materializes scanner results. Requires signing in AND being on this deployment's admin allowlist (<code>ADMIN_EMAILS</code>) — a regular logged-in account is not sufficient. Only one acquisition can run at a time; a second attempt while one is in progress is rejected as <code>INGESTION_ALREADY_RUNNING</code>.</p>`;
+    $('runIngestBtn').addEventListener('click', runIngestion);
+  }
+
+  async function runIngestion() {
+    const btn = $('runIngestBtn');
+    const resultEl = $('acquisitionResult');
+    btn.disabled = true;
+    btn.textContent = 'Running…';
+    resultEl.innerHTML = '<p class="text-muted">Contacting the live backend…</p>';
+    try {
+      const result = await authedFetch('/api/admin/ingest/run', { method: 'POST' });
+      const log = (result.attempts || []).map(a => a.status === 'INGESTED'
+        ? `INGESTED ${a.date}  CM=${a.cmRows}  FO=${a.foRows}  materialized=${a.materializedSymbols}`
+        : `SKIPPED ${a.date}: ${a.reason}`
+      ).join('\n');
+      if (result.status === 'SUCCESS') {
+        resultEl.innerHTML = `<p style="color:var(--color-green);font-weight:700">SUCCESS — ingested ${esc(result.ingestedDate)} (CM=${result.cmRows} rows, F&O=${result.foRows} rows), materialized ${result.materializedSymbols} symbol(s).</p><div class="acquisition-log">${esc(log)}</div>`;
+      } else if (result.status === 'BLOCKED') {
+        resultEl.innerHTML = `<p style="color:#f2c14e;font-weight:700">INGESTION_ALREADY_RUNNING — another acquisition is already in progress. Try again shortly.</p>`;
+      } else if (result.status === 'FAILED') {
+        resultEl.innerHTML = `<p style="color:var(--color-red);font-weight:700">FAILED — ${esc(result.reason)}</p>`;
+      } else {
+        resultEl.innerHTML = `<p style="color:#f2c14e;font-weight:700">NO NEW DATA — ${esc(result.reason)}</p><div class="acquisition-log">${esc(log)}</div>`;
+      }
+      loadIngestionRuns();
+    } catch (error) {
+      resultEl.innerHTML = `<p style="color:var(--color-red);font-weight:700">ERROR — ${esc(error.message)}</p>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Acquire Latest Available NSE Session';
+    }
+  }
+
+  // Loading ingestion history is an admin-only action gated behind requireAdmin() on the
+  // server. It must NEVER trigger a credential prompt during normal, anonymous page load —
+  // only an explicit "Sign in" click may call ensureAuth() (and, transitively, window.prompt).
+  function renderIngestionSignInPrompt() {
+    const tbody = document.querySelector('#ingestionRunsTable tbody');
+    const lastRunGrid = $('lastRunGrid');
+    tbody.innerHTML = '<tr><td colspan="6" class="text-muted">Ingestion history requires an admin sign-in. <button id="ingestionSignInBtn" class="btn btn-secondary" style="margin-left:8px;padding:2px 10px">Sign in</button></td></tr>';
+    lastRunGrid.innerHTML = '<p class="text-muted">Sign in as an admin to view the last successful run.</p>';
+    const btn = document.getElementById('ingestionSignInBtn');
+    if (btn) btn.addEventListener('click', () => loadIngestionRunsAuthenticated(), { once: true });
+  }
+
+  async function loadIngestionRuns() {
+    if (!LIVE_BACKEND_CONFIGURED) {
+      const tbody = document.querySelector('#ingestionRunsTable tbody');
+      const lastRunGrid = $('lastRunGrid');
+      tbody.innerHTML = '<tr><td colspan="6" class="text-muted">VERIFICATION BLOCKED — requires a live backend with database access, not available on this static deployment.</td></tr>';
+      lastRunGrid.innerHTML = '<p class="text-muted">VERIFICATION BLOCKED — requires a live backend with database access.</p>';
+      return;
+    }
+    // A live backend is configured, but that alone must not trigger a password prompt. Only
+    // proceed automatically if this browser already has a cached admin session token; otherwise
+    // show an explicit sign-in control instead of calling ensureAuth() for the visitor.
+    if (!localStorage.getItem(TOKEN_KEY)) {
+      renderIngestionSignInPrompt();
+      return;
+    }
+    await loadIngestionRunsAuthenticated();
+  }
+
+  async function loadIngestionRunsAuthenticated() {
+    const tbody = document.querySelector('#ingestionRunsTable tbody');
+    const lastRunGrid = $('lastRunGrid');
+    tbody.innerHTML = '<tr><td colspan="6" class="text-muted">Loading…</td></tr>';
+    lastRunGrid.innerHTML = '<p class="text-muted">Loading…</p>';
+    try {
+      const data = await authedFetch('/api/admin/ingestion-runs');
+      const runs = data.runs || [];
+      if (!runs.length) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-muted">No ingestion runs recorded yet.</td></tr>';
+      } else {
+        tbody.innerHTML = runs.map(r => `<tr><td>${text(r.segment)}</td><td>${text(r.trade_date)}</td><td>${text(r.status)}</td><td>${text(r.row_count)}</td><td>${text(r.invalid_count)}</td><td>${text(r.created_at)}${r.error ? `<div class="text-muted" style="font-size:10px">${esc(r.error)}</div>` : ''}</td></tr>`).join('');
+      }
+      const lastBySegment = {};
+      runs.filter(r => r.status === 'success').forEach(r => { if (!lastBySegment[r.segment]) lastBySegment[r.segment] = r; });
+      lastRunGrid.innerHTML = ['CM', 'FO'].map(seg => {
+        const r = lastBySegment[seg];
+        return `<div class="metric-group"><span class="metric-label">${seg === 'CM' ? 'Cash Market' : 'Futures & Options'}</span><span class="metric-value" style="font-size:0.9rem">${r ? `${text(r.trade_date)} (${text(r.row_count)} rows)` : 'DATA N/A — no successful run recorded'}</span></div>`;
+      }).join('');
+    } catch (error) {
+      const blocked = /admin authorization/i.test(error.message);
+      tbody.innerHTML = `<tr><td colspan="6" class="text-muted">${blocked ? 'VERIFICATION BLOCKED — this account is not on the admin allowlist' : `VERIFICATION BLOCKED — ${esc(error.message)}`}</td></tr>`;
+      lastRunGrid.innerHTML = `<p class="text-muted">${blocked ? 'VERIFICATION BLOCKED — this account is not on the admin allowlist' : `VERIFICATION BLOCKED — ${esc(error.message)}`}</p>`;
+    }
+  }
+
+  // ---------- Download Existing Dataset (distinct from live acquisition) ----------
   // Packages ONLY the real data/market-history/*.json files already stored in this deployment
   // and already served statically (the same way data/nse-coverage-report.json and
   // data/scanner.json are already fetched elsewhere in this app). Never contacts NSE, never
-  // estimates a missing date, never fabricates a file that isn't in the manifest, never requires
-  // authentication.
+  // estimates a missing date, never fabricates a file that isn't in the manifest.
   async function loadMarketHistoryManifest() {
     const res = await fetch('data/market-history-manifest.json', { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -152,12 +303,15 @@
   }
 
   async function init() {
+    renderBackendStatusLine();
+    renderAcquisitionControl();
     try {
       const report = await loadCoverageReport();
       renderCoverage(report);
     } catch (error) {
       $('coverageStatusLine').textContent = `VERIFICATION BLOCKED — ${error.message}`;
     }
+    loadIngestionRuns();
     try {
       const manifest = await loadMarketHistoryManifest();
       renderDatasetDownload(manifest);

@@ -78,9 +78,42 @@
   </section>
 
   <section class="dashboard-card" id="acquisition">
-    <h2 class="card-headline">NSE Data — Static Mode</h2>
-    <p class="text-muted" style="margin-top:-6px;font-weight:700">Static Mode — this page shows the verified NSE data already stored in the VIKRAM repository (coverage report below, and the full dataset in "Download Existing Dataset"). Live NSE acquisition is not available from this page.</p>
-    <p class="text-muted" style="font-size:0.85rem">VIKRAM's real acquisition mechanism (<code>server/src/ingest.js</code>) fetches Cash Market and Futures &amp; Options end-of-day bhavcopy files directly from <code>nsearchives.nseindia.com</code>, one NSE trading day at a time, and requires a live, authenticated backend with database access (<code>DATABASE_URL</code>, <code>AUTH_SECRET</code>, <code>ADMIN_EMAILS</code> — see <code>server/src/auth.js</code> and <code>server/src/adminAuth.js</code>). It runs on a schedule server-side (see <code>render.yaml</code>'s <code>vikram-eod-ingestion</code> cron job). That authentication and scheduled acquisition remain fully intact on the backend for future live use — this page simply doesn't call it, so it never prompts for credentials.</p>
+    <h2 class="card-headline">Acquire / Download NSE Data</h2>
+    <p id="backendStatusLine" class="text-muted" style="margin-top:-6px;font-weight:700">Checking backend status…</p>
+
+    <div class="grid-layout cols-2" style="margin-top:10px;gap:16px">
+      <div>
+        <h3 style="font-size:0.9rem;margin-bottom:6px">How acquisition actually works</h3>
+        <p class="text-muted" style="font-size:0.85rem">VIKRAM's real acquisition mechanism (<code>server/src/ingest.js</code>) fetches Cash Market and Futures &amp; Options end-of-day bhavcopy files directly from <code>nsearchives.nseindia.com</code>, one NSE trading day at a time. It searches backward from today for the most recent day not yet stored (up to 10 calendar days), ingests both CM and F&amp;O for that day, then re-materializes scanner results. It runs on a schedule server-side (see <code>render.yaml</code>'s <code>vikram-eod-ingestion</code> cron job) and requires a live Postgres database.</p>
+        <p class="text-muted" style="font-size:0.85rem"><strong>What date range can actually be acquired:</strong> only the most recent not-yet-stored trading day, one at a time. There is currently no bulk/arbitrary historical date-range acquisition (e.g. "fetch Jan 2022–Dec 2023") anywhere in this codebase, on the website or on the backend — building that would be a separate, larger project.</p>
+      </div>
+      <div>
+        <h3 style="font-size:0.9rem;margin-bottom:6px">Run it</h3>
+        <div id="acquisitionControl"></div>
+        <div id="acquisitionResult" style="margin-top:12px"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <h3 style="font-size:0.9rem;margin-bottom:6px">Last Successful Acquisition (by segment)</h3>
+      <div id="lastRunGrid" class="grid-layout cols-2"></div>
+    </div>
+
+    <div style="margin-top:18px">
+      <h3 style="font-size:0.9rem;margin-bottom:6px">Environment &amp; Authorization</h3>
+      <p class="text-muted" style="font-size:0.82rem">Acquisition requires: <code>DATABASE_URL</code> (Postgres connection), <code>AUTH_SECRET</code> (≥16 chars, session token signing — see <code>server/src/auth.js</code>), and <code>ADMIN_EMAILS</code> (comma-separated allowlist — see <code>server/src/adminAuth.js</code>). None of these are exposed to frontend JavaScript; the admin check happens entirely on the server by looking up the signed-in user's email from the database, never from anything the browser sends. If <code>ADMIN_EMAILS</code> is unset, acquisition is unavailable to everyone (fails closed), even a successfully logged-in user.</p>
+    </div>
+
+    <div style="margin-top:18px">
+      <h3 style="font-size:0.9rem;margin-bottom:6px">Recent Ingestion History / Errors</h3>
+      <p class="text-muted" style="font-size:0.8rem">Note: <code>ingestion_runs</code> only ever records <em>successful</em> writes by design — a failed NSE fetch (file not yet published, network error, etc.) rolls back and is never inserted. Failed attempts are only visible in the live run result above, right after you click "Run Acquisition Now".</p>
+      <div class="table-scroll" style="margin-top:8px">
+        <table class="metric-table" id="ingestionRunsTable">
+          <thead><tr><th>Segment</th><th>Trade Date</th><th>Status</th><th>Rows</th><th>Invalid Rows</th><th>Recorded At</th></tr></thead>
+          <tbody><tr><td colspan="6" class="text-muted">Checking…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
   </section>
 
   <section class="dashboard-card" id="datasetDownload">
