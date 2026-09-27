@@ -68,4 +68,33 @@ assert.equal(hasAllNullDelivery(isolatedNaSnapshot), false, 'one legitimately N/
 const emptyCmSnapshot = { tradeDate: '2026-09-16', futures: [{ symbol: 'RELIANCE', trade_date: '2026-09-16', oi: 100, change_oi: 5 }], cm: [] };
 assert.equal(hasAllNullDelivery(emptyCmSnapshot), false, 'an empty CM array is a different failure mode, not whole-day-null-delivery');
 
-console.log('backfill staleness-detection tests passed (4 scenarios)');
+// Case 5: the SECOND corruption signature found 2026-09-27 in data/market-history/2026-09-04,
+// 09-07..09-11, 09-15 -- every CM row has deliv_qty as the literal number 0 (not null/undefined).
+// This is the pattern the original null-only check missed, which is why those on-disk snapshots
+// were never re-fetched by the scheduled backfill job even after the null-detection fix went live.
+const wholeDayZeroSnapshot = {
+  tradeDate: '2026-09-04',
+  futures: [{ symbol: 'RELIANCE', trade_date: '2026-09-04', oi: 100, change_oi: 5 }],
+  cm: [
+    { symbol: 'AAA', trade_date: '2026-09-04', close: 100, volume: 1000, deliv_qty: 0, deliv_per: 0 },
+    { symbol: 'BBB', trade_date: '2026-09-04', close: 50, volume: 2000, deliv_qty: 0, deliv_per: 0 },
+    { symbol: 'CCC', trade_date: '2026-09-04', close: 75, volume: 500, deliv_qty: 0, deliv_per: 0 }
+  ]
+};
+assert.equal(hasAllNullDelivery(wholeDayZeroSnapshot), true, 'whole-day zero Delivery must be detected as corrupted, same as whole-day null');
+
+// Case 6: an isolated, legitimate per-symbol zero (a real NSE-reported 0% delivery day for one
+// illiquid symbol) must NOT be flagged -- Missing != Zero also means a genuine zero stays a
+// genuine zero and must not itself trigger a whole-day refresh loop.
+const isolatedZeroSnapshot = {
+  tradeDate: '2026-09-04',
+  futures: [{ symbol: 'RELIANCE', trade_date: '2026-09-04', oi: 100, change_oi: 5 }],
+  cm: [
+    { symbol: 'AAA', trade_date: '2026-09-04', close: 100, volume: 1000, deliv_qty: 400, deliv_per: 40 },
+    { symbol: 'BBB', trade_date: '2026-09-04', close: 50, volume: 2000, deliv_qty: 0, deliv_per: 0 },
+    { symbol: 'CCC', trade_date: '2026-09-04', close: 75, volume: 500, deliv_qty: 100, deliv_per: 20 }
+  ]
+};
+assert.equal(hasAllNullDelivery(isolatedZeroSnapshot), false, 'one legitimately zero-delivery symbol must not trigger whole-day staleness');
+
+console.log('backfill staleness-detection tests passed (6 scenarios)');
