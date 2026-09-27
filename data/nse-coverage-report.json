@@ -1,6 +1,6 @@
 {
   "status": "VERIFIED",
-  "generatedAt": "2026-09-27T07:31:13.716Z",
+  "generatedAt": "2026-09-27T19:09:13.647Z",
   "source": "data/market-history/*.json (real NSE EOD bhavcopy-derived files)",
   "dateRange": {
     "first": "2025-09-02",
