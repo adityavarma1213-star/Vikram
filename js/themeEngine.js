@@ -17,8 +17,8 @@ function applyTheme(themeName = 'aurora', mode = 'light') {
   if (checkbox) checkbox.checked = selectedMode === 'dark';
   const label = document.getElementById('modeLabel');
   if (label) label.textContent = selectedMode === 'dark' ? 'Dark' : 'Light';
-  const btnLabel = document.getElementById('modeLabelBtn');
-  if (btnLabel) btnLabel.textContent = selectedMode === 'dark' ? 'Dark' : 'Light';
+  const btnLabel = document.getElementById('modeIconBtn');
+  if (btnLabel) btnLabel.textContent = selectedMode === 'dark' ? '🌙' : '☀';
 }
 
 function persistAndApply(themeName, mode) {

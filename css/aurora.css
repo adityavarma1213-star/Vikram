@@ -84,6 +84,49 @@ html[data-mode="light"] .aurora-hero-search,html[data-mode="system"]:not([data-m
 .aurora-section .desc{color:var(--aurora-text-muted);font-size:.85rem;margin:0 0 var(--sp-4)}
 .aurora-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-5)}
 .aurora-grid-2{display:grid;grid-template-columns:1.1fr .9fr;gap:var(--sp-5)}
+.aurora-section--sm{padding:var(--sp-4);margin-top:0}
+.section-head-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-3)}
+.section-head-row h2{margin:0;font-size:.95rem}
+.view-all-link{font-size:.75rem;font-weight:700;color:var(--accent-cyan);text-decoration:none}
+.view-all-link[aria-disabled="true"]{color:var(--aurora-text-muted);pointer-events:none;opacity:.6}
+.honest-note{font-size:.72rem;color:var(--aurora-text-muted);margin:var(--sp-2) 0 0;line-height:1.4}
+.progress-pct-locked{font-size:1.3rem;font-weight:900;color:var(--aurora-text-muted)}
+.progress-track-locked{height:8px;border-radius:999px;background:var(--aurora-border);overflow:hidden;margin:var(--sp-2) 0}
+.progress-fill-locked{height:100%;background:var(--accent-cyan);border-radius:999px}
+.progress-substats{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-2);text-align:center;margin-top:var(--sp-3)}
+.progress-substats div{display:flex;flex-direction:column;gap:2px}
+.progress-substats b{font-size:1rem;color:var(--aurora-text-muted)}
+.progress-substats span{font-size:.65rem;color:var(--aurora-text-muted)}
+.recommend-row{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-3)}
+.recommend-card{background:var(--aurora-bg-elevated);border:1px solid var(--aurora-border);border-radius:12px;padding:var(--sp-3)}
+.recommend-card .rc-eyebrow{display:block;font-size:.65rem;font-weight:800;text-transform:uppercase;color:var(--accent-cyan);margin-bottom:4px}
+.recommend-card b{display:block;font-size:.95rem;color:var(--aurora-text-muted);margin-bottom:4px}
+.achievement-row{display:flex;gap:var(--sp-3);flex-wrap:wrap}
+.achievement-badge{display:flex;flex-direction:column;align-items:center;gap:6px;width:76px;font-size:1.6rem;opacity:.4;filter:grayscale(1)}
+.achievement-badge span{font-size:.62rem;font-weight:700;text-align:center;color:var(--aurora-text-muted);line-height:1.2}
+
+.market-live-panel{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:16px;padding:var(--sp-4) var(--sp-5);margin-top:var(--sp-5)}
+.mlp-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:var(--sp-3)}
+.mlp-title{font-size:.9rem;color:var(--text-muted)}
+.mlp-title b{color:var(--text-main)}
+.mlp-unavailable-badge{font-size:.65rem;font-weight:800;background:color-mix(in srgb,var(--text-muted) 18%,transparent);color:var(--text-muted);border-radius:999px;padding:2px 8px;margin-left:4px}
+.mlp-right{display:flex;align-items:center;gap:12px}
+.mlp-date{font-size:.75rem;color:var(--text-muted)}
+.mlp-exchange-tabs{display:flex;gap:4px;background:var(--bg-page);border-radius:999px;padding:3px}
+.mlp-exchange{border:none;background:transparent;font-size:.7rem;font-weight:800;padding:5px 10px;border-radius:999px;color:var(--text-muted);cursor:not-allowed}
+.mlp-exchange.active{background:var(--bg-card);color:var(--text-main)}
+.mlp-movers{display:flex;gap:20px;flex-wrap:wrap;font-size:.72rem;color:var(--text-muted);margin-top:var(--sp-3)}
+.mlp-movers b{color:var(--text-main)}
+.mlp-dashboard-btn{display:inline-block;margin-top:var(--sp-3);font-size:.78rem;font-weight:700;color:var(--accent-cyan);text-decoration:none}
+
+.market-status{display:inline-block;padding:5px 8px;border-radius:999px;background:color-mix(in srgb,var(--text-muted) 18%,transparent);color:var(--text-muted);font-size:9px;font-weight:900}
+.market-status.is-open{background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--green)}
+.donut--na{background:conic-gradient(color-mix(in srgb,var(--text-muted) 30%,transparent) 0 100%) !important}
+.donut--na:after{content:"N/A" !important}
+.promo-card{background:linear-gradient(135deg,#312e81,#7c3aed);color:#fff;position:relative}
+.promo-card h3{color:#fff}
+.promo-quote{font-size:.8rem;font-style:italic;opacity:.9;margin:0}
+.promo-arrow{position:absolute;bottom:14px;right:14px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-weight:900}
 
 .aurora-status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700}
 .aurora-status .dot{width:7px;height:7px;border-radius:50%}

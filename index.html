@@ -35,13 +35,22 @@
 <link rel="icon" href="icons/icon-192.png">
 <style>
 :root{--page-max:1640px}body{background:var(--bg-page);color:var(--text-main)}
-.navbar{height:60px;position:sticky;top:0;z-index:900;display:flex;align-items:center;gap:18px;padding:0 22px;background:color-mix(in srgb,var(--bg-card) 92%,transparent);border-bottom:1px solid var(--border-subtle);backdrop-filter:blur(18px)}
+.navbar{height:60px;position:sticky;top:0;z-index:900;display:flex;align-items:center;gap:14px;padding:0 22px;background:color-mix(in srgb,var(--bg-card) 92%,transparent);border-bottom:1px solid var(--border-subtle);backdrop-filter:blur(18px)}
+.header-search-shortcut{display:flex;align-items:center;gap:10px;flex:1;max-width:420px;padding:9px 14px;border:1px solid var(--border-subtle);border-radius:999px;background:var(--bg-page);color:var(--text-muted);font-size:12px;cursor:pointer;text-align:left}
+.header-search-shortcut:hover{border-color:var(--accent-cyan)}
+.header-search-shortcut .hss-text{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.header-search-shortcut .hss-kbd{font-size:9px;font-weight:800;border:1px solid var(--border-subtle);border-radius:5px;padding:2px 5px;color:var(--text-muted)}
+.nav-icon-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border-subtle);background:var(--bg-card);cursor:pointer;font-size:14px;display:grid;place-items:center;color:var(--text-muted);flex:0 0 auto}
+.nav-stat-group{display:flex;gap:10px;flex:0 0 auto}
+.nav-stat{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--text-muted);border:1px dashed var(--border-subtle);border-radius:999px;padding:5px 9px;white-space:nowrap;cursor:default}
+.nav-stat b{color:var(--text-main);font-weight:900}
+@media(max-width:1300px){.header-search-shortcut,.nav-stat-group{display:none}}
 .brand-lockup{display:flex;align-items:center;gap:10px;min-width:250px}.brand-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:var(--accent-cyan);color:var(--bg-page);font-weight:900}.brand-name{font-size:19px;font-weight:900;letter-spacing:.16em}.nav-tagline{font-size:9px;letter-spacing:.16em;color:var(--text-muted);font-weight:800}
 .nav-spacer{flex:1}.theme-wrap{position:relative}.theme-menu-btn{border:1px solid var(--border-subtle);background:var(--bg-card);color:var(--text-main);border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}.theme-menu{display:none}.theme-menu.open{display:grid;gap:4px}.theme-option{width:100%;border:0;background:transparent;color:var(--text-main);padding:9px 10px;text-align:left;border-radius:9px;cursor:pointer}.theme-option:hover,.theme-option.active{background:var(--bg-card-2);color:var(--accent-cyan)}.mode-row{display:flex;align-items:center;justify-content:space-between;padding:9px 10px;border-top:1px solid var(--border-subtle);margin-top:5px;color:var(--text-muted);font-size:12px}.switch{position:relative;width:42px;height:23px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;border-radius:999px;background:var(--bg-card-2);border:1px solid var(--border-subtle);cursor:pointer}.slider:before{content:"";position:absolute;width:17px;height:17px;left:2px;top:2px;border-radius:50%;background:var(--text-muted);transition:.18s}.switch input:checked+.slider:before{transform:translateX(19px);background:var(--accent-cyan)}
 .profile-badge{display:flex;align-items:center;gap:8px;border:1px solid var(--border-subtle);background:var(--bg-card);border-radius:999px;padding:5px 10px 5px 5px;font-size:12px;font-weight:800}.avatar{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent-cyan);color:var(--bg-page)}
 .profile-progress-pill{border:1px dashed var(--border-subtle);color:var(--text-muted);background:transparent;border-radius:999px;padding:6px 12px;font-size:9.5px;font-weight:800;letter-spacing:.02em;white-space:nowrap;cursor:default}
 @media(max-width:1250px){.profile-progress-pill{display:none}}
-.sidebar{padding:22px 12px;border-right:1px solid var(--border-subtle);background:color-mix(in srgb,var(--bg-card) 58%,transparent)}.side-section{margin-bottom:22px}.side-label{padding:0 11px 8px;color:var(--text-muted);font-size:9px;letter-spacing:.14em;font-weight:900}.side-link{display:flex;align-items:center;gap:9px;padding:10px 11px;border-radius:10px;color:var(--text-muted);text-decoration:none;font-size:12px;font-weight:800}.side-link:hover,.side-link.active{background:var(--bg-card-2);color:var(--text-main)}.side-link.active{box-shadow:inset 3px 0 var(--accent-cyan)}.new-pill{margin-left:auto;border-radius:999px;padding:2px 6px;background:var(--accent-cyan);color:var(--bg-page);font-size:8px}.quote-card{margin:32px 2px 0;padding:14px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card)}.quote-card p{margin:0;font-size:11px;line-height:1.5;color:var(--text-muted)}.quote-card strong{display:block;margin-top:8px;font-size:9px;color:var(--accent-cyan)}
+.sidebar{padding:22px 12px;border-right:1px solid var(--border-subtle);background:color-mix(in srgb,var(--bg-card) 58%,transparent)}.side-section{margin-bottom:22px}.side-label{padding:0 11px 8px;color:var(--text-muted);font-size:9px;letter-spacing:.14em;font-weight:900}.side-link{display:flex;align-items:center;gap:9px;padding:10px 11px;border-radius:10px;color:var(--text-muted);text-decoration:none;font-size:12px;font-weight:800}.side-link:hover,.side-link.active{background:var(--bg-card-2);color:var(--text-main)}.side-link.active{box-shadow:inset 3px 0 var(--accent-cyan)}.new-pill{margin-left:auto;border-radius:999px;padding:2px 6px;background:var(--accent-cyan);color:var(--bg-page);font-size:8px}.side-link--soon{opacity:.5;cursor:not-allowed}.side-link--soon:hover{background:transparent;color:var(--text-muted)}.soon-pill{margin-left:auto;border-radius:999px;padding:2px 6px;background:color-mix(in srgb,var(--text-muted) 25%,transparent);color:var(--text-muted);font-size:8px;font-weight:900}.quote-card{margin:32px 2px 0;padding:14px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card)}.quote-card p{margin:0;font-size:11px;line-height:1.5;color:var(--text-muted)}.quote-card strong{display:block;margin-top:8px;font-size:9px;color:var(--accent-cyan)}
 .main-content{padding:20px 22px 50px;min-width:0;max-width:var(--page-max)}.hero-panoramic{position:relative;overflow:visible;min-height:300px;padding:28px;border:1px solid var(--border-subtle);border-radius:22px;background:var(--hero-bg);box-shadow:var(--shadow-lg)}.hero-panoramic:after{content:"";position:absolute;inset:auto 0 0;height:105px;opacity:.22;background:linear-gradient(135deg,transparent 0 16%,#061018 16% 33%,transparent 33% 47%,#061018 47% 68%,transparent 68% 79%,#061018 79%);clip-path:polygon(0 100%,0 62%,13% 76%,25% 43%,36% 70%,49% 31%,62% 66%,76% 40%,88% 72%,100% 50%,100% 100%);pointer-events:none}.hero-content{position:relative;z-index:2;max-width:850px}.eyebrow{font-size:9px;letter-spacing:.18em;color:var(--accent-cyan);font-weight:900}.hero-panoramic h1{margin:10px 0 7px;font-size:clamp(34px,5vw,60px);line-height:1;letter-spacing:-.055em}.hero-panoramic p{margin:0;color:var(--text-muted);max-width:700px}.hero-search{display:flex;gap:8px;margin-top:22px;position:relative;z-index:20}.hero-search input{flex:1;height:50px;min-width:0;border:1px solid var(--border-subtle);border-radius:12px;background:rgba(0,0,0,.13);color:var(--text-main);padding:0 15px;outline:none}.hero-search button{height:50px;border:0;border-radius:12px;padding:0 20px;background:var(--accent-cyan);color:var(--bg-page);font-weight:900;cursor:pointer}.popular{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}.ticker-pill{border:1px solid var(--border-subtle);border-radius:999px;background:rgba(255,255,255,.04);color:var(--text-main);padding:6px 9px;font-size:10px;font-weight:800;cursor:pointer}.ticker-pill:hover{border-color:var(--accent-cyan);color:var(--accent-cyan)}.hero-slogan{position:absolute;right:26px;bottom:28px;z-index:2;max-width:300px;text-align:right;font-family:cursive;font-size:22px;color:var(--text-main);opacity:.82}
 .suggestions-dropdown{position:absolute;left:0;right:88px;top:58px;z-index:9999;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;box-shadow:var(--shadow-lg);overflow:hidden}.suggestion{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;cursor:pointer}.suggestion:hover{background:var(--bg-card-2)}.suggestion small{color:var(--text-muted)}
 .indices-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-top:16px}.index-card{padding:15px;border:1px solid var(--border-subtle);border-radius:15px;background:var(--bg-card)}.index-card span{display:block;color:var(--text-muted);font-size:9px;letter-spacing:.08em;font-weight:900}.index-card strong{display:block;margin:6px 0 3px;font-size:19px}.delta{font-size:10px;font-weight:900}.delta.na{color:var(--text-muted)}
@@ -117,15 +126,23 @@ html[data-mode="light"] .radar-score-pill,html[data-mode="system"]:not([data-mod
 </head>
 <body data-vikram-page="home">
 <header class="navbar">
-  <div class="brand-lockup"><span class="brand-icon">V</span><span class="brand-name">VIKRAM</span><span class="nav-tagline">DISCOVER ANALYSE INVEST GROW</span></div>
+  <div class="brand-lockup"><span class="brand-icon">V</span><span class="brand-name">VIKRAM</span><span class="nav-tagline">RESEARCH · ANALYZE · INVEST</span></div>
+  <button class="header-search-shortcut" type="button" id="headerSearchShortcut" title="Jump to search">
+    <span class="hss-icon">🔍</span><span class="hss-text">Search stocks, sectors, or symbols…</span><span class="hss-kbd">Ctrl K</span>
+  </button>
   <div class="nav-spacer"></div>
   <div class="theme-wrap">
-    <button id="themeMenuBtn" class="theme-menu-btn" type="button" aria-haspopup="true" aria-expanded="false">🌓 <span id="modeLabelBtn">Light</span> ▾</button>
+    <button id="themeMenuBtn" class="theme-menu-btn" type="button" aria-haspopup="true" aria-expanded="false"><span id="modeIconBtn">☀</span> Aurora ▾</button>
     <div id="themeMenu" class="theme-menu" hidden>
       <div class="mode-row"><span>Dark <strong id="modeLabel">Light</strong></span><label class="switch"><input id="modeCheckbox" type="checkbox" aria-label="Dark mode"><span class="slider"></span></label></div>
     </div>
   </div>
-  <div class="profile-progress-pill" title="Streaks, research points, coins and achievements are visual concepts from the reference design — VIKRAM has no gamification/progress backend yet, so no numbers are shown here.">🔒 Streak · Points · Achievements — not tracked yet</div>
+  <button class="nav-icon-btn" type="button" title="Notifications — not available yet" aria-label="Notifications, not available yet">🔔</button>
+  <div class="nav-stat-group" role="group" aria-label="Progress stats — not tracked yet">
+    <span class="nav-stat" title="No streak/activity backend exists yet">🔥 <b>—</b> Day Streak</span>
+    <span class="nav-stat" title="No research-points backend exists yet">⭐ <b>—</b> Research Points</span>
+    <span class="nav-stat" title="No coins/rewards backend exists yet">🪙 <b>—</b> Coins</span>
+  </div>
   <div class="profile-badge"><span class="avatar">A</span><span>Aditya Varma</span></div>
 </header>
 
@@ -135,26 +152,34 @@ html[data-mode="light"] .radar-score-pill,html[data-mode="system"]:not([data-mod
       <div class="side-label">PRIMARY</div>
       <a class="side-link active" href="index.html">⌂ Home</a>
       <a class="side-link" href="#companyOverview">◉ Research</a>
-      <a class="side-link" href="discover.html">◈ Discover</a>
+      <a class="side-link" href="#opportunityRadar">◈ Opportunity Radar</a>
+      <a class="side-link" href="scanner.html">⚙ Stock Scanner</a>
+      <a class="side-link side-link--soon" href="#" aria-disabled="true" tabindex="-1" title="Not built yet — no F&amp;O data source exists in VIKRAM">F&amp;O Analytics <span class="soon-pill">SOON</span></a>
+      <a class="side-link" href="#watchlist">Watchlist</a>
       <a class="side-link" href="#portfolio">▣ Portfolio</a>
-      <a class="side-link" href="academy.html">Academy <span class="new-pill">NEW</span></a>
     </section>
     <section class="side-section">
       <div class="side-label">ADVANCED</div>
-      <a class="side-link" href="performance-lab.html">Performance Lab <span class="new-pill">NEW</span></a>
-      <a class="side-link" href="market-intelligence.html">Market Intelligence <span class="new-pill">NEW</span></a>
-      <a class="side-link" href="#watchlist">Watchlist</a>
-      <a class="side-link" href="alerts.html">Alerts</a>
+      <a class="side-link side-link--soon" href="#" aria-disabled="true" tabindex="-1" title="Not built yet — backtesting engine doesn't exist in VIKRAM">Backtest <span class="soon-pill">SOON</span></a>
+      <a class="side-link" href="market-intelligence.html">Market Insights <span class="new-pill">NEW</span></a>
+      <a class="side-link side-link--soon" href="#" aria-disabled="true" tabindex="-1" title="Not built yet — no sector-level data pipeline exists in VIKRAM">Sector Analysis <span class="soon-pill">SOON</span></a>
+      <a class="side-link" href="discover.html">◈ Discover / Screeners</a>
+      <a class="side-link side-link--soon" href="#" aria-disabled="true" tabindex="-1" title="Not built yet — no news/events ingestion exists in VIKRAM">News &amp; Events <span class="soon-pill">SOON</span></a>
+      <a class="side-link" href="academy.html">Learning Hub <span class="new-pill">NEW</span></a>
+      <a class="side-link side-link--soon" href="#" aria-disabled="true" tabindex="-1" title="Not built yet">Tools &amp; Calculators <span class="soon-pill">SOON</span></a>
+      <a class="side-link side-link--soon" href="#" aria-disabled="true" tabindex="-1" title="Not built yet">Reports <span class="soon-pill">SOON</span></a>
+      <a class="side-link side-link--soon" href="#" aria-disabled="true" tabindex="-1" title="Not built yet">Community <span class="soon-pill">SOON</span></a>
       <a class="side-link" href="#settings">Settings</a>
-      <a class="side-link" href="nse-data.html">NSE Data &amp; Research</a>
+      <a class="side-link" href="about.html">Help &amp; Support</a>
     </section>
     <section class="side-section">
       <div class="side-label">MORE</div>
+      <a class="side-link" href="performance-lab.html">Performance Lab <span class="new-pill">NEW</span></a>
       <a class="side-link" href="#hiddenGems">◆ Hidden Gems</a>
       <a class="side-link" href="index.html#scannerSurface">◒ Accumulation Scanner</a>
-      <a class="side-link" href="#opportunityRadar">◈ Opportunity Radar</a>
       <a class="side-link" href="research.html">◷ 1 Year Research</a>
-      <a class="side-link" href="scanner.html">⚙ Stock Scanner</a>
+      <a class="side-link" href="alerts.html">Alerts</a>
+      <a class="side-link" href="nse-data.html">NSE Data &amp; Research</a>
     </section>
     <section class="side-section" style="display:none">
       <div class="side-label">DISCOVER</div>
@@ -170,9 +195,9 @@ html[data-mode="light"] .radar-score-pill,html[data-mode="system"]:not([data-mod
   <main class="main-content">
     <section class="hero-panoramic aurora-hero" id="home">
       <div class="hero-content">
-        <span class="eyebrow">VIKRAM</span>
-        <h1>Invest with Clarity &amp; Evidence</h1>
-        <p>Research. Understand. Decide. Monitor. — using only verified NSE evidence; nothing here is simulated or estimated.</p>
+        <span class="eyebrow">GOOD MORNING</span>
+        <h1>Aditya Vikram Varma</h1>
+        <p>Smarter Research. Better Decisions. Research. Understand. Decide. Monitor. — using only verified NSE evidence; nothing here is simulated or estimated.</p>
         <form class="hero-search" id="heroSearchForm">
           <input id="symbolSearchInput" type="text" autocomplete="off" placeholder="Search NSE symbol or company name">
           <button id="searchSubmitBtn" type="submit">Search</button>
@@ -185,21 +210,83 @@ html[data-mode="light"] .radar-score-pill,html[data-mode="system"]:not([data-mod
       <div class="hero-slogan">Discipline Today, Wealth Tomorrow</div>
     </section>
 
-    <section class="indices-grid" id="marketInsights">
-      <article class="index-card"><span>NIFTY 50</span><strong>N/A</strong><div class="delta na">Verified index feed unavailable</div></article>
-      <article class="index-card"><span>SENSEX</span><strong>N/A</strong><div class="delta na">Verified index feed unavailable</div></article>
-      <article class="index-card"><span>NIFTY BANK</span><strong>N/A</strong><div class="delta na">Verified index feed unavailable</div></article>
-      <article class="index-card"><span>NIFTY MIDCAP 100</span><strong>N/A</strong><div class="delta na">Verified index feed unavailable</div></article>
+    <section class="market-live-panel" id="marketInsights">
+      <div class="mlp-head">
+        <div class="mlp-title">○ <b>Market Live</b> <span class="mlp-unavailable-badge" title="No live NSE feed is connected yet">Unavailable</span></div>
+        <div class="mlp-right">
+          <span class="mlp-date" id="marketLiveDate">—</span>
+          <div class="mlp-exchange-tabs" role="group" aria-label="Exchange (not connected)">
+            <button type="button" class="mlp-exchange active" disabled title="No live feed connected">NSE</button>
+            <button type="button" class="mlp-exchange" disabled title="No live feed connected">BSE</button>
+            <button type="button" class="mlp-exchange" disabled title="No live feed connected">Global</button>
+          </div>
+        </div>
+      </div>
+      <div class="indices-grid">
+        <article class="index-card"><span>NIFTY 50</span><strong>N/A</strong><div class="delta na">Verified index feed unavailable</div></article>
+        <article class="index-card"><span>SENSEX</span><strong>N/A</strong><div class="delta na">Verified index feed unavailable</div></article>
+        <article class="index-card"><span>NIFTY 500</span><strong>N/A</strong><div class="delta na">Verified index feed unavailable</div></article>
+        <article class="index-card"><span>NIFTY BANK</span><strong>N/A</strong><div class="delta na">Verified index feed unavailable</div></article>
+        <article class="index-card"><span>NIFTY MIDCAP 100</span><strong>N/A</strong><div class="delta na">Verified index feed unavailable</div></article>
+      </div>
+      <div class="mlp-movers">
+        <span><b>Top Gainers:</b> Not available — no live feed connected</span>
+        <span><b>Top Losers:</b> Not available — no live feed connected</span>
+      </div>
+      <a class="mlp-dashboard-btn" href="market-intelligence.html">View Market Dashboard →</a>
     </section>
 
     <section class="aurora-primary-cards">
-      <a class="aurora-card aurora-card--research" href="#companyOverview"><div><h3>Research a Company</h3><p>Get verified evidence and the VIKRAM Score for any covered NSE stock.</p></div><span class="cta">Start Research →</span></a>
+      <a class="aurora-card aurora-card--research" href="#companyOverview"><div><h3>Research Stocks</h3><p>Get verified evidence and the VIKRAM Score for any covered NSE stock.</p></div><span class="cta">Start Research →</span></a>
       <div class="aurora-card aurora-card--ai aurora-card--soon" aria-disabled="true" title="Not built yet — no AI/chat backend exists in VIKRAM"><div><h3>Ask VIKRAM AI</h3><p>Conversational stock insights. Not available yet — no AI backend is wired up.</p></div><span class="cta">Not available</span></div>
-      <a class="aurora-card aurora-card--discover" href="discover.html"><div><h3>Discover Opportunities</h3><p>Explore the Accumulation Scanner, Hidden Gems and Opportunity Radar.</p></div><span class="cta">Explore →</span></a>
+      <a class="aurora-card aurora-card--discover" href="discover.html"><div><h3>Scan Opportunities</h3><p>Explore the Accumulation Scanner, Hidden Gems and Opportunity Radar.</p></div><span class="cta">Explore →</span></a>
       <div class="aurora-card aurora-card--fo aurora-card--soon" aria-disabled="true" title="Not built yet — no F&O data source exists in VIKRAM"><div><h3>F&amp;O Analytics</h3><p>Futures &amp; options, open interest analysis. Not available yet — no F&amp;O data source is wired up.</p></div><span class="cta">Not available</span></div>
       <a class="aurora-card aurora-card--portfolio" href="#portfolio"><div><h3>Track Your Portfolio</h3><p>Monitor holdings you've added — stored locally in your browser only.</p></div><span class="cta">View Portfolio →</span></a>
-      <a class="aurora-card aurora-card--academy" href="academy.html"><div><h3>Learn with VIKRAM Academy</h3><p>Structure is live; lesson content is still being built.</p></div><span class="cta">See Status →</span></a>
     </section>
+
+    <section class="aurora-grid-3" style="margin-top:18px">
+      <div class="aurora-section aurora-section--sm" id="researchProgress">
+        <div class="section-head-row"><h2>Your Research Progress</h2><span class="progress-pct-locked">— %</span></div>
+        <div class="progress-track-locked"><div class="progress-fill-locked" style="width:0%"></div></div>
+        <div class="progress-substats">
+          <div><b>—</b><span>Research Added</span></div>
+          <div><b>—</b><span>Day Streak</span></div>
+          <div><b>—</b><span>Points Earned</span></div>
+          <div><b>—</b><span>Level</span></div>
+        </div>
+        <p class="honest-note">No research-progress backend exists yet — nothing here is tracked.</p>
+      </div>
+      <div class="aurora-section aurora-section--sm" id="watchlistHighlights">
+        <div class="section-head-row"><h2>Watchlist Highlights</h2><a href="#watchlist" class="view-all-link">View All</a></div>
+        <p class="honest-note" style="margin-top:28px">No watchlist stocks yet — the Watchlist feature isn't built yet in VIKRAM.</p>
+      </div>
+      <div class="aurora-section aurora-section--sm" id="todaysPlan">
+        <div class="section-head-row"><h2>Today's Plan</h2><a href="#" class="view-all-link" aria-disabled="true">View All</a></div>
+        <p class="honest-note" style="margin-top:28px">No tasks yet — task planning isn't built yet in VIKRAM.</p>
+      </div>
+    </section>
+
+    <section class="aurora-grid-2" style="margin-top:18px">
+      <div class="aurora-section aurora-section--sm">
+        <div class="section-head-row"><h2>VIKRAM Recommends for You</h2><a href="#" class="view-all-link" aria-disabled="true">View All</a></div>
+        <div class="recommend-row">
+          <div class="recommend-card"><span class="rc-eyebrow">Focus Theme</span><b>—</b><p class="honest-note">Recommendation engine not available yet.</p></div>
+          <div class="recommend-card"><span class="rc-eyebrow">Your Strength</span><b>—</b><p class="honest-note">Recommendation engine not available yet.</p></div>
+          <div class="recommend-card"><span class="rc-eyebrow">New for You</span><b>—</b><p class="honest-note">Recommendation engine not available yet.</p></div>
+        </div>
+      </div>
+      <div class="aurora-section aurora-section--sm">
+        <div class="section-head-row"><h2>Your Achievements</h2><a href="#" class="view-all-link" aria-disabled="true">View All</a></div>
+        <div class="achievement-row">
+          <div class="achievement-badge locked" title="No achievement rules or activity history exist yet">🔥<span>7 Day Streak</span></div>
+          <div class="achievement-badge locked" title="No achievement rules or activity history exist yet">👑<span>Research Pro</span></div>
+          <div class="achievement-badge locked" title="No achievement rules or activity history exist yet">📈<span>Top 10% Analyst</span></div>
+          <div class="achievement-badge locked" title="No achievement rules or activity history exist yet">⭐<span>Insight Master</span></div>
+        </div>
+        <p class="honest-note">No achievement rules or activity history exist yet — all locked.</p>
+      </div>
+    </section>
+
 
     <section class="aurora-grid-2" style="margin-top:18px">
       <div class="aurora-section" id="todaysFocus">
@@ -302,9 +389,10 @@ html[data-mode="light"] .radar-score-pill,html[data-mode="system"]:not([data-mod
   </main>
 
   <aside class="right-feed">
-    <div class="feed-card"><h3>TODAY</h3><div class="date-big" id="feedDate">—</div><span class="market-closed">Market Closed</span></div>
+    <div class="feed-card"><h3>TODAY</h3><div class="date-big" id="feedDate">—</div><span class="market-status" id="marketStatusBadge">—</span></div>
     <div class="feed-card"><div class="buffett">“Invest in what you understand.”<small>— Warren Buffett</small></div></div>
-    <div class="feed-card"><h3>MARKET BREADTH</h3><div class="breadth"><div class="donut" aria-label="Market breadth donut"></div><div class="breadth-stats"><div><span>Advances</span><b class="adv">1,842</b></div><div><span>Declines</span><b class="dec">1,236</b></div><div><span>Unchanged</span><b>112</b></div></div></div></div>
+    <div class="feed-card"><h3>MARKET BREADTH</h3><div class="breadth"><div class="donut donut--na" aria-label="Market breadth data not available"></div><div class="breadth-stats"><div><span>Advances</span><b>—</b></div><div><span>Declines</span><b>—</b></div><div><span>Unchanged</span><b>—</b></div></div></div><p class="honest-note" style="margin-top:8px">No live market-breadth feed connected yet.</p></div>
+    <div class="feed-card promo-card"><h3>Discipline Compounds Wealth</h3><p class="promo-quote">“Better research. Better decisions. A brighter tomorrow.”</p><span class="promo-arrow">→</span></div>
   </aside>
 </div>
 
@@ -322,6 +410,21 @@ html[data-mode="light"] .radar-score-pill,html[data-mode="system"]:not([data-mod
 (() => {
   const scannerCards = document.getElementById('scannerCards');
   const search = document.getElementById('symbolSearchInput');
+  const headerSearchShortcut = document.getElementById('headerSearchShortcut');
+  document.querySelectorAll('a[aria-disabled="true"]').forEach(a => a.addEventListener('click', e => e.preventDefault()));
+  if (headerSearchShortcut && search) {
+    headerSearchShortcut.addEventListener('click', () => {
+      search.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      search.focus();
+    });
+  }
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k' && search) {
+      e.preventDefault();
+      search.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      search.focus();
+    }
+  });
   const suggestions = document.getElementById('searchSuggestions');
   const universe = document.getElementById('universeFilter');
   const universeStatusLine = document.getElementById('universeStatusLine');
@@ -818,6 +921,28 @@ html[data-mode="light"] .radar-score-pill,html[data-mode="system"]:not([data-mod
 
   document.querySelectorAll('.surface-tab:not(:disabled)').forEach(tab => tab.addEventListener('click', () => { document.querySelectorAll('.surface-tab').forEach(x => { x.classList.remove('active'); x.setAttribute('aria-selected', 'false'); }); tab.classList.add('active'); tab.setAttribute('aria-selected', 'true'); }));
   const d = new Date(); document.getElementById('feedDate').textContent = d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  const mlDate = document.getElementById('marketLiveDate');
+  if (mlDate) mlDate.textContent = d.toLocaleDateString('en-IN',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
+  (function marketStatus() {
+    const badge = document.getElementById('marketStatusBadge');
+    if (!badge) return;
+    try {
+      const istParts = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kolkata', hour12: false, weekday: 'short', hour: '2-digit', minute: '2-digit' }).formatToParts(new Date());
+      const get = t => istParts.find(p => p.type === t).value;
+      const weekday = get('weekday');
+      const hour = parseInt(get('hour'), 10);
+      const minute = parseInt(get('minute'), 10);
+      const minutesNow = hour * 60 + minute;
+      const isWeekday = !['Sat', 'Sun'].includes(weekday);
+      const isTradingWindow = minutesNow >= (9 * 60 + 15) && minutesNow <= (15 * 60 + 30);
+      const open = isWeekday && isTradingWindow;
+      badge.textContent = open ? 'Market Open' : 'Market Closed';
+      badge.classList.toggle('is-open', open);
+      badge.title = 'Based on your device clock converted to IST — does not account for NSE holidays';
+    } catch (e) {
+      badge.textContent = 'Market status unknown';
+    }
+  })();
   const dataDateEl = document.getElementById('scannerDataDate');
   const dataAgeEl = document.getElementById('scannerDataAge');
   function renderScannerMeta(asOf) {
