@@ -1,6 +1,6 @@
 {
   "status": "VERIFIED",
-  "generatedAt": "2026-09-27T06:56:53.671Z",
+  "generatedAt": "2026-09-27T07:31:13.716Z",
   "source": "data/market-history/*.json (real NSE EOD bhavcopy-derived files)",
   "dateRange": {
     "first": "2025-09-02",
@@ -11,8 +11,8 @@
     "daysWithData": 277,
     "daysWithoutData": 0,
     "totalRows": 666627,
-    "rowsWithDeliveryValuePresent": 645362,
-    "deliveryFieldCoveragePct": 96.81,
+    "rowsWithDeliveryValuePresent": 648022,
+    "deliveryFieldCoveragePct": 97.21,
     "emptyDates": [],
     "suspectedDuplicateSessions": [
       {
