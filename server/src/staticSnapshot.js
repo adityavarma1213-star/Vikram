@@ -21,6 +21,14 @@ function num(v) { if (v === undefined || v === null || String(v).trim() === '') 
 function parseCsv(buf) { return parse(buf.toString('utf8').replace(/^\uFEFF/, ''), { columns: true, skip_empty_lines: true, trim: true, relax_column_count: false, bom: true }); }
 function requireColumns(rows, source, columns) { if (!rows.length) throw new Error(`${source}: empty CSV`); const headers = new Set(Object.keys(rows[0])); const missing = columns.filter(column => !headers.has(column)); if (missing.length) throw new Error(`${source}: schema mismatch; missing columns: ${missing.join(', ')}`); }
 function sourceTradeDate(rows, requestedDate, source) { const actual = clean(rows.find(r => clean(r.TradDt))?.TradDt); if (!actual) throw new Error(`${source}: missing TradDt source date`); if (actual.slice(0, 10) !== formatYmd(requestedDate)) throw new Error(`${source}: archive returned ${actual.slice(0, 10)} while ${formatYmd(requestedDate)} was requested`); return actual.slice(0, 10); }
+// NSE's "Full Bhavcopy" (sec_bhavdata_full) source reports its DATE1 field as DD-Mon-YYYY
+// (e.g. "25-Sep-2026"), unlike the UDiFF source's ISO TradDt. Normalize to YYYY-MM-DD before
+// comparing against formatYmd(date) so a correctly-dated Full Bhavcopy file is accepted instead
+// of always being rejected and silently falling back to the UDiFF source, which has no delivery
+// columns at all. A value that isn't in this known DD-Mon-YYYY shape is returned unchanged, so a
+// genuinely mismatched or malformed date still fails validation as before.
+const BHAVCOPY_MONTHS = { Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06', Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12' };
+function normalizeBhavcopyDate(raw) { const s = clean(raw); if (!s) return s; const m = /^(\d{2})-([A-Za-z]{3})-(\d{4})$/.exec(s); if (!m) return s; const mon = BHAVCOPY_MONTHS[m[2]]; return mon ? `${m[3]}-${mon}-${m[1]}` : s; }
 async function get(url) { const response = await fetch(url, { headers: HEADERS }); if (!response.ok) throw new Error(`NSE ${response.status} for ${url}`); return Buffer.from(await response.arrayBuffer()); }
 
 // Raw-byte preservation (added 2026-09-16, investigating the recurring delivery=0% anomaly --
@@ -71,7 +79,7 @@ async function fetchCm(date) {
         return rows.filter(r => clean(r.SctySrs) === 'EQ').map(r => ({ symbol: clean(r.TckrSymb), trade_date: tradeDate, close: num(r.ClsPric), last_price: num(r.LastPric), prev_close: num(r.PrvsClsgPric), volume: num(r.TtlTradgVol), deliv_qty: num(r.DlvryQty), deliv_per: num(r.DlvryPct) })).filter(r => r.symbol);
       }
       rows = parseCsv(buf); requireColumns(rows, 'NSE security-wise bhavcopy', ['SYMBOL', 'SERIES', 'CLOSE_PRICE', 'PREV_CLOSE', 'TTL_TRD_QNTY', 'DELIV_QTY', 'DELIV_PER']); // hardened: same fix as backtest/nseDownloader.js
-      const tradeDate = clean(rows.find(r => clean(r.DATE1 || r.TradeDate || r.TRADE_DATE))?.DATE1 || rows.find(r => clean(r.DATE1 || r.TradeDate || r.TRADE_DATE))?.TradeDate || rows.find(r => clean(r.DATE1 || r.TradeDate || r.TRADE_DATE))?.TRADE_DATE);
+      const tradeDate = normalizeBhavcopyDate(rows.find(r => clean(r.DATE1 || r.TradeDate || r.TRADE_DATE))?.DATE1 || rows.find(r => clean(r.DATE1 || r.TradeDate || r.TRADE_DATE))?.TradeDate || rows.find(r => clean(r.DATE1 || r.TradeDate || r.TRADE_DATE))?.TRADE_DATE);
       if (tradeDate && tradeDate.slice(0, 10) !== formatYmd(date)) throw new Error(`NSE security-wise bhavcopy: archive returned ${tradeDate.slice(0, 10)} while ${formatYmd(date)} was requested`);
       return rows.filter(r => clean(r.SERIES) === 'EQ').map(r => ({ symbol: clean(r.SYMBOL), trade_date: formatYmd(date), close: num(r.CLOSE_PRICE), last_price: num(r.LAST_PRICE), prev_close: num(r.PREV_CLOSE), volume: num(r.TTL_TRD_QNTY), deliv_qty: num(r.DELIV_QTY), deliv_per: num(r.DELIV_PER) })).filter(r => r.symbol);
     } catch (error) { if (url === urls[urls.length - 1]) throw error; }
