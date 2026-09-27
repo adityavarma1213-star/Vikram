@@ -13072,9 +13072,13 @@
       }
     }
   },
-  "generatedAt": "2026-09-27T01:32:47.313Z",
+  "generatedAt": "2026-09-27T01:35:57.892Z",
   "sourceFile": "backtest/REAL_1YEAR_BACKTEST_RESULT.json",
   "sourceDataProvenance": "REAL_NSE",
+  "sourceDateRange": [
+    "2025-09-02",
+    "2026-09-15"
+  ],
   "sourceEngine": {
     "source_file": "accumulation/engine.js",
     "source_sha256": "ae6a8f1f6698fc41d16d7c15800ca7f406361f3f6ef06bc3e04dd43287fedf58",
