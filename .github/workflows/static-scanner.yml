@@ -57,6 +57,8 @@ jobs:
           node --check js/search.js
           node --check js/dataEngine.js
           node --check tools/clean-market-history.js
+      - name: Regenerate NSE coverage report before tests
+        run: node scripts/buildNseCoverageReport.js
       - name: Run scanner tests
         working-directory: server
         run: npm test
@@ -72,7 +74,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/scanner.json data/market-history data/raw-archive
+          git add data/scanner.json data/market-history data/raw-archive data/nse-coverage-report.json
           if git diff --cached --quiet; then
             echo 'No market-data changes to commit.'
           else
