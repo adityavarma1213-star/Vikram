@@ -22,6 +22,41 @@
   --smpl-red:         #ff6b6b;
 }
 
+/* ---------- Universal fix: reset the underlying color variables inside every
+   dark card, not just a few known classes. Several sections (Today's Focus,
+   Investor GPS, Data-Trust cells rendered by js/homeAurora.js) print inline
+   styles like color:var(--aurora-text-muted) or inherit body's default
+   var(--text-main) — which is dark navy text, invisible on a dark navy card.
+   Re-declaring these variables + `color` here means EVERY descendant that
+   relies on inheritance or on these variables automatically becomes legible,
+   including content the app injects with JavaScript after this file loads. */
+.hero-panoramic.aurora-hero,
+.market-live-panel,
+.index-card,
+#researchProgress, #watchlistHighlights, #todaysPlan,
+.aurora-grid-2 .aurora-section,
+.recommend-card,
+.right-feed .feed-card{
+  --text-main: #ffffff;
+  --text-muted: var(--smpl-text-muted);
+  --aurora-text: #ffffff;
+  --aurora-text-muted: var(--smpl-text-muted);
+  --border-subtle: var(--smpl-card-border);
+  --bg-card-2: rgba(255,255,255,.10);
+  --accent-cyan: var(--smpl-accent);
+  --aurora-gps: var(--smpl-accent);
+  --green: var(--smpl-green); --red: var(--smpl-red);
+  --aurora-verified: var(--smpl-green); --aurora-negative: var(--smpl-red);
+  --amber-verdict: #fbbf24;
+  color: var(--text-main) !important;
+}
+/* .desc paragraphs (Today's Focus intro, Investor GPS body copy) explicitly
+   use the muted token above rather than the default heading color. */
+.aurora-grid-2 .aurora-section .desc,
+#researchProgress .desc, #watchlistHighlights .desc, #todaysPlan .desc{
+  color: var(--smpl-text-muted) !important;
+}
+
 /* ---------- Hero ---------- */
 .hero-panoramic.aurora-hero{
   background:
