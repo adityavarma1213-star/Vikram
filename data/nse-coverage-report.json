@@ -1,18 +1,18 @@
 {
   "status": "VERIFIED",
-  "generatedAt": "2026-09-16T21:05:14.454Z",
+  "generatedAt": "2026-09-27T06:56:53.671Z",
   "source": "data/market-history/*.json (real NSE EOD bhavcopy-derived files)",
   "dateRange": {
     "first": "2025-09-02",
-    "last": "2026-09-15"
+    "last": "2026-09-25"
   },
-  "tradingSessions": 269,
+  "tradingSessions": 277,
   "cm": {
-    "daysWithData": 269,
+    "daysWithData": 277,
     "daysWithoutData": 0,
-    "totalRows": 645362,
+    "totalRows": 666627,
     "rowsWithDeliveryValuePresent": 645362,
-    "deliveryFieldCoveragePct": 100,
+    "deliveryFieldCoveragePct": 96.81,
     "emptyDates": [],
     "suspectedDuplicateSessions": [
       {
@@ -135,10 +135,10 @@
     ]
   },
   "fo": {
-    "daysWithData": 256,
+    "daysWithData": 264,
     "daysWithoutData": 13,
-    "totalRows": 159545,
-    "rowsWithOiPresent": 159545,
+    "totalRows": 164721,
+    "rowsWithOiPresent": 164721,
     "oiFieldCoveragePct": 100,
     "emptyDates": [
       "2025-10-22",
