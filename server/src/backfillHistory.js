@@ -1,8 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const { toIstCalendarDate, addDays, formatYmd } = require('./istDate');
-const { fetchCm, fetchFo, writeHistory } = require('./staticSnapshot');
 const { MATERIALIZE_LOOKBACK_DAYS } = require('./scanMaterializer');
+// fetchCm/fetchFo/writeHistory are lazily required inside main() below, not at module load time.
+// staticSnapshot.js pulls in csv-parse; hasAllNullDelivery/needsRefresh are pure data-integrity
+// checks with no CSV-parsing or network dependency of their own, and keeping them decoupled lets
+// them (and their regression tests) load/run without that dependency present.
 
 const ROOT = path.resolve(__dirname, '../..');
 const HISTORY_DIR = path.join(ROOT, 'data', 'market-history');
@@ -12,12 +15,32 @@ function existingDates() {
   if (!fs.existsSync(HISTORY_DIR)) return new Set();
   return new Set(fs.readdirSync(HISTORY_DIR).filter(name => /^\d{4}-\d{2}-\d{2}\.json$/.test(name)).map(name => name.slice(0, 10)));
 }
+// DATA-INTEGRITY-ONLY check (2026-09-27): a snapshot with a populated `futures` array was
+// previously always treated as healthy, even when its CM rows carried no Delivery data at all.
+// That is exactly the signature the DD-Mon-YYYY vs ISO date-comparison bug left behind (see
+// normalizeBhavcopyDate() in staticSnapshot.js and REMEDIATION_STATUS.md): every CM row for the
+// day silently fell back to the UDiFF source, which has no DELIV_QTY/DELIV_PER columns, so
+// deliv_qty came back null for 100% of that day's rows -- a whole-day ingestion defect, not
+// genuine per-symbol "delivery data unavailable" (which NSE marks per-symbol, not for an entire
+// trading day; see deliveryColumnRequired.test.js). Detecting "every row null" therefore flags
+// the real corruption pattern without misclassifying the rare legitimate case of an individual
+// symbol lacking delivery data as staleness -- preserving Missing != Zero semantics: a single
+// missing value is still just missing, never coerced into a refresh trigger. This does not
+// change what counts as valid CM/Delivery data, nor any V15 scoring/confirmation input -- it only
+// changes whether an existing on-disk snapshot is trusted as already-healthy.
+function hasAllNullDelivery(snapshot) {
+  const cm = Array.isArray(snapshot.cm) ? snapshot.cm : [];
+  if (!cm.length) return false; // no CM rows at all is a different (pre-existing) failure mode
+  return cm.every(row => row.deliv_qty === null || row.deliv_qty === undefined);
+}
 function needsRefresh(key) {
   const file = path.join(HISTORY_DIR, `${key}.json`);
   if (!fs.existsSync(file)) return true;
   try {
     const snapshot = JSON.parse(fs.readFileSync(file, 'utf8'));
-    return !Array.isArray(snapshot.futures) || snapshot.futures.length === 0;
+    if (!Array.isArray(snapshot.futures) || snapshot.futures.length === 0) return true;
+    if (hasAllNullDelivery(snapshot)) return true;
+    return false;
   } catch (_) {
     return true;
   }
@@ -37,6 +60,7 @@ async function fetchWithBackoff(fn, label) {
   throw lastError;
 }
 async function main() {
+  const { fetchCm, fetchFo, writeHistory } = require('./staticSnapshot');
   const anchor = toIstCalendarDate();
   const existing = existingDates();
   let fetched = 0, refreshed = 0, skipped = 0, failed = 0;
@@ -62,4 +86,4 @@ async function main() {
   console.log(`Backfill complete: fetched=${fetched}, refreshed=${refreshed}, existing=${skipped}, unavailable=${failed}`);
 }
 if (require.main === module) main().catch(error => { console.error(error); process.exit(1); });
-module.exports = { existingDates, needsRefresh, fetchWithBackoff, main };
+module.exports = { existingDates, needsRefresh, hasAllNullDelivery, fetchWithBackoff, main };
