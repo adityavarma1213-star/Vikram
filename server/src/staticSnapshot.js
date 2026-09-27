@@ -82,7 +82,10 @@ async function fetchCm(date) {
       const tradeDate = normalizeBhavcopyDate(rows.find(r => clean(r.DATE1 || r.TradeDate || r.TRADE_DATE))?.DATE1 || rows.find(r => clean(r.DATE1 || r.TradeDate || r.TRADE_DATE))?.TradeDate || rows.find(r => clean(r.DATE1 || r.TradeDate || r.TRADE_DATE))?.TRADE_DATE);
       if (tradeDate && tradeDate.slice(0, 10) !== formatYmd(date)) throw new Error(`NSE security-wise bhavcopy: archive returned ${tradeDate.slice(0, 10)} while ${formatYmd(date)} was requested`);
       return rows.filter(r => clean(r.SERIES) === 'EQ').map(r => ({ symbol: clean(r.SYMBOL), trade_date: formatYmd(date), close: num(r.CLOSE_PRICE), last_price: num(r.LAST_PRICE), prev_close: num(r.PREV_CLOSE), volume: num(r.TTL_TRD_QNTY), deliv_qty: num(r.DELIV_QTY), deliv_per: num(r.DELIV_PER) })).filter(r => r.symbol);
-    } catch (error) { if (url === urls[urls.length - 1]) throw error; }
+    } catch (error) {
+      console.warn(`fetchCm: ${url} failed (${error.message}); trying next source`);
+      if (url === urls[urls.length - 1]) throw error;
+    }
   }
   throw new Error('No NSE CM file available');
 }
