@@ -116,4 +116,4 @@ async function main() {
   fs.mkdirSync(DATA_DIR, { recursive: true }); fs.writeFileSync(SNAPSHOT_FILE, `${JSON.stringify(snapshot)}\n`); console.log(`SNAPSHOT ${latest.tradeDate}: ${currentResults.length} current-date symbols from ${history.length} stored trading-day snapshot(s); confirmed streaks: ${detection.size}`);
 }
 if (require.main === module) main().catch(error => { console.error(error); process.exit(1); });
-module.exports = { fetchCm, fetchFo, fetchUniverse, readHistory, writeHistory, materialize, buildCurrentDetection, ingestLatest, parseCsv, requireColumns, sourceTradeDate };
+module.exports = { fetchCm, fetchFo, fetchUniverse, readHistory, writeHistory, materialize, buildCurrentDetection, ingestLatest, parseCsv, requireColumns, sourceTradeDate, num };
