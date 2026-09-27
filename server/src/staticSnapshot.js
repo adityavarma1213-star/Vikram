@@ -17,7 +17,7 @@ const NSE_HOME = 'https://www.nseindia.com';
 const NSE_EQUITY_UNIVERSE = 'https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv';
 const HEADERS = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/134.0 Safari/537.36', Accept: '*/*', 'Accept-Language': 'en-US,en;q=0.9', Referer: `${NSE_HOME}/` };
 function clean(v) { return v === undefined || v === null || String(v).trim() === '' ? null : String(v).trim(); }
-function num(v) { const x = Number(String(v ?? '').replace(/,/g, '')); return Number.isFinite(x) ? x : null; }
+function num(v) { if (v === undefined || v === null || String(v).trim() === '') return null; const x = Number(String(v).replace(/,/g, '')); return Number.isFinite(x) ? x : null; }
 function parseCsv(buf) { return parse(buf.toString('utf8').replace(/^\uFEFF/, ''), { columns: true, skip_empty_lines: true, trim: true, relax_column_count: false, bom: true }); }
 function requireColumns(rows, source, columns) { if (!rows.length) throw new Error(`${source}: empty CSV`); const headers = new Set(Object.keys(rows[0])); const missing = columns.filter(column => !headers.has(column)); if (missing.length) throw new Error(`${source}: schema mismatch; missing columns: ${missing.join(', ')}`); }
 function sourceTradeDate(rows, requestedDate, source) { const actual = clean(rows.find(r => clean(r.TradDt))?.TradDt); if (!actual) throw new Error(`${source}: missing TradDt source date`); if (actual.slice(0, 10) !== formatYmd(requestedDate)) throw new Error(`${source}: archive returned ${actual.slice(0, 10)} while ${formatYmd(requestedDate)} was requested`); return actual.slice(0, 10); }
@@ -66,7 +66,7 @@ async function fetchCm(date) {
       const buf = await get(url); let rows;
       preserveRaw('CM', formatYmd(date), url, buf);
       if (url.endsWith('.zip')) {
-        const zip = await unzipper.Open.buffer(buf); const file = zip.files.find(f => /\.csv$/i.test(f.path)); if (!file) throw new Error('No CSV found in CM archive'); rows = parseCsv(await file.buffer()); requireColumns(rows, 'NSE UDiFF CM', ['TradDt', 'TckrSymb', 'SctySrs', 'ClsPric', 'PrvsClsgPric', 'TtlTradgVol', 'DlvryQty', 'DlvryPct']); // hardened: same fix as backtest/nseDownloader.js -- a missing/renamed delivery column now throws instead of silently becoming 0 (see 2026-09-07..11 delivery=0% anomaly)
+        const zip = await unzipper.Open.buffer(buf); const file = zip.files.find(f => /\.csv$/i.test(f.path)); if (!file) throw new Error('No CSV found in CM archive'); rows = parseCsv(await file.buffer()); requireColumns(rows, 'NSE UDiFF CM', ['TradDt', 'TckrSymb', 'SctySrs', 'ClsPric', 'PrvsClsgPric', 'TtlTradgVol']);
         const tradeDate = sourceTradeDate(rows, date, 'NSE UDiFF CM');
         return rows.filter(r => clean(r.SctySrs) === 'EQ').map(r => ({ symbol: clean(r.TckrSymb), trade_date: tradeDate, close: num(r.ClsPric), last_price: num(r.LastPric), prev_close: num(r.PrvsClsgPric), volume: num(r.TtlTradgVol), deliv_qty: num(r.DlvryQty), deliv_per: num(r.DlvryPct) })).filter(r => r.symbol);
       }
