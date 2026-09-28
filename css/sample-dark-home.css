@@ -19,7 +19,7 @@
   --smpl-text-muted:  #aebdf2;
   --smpl-accent:      #22d3ee;   /* cyan links / "View All" */
   --smpl-green:       #34d399;
-  --smpl-red:         #ff6b6b;
+  --smpl-red:         #ff9e9e;
 }
 
 /* ---------- Universal fix: reset the underlying color variables inside every
@@ -61,12 +61,12 @@
 .hero-panoramic.aurora-hero{
   background:
     radial-gradient(120% 160% at 8% 0%, rgba(255,255,255,.10), transparent 55%),
-    linear-gradient(120deg, #1a6fe0 0%, #0d3f95 45%, var(--smpl-card-deep) 100%) !important;
+    linear-gradient(120deg, #1865cb 0%, #0d3f95 45%, var(--smpl-card-deep) 100%) !important;
   border-color: var(--smpl-card-border) !important;
 }
-.hero-panoramic .eyebrow{ color:#8fd8ff !important; }
+.hero-panoramic .eyebrow{ color:#c8f0ff !important; }
 .hero-panoramic h1, .hero-panoramic p, .hero-slogan{ color:var(--smpl-text) !important; }
-.hero-panoramic p{ color:#cfe0ff !important; opacity:.95 }
+.hero-panoramic p{ color:#eaf2ff !important; opacity:.95 }
 .hero-search input{ background:rgba(255,255,255,.10) !important; color:var(--smpl-text) !important; border-color:var(--smpl-card-border) !important; }
 .hero-search input::placeholder{ color:#b7c8f5 !important; }
 .ticker-pill{ background:rgba(255,255,255,.08) !important; border-color:var(--smpl-card-border) !important; color:var(--smpl-text) !important; }
@@ -91,17 +91,17 @@
   background: linear-gradient(155deg, #17429c, #0a2f74) !important;
   border-color: var(--smpl-card-border) !important;
 }
-.index-card span{ color:#9db3ee !important; }
+.index-card span{ color:#b4c5f3 !important; }
 .index-card strong{ color:var(--smpl-text) !important; }
 .index-card .delta{ color:var(--smpl-green) !important; }
-.index-card .delta.na{ color:#8298d6 !important; }
+.index-card .delta.na{ color:#a8b8e3 !important; }
 
 /* ---------- 5 primary action cards — exact sample hues ---------- */
-.aurora-card--research{ background:linear-gradient(135deg,#2f7dfa,#0b3fb0) !important; }
-.aurora-card--ai{        background:linear-gradient(135deg,#a855f7,#6d28d9) !important; }
-.aurora-card--discover{  background:linear-gradient(135deg,#14b8a6,#0f766e) !important; }
-.aurora-card--fo{        background:linear-gradient(135deg,#ff9d6c,#e2574a) !important; }
-.aurora-card--portfolio{ background:linear-gradient(135deg,#8b7cf6,#6d4ce0) !important; }
+.aurora-card--research{ background:linear-gradient(135deg,#146cf9,#0b3fb0) !important; }
+.aurora-card--ai{        background:linear-gradient(135deg,#9e42f6,#6d28d9) !important; }
+.aurora-card--discover{  background:linear-gradient(135deg,#0e8376,#0b5f58) !important; }
+.aurora-card--fo{        background:linear-gradient(135deg,#d9541f,#bf3a2c) !important; }
+.aurora-card--portfolio{ background:linear-gradient(135deg,#705df4,#5b3fd0) !important; }
 
 /* ---------- Widget panels: Research Progress / Watchlist / Today's Plan ---------- */
 #researchProgress, #watchlistHighlights, #todaysPlan,
@@ -118,7 +118,7 @@
 #researchProgress .progress-substats span,
 .honest-note{ color:var(--smpl-text-muted) !important; }
 .view-all-link{ color:var(--smpl-accent) !important; }
-.view-all-link[aria-disabled="true"]{ color:#7488c2 !important; }
+.view-all-link[aria-disabled="true"]{ color:#a9b6d9 !important; }
 
 /* ---------- VIKRAM Recommends + Your Achievements ---------- */
 .aurora-grid-2 .aurora-section:not(.aurora-section--sm){
@@ -136,7 +136,7 @@
 
 /* ---------- Discipline Compounds Wealth promo card ---------- */
 .promo-card{
-  background: linear-gradient(160deg,#4c3a8f 0%,#9a5fa0 40%,#e8875a 75%,#f4b860 100%) !important;
+  background: linear-gradient(160deg,#3b2d78 0%,#71429a 45%,#a84f7c 78%,#c9603f 100%) !important;
 }
 .promo-card h3, .promo-quote{ color:#fff !important; }
 
