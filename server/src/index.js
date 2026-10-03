@@ -215,7 +215,7 @@ app.get('/api/admin/ingestion-runs',requireAuthMw,requireAdmin(pool),async(_req,
     res.status(503).json({ status: 'DATA_INSUFFICIENT', reason: e.message });
   }
 });
-const publicRoot=path.resolve(__dirname,'../..');app.use(express.static(publicRoot,{extensions:['html'],index:'index.html'}));app.get('/scanner',(_req,res)=>res.sendFile(path.join(publicRoot,'scanner.html')));app.get('/',(_req,res)=>res.sendFile(path.join(publicRoot,'index.html')));
+const publicRoot=path.resolve(__dirname,'../..');app.use(express.static(publicRoot,{dotfiles:'deny',extensions:['html'],index:'index.html'}));app.get('/scanner',(_req,res)=>res.sendFile(path.join(publicRoot,'scanner.html')));app.get('/',(_req,res)=>res.sendFile(path.join(publicRoot,'index.html')));
 // Production integration: honest 404 for unmatched API routes (never silently fall through to
 // the SPA's index.html for an /api/* path -- that would look like a confusing empty success).
 app.use('/api', (_req, res) => res.status(404).json({ status: 'VERIFICATION_BLOCKED', reason: 'Unknown API endpoint.' }));
