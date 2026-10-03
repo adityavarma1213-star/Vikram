@@ -90,6 +90,14 @@
 /* New minimal toolbar: Universe pills + note + search only — Verdict/Score/Sort have no visible
    control here any more; their UI is entirely in the table headers (see .radar-col-menu below). */
 .radar-mini-toolbar{display:flex;flex-direction:column;gap:9px;padding:11px;border:1px solid var(--border-subtle);border-radius:14px;background:color-mix(in srgb,var(--bg-card-2) 80%,transparent)}
+/* RSI filter bar — UNLIKE the selects above, these are real, visible, clickable controls (RSI has
+   no existing table column to attach a header-menu to). Shared by Master/Accumulation Scanner,
+   Opportunity Radar and Hidden Gems — see rsiRowMatches() in the inline script below. */
+.rsi-filter-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:11px;border:1px solid var(--border-subtle);border-radius:14px;background:color-mix(in srgb,var(--bg-card-2) 80%,transparent);margin-top:9px}
+.rsi-filter-bar-label{font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-right:2px;flex:0 0 100%}
+.rsi-select,.rsi-input{border:1px solid var(--border-subtle);background:var(--bg-card-2);color:var(--text-main);border-radius:9px;padding:8px 10px;font-size:10px;font-weight:800;outline:none;height:36px;box-sizing:border-box}
+.rsi-input{width:90px}
+.rsi-select:focus,.rsi-input:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-cyan) 18%,transparent)}
 .radar-universe-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
 .radar-universe-pills{display:flex;flex-wrap:wrap;gap:6px}
 .radar-universe-pill{border:1px solid var(--border-subtle);background:color-mix(in srgb,var(--bg-card) 62%,transparent);color:var(--text-muted);border-radius:999px;padding:7px 12px;font-size:10px;font-weight:800;cursor:pointer;touch-action:manipulation}
@@ -341,6 +349,19 @@ html[data-mode="light"] .radar-score-pill,html[data-mode="system"]:not([data-mod
         <select id="volumeFilter" class="radar-native-select" data-radar-filter aria-hidden="true" tabindex="-1"><option value="ALL">All</option><option value="BREAKOUT">Volume Breakout (≥ 2x avg)</option></select>
         <select id="deliveryFilter" class="radar-native-select" data-radar-filter aria-hidden="true" tabindex="-1"><option value="ALL">All</option><option value="HIGH">High Delivery (≥ 60%)</option></select>
         <select id="oiChangeFilter" class="radar-native-select" data-radar-filter aria-hidden="true" tabindex="-1"><option value="ALL">All</option><option value="BUILDUP">OI Build-up (real data only)</option></select>
+        <div class="rsi-filter-bar" aria-label="RSI filters">
+        <span class="rsi-filter-bar-label">RSI Filters (informational — daily / weekly / monthly)</span>
+<select id="rsiDailyDirFilter" class="rsi-select" data-rsi-filter aria-label="Daily RSI direction"><option value="ALL">Daily RSI: All</option><option value="RISING">Daily RSI: Rising</option><option value="FALLING">Daily RSI: Falling</option><option value="FLAT">Daily RSI: Flat</option></select>
+        <select id="rsiWeeklyDirFilter" class="rsi-select" data-rsi-filter aria-label="Weekly RSI direction"><option value="ALL">Weekly RSI: All</option><option value="RISING">Weekly RSI: Rising</option><option value="FALLING">Weekly RSI: Falling</option><option value="FLAT">Weekly RSI: Flat</option></select>
+        <select id="rsiMonthlyDirFilter" class="rsi-select" data-rsi-filter aria-label="Monthly RSI direction"><option value="ALL">Monthly RSI: All</option><option value="RISING">Monthly RSI: Rising</option><option value="FALLING">Monthly RSI: Falling</option><option value="FLAT">Monthly RSI: Flat</option></select>
+        <select id="rsiAlignmentFilter" class="rsi-select" data-rsi-filter aria-label="RSI multi-timeframe alignment"><option value="NONE">RSI Alignment: None</option><option value="ALL_RISING">All Timeframes Rising</option><option value="ALL_FALLING">All Timeframes Falling</option><option value="DW_RISING">Daily + Weekly Rising</option><option value="WM_RISING">Weekly + Monthly Rising</option><option value="DWM_RISING">Daily + Weekly + Monthly Rising</option></select>
+        <select id="rsiDailyZoneFilter" class="rsi-select" data-rsi-filter aria-label="Daily RSI zone"><option value="ALL">Daily RSI Zone: All</option><option value="OVERSOLD">Daily: Oversold (&lt;30)</option><option value="WEAK_RECOVERY">Daily: Weak/Recovery (30–50)</option><option value="POSITIVE_MOMENTUM">Daily: Positive Momentum (50–70)</option><option value="OVERBOUGHT">Daily: Overbought (≥70)</option></select>
+        <select id="rsiWeeklyZoneFilter" class="rsi-select" data-rsi-filter aria-label="Weekly RSI zone"><option value="ALL">Weekly RSI Zone: All</option><option value="OVERSOLD">Weekly: Oversold (&lt;30)</option><option value="WEAK_RECOVERY">Weekly: Weak/Recovery (30–50)</option><option value="POSITIVE_MOMENTUM">Weekly: Positive Momentum (50–70)</option><option value="OVERBOUGHT">Weekly: Overbought (≥70)</option></select>
+        <select id="rsiMonthlyZoneFilter" class="rsi-select" data-rsi-filter aria-label="Monthly RSI zone"><option value="ALL">Monthly RSI Zone: All</option><option value="OVERSOLD">Monthly: Oversold (&lt;30)</option><option value="WEAK_RECOVERY">Monthly: Weak/Recovery (30–50)</option><option value="POSITIVE_MOMENTUM">Monthly: Positive Momentum (50–70)</option><option value="OVERBOUGHT">Monthly: Overbought (≥70)</option></select>
+        <select id="rsiRangeTimeframe" class="rsi-select" data-rsi-filter aria-label="RSI numeric range timeframe"><option value="DAILY">RSI Range: Daily</option><option value="WEEKLY">RSI Range: Weekly</option><option value="MONTHLY">RSI Range: Monthly</option></select>
+        <input id="rsiRangeMin" type="number" min="0" max="100" step="0.01" placeholder="Min RSI" class="rsi-input" data-rsi-filter aria-label="Minimum RSI">
+        <input id="rsiRangeMax" type="number" min="0" max="100" step="0.01" placeholder="Max RSI" class="rsi-input" data-rsi-filter aria-label="Maximum RSI">
+        </div>
         <div class="radar-universe-row">
           <div class="radar-universe-pills" role="group" aria-label="NSE universe">
             <button type="button" class="radar-universe-pill" data-universe-value="ALL">All NSE Stocks</button>
@@ -450,6 +471,64 @@ html[data-mode="light"] .radar-score-pill,html[data-mode="system"]:not([data-mod
   // has changed size/order.
   if (tableSearch) tableSearch.addEventListener('input', () => { tablePage = 1; render(); });
   if (sortSelect) sortSelect.addEventListener('change', () => { tablePage = 1; render(); });
+  // ==========================================================================
+  // RSI FILTERS — canonical, shared by ALL FOUR scanner surfaces.
+  // ==========================================================================
+  // RSI itself (row.rsi.{daily,weekly,monthly}) is pre-computed ONCE, offline,
+  // by the canonical engine (js/rsiEngine.js -> scripts/buildRsiSnapshot.js ->
+  // scripts/mergeRsiIntoScannerSnapshot.js) and merged additively into
+  // data/scanner.json. Every surface below reads that SAME row.rsi object —
+  // there is no second RSI calculator anywhere in this file. RSI is
+  // informational/research-filter only: it narrows which already-scored rows
+  // are shown and never touches r.score / r.verdict / r.confirmation.
+  const rsiFilterIds = ['rsiDailyDirFilter','rsiWeeklyDirFilter','rsiMonthlyDirFilter','rsiAlignmentFilter','rsiDailyZoneFilter','rsiWeeklyZoneFilter','rsiMonthlyZoneFilter','rsiRangeTimeframe','rsiRangeMin','rsiRangeMax'];
+  const rsiFilterEls = Object.fromEntries(rsiFilterIds.map(id => [id, document.getElementById(id)]));
+  function getRsiFilterState() {
+    return {
+      dailyDir: rsiFilterEls.rsiDailyDirFilter ? rsiFilterEls.rsiDailyDirFilter.value : 'ALL',
+      weeklyDir: rsiFilterEls.rsiWeeklyDirFilter ? rsiFilterEls.rsiWeeklyDirFilter.value : 'ALL',
+      monthlyDir: rsiFilterEls.rsiMonthlyDirFilter ? rsiFilterEls.rsiMonthlyDirFilter.value : 'ALL',
+      alignment: rsiFilterEls.rsiAlignmentFilter ? rsiFilterEls.rsiAlignmentFilter.value : 'NONE',
+      dailyZone: rsiFilterEls.rsiDailyZoneFilter ? rsiFilterEls.rsiDailyZoneFilter.value : 'ALL',
+      weeklyZone: rsiFilterEls.rsiWeeklyZoneFilter ? rsiFilterEls.rsiWeeklyZoneFilter.value : 'ALL',
+      monthlyZone: rsiFilterEls.rsiMonthlyZoneFilter ? rsiFilterEls.rsiMonthlyZoneFilter.value : 'ALL',
+      rangeTimeframe: rsiFilterEls.rsiRangeTimeframe ? rsiFilterEls.rsiRangeTimeframe.value : 'DAILY',
+      rangeMin: rsiFilterEls.rsiRangeMin ? String(rsiFilterEls.rsiRangeMin.value || '').trim() : '',
+      rangeMax: rsiFilterEls.rsiRangeMax ? String(rsiFilterEls.rsiRangeMax.value || '').trim() : ''
+    };
+  }
+  function rsiIsActive(s) {
+    return s.dailyDir !== 'ALL' || s.weeklyDir !== 'ALL' || s.monthlyDir !== 'ALL' || s.alignment !== 'NONE' ||
+      s.dailyZone !== 'ALL' || s.weeklyZone !== 'ALL' || s.monthlyZone !== 'ALL' || s.rangeMin !== '' || s.rangeMax !== '';
+  }
+  // Pure predicate — single source of truth for "does this row satisfy the
+  // currently-selected RSI filters". Missing RSI (null) NEVER matches a
+  // specific direction/zone/range condition; it only ever matches "All".
+  function rsiRowMatches(r, s) {
+    const rsi = (r && r.rsi) || {};
+    const d = rsi.daily || {}, w = rsi.weekly || {}, m = rsi.monthly || {};
+    if (s.dailyDir !== 'ALL' && d.direction !== s.dailyDir) return false;
+    if (s.weeklyDir !== 'ALL' && w.direction !== s.weeklyDir) return false;
+    if (s.monthlyDir !== 'ALL' && m.direction !== s.monthlyDir) return false;
+    if (s.dailyZone !== 'ALL' && d.zone !== s.dailyZone) return false;
+    if (s.weeklyZone !== 'ALL' && w.zone !== s.weeklyZone) return false;
+    if (s.monthlyZone !== 'ALL' && m.zone !== s.monthlyZone) return false;
+    if (s.alignment === 'ALL_RISING' && !(d.direction === 'RISING' && w.direction === 'RISING' && m.direction === 'RISING')) return false;
+    if (s.alignment === 'ALL_FALLING' && !(d.direction === 'FALLING' && w.direction === 'FALLING' && m.direction === 'FALLING')) return false;
+    if (s.alignment === 'DW_RISING' && !(d.direction === 'RISING' && w.direction === 'RISING')) return false;
+    if (s.alignment === 'WM_RISING' && !(w.direction === 'RISING' && m.direction === 'RISING')) return false;
+    if (s.alignment === 'DWM_RISING' && !(d.direction === 'RISING' && w.direction === 'RISING' && m.direction === 'RISING')) return false;
+    if (s.rangeMin !== '' || s.rangeMax !== '') {
+      const tf = s.rangeTimeframe === 'WEEKLY' ? w : s.rangeTimeframe === 'MONTHLY' ? m : d;
+      const v = tf.value;
+      if (v == null) return false; // N/A never accidentally passes a numeric range filter
+      if (s.rangeMin !== '' && v < Number(s.rangeMin)) return false;
+      if (s.rangeMax !== '' && v > Number(s.rangeMax)) return false;
+    }
+    return true;
+  }
+  rsiFilterIds.forEach(id => { const el = rsiFilterEls[id]; if (el) el.addEventListener(id.includes('Range') && id !== 'rsiRangeTimeframe' ? 'input' : 'change', () => { tablePage = 1; render(); renderOpportunityRadar(); renderHiddenGems(); }); });
+
   const obvFilter = document.getElementById('obvFilter');
   const volumeFilter = document.getElementById('volumeFilter');
   const deliveryFilter = document.getElementById('deliveryFilter');
@@ -634,7 +713,11 @@ html[data-mode="light"] .radar-score-pill,html[data-mode="system"]:not([data-mod
   function renderOpportunityRadar() {
     if (!radarList || !window.VikramOpportunityRadar) return;
     const { buildRadar, buildDisclosure } = window.VikramOpportunityRadar;
-    const ranked = buildRadar(rows, radarCategory ? radarCategory.value : 'ALL').slice(0, 50);
+    // Same canonical RSI data + same rsiRowMatches() predicate as the Master/Accumulation
+    // scanner above — Opportunity Radar narrows further, it never recomputes RSI itself.
+    const rsiStateRadar = getRsiFilterState();
+    const rsiFilteredRows = rsiIsActive(rsiStateRadar) ? rows.filter(r => rsiRowMatches(r, rsiStateRadar)) : rows;
+    const ranked = buildRadar(rsiFilteredRows, radarCategory ? radarCategory.value : 'ALL').slice(0, 50);
     radarList.innerHTML = ranked.length ? ranked.map(({ row }) => {
       const d = buildDisclosure(row, intelligenceMap);
       const whyHtml = d.level2.why.length ? `<ul>${d.level2.why.map(w => `<li>${text(w)}</li>`).join('')}</ul>` : '<p class="text-muted">No additional explanation recorded.</p>';
@@ -680,13 +763,17 @@ html[data-mode="light"] .radar-score-pill,html[data-mode="system"]:not([data-mod
     if (!hiddenGemsList) return;
     renderHiddenGemsMeta();
     const base = (window.ACCUMULATION_API_BASE || '').replace(/\/$/, '');
+    // Same canonical RSI data + same rsiRowMatches() predicate as every other surface — Hidden
+    // Gems narrows further, it never recomputes RSI itself.
+    const rsiStateGems = getRsiFilterState();
+    const rsiFilteredRowsForGems = rsiIsActive(rsiStateGems) ? rows.filter(r => rsiRowMatches(r, rsiStateGems)) : rows;
     if (!base) {
       // No live backend configured -> the full stealth/recognition/institutional classification
       // genuinely cannot be computed here, and we do not fabricate one. But the canonical
       // Research Intelligence artifact (real, already computed from NSE history) IS a static
       // file, so we can honestly show real historical evidence for today's ACCUMULATION
       // CONFIRMED/STARTING symbols automatically — no live backend required.
-      const candidates = rows.filter(r => {
+      const candidates = rsiFilteredRowsForGems.filter(r => {
         const v = String(r.verdict || '').toUpperCase();
         return v === 'ACCUMULATION CONFIRMED' || v === 'ACCUMULATION STARTING';
       });
@@ -791,7 +878,8 @@ html[data-mode="light"] .radar-score-pill,html[data-mode="system"]:not([data-mod
     }
     // FILTER step: universe/verdict/score/search narrow which rows are included. Order is
     // untouched here — that is entirely the SORT step below, which never changes membership.
-    const filteredForUniverse = rows.filter(r => inUniverse(r) && verdictMatches(r.verdict, v) && (Number(r.score) || 0) >= min && matchesObv(r) && matchesVolume(r) && matchesDelivery(r) && matchesOiChange(r));
+    const rsiState = getRsiFilterState();
+    const filteredForUniverse = rows.filter(r => inUniverse(r) && verdictMatches(r.verdict, v) && (Number(r.score) || 0) >= min && matchesObv(r) && matchesVolume(r) && matchesDelivery(r) && matchesOiChange(r) && rsiRowMatches(r, rsiState));
     const { filterRows, sortRows, paginate } = window.VikramTableControls || {};
     const textFiltered = filterRows ? filterRows(filteredForUniverse, tableSearch ? tableSearch.value : '') : filteredForUniverse;
     // SORT step: reorders the already-filtered set; never adds or removes a row.
@@ -914,9 +1002,17 @@ html[data-mode="light"] .radar-score-pill,html[data-mode="system"]:not([data-mod
   if (clearScannerFilters) clearScannerFilters.addEventListener('click', () => {
     universe.value = 'ALL'; verdict.value = 'ALL'; score.value = '0';
     [obvFilter, volumeFilter, deliveryFilter, oiChangeFilter].forEach(el => { if (el) el.value = 'ALL'; });
+    rsiFilterIds.forEach(id => {
+      const el = rsiFilterEls[id];
+      if (!el) return;
+      if (id === 'rsiRangeMin' || id === 'rsiRangeMax') el.value = '';
+      else if (id === 'rsiAlignmentFilter') el.value = 'NONE';
+      else if (id === 'rsiRangeTimeframe') el.value = 'DAILY';
+      else el.value = 'ALL';
+    });
     if (tableSearch) tableSearch.value = '';
     if (sortSelect) sortSelect.value = 'score:desc';
-    tablePage = 1; render();
+    tablePage = 1; render(); renderOpportunityRadar(); renderHiddenGems();
   });
   [universe,verdict,score].forEach(el => el.addEventListener('change', () => { tablePage = 1; render(); }));
 
