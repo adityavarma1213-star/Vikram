@@ -1,0 +1,266 @@
+{
+ "schemaVersion": "v15-daily-snapshot/1",
+ "entries": [
+  {
+   "scanDate": "2026-09-04",
+   "scanTimestamp": "2026-09-07T03:11:48.066Z",
+   "file": "2026-09-04/20260907T031148066Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "2496756e476e0c2542c847d07f8573da665e664ad2d759b885a0f19da098e494",
+   "prevChainHash": "0000000000000000000000000000000000000000000000000000000000000000",
+   "chainHash": "ab2feab67a9fcb0445c41818d81d5104e225bf0955d422e804e019f25327d9f5"
+  },
+  {
+   "scanDate": "2026-09-04",
+   "scanTimestamp": "2026-09-07T03:46:35.900Z",
+   "file": "2026-09-04/20260907T034635900Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "7b69851aa2851048961420fd6b8dc488c21a75c0dd6e0203f45c1a2fc5b5d808",
+   "prevChainHash": "ab2feab67a9fcb0445c41818d81d5104e225bf0955d422e804e019f25327d9f5",
+   "chainHash": "bedc752a41e8fe345e803c8fa84c5c8f9f974c2f329f2cffe20dbb73d148e9ab"
+  },
+  {
+   "scanDate": "2026-09-04",
+   "scanTimestamp": "2026-09-07T04:03:03.212Z",
+   "file": "2026-09-04/20260907T040303212Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "84e8ab4cd2c6764cf51dfebd2855a831f37a0135944b8ecc62eb498260ba867e",
+   "prevChainHash": "bedc752a41e8fe345e803c8fa84c5c8f9f974c2f329f2cffe20dbb73d148e9ab",
+   "chainHash": "634ef6ab0e054d0b904e64d24c8db78cdcc613c07d76e903fcf4ba75d99a8eec"
+  },
+  {
+   "scanDate": "2026-09-04",
+   "scanTimestamp": "2026-09-07T06:13:20.406Z",
+   "file": "2026-09-04/20260907T061320406Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "d5b37c9de43ecf7477377e2a196e71eda56c2c144b450aa5833cda6e7d9b55eb",
+   "prevChainHash": "634ef6ab0e054d0b904e64d24c8db78cdcc613c07d76e903fcf4ba75d99a8eec",
+   "chainHash": "887d13a99bb5d8e386c3e4bebe4b3aabe993b71ed513e5829e1db581d26fd028"
+  },
+  {
+   "scanDate": "2026-09-07",
+   "scanTimestamp": "2026-09-07T13:16:34.402Z",
+   "file": "2026-09-07/20260907T131634402Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "4c0c7302aa38baedb78f4a5aa2ef446b22cadac1ed453de72e82bb2cbf077aec",
+   "prevChainHash": "887d13a99bb5d8e386c3e4bebe4b3aabe993b71ed513e5829e1db581d26fd028",
+   "chainHash": "56762fa7b8f839da029e770ce065e2e161619e74c428124e36c5184f6941c227"
+  },
+  {
+   "scanDate": "2026-09-07",
+   "scanTimestamp": "2026-09-07T14:32:41.640Z",
+   "file": "2026-09-07/20260907T143241640Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "6e9b154a51745d37549490c49bec6b82157b3fd558c3593d65c57e48bf636a86",
+   "prevChainHash": "56762fa7b8f839da029e770ce065e2e161619e74c428124e36c5184f6941c227",
+   "chainHash": "b5ca612eeed57f4ffa0a7d3a468bf4d1104025bf645fe8a70df0f4ecd72a3d2a"
+  },
+  {
+   "scanDate": "2026-09-07",
+   "scanTimestamp": "2026-09-07T16:06:12.687Z",
+   "file": "2026-09-07/20260907T160612687Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "219f921dded1de642c002d0a8b57a35df17d044c67d37985c8be2876f58a420b",
+   "prevChainHash": "b5ca612eeed57f4ffa0a7d3a468bf4d1104025bf645fe8a70df0f4ecd72a3d2a",
+   "chainHash": "ac7a50969d8a373f555b1828f4315b62971d3b755ccab26d8b5370be13a69158"
+  },
+  {
+   "scanDate": "2026-09-07",
+   "scanTimestamp": "2026-09-07T18:32:49.775Z",
+   "file": "2026-09-07/20260907T183249775Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "3236c9238086e5333640c332ff5be0a8e40199b7642a1bbc86862aeb5a45c5c8",
+   "prevChainHash": "ac7a50969d8a373f555b1828f4315b62971d3b755ccab26d8b5370be13a69158",
+   "chainHash": "97913b9f6283c0a7bd7a29b49a9638072cb4ded933ad53007c5c684e2a3a3073"
+  },
+  {
+   "scanDate": "2026-09-08",
+   "scanTimestamp": "2026-09-08T17:33:22.281Z",
+   "file": "2026-09-08/20260908T173322281Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "23de2b0f81ec7c1bb2f555ff6b06253abb297f0baeddea4a94b5cec8886e4f13",
+   "prevChainHash": "97913b9f6283c0a7bd7a29b49a9638072cb4ded933ad53007c5c684e2a3a3073",
+   "chainHash": "471b41e40b9b91aa749c4008c4f1b5f210ab2d38cf513acb170925765da482a3"
+  },
+  {
+   "scanDate": "2026-09-09",
+   "scanTimestamp": "2026-09-09T17:26:48.892Z",
+   "file": "2026-09-09/20260909T172648892Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "55bd0132f2934ec20fd086ac0b9a2c6ce4cc7d10e7a953cd3281e397e8dafa1f",
+   "prevChainHash": "471b41e40b9b91aa749c4008c4f1b5f210ab2d38cf513acb170925765da482a3",
+   "chainHash": "4fc1fca06141cdc2eff2b9a22d45a2cfe5565e2764b58ad96c3fd4cfe53da8f9"
+  },
+  {
+   "scanDate": "2026-09-10",
+   "scanTimestamp": "2026-09-10T17:17:39.951Z",
+   "file": "2026-09-10/20260910T171739951Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "bca600151aed1b7377e289cf53046d1b0b7ac1992dca95d1998b5ffe86945d54",
+   "prevChainHash": "4fc1fca06141cdc2eff2b9a22d45a2cfe5565e2764b58ad96c3fd4cfe53da8f9",
+   "chainHash": "95a6aa16ba26a1e291dda324038921aea3fdc9e9dca8cc6788ee3fe0e368cdb1"
+  },
+  {
+   "scanDate": "2026-09-11",
+   "scanTimestamp": "2026-09-11T17:19:15.541Z",
+   "file": "2026-09-11/20260911T171915541Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "d4b7c099a8a0551b1ff788d8efcedd91a3b9b1177ebbc3fc5e2f2e0102ae6592",
+   "prevChainHash": "95a6aa16ba26a1e291dda324038921aea3fdc9e9dca8cc6788ee3fe0e368cdb1",
+   "chainHash": "a492c4315b4bcaf4c3bf8289ac1a1524c5fd980fd3c704ab7e49a971de778e80"
+  },
+  {
+   "scanDate": "2026-09-11",
+   "scanTimestamp": "2026-09-12T05:29:06.068Z",
+   "file": "2026-09-11/20260912T052906068Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "4e3471cca728564a43d1a469c8729cd4f24743f26a9ac066ef6eaf844b5da386",
+   "prevChainHash": "a492c4315b4bcaf4c3bf8289ac1a1524c5fd980fd3c704ab7e49a971de778e80",
+   "chainHash": "06ad1968fa6c7a04f769c9f15af9216cb3c06f94457874d29a1551179f3bdfeb"
+  },
+  {
+   "scanDate": "2026-09-11",
+   "scanTimestamp": "2026-09-12T19:10:02.985Z",
+   "file": "2026-09-11/20260912T191002985Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "a0e7429a4ac60ab9844153925e2c5476b4c2e921fd563a19946790998b520d78",
+   "prevChainHash": "06ad1968fa6c7a04f769c9f15af9216cb3c06f94457874d29a1551179f3bdfeb",
+   "chainHash": "f3a32e397108af66a707ae73f78771e6cdf118d01738d59379c3bb419628efee"
+  },
+  {
+   "scanDate": "2026-09-11",
+   "scanTimestamp": "2026-09-12T23:56:46.994Z",
+   "file": "2026-09-11/20260912T235646994Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "00faf66904c2f501675e0a762d37115063920b81169b3cfe463caf4876119a6c",
+   "prevChainHash": "f3a32e397108af66a707ae73f78771e6cdf118d01738d59379c3bb419628efee",
+   "chainHash": "dba1767eb27873b820c26e443375df3196f17ada8235849679ae7fcb84fd14ae"
+  },
+  {
+   "scanDate": "2026-09-11",
+   "scanTimestamp": "2026-09-13T04:53:49.996Z",
+   "file": "2026-09-11/20260913T045349996Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "c5300a05fd227041cdd3625652c08ddc50747dc8439b74d994a36f283b5239f7",
+   "prevChainHash": "dba1767eb27873b820c26e443375df3196f17ada8235849679ae7fcb84fd14ae",
+   "chainHash": "f1801dfe5a9e6d558149a245dbaa519a4c639ef596a0680bcb9f0b6ddbbdf9d0"
+  },
+  {
+   "scanDate": "2026-09-11",
+   "scanTimestamp": "2026-09-13T12:28:52.792Z",
+   "file": "2026-09-11/20260913T122852792Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "148e5b74a2f9a19d8a84b09c8713a1255ad9cc15a4611694070cea55fd24c664",
+   "prevChainHash": "f1801dfe5a9e6d558149a245dbaa519a4c639ef596a0680bcb9f0b6ddbbdf9d0",
+   "chainHash": "55a5989236c03578a13f1dce6b737f74dc919fbc2a17dca24a169784ba1c80b4"
+  },
+  {
+   "scanDate": "2026-09-11",
+   "scanTimestamp": "2026-09-13T23:38:40.303Z",
+   "file": "2026-09-11/20260913T233840303Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "66333b0651b83294082145b2176c05883a20e73e93f4560dc51d2df75a17c28e",
+   "prevChainHash": "55a5989236c03578a13f1dce6b737f74dc919fbc2a17dca24a169784ba1c80b4",
+   "chainHash": "25e5fb8003145a7fb8be3606a666b034970a137633ab3ab81952aae8a3f78286"
+  },
+  {
+   "scanDate": "2026-09-11",
+   "scanTimestamp": "2026-09-14T19:00:43.905Z",
+   "file": "2026-09-11/20260914T190043905Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "7c3a88e746de031e2ee6bced935c985079ab8b65dc1cd44566215a24ee574370",
+   "prevChainHash": "25e5fb8003145a7fb8be3606a666b034970a137633ab3ab81952aae8a3f78286",
+   "chainHash": "4bc05144555c435b167e41d52c94789420c3af593828a0242d3af13d612e7087"
+  },
+  {
+   "scanDate": "2026-09-15",
+   "scanTimestamp": "2026-09-15T17:57:12.398Z",
+   "file": "2026-09-15/20260915T175712398Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "752d4aa7149b2cc96e8d7f36b995c12a9315c32de9badae94208f5b5f8122a24",
+   "prevChainHash": "4bc05144555c435b167e41d52c94789420c3af593828a0242d3af13d612e7087",
+   "chainHash": "c859926bb2a18d574df85db519d725a0211f2546d91cbb9bc0e169c55e01784b"
+  },
+  {
+   "scanDate": "2026-09-25",
+   "scanTimestamp": "2026-09-27T03:38:39.795Z",
+   "file": "2026-09-25/20260927T033839795Z.json",
+   "classification": "DATA_INSUFFICIENT",
+   "snapshotHash": "bc05b0ef933cea30283bcb9412a5ab3fb0e7ae320b9d2206c4228978ec3f7137",
+   "prevChainHash": "c859926bb2a18d574df85db519d725a0211f2546d91cbb9bc0e169c55e01784b",
+   "chainHash": "4f2c3a3120d0333ef6b8733b629be63d67aa20080d9a9f748ddedfab9ea396ff"
+  },
+  {
+   "scanDate": "2026-09-25",
+   "scanTimestamp": "2026-09-27T07:11:50.643Z",
+   "file": "2026-09-25/20260927T071150643Z.json",
+   "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+   "snapshotHash": "d250ffaf9978867a9991a3879f51a0214c696da4088d43e9cc23de089b4581d0",
+   "prevChainHash": "4f2c3a3120d0333ef6b8733b629be63d67aa20080d9a9f748ddedfab9ea396ff",
+   "chainHash": "64321fa66c3ceea520bbedf0aef56d7b593d85416e0759aa6d1e6b43679264e4"
+  },
+  {
+   "scanDate": "2026-09-25",
+   "scanTimestamp": "2026-09-27T07:45:53.267Z",
+   "file": "2026-09-25/20260927T074553267Z.json",
+   "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+   "snapshotHash": "f69050b8d845f38cc0c1dfa8def3961aab47725d8df286f5c6a1f0a80cc1b6c9",
+   "prevChainHash": "64321fa66c3ceea520bbedf0aef56d7b593d85416e0759aa6d1e6b43679264e4",
+   "chainHash": "c79b5efb2416f0bfcdb502f4a41e227004101671cf74b478769d6c0ebc4731bf"
+  },
+  {
+   "scanDate": "2026-09-25",
+   "scanTimestamp": "2026-09-27T19:24:37.837Z",
+   "file": "2026-09-25/20260927T192437837Z.json",
+   "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+   "snapshotHash": "1c5e2ecf368a59bf581099ccd56397a398b06252836ce3fa7955b63bcf85ee81",
+   "prevChainHash": "c79b5efb2416f0bfcdb502f4a41e227004101671cf74b478769d6c0ebc4731bf",
+   "chainHash": "1822693bd72e88f64a8e03e3212cb84c9dbd20e2846088eb5c350e54ddc7d56c"
+  },
+  {
+   "scanDate": "2026-09-25",
+   "scanTimestamp": "2026-09-27T20:23:53.340Z",
+   "file": "2026-09-25/20260927T202353340Z.json",
+   "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+   "snapshotHash": "7bcac3e5ac82195df56063e650c753c1d6d6c7eccfa663c8b0b5c3a4b75eee4b",
+   "prevChainHash": "1822693bd72e88f64a8e03e3212cb84c9dbd20e2846088eb5c350e54ddc7d56c",
+   "chainHash": "d6ab15de80c069dc0482d0ed17bc97d4f5d90165e3d7ead57936459dcd9f0994"
+  },
+  {
+   "scanDate": "2026-09-25",
+   "scanTimestamp": "2026-09-27T21:15:55.963Z",
+   "file": "2026-09-25/20260927T211555963Z.json",
+   "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+   "snapshotHash": "393f14c0cf580de5a01afbcdcd01aa2c210a128f17860af95bffb348c4e45102",
+   "prevChainHash": "d6ab15de80c069dc0482d0ed17bc97d4f5d90165e3d7ead57936459dcd9f0994",
+   "chainHash": "e14502e531b7fd53a0138c78f19857edcba40aac8715fc30cf5686ef9b733f9d"
+  },
+  {
+   "scanDate": "2026-09-25",
+   "scanTimestamp": "2026-09-27T22:09:28.203Z",
+   "file": "2026-09-25/20260927T220928203Z.json",
+   "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+   "snapshotHash": "47e3c592c0822ea59f5b3985b03ab053d073ec1024fa6f8976993931253d6f93",
+   "prevChainHash": "e14502e531b7fd53a0138c78f19857edcba40aac8715fc30cf5686ef9b733f9d",
+   "chainHash": "3b3253ccb4d0a6b2a964ab0d894202a12a8ef8633773f94d912c5aed23b42f61"
+  },
+  {
+   "scanDate": "2026-09-25",
+   "scanTimestamp": "2026-09-28T03:44:29.171Z",
+   "file": "2026-09-25/20260928T034429171Z.json",
+   "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+   "snapshotHash": "08964cf3cbe67948ebaa99c188f754b278323f9b731dcdee53d531dd57923ccd",
+   "prevChainHash": "3b3253ccb4d0a6b2a964ab0d894202a12a8ef8633773f94d912c5aed23b42f61",
+   "chainHash": "f5d5d161cc263649e8bff7039aeef7b3498d2ad15a2ce5ebd04fd924135e5547"
+  },
+  {
+   "scanDate": "2026-09-28",
+   "scanTimestamp": "2026-09-28T20:25:30.275Z",
+   "file": "2026-09-28/20260928T202530275Z.json",
+   "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+   "snapshotHash": "9aa9b95ff45804fb9faa8b633dd43755e4923d6a1f4abab8b5bd34871fb77be4",
+   "prevChainHash": "f5d5d161cc263649e8bff7039aeef7b3498d2ad15a2ce5ebd04fd924135e5547",
+   "chainHash": "b6fac26e221ed5f95dd1118f606eb2dd475cefc1c69ca0aa81b225367c3bdc84"
+  }
+ ]
+}

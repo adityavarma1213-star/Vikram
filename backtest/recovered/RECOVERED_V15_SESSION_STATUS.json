@@ -1,0 +1,4627 @@
+[
+ {
+  "date": "2025-09-02",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-03",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-04",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-05",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-08",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-09",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-10",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-11",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-12",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-15",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-16",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-17",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-18",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-19",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-22",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-23",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-24",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-25",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-26",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-29",
+  "originalReportStatus": "WARMUP (no verdicts by design)",
+  "status": "DATA_INSUFFICIENT",
+  "reason": "WARMUP_20_SESSIONS (no symbol has enough history for a V15 verdict)",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-09-30",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2085,
+  "starting": 310,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-01",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2087,
+  "starting": 366,
+  "confirmed": 8,
+  "confirmedSymbols": [
+   "APLAPOLLO",
+   "DIVISLAB",
+   "FORTIS",
+   "ICICIGI",
+   "IEX",
+   "MFSL",
+   "SRF",
+   "YESBANK"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-03",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2086,
+  "starting": 441,
+  "confirmed": 14,
+  "confirmedSymbols": [
+   "BAJAJ-AUTO",
+   "DALBHARAT",
+   "DELHIVERY",
+   "DIVISLAB",
+   "HDFCAMC",
+   "HINDPETRO",
+   "IEX",
+   "JINDALSTEL",
+   "LTF",
+   "NMDC",
+   "PETRONET",
+   "PFC",
+   "PNB",
+   "VEDL"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-06",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2086,
+  "starting": 427,
+  "confirmed": 7,
+  "confirmedSymbols": [
+   "CAMS",
+   "CYIENT",
+   "IOC",
+   "MANKIND",
+   "TATACONSUM",
+   "TECHM",
+   "TORNTPHARM"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-07",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2102,
+  "starting": 394,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "LODHA",
+   "TORNTPHARM",
+   "UNOMINDA",
+   "VOLTAS",
+   "YESBANK"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-08",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2170,
+  "starting": 398,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "PIDILITIND"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-09",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2169,
+  "starting": 359,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "DRREDDY",
+   "HINDALCO",
+   "IOC",
+   "JSWSTEEL",
+   "TATAPOWER"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-10",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2166,
+  "starting": 422,
+  "confirmed": 6,
+  "confirmedSymbols": [
+   "ASTRAL",
+   "DIVISLAB",
+   "HDFCAMC",
+   "IDFCFIRSTB",
+   "LTIM",
+   "TATAPOWER"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-13",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2166,
+  "starting": 321,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "DIVISLAB",
+   "FEDERALBNK"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-14",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2188,
+  "starting": 352,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "BIOCON",
+   "FEDERALBNK",
+   "LAURUSLABS"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-15",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2184,
+  "starting": 392,
+  "confirmed": 9,
+  "confirmedSymbols": [
+   "360ONE",
+   "BAJAJFINSV",
+   "BAJFINANCE",
+   "CIPLA",
+   "HINDALCO",
+   "HINDPETRO",
+   "IOC",
+   "SRF",
+   "WIPRO"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-16",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2181,
+  "starting": 424,
+  "confirmed": 6,
+  "confirmedSymbols": [
+   "ADANIPORTS",
+   "BAJAJFINSV",
+   "ITC",
+   "KOTAKBANK",
+   "PHOENIXLTD",
+   "TATACONSUM"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-17",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2184,
+  "starting": 383,
+  "confirmed": 4,
+  "confirmedSymbols": [
+   "BHARTIARTL",
+   "HINDUNILVR",
+   "MANKIND",
+   "PIDILITIND"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-20",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2186,
+  "starting": 359,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "CIPLA"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-21",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2197,
+  "starting": 82,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-22",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "NOT_RUN",
+  "reason": "NON_TRADING_DAY_STALE_DUPLICATE_EXCLUDED",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-10-23",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2202,
+  "starting": 566,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-24",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2202,
+  "starting": 331,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-27",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2200,
+  "starting": 419,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-28",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2200,
+  "starting": 419,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-29",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2199,
+  "starting": 549,
+  "confirmed": 11,
+  "confirmedSymbols": [
+   "BIOCON",
+   "DLF",
+   "GAIL",
+   "GMRAIRPORT",
+   "IRCTC",
+   "MPHASIS",
+   "NBCC",
+   "NTPC",
+   "PATANJALI",
+   "PETRONET",
+   "UPL"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-30",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2198,
+  "starting": 414,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "BIOCON",
+   "GLENMARK",
+   "GMRAIRPORT"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-10-31",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2199,
+  "starting": 406,
+  "confirmed": 6,
+  "confirmedSymbols": [
+   "ASHOKLEY",
+   "HINDPETRO",
+   "INDIANB",
+   "LUPIN",
+   "SBIN",
+   "SHRIRAMFIN"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-03",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2200,
+  "starting": 507,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "ASTRAL",
+   "BIOCON",
+   "CUMMINSIND",
+   "LICI",
+   "LUPIN"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-04",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2220,
+  "starting": 409,
+  "confirmed": 4,
+  "confirmedSymbols": [
+   "CHOLAFIN",
+   "DELHIVERY",
+   "LUPIN",
+   "MFSL"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-05",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "NOT_RUN",
+  "reason": "NON_TRADING_DAY_STALE_DUPLICATE_EXCLUDED",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-11-06",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2221,
+  "starting": 461,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "BIOCON",
+   "BRITANNIA",
+   "DIVISLAB"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-07",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2222,
+  "starting": 438,
+  "confirmed": 4,
+  "confirmedSymbols": [
+   "ALKEM",
+   "BRITANNIA",
+   "EICHERMOT",
+   "SHRIRAMFIN"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-10",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2223,
+  "starting": 436,
+  "confirmed": 4,
+  "confirmedSymbols": [
+   "ASIANPAINT",
+   "BAJAJ-AUTO",
+   "MANAPPURAM",
+   "TECHM"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-11",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2223,
+  "starting": 431,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "IOC",
+   "PERSISTENT",
+   "TECHM"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-12",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2236,
+  "starting": 524,
+  "confirmed": 8,
+  "confirmedSymbols": [
+   "CONCOR",
+   "ETERNAL",
+   "GLENMARK",
+   "ICICIPRULI",
+   "LTIM",
+   "MOTHERSON",
+   "SRF",
+   "SYNGENE"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-13",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2238,
+  "starting": 496,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "GLENMARK",
+   "NMDC"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-14",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2239,
+  "starting": 419,
+  "confirmed": 4,
+  "confirmedSymbols": [
+   "ASIANPAINT",
+   "AUROPHARMA",
+   "GLENMARK",
+   "SIEMENS"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-17",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2249,
+  "starting": 527,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "POLICYBZR"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-18",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2252,
+  "starting": 367,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "CONCOR"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-19",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2262,
+  "starting": 359,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "TECHM"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-20",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2264,
+  "starting": 361,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-21",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2264,
+  "starting": 260,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-24",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2267,
+  "starting": 368,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-25",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2270,
+  "starting": 291,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-26",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2270,
+  "starting": 321,
+  "confirmed": 6,
+  "confirmedSymbols": [
+   "AUBANK",
+   "HDFCLIFE",
+   "LAURUSLABS",
+   "LICHSGFIN",
+   "SAIL",
+   "UNOMINDA"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-27",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2269,
+  "starting": 296,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "JSWSTEEL"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-11-28",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2267,
+  "starting": 312,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "CUMMINSIND",
+   "NUVAMA"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-01",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2268,
+  "starting": 376,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "JSWSTEEL",
+   "NMDC"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-02",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2279,
+  "starting": 303,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "MOTHERSON",
+   "SHREECEM"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-03",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2279,
+  "starting": 294,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-04",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2277,
+  "starting": 305,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "ADANIENT",
+   "PERSISTENT"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-05",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2277,
+  "starting": 306,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-08",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2284,
+  "starting": 414,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-09",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2286,
+  "starting": 592,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "FEDERALBNK"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-10",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2285,
+  "starting": 331,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "AUBANK",
+   "ICICIPRULI",
+   "PFC"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-11",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2285,
+  "starting": 310,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "AMBUJACEM",
+   "MOTHERSON",
+   "PNBHOUSING"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-12",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2288,
+  "starting": 355,
+  "confirmed": 12,
+  "confirmedSymbols": [
+   "CHOLAFIN",
+   "GAIL",
+   "GMRAIRPORT",
+   "HINDALCO",
+   "IOC",
+   "LODHA",
+   "MANKIND",
+   "NMDC",
+   "SONACOMS",
+   "SYNGENE",
+   "TATAPOWER",
+   "VEDL"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-15",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2291,
+  "starting": 392,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "NMDC",
+   "PHOENIXLTD"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-16",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2290,
+  "starting": 330,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-17",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2293,
+  "starting": 281,
+  "confirmed": 6,
+  "confirmedSymbols": [
+   "APLAPOLLO",
+   "AUBANK",
+   "IOC",
+   "LTIM",
+   "PATANJALI",
+   "SHRIRAMFIN"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-18",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2296,
+  "starting": 270,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "ICICIPRULI",
+   "LICI"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-19",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2298,
+  "starting": 451,
+  "confirmed": 4,
+  "confirmedSymbols": [
+   "ASIANPAINT",
+   "DELHIVERY",
+   "MANAPPURAM",
+   "SONACOMS"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-22",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2301,
+  "starting": 561,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "IRCTC"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-23",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2307,
+  "starting": 482,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-24",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2293,
+  "starting": 465,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-25",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "NOT_RUN",
+  "reason": "NON_TRADING_DAY_STALE_DUPLICATE_EXCLUDED",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2025-12-26",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2295,
+  "starting": 437,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-29",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2294,
+  "starting": 465,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-30",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2301,
+  "starting": 495,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "MARUTI"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2025-12-31",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2313,
+  "starting": 524,
+  "confirmed": 9,
+  "confirmedSymbols": [
+   "ABCAPITAL",
+   "BAJAJHLDNG",
+   "BPCL",
+   "DABUR",
+   "GODREJCP",
+   "ICICIPRULI",
+   "IOC",
+   "KEI",
+   "SAMMAANCAP"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-01",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2320,
+  "starting": 306,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "APLAPOLLO",
+   "INDUSINDBK"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-02",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2318,
+  "starting": 616,
+  "confirmed": 8,
+  "confirmedSymbols": [
+   "BANKBARODA",
+   "BLUESTARCO",
+   "CANBK",
+   "CROMPTON",
+   "JIOFIN",
+   "LODHA",
+   "POWERGRID",
+   "UNOMINDA"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-05",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2325,
+  "starting": 572,
+  "confirmed": 13,
+  "confirmedSymbols": [
+   "BRITANNIA",
+   "CROMPTON",
+   "DELHIVERY",
+   "DLF",
+   "KALYANKJIL",
+   "MUTHOOTFIN",
+   "NESTLEIND",
+   "PHOENIXLTD",
+   "PIDILITIND",
+   "POWERGRID",
+   "PRESTIGE",
+   "SAMMAANCAP",
+   "TORNTPOWER"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-06",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2333,
+  "starting": 492,
+  "confirmed": 17,
+  "confirmedSymbols": [
+   "AUROPHARMA",
+   "BRITANNIA",
+   "CIPLA",
+   "DELHIVERY",
+   "GRASIM",
+   "HAVELLS",
+   "HDFCLIFE",
+   "HINDUNILVR",
+   "LUPIN",
+   "MFSL",
+   "MUTHOOTFIN",
+   "PHOENIXLTD",
+   "RECLTD",
+   "SBIN",
+   "TATACONSUM",
+   "VBL",
+   "VOLTAS"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-07",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2336,
+  "starting": 510,
+  "confirmed": 11,
+  "confirmedSymbols": [
+   "ALKEM",
+   "APOLLOHOSP",
+   "BIOCON",
+   "DELHIVERY",
+   "ETERNAL",
+   "HCLTECH",
+   "JIOFIN",
+   "NAUKRI",
+   "TECHM",
+   "TORNTPHARM",
+   "VBL"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-08",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2337,
+  "starting": 485,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "ICICIBANK",
+   "INDUSTOWER",
+   "SBILIFE"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-09",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2339,
+  "starting": 430,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "DMART",
+   "ETERNAL"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-12",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2351,
+  "starting": 517,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "ALKEM",
+   "HCLTECH",
+   "ONGC",
+   "SBILIFE",
+   "SUNPHARMA"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-13",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2357,
+  "starting": 360,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "DALBHARAT",
+   "ICICIBANK",
+   "OIL",
+   "ONGC",
+   "PAGEIND"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-14",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2355,
+  "starting": 376,
+  "confirmed": 7,
+  "confirmedSymbols": [
+   "APLAPOLLO",
+   "BANKBARODA",
+   "BANKINDIA",
+   "BEL",
+   "DALBHARAT",
+   "INDIANB",
+   "JSWSTEEL"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-15",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "NOT_RUN",
+  "reason": "NON_TRADING_DAY_STALE_DUPLICATE_EXCLUDED",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2026-01-16",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2358,
+  "starting": 461,
+  "confirmed": 7,
+  "confirmedSymbols": [
+   "AUBANK",
+   "GRASIM",
+   "ICICIPRULI",
+   "LTIM",
+   "SHRIRAMFIN",
+   "TECHM",
+   "ULTRACEMCO"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-19",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2366,
+  "starting": 358,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "TORNTPHARM",
+   "UNIONBANK"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-20",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2368,
+  "starting": 565,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-21",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2368,
+  "starting": 615,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-22",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2367,
+  "starting": 441,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-23",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2377,
+  "starting": 314,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-26",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "NOT_RUN",
+  "reason": "NON_TRADING_DAY_STALE_DUPLICATE_EXCLUDED",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2026-01-27",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2385,
+  "starting": 475,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-28",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2384,
+  "starting": 603,
+  "confirmed": 13,
+  "confirmedSymbols": [
+   "BHARATFORG",
+   "BPCL",
+   "DABUR",
+   "DELHIVERY",
+   "GMRAIRPORT",
+   "HAL",
+   "HDFCAMC",
+   "IOC",
+   "NTPC",
+   "POWERGRID",
+   "SAMMAANCAP",
+   "SBILIFE",
+   "TIINDIA"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-29",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2387,
+  "starting": 526,
+  "confirmed": 8,
+  "confirmedSymbols": [
+   "AMBUJACEM",
+   "BPCL",
+   "COALINDIA",
+   "DELHIVERY",
+   "NMDC",
+   "NTPC",
+   "POWERGRID",
+   "SAMMAANCAP"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-01-30",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2386,
+  "starting": 642,
+  "confirmed": 6,
+  "confirmedSymbols": [
+   "BRITANNIA",
+   "HAVELLS",
+   "INDUSTOWER",
+   "KEI",
+   "TORNTPOWER",
+   "TVSMOTOR"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-02",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2389,
+  "starting": 412,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "IOC",
+   "SBILIFE",
+   "SBIN"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-03",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2390,
+  "starting": 1007,
+  "confirmed": 18,
+  "confirmedSymbols": [
+   "ABB",
+   "BHARATFORG",
+   "BIOCON",
+   "BPCL",
+   "CAMS",
+   "COALINDIA",
+   "CONCOR",
+   "HDFCLIFE",
+   "ICICIGI",
+   "IOC",
+   "MANKIND",
+   "MUTHOOTFIN",
+   "PAGEIND",
+   "PFC",
+   "SIEMENS",
+   "SONACOMS",
+   "SRF",
+   "SUNPHARMA"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-04",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2391,
+  "starting": 656,
+  "confirmed": 13,
+  "confirmedSymbols": [
+   "ASHOKLEY",
+   "BLUESTARCO",
+   "GMRAIRPORT",
+   "HDFCAMC",
+   "HDFCLIFE",
+   "IOC",
+   "JINDALSTEL",
+   "NTPC",
+   "PFC",
+   "PIDILITIND",
+   "SIEMENS",
+   "SUPREMEIND",
+   "TORNTPOWER"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-05",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2391,
+  "starting": 366,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "DMART",
+   "TORNTPOWER"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-06",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2391,
+  "starting": 344,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "APOLLOHOSP",
+   "TORNTPOWER"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-09",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2392,
+  "starting": 754,
+  "confirmed": 9,
+  "confirmedSymbols": [
+   "ALKEM",
+   "BLUESTARCO",
+   "GMRAIRPORT",
+   "HDFCLIFE",
+   "INDUSINDBK",
+   "LICHSGFIN",
+   "MFSL",
+   "TORNTPHARM",
+   "UNOMINDA"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-10",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2390,
+  "starting": 642,
+  "confirmed": 4,
+  "confirmedSymbols": [
+   "DELHIVERY",
+   "MAXHEALTH",
+   "NYKAA",
+   "PPLPHARMA"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-11",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2392,
+  "starting": 488,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "BRITANNIA",
+   "FEDERALBNK",
+   "INDUSTOWER",
+   "SBIN",
+   "SYNGENE"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-12",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2392,
+  "starting": 477,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "BLUESTARCO",
+   "SBIN"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-13",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2392,
+  "starting": 372,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "MFSL",
+   "SBIN"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-16",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2394,
+  "starting": 332,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "ASTRAL",
+   "GLENMARK"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-17",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2394,
+  "starting": 346,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "INDUSINDBK"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-18",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2395,
+  "starting": 320,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-19",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2397,
+  "starting": 240,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-20",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2396,
+  "starting": 253,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-23",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2399,
+  "starting": 299,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "NTPC"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-24",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2398,
+  "starting": 266,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "NTPC"
+  ],
+  "exactDateOiSymbols": 207,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-25",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2400,
+  "starting": 359,
+  "confirmed": 11,
+  "confirmedSymbols": [
+   "BIOCON",
+   "COLPAL",
+   "EXIDEIND",
+   "HAVELLS",
+   "IOC",
+   "JSWSTEEL",
+   "LUPIN",
+   "MANKIND",
+   "PETRONET",
+   "SAIL",
+   "SUPREMEIND"
+  ],
+  "exactDateOiSymbols": 206,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-26",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2398,
+  "starting": 388,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "CGPOWER",
+   "CIPLA",
+   "ICICIBANK",
+   "UNIONBANK",
+   "TMPV"
+  ],
+  "exactDateOiSymbols": 206,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-02-27",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2397,
+  "starting": 461,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "IOC",
+   "JUBLFOOD",
+   "TIINDIA"
+  ],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-02",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2400,
+  "starting": 584,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "SUNPHARMA",
+   "TIINDIA"
+  ],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-03",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "NOT_RUN",
+  "reason": "NON_TRADING_DAY_STALE_DUPLICATE_EXCLUDED",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2026-03-04",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2400,
+  "starting": 550,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-05",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2399,
+  "starting": 482,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "SUNPHARMA"
+  ],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-06",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2392,
+  "starting": 356,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "ASTRAL",
+   "NTPC"
+  ],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-09",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2402,
+  "starting": 510,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "SUNPHARMA"
+  ],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-10",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2404,
+  "starting": 588,
+  "confirmed": 4,
+  "confirmedSymbols": [
+   "DALBHARAT",
+   "LUPIN",
+   "NESTLEIND",
+   "SUNPHARMA"
+  ],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-11",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2404,
+  "starting": 536,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "SUPREMEIND",
+   "WIPRO"
+  ],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-12",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2404,
+  "starting": 534,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "NTPC"
+  ],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-13",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2403,
+  "starting": 610,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-16",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2406,
+  "starting": 591,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "NHPC"
+  ],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-17",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2407,
+  "starting": 558,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "RECLTD",
+   "SBILIFE",
+   "SONACOMS"
+  ],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-18",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2407,
+  "starting": 719,
+  "confirmed": 8,
+  "confirmedSymbols": [
+   "BHARATFORG",
+   "DELHIVERY",
+   "LODHA",
+   "NUVAMA",
+   "PHOENIXLTD",
+   "PNBHOUSING",
+   "POLYCAB",
+   "RECLTD"
+  ],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-19",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2404,
+  "starting": 339,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-20",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2405,
+  "starting": 552,
+  "confirmed": 14,
+  "confirmedSymbols": [
+   "COALINDIA",
+   "DELHIVERY",
+   "GRASIM",
+   "HCLTECH",
+   "HEROMOTOCO",
+   "INFY",
+   "MAXHEALTH",
+   "MFSL",
+   "PIIND",
+   "POWERGRID",
+   "RELIANCE",
+   "TECHM",
+   "WIPRO",
+   "TMPV"
+  ],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-23",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2411,
+  "starting": 701,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "HCLTECH"
+  ],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-24",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2411,
+  "starting": 827,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-25",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2411,
+  "starting": 902,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-26",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "NOT_RUN",
+  "reason": "NON_TRADING_DAY_STALE_DUPLICATE_EXCLUDED",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2026-03-27",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2413,
+  "starting": 1083,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-30",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2417,
+  "starting": 768,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 205,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-03-31",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "NOT_RUN",
+  "reason": "NON_TRADING_DAY_STALE_DUPLICATE_EXCLUDED",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2026-04-01",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2417,
+  "starting": 487,
+  "confirmed": 16,
+  "confirmedSymbols": [
+   "ADANIPORTS",
+   "AUROPHARMA",
+   "BAJFINANCE",
+   "HDFCBANK",
+   "ICICIBANK",
+   "ICICIPRULI",
+   "MARICO",
+   "MOTHERSON",
+   "NAM-INDIA",
+   "NESTLEIND",
+   "NYKAA",
+   "PNBHOUSING",
+   "PREMIERENE",
+   "PRESTIGE",
+   "SAIL",
+   "SWIGGY"
+  ],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-02",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2421,
+  "starting": 314,
+  "confirmed": 7,
+  "confirmedSymbols": [
+   "LODHA",
+   "MARICO",
+   "NYKAA",
+   "PRESTIGE",
+   "TCS",
+   "TITAN",
+   "LTM"
+  ],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-03",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "NOT_RUN",
+  "reason": "NON_TRADING_DAY_STALE_DUPLICATE_EXCLUDED",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2026-04-06",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2423,
+  "starting": 373,
+  "confirmed": 7,
+  "confirmedSymbols": [
+   "ADANIPOWER",
+   "LODHA",
+   "NAM-INDIA",
+   "NYKAA",
+   "SBIN",
+   "TATACONSUM",
+   "TITAN"
+  ],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-07",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2425,
+  "starting": 339,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "BAJAJFINSV",
+   "HINDUNILVR",
+   "JSWSTEEL"
+  ],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-08",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2424,
+  "starting": 883,
+  "confirmed": 26,
+  "confirmedSymbols": [
+   "ABB",
+   "AUROPHARMA",
+   "BRITANNIA",
+   "CHOLAFIN",
+   "CIPLA",
+   "CROMPTON",
+   "DALBHARAT",
+   "DELHIVERY",
+   "EICHERMOT",
+   "GAIL",
+   "GODREJCP",
+   "HCLTECH",
+   "HEROMOTOCO",
+   "HINDUNILVR",
+   "INFY",
+   "KEI",
+   "NTPC",
+   "PETRONET",
+   "POLYCAB",
+   "SAIL",
+   "SBIN",
+   "SONACOMS",
+   "SRF",
+   "TCS",
+   "UNOMINDA",
+   "UPL"
+  ],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-09",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2424,
+  "starting": 430,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "360ONE",
+   "ABB",
+   "NTPC",
+   "PETRONET",
+   "TATACONSUM"
+  ],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-10",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2423,
+  "starting": 535,
+  "confirmed": 8,
+  "confirmedSymbols": [
+   "ABB",
+   "ASTRAL",
+   "CUMMINSIND",
+   "HEROMOTOCO",
+   "NAM-INDIA",
+   "PHOENIXLTD",
+   "PIDILITIND",
+   "UNITDSPR"
+  ],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-13",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2427,
+  "starting": 424,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-14",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "NOT_RUN",
+  "reason": "NON_TRADING_DAY_STALE_DUPLICATE_EXCLUDED",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2026-04-15",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2429,
+  "starting": 645,
+  "confirmed": 17,
+  "confirmedSymbols": [
+   "360ONE",
+   "ABB",
+   "ALKEM",
+   "BPCL",
+   "CAMS",
+   "CGPOWER",
+   "DALBHARAT",
+   "ICICIGI",
+   "PAGEIND",
+   "PATANJALI",
+   "PIIND",
+   "PNBHOUSING",
+   "PRESTIGE",
+   "SHREECEM",
+   "UNOMINDA",
+   "WIPRO",
+   "LTM"
+  ],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-16",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2429,
+  "starting": 551,
+  "confirmed": 4,
+  "confirmedSymbols": [
+   "BAJAJHLDNG",
+   "BHEL",
+   "POLICYBZR",
+   "LTM"
+  ],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-17",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2378,
+  "starting": 624,
+  "confirmed": 16,
+  "confirmedSymbols": [
+   "360ONE",
+   "ADANIENSOL",
+   "ASTRAL",
+   "CIPLA",
+   "DRREDDY",
+   "HDFCAMC",
+   "HYUNDAI",
+   "ICICIPRULI",
+   "JIOFIN",
+   "NAM-INDIA",
+   "NHPC",
+   "PATANJALI",
+   "PIIND",
+   "PREMIERENE",
+   "SUPREMEIND",
+   "VMM"
+  ],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-20",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2379,
+  "starting": 430,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "OFSS"
+  ],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-21",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2378,
+  "starting": 398,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "HINDUNILVR",
+   "NAM-INDIA",
+   "PHOENIXLTD"
+  ],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-22",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2375,
+  "starting": 384,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-23",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2370,
+  "starting": 365,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-24",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2365,
+  "starting": 242,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-27",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2361,
+  "starting": 373,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-28",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2356,
+  "starting": 326,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 213,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-29",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2357,
+  "starting": 351,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "LICHSGFIN",
+   "SUNPHARMA"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-04-30",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2340,
+  "starting": 299,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "CHOLAFIN",
+   "KOTAKBANK"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-01",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "NOT_RUN",
+  "reason": "NON_TRADING_DAY_STALE_DUPLICATE_EXCLUDED",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2026-05-04",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2341,
+  "starting": 486,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "360ONE",
+   "BAJAJFINSV",
+   "GMRAIRPORT",
+   "KEI",
+   "LAURUSLABS"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-05",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2341,
+  "starting": 395,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "GLENMARK",
+   "NUVAMA"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-06",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2342,
+  "starting": 562,
+  "confirmed": 11,
+  "confirmedSymbols": [
+   "360ONE",
+   "BANKBARODA",
+   "HDFCLIFE",
+   "HINDPETRO",
+   "HINDZINC",
+   "IDFCFIRSTB",
+   "LAURUSLABS",
+   "LUPIN",
+   "POLYCAB",
+   "SBICARD",
+   "SHREECEM"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-07",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2342,
+  "starting": 684,
+  "confirmed": 6,
+  "confirmedSymbols": [
+   "GMRAIRPORT",
+   "HDFCLIFE",
+   "LAURUSLABS",
+   "MARUTI",
+   "NUVAMA",
+   "PIDILITIND"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-08",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2337,
+  "starting": 530,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "FORTIS",
+   "TATACONSUM"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-11",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2338,
+  "starting": 474,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "BIOCON",
+   "MANKIND",
+   "SONACOMS"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-12",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2334,
+  "starting": 446,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "VEDL"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-13",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2328,
+  "starting": 355,
+  "confirmed": 7,
+  "confirmedSymbols": [
+   "AUROPHARMA",
+   "DIVISLAB",
+   "GRASIM",
+   "LICHSGFIN",
+   "MUTHOOTFIN",
+   "NMDC",
+   "PATANJALI"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-14",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2324,
+  "starting": 341,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "BIOCON",
+   "IDFCFIRSTB",
+   "NYKAA"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-15",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2317,
+  "starting": 308,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "DELHIVERY",
+   "MANKIND"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-18",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2315,
+  "starting": 283,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "POLICYBZR"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-19",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2447,
+  "starting": 353,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "INFY",
+   "MOTHERSON",
+   "POLICYBZR",
+   "TCS",
+   "TECHM"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-20",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2453,
+  "starting": 286,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "ABCAPITAL",
+   "POLICYBZR",
+   "TIINDIA"
+  ],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-21",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2451,
+  "starting": 384,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-22",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2453,
+  "starting": 365,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-25",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2454,
+  "starting": 530,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-26",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2453,
+  "starting": 512,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 209,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-27",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2451,
+  "starting": 510,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "GVT&D",
+   "HAVELLS",
+   "JSWENERGY",
+   "MOTHERSON",
+   "SUZLON"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-05-28",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "NOT_RUN",
+  "reason": "NON_TRADING_DAY_STALE_DUPLICATE_EXCLUDED",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2026-05-29",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2447,
+  "starting": 714,
+  "confirmed": 14,
+  "confirmedSymbols": [
+   "ALKEM",
+   "BHARATFORG",
+   "GMRAIRPORT",
+   "GVT&D",
+   "HCLTECH",
+   "IREDA",
+   "LTF",
+   "MOTHERSON",
+   "MPHASIS",
+   "MUTHOOTFIN",
+   "OBEROIRLTY",
+   "RADICO",
+   "TECHM",
+   "YESBANK"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-01",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2450,
+  "starting": 489,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "COALINDIA",
+   "COFORGE"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-02",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2447,
+  "starting": 411,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "COFORGE",
+   "CUMMINSIND",
+   "GVT&D",
+   "VBL",
+   "WIPRO"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-03",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2444,
+  "starting": 331,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "CANBK",
+   "SBIN"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-04",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2443,
+  "starting": 382,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-05",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2435,
+  "starting": 388,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "ETERNAL",
+   "PFC",
+   "VMM"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-08",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2437,
+  "starting": 351,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-09",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2434,
+  "starting": 374,
+  "confirmed": 6,
+  "confirmedSymbols": [
+   "APOLLOHOSP",
+   "BANKBARODA",
+   "BANKINDIA",
+   "CANBK",
+   "DIVISLAB",
+   "NAM-INDIA"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-10",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2431,
+  "starting": 350,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "PHOENIXLTD"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-11",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2423,
+  "starting": 301,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-12",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2420,
+  "starting": 473,
+  "confirmed": 10,
+  "confirmedSymbols": [
+   "BAJAJFINSV",
+   "CHOLAFIN",
+   "CROMPTON",
+   "INDIGO",
+   "INDUSINDBK",
+   "MARUTI",
+   "OBEROIRLTY",
+   "PIDILITIND",
+   "PNBHOUSING",
+   "TVSMOTOR"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-15",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2418,
+  "starting": 795,
+  "confirmed": 13,
+  "confirmedSymbols": [
+   "360ONE",
+   "APLAPOLLO",
+   "DALBHARAT",
+   "DLF",
+   "GAIL",
+   "IOC",
+   "JIOFIN",
+   "OBEROIRLTY",
+   "PHOENIXLTD",
+   "PIDILITIND",
+   "PRESTIGE",
+   "TATAPOWER",
+   "VBL"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-16",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2422,
+  "starting": 482,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "COLPAL",
+   "OBEROIRLTY",
+   "SRF"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-17",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2418,
+  "starting": 548,
+  "confirmed": 6,
+  "confirmedSymbols": [
+   "ADANIPORTS",
+   "BEL",
+   "CANBK",
+   "ICICIGI",
+   "MPHASIS",
+   "NYKAA"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-18",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2409,
+  "starting": 556,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "DLF",
+   "RADICO"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-19",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2404,
+  "starting": 605,
+  "confirmed": 6,
+  "confirmedSymbols": [
+   "360ONE",
+   "BAJFINANCE",
+   "BHARATFORG",
+   "GVT&D",
+   "NYKAA",
+   "TRENT"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-22",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2409,
+  "starting": 630,
+  "confirmed": 4,
+  "confirmedSymbols": [
+   "BAJAJ-AUTO",
+   "ICICIPRULI",
+   "PFC",
+   "POLICYBZR"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-23",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2404,
+  "starting": 497,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "BHARATFORG"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-24",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2401,
+  "starting": 388,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-25",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2399,
+  "starting": 414,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-26",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "NOT_RUN",
+  "reason": "NON_TRADING_DAY_STALE_DUPLICATE_EXCLUDED",
+  "evidence": "REPLAY_DATASET",
+  "scanned": null,
+  "starting": null,
+  "confirmed": null,
+  "confirmedSymbols": []
+ },
+ {
+  "date": "2026-06-29",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2396,
+  "starting": 461,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-06-30",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2394,
+  "starting": 429,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "ALKEM",
+   "MARUTI"
+  ],
+  "exactDateOiSymbols": 211,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-01",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2391,
+  "starting": 436,
+  "confirmed": 4,
+  "confirmedSymbols": [
+   "ADANIENT",
+   "BAJAJFINSV",
+   "BAJAJHLDNG",
+   "BRITANNIA"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-02",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2381,
+  "starting": 501,
+  "confirmed": 8,
+  "confirmedSymbols": [
+   "BRITANNIA",
+   "CAMS",
+   "DABUR",
+   "DELHIVERY",
+   "DLF",
+   "HINDUNILVR",
+   "IOC",
+   "TATACONSUM"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-03",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2360,
+  "starting": 503,
+  "confirmed": 7,
+  "confirmedSymbols": [
+   "ALKEM",
+   "BIOCON",
+   "DLF",
+   "LAURUSLABS",
+   "PHOENIXLTD",
+   "PNBHOUSING",
+   "ZYDUSLIFE"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-06",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2362,
+  "starting": 454,
+  "confirmed": 7,
+  "confirmedSymbols": [
+   "AUBANK",
+   "CHOLAFIN",
+   "LODHA",
+   "MUTHOOTFIN",
+   "OBEROIRLTY",
+   "ONGC",
+   "UNITDSPR"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-07",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2359,
+  "starting": 364,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "ALKEM",
+   "HINDUNILVR",
+   "IOC",
+   "PETRONET",
+   "VOLTAS"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-08",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2354,
+  "starting": 395,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "ICICIGI"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-09",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2351,
+  "starting": 393,
+  "confirmed": 6,
+  "confirmedSymbols": [
+   "APOLLOHOSP",
+   "BHARTIARTL",
+   "HDFCAMC",
+   "HINDUNILVR",
+   "KFINTECH",
+   "MOTILALOFS"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-10",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2346,
+  "starting": 435,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "360ONE",
+   "DELHIVERY",
+   "DLF",
+   "ICICIPRULI",
+   "INOXWIND"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-13",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2354,
+  "starting": 462,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "BAJAJ-AUTO",
+   "INFY",
+   "TORNTPHARM"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-14",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2351,
+  "starting": 298,
+  "confirmed": 4,
+  "confirmedSymbols": [
+   "ALKEM",
+   "OIL",
+   "SBICARD",
+   "TORNTPHARM"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-15",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2354,
+  "starting": 373,
+  "confirmed": 7,
+  "confirmedSymbols": [
+   "BHEL",
+   "DIVISLAB",
+   "HDFCAMC",
+   "IOC",
+   "PIDILITIND",
+   "TORNTPHARM",
+   "ULTRACEMCO"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-16",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2355,
+  "starting": 351,
+  "confirmed": 4,
+  "confirmedSymbols": [
+   "CROMPTON",
+   "CUMMINSIND",
+   "IOC",
+   "SONACOMS"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-17",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2350,
+  "starting": 276,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "COLPAL",
+   "PIDILITIND"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-20",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2351,
+  "starting": 318,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "BPCL",
+   "MANAPPURAM",
+   "RADICO"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-21",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2356,
+  "starting": 345,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-22",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2352,
+  "starting": 282,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-23",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2351,
+  "starting": 303,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-24",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2352,
+  "starting": 303,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-27",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2370,
+  "starting": 413,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-28",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2374,
+  "starting": 300,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "TCS"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-29",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2374,
+  "starting": 449,
+  "confirmed": 8,
+  "confirmedSymbols": [
+   "AXISBANK",
+   "BRITANNIA",
+   "CIPLA",
+   "LICHSGFIN",
+   "LUPIN",
+   "MFSL",
+   "PFC",
+   "RECLTD"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-30",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2374,
+  "starting": 378,
+  "confirmed": 4,
+  "confirmedSymbols": [
+   "COALINDIA",
+   "DIVISLAB",
+   "NYKAA",
+   "TECHM"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-07-31",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2382,
+  "starting": 500,
+  "confirmed": 11,
+  "confirmedSymbols": [
+   "AUBANK",
+   "BHARATFORG",
+   "CHOLAFIN",
+   "DIVISLAB",
+   "HDFCLIFE",
+   "HINDALCO",
+   "JIOFIN",
+   "MANAPPURAM",
+   "MOTHERSON",
+   "MUTHOOTFIN",
+   "TATASTEEL"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-03",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2387,
+  "starting": 729,
+  "confirmed": 6,
+  "confirmedSymbols": [
+   "APLAPOLLO",
+   "BLUESTARCO",
+   "CHOLAFIN",
+   "HINDALCO",
+   "MARICO",
+   "TATASTEEL"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-04",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2383,
+  "starting": 562,
+  "confirmed": 4,
+  "confirmedSymbols": [
+   "AUROPHARMA",
+   "HEROMOTOCO",
+   "NAM-INDIA",
+   "NMDC"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-05",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2385,
+  "starting": 609,
+  "confirmed": 15,
+  "confirmedSymbols": [
+   "360ONE",
+   "AMBUJACEM",
+   "AUROPHARMA",
+   "GAIL",
+   "GODREJCP",
+   "HDFCLIFE",
+   "ICICIGI",
+   "JSWSTEEL",
+   "JUBLFOOD",
+   "NAM-INDIA",
+   "NMDC",
+   "NTPC",
+   "PIIND",
+   "SAIL",
+   "VEDL"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-06",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2381,
+  "starting": 640,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "BANDHANBNK",
+   "CHOLAFIN",
+   "HAL",
+   "RELIANCE",
+   "TITAN"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-07",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2381,
+  "starting": 532,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "GRASIM",
+   "JUBLFOOD"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-10",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2393,
+  "starting": 629,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "TATASTEEL"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-11",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2424,
+  "starting": 506,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "COALINDIA",
+   "LICI"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-12",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2425,
+  "starting": 516,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "INDUSTOWER",
+   "LICI",
+   "UNIONBANK"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-13",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2430,
+  "starting": 519,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-14",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2428,
+  "starting": 416,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "ADANIENSOL",
+   "INDUSTOWER"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-17",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2453,
+  "starting": 488,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "NAUKRI",
+   "UNOMINDA"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-18",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2454,
+  "starting": 417,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "AMBER"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-19",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2455,
+  "starting": 387,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "NAM-INDIA"
+  ],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-20",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2450,
+  "starting": 429,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-21",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2450,
+  "starting": 447,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-24",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2457,
+  "starting": 482,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-25",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2458,
+  "starting": 391,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 208,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-26",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2456,
+  "starting": 405,
+  "confirmed": 6,
+  "confirmedSymbols": [
+   "DIVISLAB",
+   "KOTAKBANK",
+   "LAURUSLABS",
+   "LICHSGFIN",
+   "TATASTEEL",
+   "VEDL"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-27",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2455,
+  "starting": 366,
+  "confirmed": 9,
+  "confirmedSymbols": [
+   "ALKEM",
+   "ETERNAL",
+   "GODREJPROP",
+   "INDUSTOWER",
+   "KOTAKBANK",
+   "LAURUSLABS",
+   "SAGILITY",
+   "TITAN",
+   "ZYDUSLIFE"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-28",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2456,
+  "starting": 391,
+  "confirmed": 6,
+  "confirmedSymbols": [
+   "ALKEM",
+   "APLAPOLLO",
+   "DIVISLAB",
+   "MPHASIS",
+   "TECHM",
+   "VEDL"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-08-31",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2470,
+  "starting": 522,
+  "confirmed": 14,
+  "confirmedSymbols": [
+   "AUROPHARMA",
+   "BAJAJHLDNG",
+   "BOSCHLTD",
+   "HINDPETRO",
+   "ICICIBANK",
+   "ICICIPRULI",
+   "JIOFIN",
+   "NESTLEIND",
+   "OFSS",
+   "PETRONET",
+   "PRESTIGE",
+   "SUNPHARMA",
+   "TORNTPHARM",
+   "WIPRO"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-01",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2471,
+  "starting": 381,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-02",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2474,
+  "starting": 379,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "ABCAPITAL",
+   "BPCL"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-03",
+  "originalReportStatus": "RECORDED_VERDICTS",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2469,
+  "starting": 440,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "BAJAJHLDNG",
+   "IDFCFIRSTB",
+   "INDHOTEL",
+   "PRESTIGE",
+   "SWIGGY"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-04",
+  "originalReportStatus": "DATA_INSUFFICIENT (delivery zero-filled in original input)",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2468,
+  "starting": 424,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "SWIGGY"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-07",
+  "originalReportStatus": "DATA_INSUFFICIENT (delivery zero-filled in original input)",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2483,
+  "starting": 470,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "COALINDIA"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-08",
+  "originalReportStatus": "DATA_INSUFFICIENT (delivery zero-filled in original input)",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2483,
+  "starting": 469,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "DIVISLAB"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-09",
+  "originalReportStatus": "DATA_INSUFFICIENT (delivery zero-filled in original input)",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2479,
+  "starting": 489,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "TATASTEEL",
+   "TVSMOTOR",
+   "VBL"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-10",
+  "originalReportStatus": "DATA_INSUFFICIENT (delivery zero-filled in original input)",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2475,
+  "starting": 425,
+  "confirmed": 3,
+  "confirmedSymbols": [
+   "HDFCLIFE",
+   "HYUNDAI",
+   "PETRONET"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-11",
+  "originalReportStatus": "DATA_INSUFFICIENT (delivery zero-filled in original input)",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2477,
+  "starting": 434,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "VBL"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 1
+ },
+ {
+  "date": "2026-09-15",
+  "originalReportStatus": "DATA_INSUFFICIENT (delivery zero-filled in original input)",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2599,
+  "starting": 418,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-16",
+  "originalReportStatus": "MISSING (no verdicts stored by the original run)",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2603,
+  "starting": 380,
+  "confirmed": 4,
+  "confirmedSymbols": [
+   "ALKEM",
+   "GLENMARK",
+   "IOC",
+   "PHOENIXLTD"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-17",
+  "originalReportStatus": "MISSING (no verdicts stored by the original run)",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2605,
+  "starting": 354,
+  "confirmed": 5,
+  "confirmedSymbols": [
+   "ALKEM",
+   "BANKINDIA",
+   "MANKIND",
+   "PRESTIGE",
+   "SONACOMS"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-18",
+  "originalReportStatus": "MISSING (no verdicts stored by the original run)",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2603,
+  "starting": 600,
+  "confirmed": 13,
+  "confirmedSymbols": [
+   "AMBUJACEM",
+   "APLAPOLLO",
+   "ASTRAL",
+   "COLPAL",
+   "INDUSINDBK",
+   "IOC",
+   "JSWENERGY",
+   "NHPC",
+   "RADICO",
+   "UNOMINDA",
+   "WAAREEENER",
+   "WIPRO",
+   "ZYDUSLIFE"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-21",
+  "originalReportStatus": "MISSING (no verdicts stored by the original run)",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2622,
+  "starting": 448,
+  "confirmed": 2,
+  "confirmedSymbols": [
+   "BAJAJHLDNG",
+   "NAUKRI"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-22",
+  "originalReportStatus": "MISSING (no verdicts stored by the original run)",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2622,
+  "starting": 435,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "BPCL"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-23",
+  "originalReportStatus": "MISSING (no verdicts stored by the original run)",
+  "status": "VERIFIED_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2629,
+  "starting": 520,
+  "confirmed": 1,
+  "confirmedSymbols": [
+   "VMM"
+  ],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-24",
+  "originalReportStatus": "MISSING (no verdicts stored by the original run)",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2626,
+  "starting": 389,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0
+ },
+ {
+  "date": "2026-09-25",
+  "originalReportStatus": "MISSING (no verdicts stored by the original run)",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2623,
+  "starting": 386,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0,
+  "scannerSnapshotCrossCheck": {
+   "scanner": "scanner_2026-09-25_49c2fa2.json",
+   "agrees": true
+  }
+ },
+ {
+  "date": "2026-09-28",
+  "originalReportStatus": "MISSING (no verdicts stored by the original run)",
+  "status": "VERIFIED_ZERO_CONFIRMATIONS",
+  "reason": "Frozen V15 evaluated on delivery-valid CM + exact-date F&O data",
+  "evidence": "REPLAY_FROZEN_ENGINE",
+  "scanned": 2642,
+  "starting": 421,
+  "confirmed": 0,
+  "confirmedSymbols": [],
+  "exactDateOiSymbols": 210,
+  "deliveryMissing": 0,
+  "scannerSnapshotCrossCheck": {
+   "scanner": "scanner_2026-09-28_31c3e72.json",
+   "agrees": true
+  }
+ }
+]

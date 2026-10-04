@@ -6,7 +6,9 @@ function sha256(buffer) {
 }
 
 function clean(v) { return v === undefined || v === null || String(v).trim() === '' ? null : String(v).trim(); }
-function num(v) { const x = Number(String(v ?? '').replace(/,/g, '')); return Number.isFinite(x) ? x : null; }
+// Missing != Zero: blank / absent / NSE '-' placeholder -> null (never 0); an explicit '0' stays 0.
+const { toNumberOrNull } = require('../../server/src/dataQuality');
+function num(v) { return toNumberOrNull(v); }
 
 // Fails loudly (throws) rather than silently accepting a schema NSE didn't
 // actually promise us — a format change should surface as MALFORMED, not

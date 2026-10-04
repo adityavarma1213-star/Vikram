@@ -1,0 +1,7 @@
+{
+  "_note": "SHA256 of the frozen V15 files at baseline (HEAD 610c488, 2026-10-03). The replay and the v15Frozen test refuse to run if any of these differ.",
+  "accumulation/engine.js": "ae6a8f1f6698fc41d16d7c15800ca7f406361f3f6ef06bc3e04dd43287fedf58",
+  "accumulation/config.js": "55549588df09252f4e19cfb047cfe78f3f62928e9a33787563355d6c092e2f27",
+  "server/src/scannerEngine.js": "e01c6d05bfd09f42c724955183f0b531c6c3faebc0879c6ff92bc0c01b82b155",
+  "server/src/scanMaterializer.js": "0ca6f695306dd84c992809273b39c985aa7bc4203368309f6542dfc17e79a0f9"
+}

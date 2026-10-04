@@ -22,6 +22,7 @@ try { unzipper = require('unzipper'); } catch (e) { unzipper = null; }
 
 const { formatYmd, formatDdMmYyyy, formatYmdCompact, candidateSessionDates } = require('./lib/dateUtils');
 const { sha256, clean, num, requireColumns, validateCmRow, validateFoRow, findDuplicates, confirmTradeDate } = require('./lib/validators');
+const { assessDeliveryDay } = require('../server/src/dataQuality');
 const { Manifest } = require('./lib/manifest');
 
 const ROOT = __dirname;
@@ -143,6 +144,12 @@ async function downloadOneSegment(segment, date, manifest, { onBlocked }) {
         if (errs.length) { malformedCount += 1; if (rowErrors.length < 20) rowErrors.push(`${row.symbol}: ${errs.join('; ')}`); }
       }
 
+      // Hard whole-day check (Missing != Zero): a CM day whose delivery column is entirely zero/missing is an
+      // ingestion defect and must never be written as VALID normalized market data.
+      if (segment === 'CM') {
+        const deliveryDay = assessDeliveryDay(rows);
+        if (deliveryDay.status !== 'OK') rowErrors.push(`whole-day delivery check failed: ${deliveryDay.status} (rows=${deliveryDay.rows}, positive=${deliveryDay.positive}, zero=${deliveryDay.zero}, missing=${deliveryDay.missing})`);
+      }
       const validationStatus = rowErrors.length === 0 ? 'VALID' : (malformedCount > rows.length * 0.5 ? 'MALFORMED' : 'INVALID');
 
       manifest.record(segment, ymd, {

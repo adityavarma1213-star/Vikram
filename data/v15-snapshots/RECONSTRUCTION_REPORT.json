@@ -1,0 +1,281 @@
+[
+ {
+  "commit": "9704b95",
+  "scanDate": "2026-09-04",
+  "scanTimestamp": "2026-09-07T03:11:48.066Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 357,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "307ed8d",
+  "scanDate": "2026-09-04",
+  "scanTimestamp": "2026-09-07T03:46:35.900Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 357,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "88ebe7a",
+  "scanDate": "2026-09-04",
+  "scanTimestamp": "2026-09-07T04:03:03.212Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 357,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "0632635",
+  "scanDate": "2026-09-04",
+  "scanTimestamp": "2026-09-07T06:13:20.406Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 357,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "ce19352",
+  "scanDate": "2026-09-07",
+  "scanTimestamp": "2026-09-07T13:16:34.402Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 352,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "9e4c68a",
+  "scanDate": "2026-09-07",
+  "scanTimestamp": "2026-09-07T14:32:41.640Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 352,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "1fdb6eb",
+  "scanDate": "2026-09-07",
+  "scanTimestamp": "2026-09-07T16:06:12.687Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 349,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "0dafb19",
+  "scanDate": "2026-09-07",
+  "scanTimestamp": "2026-09-07T18:32:49.775Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 349,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "e492772",
+  "scanDate": "2026-09-08",
+  "scanTimestamp": "2026-09-08T17:33:22.281Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 354,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "87ab63d",
+  "scanDate": "2026-09-09",
+  "scanTimestamp": "2026-09-09T17:26:48.892Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 364,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "aba7cbd",
+  "scanDate": "2026-09-10",
+  "scanTimestamp": "2026-09-10T17:17:39.951Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 330,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "23c4c0c",
+  "scanDate": "2026-09-11",
+  "scanTimestamp": "2026-09-11T17:19:15.541Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 295,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "1325392",
+  "scanDate": "2026-09-04",
+  "scanTimestamp": "2026-09-07T06:13:20.406Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 357,
+  "status": "SKIPPED_SAME_TIMESTAMP_ALREADY_STORED"
+ },
+ {
+  "commit": "fd98baa",
+  "scanDate": "2026-09-11",
+  "scanTimestamp": "2026-09-12T05:29:06.068Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 296,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "d489815",
+  "scanDate": "2026-09-11",
+  "scanTimestamp": "2026-09-12T19:10:02.985Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 296,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "c3e5195",
+  "scanDate": "2026-09-11",
+  "scanTimestamp": "2026-09-12T23:56:46.994Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 296,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "c785720",
+  "scanDate": "2026-09-11",
+  "scanTimestamp": "2026-09-13T04:53:49.996Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 296,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "f3a950b",
+  "scanDate": "2026-09-11",
+  "scanTimestamp": "2026-09-13T12:28:52.792Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 296,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "7bec2b9",
+  "scanDate": "2026-09-11",
+  "scanTimestamp": "2026-09-13T23:38:40.303Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 296,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "a6f2a5c",
+  "scanDate": "2026-09-11",
+  "scanTimestamp": "2026-09-14T19:00:43.905Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 296,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "3ed114f",
+  "scanDate": "2026-09-15",
+  "scanTimestamp": "2026-09-15T17:57:12.398Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 223,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "a53bd17",
+  "scanDate": "2026-09-25",
+  "scanTimestamp": "2026-09-27T03:38:39.795Z",
+  "classification": "DATA_INSUFFICIENT",
+  "confirmed": 0,
+  "starting": 322,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "c637df7",
+  "scanDate": "2026-09-25",
+  "scanTimestamp": "2026-09-27T07:11:50.643Z",
+  "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+  "confirmed": 0,
+  "starting": 385,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "18564a4",
+  "scanDate": "2026-09-25",
+  "scanTimestamp": "2026-09-27T07:45:53.267Z",
+  "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+  "confirmed": 0,
+  "starting": 385,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "69cfbf5",
+  "scanDate": "2026-09-25",
+  "scanTimestamp": "2026-09-27T19:24:37.837Z",
+  "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+  "confirmed": 0,
+  "starting": 390,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "52c8ded",
+  "scanDate": "2026-09-25",
+  "scanTimestamp": "2026-09-27T20:23:53.340Z",
+  "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+  "confirmed": 0,
+  "starting": 390,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "8c101fc",
+  "scanDate": "2026-09-25",
+  "scanTimestamp": "2026-09-27T21:15:55.963Z",
+  "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+  "confirmed": 0,
+  "starting": 390,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "943db86",
+  "scanDate": "2026-09-25",
+  "scanTimestamp": "2026-09-27T22:09:28.203Z",
+  "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+  "confirmed": 0,
+  "starting": 390,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "49c2fa2",
+  "scanDate": "2026-09-25",
+  "scanTimestamp": "2026-09-28T03:44:29.171Z",
+  "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+  "confirmed": 0,
+  "starting": 390,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "31c3e72",
+  "scanDate": "2026-09-28",
+  "scanTimestamp": "2026-09-28T20:25:30.275Z",
+  "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+  "confirmed": 0,
+  "starting": 423,
+  "status": "WRITTEN"
+ },
+ {
+  "commit": "2efbaad",
+  "scanDate": "2026-09-28",
+  "scanTimestamp": "2026-09-28T20:25:30.275Z",
+  "classification": "VERIFIED_ZERO_CONFIRMATIONS",
+  "confirmed": 0,
+  "starting": 423,
+  "status": "SKIPPED_SAME_TIMESTAMP_ALREADY_STORED"
+ }
+]

@@ -13,7 +13,9 @@ const HOME='https://www.nseindia.com';
 const HEADERS={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/134.0 Safari/537.36','Accept':'*/*','Accept-Language':'en-US,en;q=0.9','Referer':HOME+'/'};
 async function get(url){const r=await fetch(url,{headers:HEADERS});if(!r.ok)throw new Error(`NSE ${r.status} for ${url}`);return Buffer.from(await r.arrayBuffer());}
 function clean(v){return v===undefined||v===null||String(v).trim()===''?null:String(v).trim();}
-function num(v){const x=Number(String(v??'').replace(/,/g,''));return Number.isFinite(x)?x:null;}
+// Missing != Zero: blank / absent / NSE '-' placeholder -> null (never 0); an explicit '0' stays 0.
+const { toNumberOrNull } = require('./dataQuality');
+function num(v){return toNumberOrNull(v);}
 function parseCsv(buf){return parse(buf.toString('utf8').replace(/^\uFEFF/,''),{columns:true,skip_empty_lines:true,trim:true,relax_column_count:true});}
 
 // #8 remediation: raw rows are classified by ingestValidation.js BEFORE they are trusted. Only

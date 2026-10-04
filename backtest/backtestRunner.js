@@ -35,6 +35,7 @@ const { buildResearchIntelligence } = require('./lib/researchIntelligence');
 const { scanForStaleDuplicates } = require('./lib/staleDuplicateDetector');
 const { isKnownHolidayDate, holidayInfo } = require('./lib/nseHolidayCalendar');
 const engine = require('./lib/engineAdapter');
+const { buildDecisionRecord } = require('./lib/telemetrySchema');
 
 const ROOT = __dirname;
 const NORMALIZED_DIR = path.join(ROOT, 'data', 'normalized');
@@ -116,8 +117,11 @@ function loadNormalizedBySymbol() {
 // corporateActionCoverage is the result of lib/corporateActions.js's
 // assessCoverage() for this run — passed in (not computed here) so this
 // function stays pure/testable; runBacktest() below supplies the real one.
-function detectSignalsAndForwardReturns(bySymbol, futuresBySymbolDate, evalEngine, { warmup = 20, corporateActionCoverage = null } = {}) {
+function detectSignalsAndForwardReturns(bySymbol, futuresBySymbolDate, evalEngine, { warmup = 20, corporateActionCoverage = null, collectDailyStats = false } = {}) {
   const signals = [];
+  // Optional per-session aggregates (scanned / STARTING / CONFIRMED ...) for the catch-frequency
+  // system. Off by default so the original return shape and cost are unchanged.
+  const dailyStats = collectDailyStats ? new Map() : null;
 
   for (const [symbol, history] of bySymbol.entries()) {
     // Step 1: compute the engine's verdict for EVERY day (never skipped),
@@ -128,7 +132,23 @@ function detectSignalsAndForwardReturns(bySymbol, futuresBySymbolDate, evalEngin
       const pastHistory = history.slice(0, i + 1); // no look-ahead: only up to and including today
       const futures = futuresBySymbolDate.get(`${symbol}|${current.trade_date}`) || null;
       const result = evalEngine.evaluate({ symbol, history: pastHistory, current, futures });
-      verdictStream.push({ date: current.trade_date, close: current.close, verdict: result.verdict, score: result.score, historyIndex: i });
+      // Telemetry retention: the ORIGINAL keys are unchanged; `record` additionally carries the
+      // complete frozen-engine decision (metrics, gate failures, components, why) so nothing
+      // computed at decision time is lost before event grouping and reporting.
+      // The full record is built for CONFIRMED days only (those are the days that enter events);
+      // building it for every symbol-day would hold ~700k records in memory. Every day still
+      // contributes its verdict + score to the stream and to the optional daily statistics.
+      const record = result.verdict === 'ACCUMULATION CONFIRMED' ? buildDecisionRecord(symbol, result, { historyLength: i + 1 }) : undefined;
+      verdictStream.push({ date: current.trade_date, close: current.close, verdict: result.verdict, score: result.score, historyIndex: i, record });
+      if (dailyStats) {
+        let d = dailyStats.get(current.trade_date);
+        if (!d) { d = { date: current.trade_date, scanned: 0, starting: 0, confirmed: 0, confirmedSymbols: [], startingSymbols: [], oiExactDate: 0, deliveryMissing: 0 }; dailyStats.set(current.trade_date, d); }
+        d.scanned += 1;
+        if (result.verdict === 'ACCUMULATION STARTING') { d.starting += 1; d.startingSymbols.push(symbol); }
+        if (result.verdict === 'ACCUMULATION CONFIRMED') { d.confirmed += 1; d.confirmedSymbols.push(symbol); }
+        if (result.metrics && result.metrics.oiExactDate) d.oiExactDate += 1;
+        if (!result.metrics || result.metrics.deliveryPct === null) d.deliveryMissing += 1;
+      }
     }
 
     // Step 2: group consecutive CONFIRMED days into detection events. The
@@ -179,7 +199,9 @@ function detectSignalsAndForwardReturns(bySymbol, futuresBySymbolDate, evalEngin
         latestDetectionPrice: event.latestDetectionPrice,
         tradingSessionStreak: event.tradingSessionStreak,
         eventStatus: event.status,
-        forwardReturns
+        forwardReturns,
+        // Decision-time telemetry (additive; absent only when the caller supplied no records).
+        ...(event.decisions ? { decisions: event.decisions, firstDetectionDecision: event.decisions[0], latestDetectionDecision: event.decisions[event.decisions.length - 1] } : {})
       });
     }
   }
@@ -198,7 +220,7 @@ function detectSignalsAndForwardReturns(bySymbol, futuresBySymbolDate, evalEngin
     };
   }
 
-  return { signals, horizonStats };
+  return dailyStats ? { signals, horizonStats, dailyStats: [...dailyStats.values()].sort((a, b) => a.date.localeCompare(b.date)) } : { signals, horizonStats };
 }
 
 function runBacktest() {
