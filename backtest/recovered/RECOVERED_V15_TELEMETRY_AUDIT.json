@@ -1,0 +1,58 @@
+{
+ "catchDays": 888,
+ "fieldPresence": {
+  "score": {
+   "numeric": 888,
+   "missing": 0
+  },
+  "volumeRatio": {
+   "numeric": 888,
+   "missing": 0
+  },
+  "obv": {
+   "numeric": 888,
+   "missing": 0
+  },
+  "obvTrend": {
+   "numeric": 888,
+   "missing": 0
+  },
+  "deliveryPct": {
+   "numeric": 888,
+   "missing": 0
+  },
+  "futuresOi": {
+   "numeric": 888,
+   "missing": 0
+  },
+  "changeOi": {
+   "numeric": 888,
+   "missing": 0
+  },
+  "priceChangePct": {
+   "numeric": 888,
+   "missing": 0
+  }
+ },
+ "gateFailuresPresent": 888,
+ "gateFailuresOnConfirmedAllEmpty": true,
+ "componentsPresent": 888,
+ "confirmedGateInvariants": {
+  "scoreAtLeast75": true,
+  "volumeRatioAtLeast1_2": true,
+  "deliveryAtLeast45": true,
+  "obvTrendPositive": true,
+  "changeOiPositive": true,
+  "exactDateOi": true,
+  "priceChangeAbove0_25": true,
+  "historyAtLeast10": true
+ },
+ "fieldRecoveryOnBaselineMatchedRows": {
+  "score": 852,
+  "volumeRatio": 852,
+  "obv": 852,
+  "obvTrend": 852
+ },
+ "fieldMismatchesVsBaseline": 0,
+ "note": "Original report: score, volume_ratio and obv were N/A on 852/852 rows. Values above are the frozen engine's own decision-time outputs, replayed on the identical stored data."
+}

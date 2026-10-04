@@ -53,11 +53,15 @@ function buildDetectionEvents(symbol, verdictStream) {
           status: 'New',
           endedDate: null
         };
+        // Telemetry retention: when the caller supplies the canonical decision record for a
+        // day, the event keeps it for EVERY confirmed day of the streak (never dropped).
+        if (day.record) current.decisions = [day.record];
       } else {
         current.latestDetectionDate = day.date;
         current.latestDetectionPrice = day.close;
         current.tradingSessionStreak += 1;
         current.status = 'Active';
+        if (day.record) (current.decisions = current.decisions || []).push(day.record);
       }
     } else if (current) {
       // Streak broken. The event is finalized as of its last confirmed day;

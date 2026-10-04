@@ -1,0 +1,23 @@
+{
+ "baseline": {
+  "catchDays": 852,
+  "events": 769,
+  "symbols": 192
+ },
+ "recovered": {
+  "catchDays": 888,
+  "symbols": 193
+ },
+ "matchedCatchDays": 852,
+ "onlyInBaseline": 0,
+ "onlyInRecovered": 36,
+ "unexpectedDifferences": 0,
+ "fieldRecoveryOnMatched": {
+  "score": 852,
+  "volumeRatio": 852,
+  "obv": 852,
+  "obvTrend": 852
+ },
+ "fieldMismatchesOnMatched": [],
+ "differenceCount": 36
+}

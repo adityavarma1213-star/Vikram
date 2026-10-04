@@ -51,6 +51,10 @@ function fullBhavcopyCsv(dateStr, symbol, deliveryQty, deliveryPer) {
   return Buffer.from(`${header}\n${row}\n`);
 }
 
+// The session Tests 3 and 4 are about. Their input is the real stored history up to and including this date.
+const PINNED_SESSION = '2026-09-25';
+const historyThrough = (history, date) => history.filter(d => d.tradeDate <= date);
+
 async function run() {
   const { fetchCm, readHistory, materialize } = require('../src/staticSnapshot');
 
@@ -116,10 +120,15 @@ async function run() {
   // this fix.
   // ---------------------------------------------------------------------------------------
   {
+    // materialize() returns ONE row per symbol: that symbol's latest session. This test is about the
+    // 2026-09-25 session, so the real on-disk history is cut at that date (point-in-time). Without the
+    // cut, any later session added to data/market-history (e.g. 2026-09-28) moves every symbol's row off
+    // 2026-09-25 and the lookup below finds nothing. Same real data, same assertions; only the input is pinned.
     const history = readHistory();
     assert.ok(history.length > 0, 'expected real market-history files to be present in this repo');
-    const materialized = materialize(history);
-    const row = materialized.results.find(r => r.symbol === 'INDHOTEL' && r.tradeDate === '2026-09-25');
+    assert.ok(history.some(d => d.tradeDate === PINNED_SESSION), `expected the real ${PINNED_SESSION} session in data/market-history`);
+    const materialized = materialize(historyThrough(history, PINNED_SESSION));
+    const row = materialized.results.find(r => r.symbol === 'INDHOTEL' && r.tradeDate === PINNED_SESSION);
     assert.ok(row, 'expected an INDHOTEL result for 2026-09-25');
     assert.equal(typeof row.metrics.futuresOi, 'number');
     assert.ok(row.metrics.futuresOi > 0, 'futuresOi must be populated (non-null, positive)');
@@ -133,8 +142,9 @@ async function run() {
   // ---------------------------------------------------------------------------------------
   {
     const history = readHistory();
-    const materialized = materialize(history);
-    const row = materialized.results.find(r => r.symbol === '3MINDIA' && r.tradeDate === '2026-09-25');
+    assert.ok(history.some(d => d.tradeDate === PINNED_SESSION), `expected the real ${PINNED_SESSION} session in data/market-history`);
+    const materialized = materialize(historyThrough(history, PINNED_SESSION));
+    const row = materialized.results.find(r => r.symbol === '3MINDIA' && r.tradeDate === PINNED_SESSION);
     assert.ok(row, 'expected a 3MINDIA result for 2026-09-25');
     assert.equal(row.metrics.futuresOi, null, '3MINDIA has no F&O contract -- futuresOi must remain null');
     assert.equal(row.metrics.changeOi, null, '3MINDIA has no F&O contract -- changeOi must remain null');

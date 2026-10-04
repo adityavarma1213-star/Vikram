@@ -53,6 +53,10 @@ jobs:
           node --check server/src/scannerEngine.js
           node --check server/src/scanMaterializer.js
           node --check server/src/ingest.js
+          node --check server/src/dataQuality.js
+          node --check server/src/v15SnapshotStore.js
+          node --check server/src/catchFrequency.js
+          node --check scripts/writeV15Snapshot.js
           node --check js/app.js
           node --check js/search.js
           node --check js/dataEngine.js
@@ -70,11 +74,17 @@ jobs:
         run: node server/src/staticSnapshot.js
       - name: Validate generated full-universe snapshot
         run: npm --prefix server run validate:snapshot
+      - name: Write immutable V15 daily snapshot (fails the run on DATA_INSUFFICIENT)
+        # writeV15Snapshot exits non-zero when the scan's data quality is DATA_INSUFFICIENT
+        # (e.g. all-zero delivery). The run stops here, so nothing below is persisted or published.
+        run: node scripts/writeV15Snapshot.js
+      - name: Rebuild catch-frequency from snapshots
+        run: node scripts/buildCatchFrequency.js
       - name: Persist verified market data
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/scanner.json data/market-history data/raw-archive data/nse-coverage-report.json
+          git add data/scanner.json data/market-history data/raw-archive data/nse-coverage-report.json data/v15-snapshots data/v15-catch-frequency.json
           if git diff --cached --quiet; then
             echo 'No market-data changes to commit.'
           else

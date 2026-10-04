@@ -6,6 +6,7 @@ const { toIstCalendarDate, addDays, formatYmd, formatDdMmYyyy, formatYmdCompact 
 const { buildScannerResults, buildPeriodResults, MATERIALIZE_LOOKBACK_DAYS } = require('./scanMaterializer');
 const { fetchIndexUniverses, membershipFor } = require('./indexUniverses');
 const { buildDetectionMap } = require('./detectionHistory');
+const { requireValidDeliveryDay } = require('./dataQuality');
 
 const ROOT = path.resolve(__dirname, '../..');
 const accumulationEngine = require(path.join(ROOT, 'accumulation', 'engine'));
@@ -117,7 +118,7 @@ function buildCurrentDetection(historySnapshots, currentResults) {
   // cannot silently drift out of feature parity with each other again.
   return buildDetectionMap(bySymbol, futures, derivativesSymbols, currentResults, accumulationEngine.evaluate);
 }
-async function ingestLatest() { const anchor = toIstCalendarDate(); let lastError = null; for (let i = 0; i < SEARCH_WINDOW_DAYS; i += 1) { const date = addDays(anchor, -i); try { const cm = await fetchCm(date); let futures = []; try { futures = await fetchFo(date); } catch (error) { console.warn(`F&O unavailable for ${formatYmd(date)}: ${error.message}`); } const snapshot = { tradeDate: formatYmd(date), cm, futures, generatedAt: new Date().toISOString() }; writeHistory(snapshot); return snapshot; } catch (error) { lastError = error; console.log(`SKIP ${formatYmd(date)}: ${error.message}`); } } throw new Error(`No recent NSE CM file was available in the last ${SEARCH_WINDOW_DAYS} calendar days: ${lastError?.message || 'unknown error'}`); }
+async function ingestLatest() { const anchor = toIstCalendarDate(); let lastError = null; for (let i = 0; i < SEARCH_WINDOW_DAYS; i += 1) { const date = addDays(anchor, -i); try { const cm = await fetchCm(date); requireValidDeliveryDay(cm, `NSE CM ${formatYmd(date)}`); let futures = []; try { futures = await fetchFo(date); } catch (error) { console.warn(`F&O unavailable for ${formatYmd(date)}: ${error.message}`); } const snapshot = { tradeDate: formatYmd(date), cm, futures, generatedAt: new Date().toISOString() }; writeHistory(snapshot); return snapshot; } catch (error) { if (error && error.name === 'DataQualityError') throw error; lastError = error; console.log(`SKIP ${formatYmd(date)}: ${error.message}`); } } throw new Error(`No recent NSE CM file was available in the last ${SEARCH_WINDOW_DAYS} calendar days: ${lastError?.message || 'unknown error'}`); }
 async function main() {
   const latest = await ingestLatest(); const history = readHistory(); const materialized = materialize(history); let universe = new Map(); try { universe = await fetchUniverse(); } catch (error) { console.warn(`NSE company-name universe unavailable: ${error.message}`); }
   let indexUniverses = null; try { indexUniverses = await fetchIndexUniverses(get); } catch (error) { console.warn(`Nifty index constituent data unavailable: ${error.message}`); }
