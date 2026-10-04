@@ -1,0 +1,134 @@
+name: V15 Release Verification (read-only)
+
+# VERIFICATION ONLY. This workflow never commits, never pushes and never deploys.
+#   - permissions: contents read only (no pages, no id-token)
+#   - no `git push`, no `git commit`, no Pages steps
+#   - every check must pass for the run to be green; there is no continue-on-error anywhere
+# It exists to run, in a CI environment where dependencies can install:
+#   the server and backtest test chains, the previously BLOCKED tests, the V15 frozen-hash guard,
+#   and the snapshot behaviour proofs (write-once, DATA_INSUFFICIENT stop, tamper detection).
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [recovery/v15-pipeline-2026-10-03]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: v15-release-verification-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Show environment
+        run: |
+          node --version
+          npm --version
+          git rev-parse HEAD
+      - name: Install server dependencies (npm ci)
+        working-directory: server
+        run: npm ci --no-audit --no-fund
+      - name: Install backtest dependencies (npm ci)
+        working-directory: backtest
+        run: npm ci --no-audit --no-fund
+      - name: Confirm the previously blocked dependencies resolve
+        run: |
+          cd server && node -e "for (const m of ['csv-parse/sync','pg','unzipper','express']) { require.resolve(m); console.log('resolved', m); }"
+          cd ../backtest && node -e "for (const m of ['csv-parse/sync','unzipper']) { require.resolve(m); console.log('resolved', m); }"
+      - name: Syntax check of new and changed modules
+        run: |
+          for f in server/src/dataQuality.js server/src/v15SnapshotStore.js server/src/catchFrequency.js \
+                   server/src/ingest.js server/src/staticSnapshot.js backtest/nseDownloader.js backtest/lib/validators.js \
+                   backtest/lib/telemetrySchema.js backtest/lib/detectionEvents.js backtest/backtestRunner.js \
+                   backtest/replayRecovered.js scripts/writeV15Snapshot.js scripts/buildCatchFrequency.js \
+                   scripts/reconstructSnapshotsFromGit.js scripts/verifyV15SnapshotBehavior.js; do
+            node --check "$f" && echo "ok $f"
+          done
+
+      - name: Verify the five frozen V15 file SHA-256 hashes
+        run: |
+          node -e "
+          const fs=require('fs'),crypto=require('crypto');
+          const frozen=JSON.parse(fs.readFileSync('docs/recovery/frozen-hashes.json','utf8'));
+          const files=Object.entries(frozen).filter(([k])=>!k.startsWith('_'));
+          let bad=0;
+          for (const [f,h] of files.concat([['backtest/REAL_1YEAR_BACKTEST_RESULT.json','281ed526c1189f6f703b26377d1832b50d35b17ce97dc7748c82f11f5b9fe1e7']])) {
+            const a=crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+            console.log((a===h?'MATCH   ':'MISMATCH'), f, a);
+            if (a!==h) bad++;
+          }
+          if (bad) { console.error(bad+' frozen file(s) changed'); process.exit(1); }
+          console.log('all frozen files unchanged (5 V15 files + original result)');
+          "
+      - name: Confirm V15 files are byte-identical to origin/main
+        run: |
+          git fetch --no-tags --depth=1 origin main
+          git diff --stat origin/main HEAD -- accumulation/engine.js accumulation/config.js server/src/scannerEngine.js server/src/scanMaterializer.js backtest/REAL_1YEAR_BACKTEST_RESULT.json | tee /tmp/frozen-diff.txt
+          test ! -s /tmp/frozen-diff.txt
+
+      - name: Regenerate NSE coverage report (same as production, working tree only)
+        run: node scripts/buildNseCoverageReport.js
+      - name: Server test chain (npm test)
+        working-directory: server
+        run: npm test
+      - name: Backtest test chain (npm test)
+        working-directory: backtest
+        run: npm test
+
+      - name: Previously BLOCKED tests, run explicitly (all seven; any failure fails the step)
+        run: |
+          fail=0
+          for t in backtest/test/downloaderResume.test.js \
+                   server/test/bhavcopyDateNormalization.test.js \
+                   server/test/deliveryColumnRequired.test.js \
+                   server/test/detectionHistory.test.js \
+                   server/test/indexUniverses.test.js \
+                   server/test/ingestRangeBackfill.test.js \
+                   server/test/numericMissingValueCoercion.test.js; do
+            echo "::group::$t"
+            if (cd "$(dirname "$t")" && node "$(basename "$t")"); then echo "RESULT PASS $t"; else echo "RESULT FAIL $t"; fail=1; fi
+            echo "::endgroup::"
+          done
+          exit $fail
+      - name: Repair tests, run explicitly (telemetry, V15 frozen, data quality, snapshot store, catch frequency)
+        run: |
+          fail=0
+          for t in backtest/test/telemetryRetention.test.js backtest/test/v15Frozen.test.js \
+                   server/test/dataQuality.test.js server/test/v15SnapshotStore.test.js server/test/catchFrequency.test.js; do
+            echo "::group::$t"
+            if (cd "$(dirname "$t")" && node "$(basename "$t")"); then echo "RESULT PASS $t"; else echo "RESULT FAIL $t"; fail=1; fi
+            echo "::endgroup::"
+          done
+          exit $fail
+      # liveNetworkProbe is excluded on purpose: it probes live NSE reachability, not the repair.
+      - name: Every other test file not in either npm chain
+        run: |
+          fail=0
+          for t in backtest/test/*.test.js server/test/*.test.js; do
+            case "$t" in *liveNetworkProbe*) continue;; esac
+            d="$(dirname "$t")"; b="$(basename "$t")"
+            if (cd "$d" && node "$b") >/tmp/t.log 2>&1; then echo "PASS $t"; else echo "FAIL $t"; tail -20 /tmp/t.log; fail=1; fi
+          done
+          exit $fail
+
+      - name: Snapshot behaviour proofs (write-once, DATA_INSUFFICIENT stop, tamper detection, catch frequency)
+        run: node scripts/verifyV15SnapshotBehavior.js
+      - name: Verify the committed snapshot store chain
+        run: node -e "const r=require('./server/src/v15SnapshotStore').verifyChain('data/v15-snapshots'); console.log(JSON.stringify(r)); process.exit(r.ok?0:1)"
+      - name: Confirm this run changed nothing that could be persisted
+        run: |
+          git status --porcelain | tee /tmp/status.txt
+          echo "--- tracked V15 / data files modified by the run (must be empty):"
+          git diff --name-only -- accumulation server/src/scannerEngine.js server/src/scanMaterializer.js data/scanner.json data/market-history data/raw-archive backtest/REAL_1YEAR_BACKTEST_RESULT.json | tee /tmp/changed.txt
+          test ! -s /tmp/changed.txt

@@ -3,12 +3,12 @@
 // Writes one immutable V15 daily snapshot from data/scanner.json (produced by the frozen engine).
 // Exit codes: 0 = snapshot written/unchanged and data quality OK
 //             2 = data quality DATA_INSUFFICIENT (snapshot still written, labelled; caller must NOT publish)
-//             1 = error
+//             1 = error, or the stored snapshot chain failed verification (tampered / corrupted / broken)
 // Usage: node scripts/writeV15Snapshot.js [--scanner data/scanner.json] [--dir data/v15-snapshots]
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { buildSnapshot, writeSnapshot } = require('../server/src/v15SnapshotStore');
+const { buildSnapshot, writeSnapshot, verifyChain } = require('../server/src/v15SnapshotStore');
 
 const root = path.resolve(__dirname, '..');
 const arg = (name, dflt) => { const i = process.argv.indexOf(name); return i >= 0 ? process.argv[i + 1] : dflt; };
@@ -40,6 +40,10 @@ function main() {
   });
   const result = writeSnapshot(dir, snapshot);
   console.log(`${result.status} ${path.relative(root, result.file)} scanDate=${snapshot.scanDate} classification=${snapshot.classification} confirmed=${snapshot.counts.confirmed} starting=${snapshot.counts.starting}`);
+  // Re-hash every stored snapshot and the chain. An UNCHANGED rewrite must not hide a tampered file.
+  const chain = verifyChain(dir);
+  if (!chain.ok) { console.error(`SNAPSHOT CHAIN VERIFICATION FAILED (${chain.problems.length} problem(s)):\n  ${chain.problems.join('\n  ')}`); process.exit(1); }
+  console.log(`snapshot chain verified: ${chain.entries} entries, 0 problems`);
   if (snapshot.dataQuality.status !== 'OK') { console.error(`DATA_INSUFFICIENT: ${snapshot.dataQuality.reasons.join('; ')}`); process.exit(2); }
 }
 if (require.main === module) { try { main(); } catch (e) { console.error(e.message); process.exit(1); } }

@@ -48,5 +48,12 @@ assert.equal(store.verifyChain(dir).ok, true);
 const f = path.join(dir, store.readIndex(dir).entries[0].file);
 fs.writeFileSync(f, fs.readFileSync(f, 'utf8').replace('"confirmed": 1', '"confirmed": 0'));
 assert.equal(store.verifyChain(dir).ok, false, 'tampering is detected');
+// Regression: tampering must stay detectable, and re-writing the same scan afterwards must not make it look clean.
+const tamperedEntry = store.readIndex(dir).entries[0];
+const tamperedChain = store.verifyChain(dir);
+assert.ok(tamperedChain.problems.some(p => p.includes(tamperedEntry.file) && p.includes('content hash mismatch')), 'problem names the tampered file');
+assert.equal(store.verifySnapshot(JSON.parse(fs.readFileSync(f, 'utf8'))), false, 'tampered file no longer matches its own snapshotHash');
+store.writeSnapshot(dir, s1); // same scan again: reports UNCHANGED (it compares the stored hash field only)
+assert.equal(store.verifyChain(dir).ok, false, 'a rewrite does not repair or hide tampering; verifyChain still fails');
 
 console.log('v15SnapshotStore tests passed');
