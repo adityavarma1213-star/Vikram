@@ -122,13 +122,24 @@ jobs:
           done
           exit $fail
 
-      - name: Snapshot behaviour proofs (write-once, DATA_INSUFFICIENT stop, tamper detection, catch frequency)
+      - name: Snapshot behaviour proofs (write-once, DATA_INSUFFICIENT = evidence snapshot written + exit 2 + persistence not reached, tamper detection)
         run: node scripts/verifyV15SnapshotBehavior.js
       - name: Verify the committed snapshot store chain
         run: node -e "const r=require('./server/src/v15SnapshotStore').verifyChain('data/v15-snapshots'); console.log(JSON.stringify(r)); process.exit(r.ok?0:1)"
-      - name: Confirm this run changed nothing that could be persisted
+      - name: Fail if the run left any unexpected tracked or untracked change
+        # The only change this workflow is expected to make is the regenerated coverage report
+        # (same as production, working tree only). Anything else - a modified tracked file, a new
+        # untracked file, a deleted file - fails the run.
         run: |
-          git status --porcelain | tee /tmp/status.txt
-          echo "--- tracked V15 / data files modified by the run (must be empty):"
+          git status --porcelain --untracked-files=all | tee /tmp/status-all.txt
+          grep -v -E '^ M data/nse-coverage-report\.json$' /tmp/status-all.txt > /tmp/status-unexpected.txt || true
+          if [ -s /tmp/status-unexpected.txt ]; then
+            echo "::error::Unexpected working-tree changes after the verification run:"
+            cat /tmp/status-unexpected.txt
+            exit 1
+          fi
+          echo "working tree clean apart from the expected coverage-report regeneration"
+      - name: Fail if any frozen V15 / data file was modified by the run
+        run: |
           git diff --name-only -- accumulation server/src/scannerEngine.js server/src/scanMaterializer.js data/scanner.json data/market-history data/raw-archive backtest/REAL_1YEAR_BACKTEST_RESULT.json | tee /tmp/changed.txt
           test ! -s /tmp/changed.txt

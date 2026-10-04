@@ -4,8 +4,11 @@
 // Nothing under the repository is written. Any failed assertion exits non-zero.
 //   1. a good scan writes a snapshot and exits 0
 //   2. the same scan again is UNCHANGED (write-once) and exits 0
-//   3. a zero-delivery scan is classified DATA_INSUFFICIENT and exits 2
-//   4. under `bash -e`, a step placed after a DATA_INSUFFICIENT write is NEVER reached (stops before persistence)
+//   3. a zero-delivery scan is classified DATA_INSUFFICIENT: an immutable evidence snapshot IS written (labelled
+//      DATA_INSUFFICIENT) and the script exits 2
+//   4. under `bash -e`, the step after that exit-2 write (the persistence/publication step) is NEVER reached.
+//      "Stops before persistence" means the snapshot evidence is kept in the job's working tree, but nothing is
+//      committed, pushed or published downstream.
 //   5. a different payload for an already-written path is refused (immutable)
 //   6. a tampered stored snapshot is detected, and a rewrite does not hide it (exit 1)
 //   7. catch-frequency builds from the snapshots without treating unverified days as zero
@@ -42,13 +45,13 @@ for (const x of zero.results) { x.metrics.deliveryPct = 0; x.metrics.deliveryQty
 zero.generatedAt = '2099-01-01T00:00:00.000Z';
 const zeroPath = path.join(tmp, 'zero-delivery-scanner.json'); fs.writeFileSync(zeroPath, JSON.stringify(zero));
 r = write(zeroPath, snaps);
-assert.equal(r.status, 2, `zero-delivery scan must exit 2\n${r.stdout}${r.stderr}`); assert.match(r.stderr, /DATA_INSUFFICIENT: ALL_DELIVERY_ZERO/); assert.match(r.stdout, /classification=DATA_INSUFFICIENT/); ok('zero-delivery scan is DATA_INSUFFICIENT and exits 2');
+assert.equal(r.status, 2, `zero-delivery scan must exit 2\n${r.stdout}${r.stderr}`); assert.match(r.stderr, /DATA_INSUFFICIENT: ALL_DELIVERY_ZERO/); assert.match(r.stdout, /classification=DATA_INSUFFICIENT/); ok('zero-delivery scan: DATA_INSUFFICIENT evidence snapshot written, exit 2');
 
 // 4: the persistence step must not run after a failed snapshot step (same semantics as a GitHub Actions run: step stops on non-zero)
 const sentinel = path.join(tmp, 'PERSIST_REACHED');
 const stopDir = path.join(tmp, 'stop-snaps');
 r = run(['-e', '-c', `node "${writer}" --scanner "${zeroPath}" --dir "${stopDir}"; touch "${sentinel}"`], 'bash');
-assert.notEqual(r.status, 0, 'chain after a DATA_INSUFFICIENT write must fail'); assert.equal(fs.existsSync(sentinel), false, 'persistence step must NOT be reached'); ok('DATA_INSUFFICIENT stops the chain before the persistence step is reached');
+assert.notEqual(r.status, 0, 'chain after a DATA_INSUFFICIENT write must fail'); assert.equal(fs.existsSync(sentinel), false, 'persistence step must NOT be reached'); ok('after DATA_INSUFFICIENT (snapshot written, exit 2) the downstream persistence step is NOT reached');
 r = run(['-e', '-c', `node "${writer}" --scanner "${scannerPath}" --dir "${path.join(tmp, 'go-snaps')}"; touch "${sentinel}"`], 'bash');
 assert.equal(r.status, 0, r.stderr); assert.equal(fs.existsSync(sentinel), true, 'control: a verified scan DOES reach the persistence step'); fs.rmSync(sentinel); ok('control: a verified scan does reach the persistence step');
 
