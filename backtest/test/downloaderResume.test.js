@@ -89,6 +89,10 @@ function cleanupArtifacts() {
 
 async function main() {
   cleanupArtifacts(); // in case a prior failed run left artifacts behind
+  // The real manifest.json already holds the genuine NSE sessions this pipeline downloaded. Record the
+  // count BEFORE this test writes anything, so the double-counting check below measures only what THIS
+  // test adds (exactly its own 2 dates), instead of assuming the real manifest is empty.
+  const baselineSessions = new Manifest(downloader.MANIFEST_PATH).summary().trading_sessions_confirmed;
   installMockFetch();
   try {
     // --- Simulated first run: only date 1 is in range (stands in for "the
@@ -133,7 +137,7 @@ async function main() {
     // --- Determinism: real_data_records must not double-count date 1 just
     // because run() was invoked twice ---
     const summary = manifestAfterRun2.summary();
-    assert.equal(summary.trading_sessions_confirmed, 2, 'expected exactly 2 confirmed CM sessions (date 1 + date 2), not a duplicate');
+    assert.equal(summary.trading_sessions_confirmed - baselineSessions, 2, `expected exactly 2 NEW confirmed CM sessions (date 1 + date 2) on top of the ${baselineSessions} real sessions already in the manifest, not a duplicate (got ${summary.trading_sessions_confirmed})`);
 
     console.log('downloaderResume.test.js PASSED: real run()/downloadOneSegment() code path — checkpoint skip on resume verified, no double-counting, raw+normalized files verified present (mocked network, LEGACY_CSV path only).');
   } finally {
