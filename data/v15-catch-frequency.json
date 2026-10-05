@@ -1,7 +1,7 @@
 {
  "schema": "v15-catch-frequency/1",
  "firstSnapshotDate": "2026-09-04",
- "sessions": 19,
+ "sessions": 20,
  "daily": [
   {
    "date": "2026-09-04",
@@ -211,6 +211,17 @@
    "repeats": "DATA_INSUFFICIENT",
    "confirmationRatePct": 0.15,
    "dataQuality": "OK"
+  },
+  {
+   "date": "2026-10-05",
+   "status": "VERIFIED_CONFIRMATIONS",
+   "scanned": 2678,
+   "starting": 434,
+   "confirmed": 6,
+   "newDetections": 6,
+   "repeats": 0,
+   "confirmationRatePct": 0.22,
+   "dataQuality": "OK"
   }
  ],
  "weekly": [
@@ -288,6 +299,21 @@
    "confirmationRatePct": 0.07,
    "trend": "UP",
    "dataQuality": "PARTIAL (2 of 4 sessions verified)"
+  },
+  {
+   "period": "2026-W41",
+   "sessions": 1,
+   "verifiedSessions": 1,
+   "unverifiedSessions": 0,
+   "scanned": 2678,
+   "starting": 434,
+   "confirmed": 6,
+   "uniqueConfirmed": 6,
+   "repeats": 0,
+   "avgConfirmedPerSession": 6,
+   "confirmationRatePct": 0.22,
+   "trend": "UP",
+   "dataQuality": "COMPLETE"
   }
  ],
  "monthly": [
@@ -308,16 +334,16 @@
   },
   {
    "period": "2026-10",
-   "sessions": 1,
-   "verifiedSessions": 1,
+   "sessions": 2,
+   "verifiedSessions": 2,
    "unverifiedSessions": 0,
-   "scanned": 2662,
-   "starting": 521,
-   "confirmed": 4,
-   "uniqueConfirmed": 4,
+   "scanned": 5340,
+   "starting": 955,
+   "confirmed": 10,
+   "uniqueConfirmed": 10,
    "repeats": 0,
-   "avgConfirmedPerSession": 4,
-   "confirmationRatePct": 0.15,
+   "avgConfirmedPerSession": 5,
+   "confirmationRatePct": 0.19,
    "trend": "UP",
    "dataQuality": "COMPLETE"
   }
