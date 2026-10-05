@@ -1,7 +1,7 @@
 {
  "schema": "v15-catch-frequency/1",
  "firstSnapshotDate": "2026-09-04",
- "sessions": 16,
+ "sessions": 19,
  "daily": [
   {
    "date": "2026-09-04",
@@ -178,6 +178,39 @@
    "repeats": 0,
    "confirmationRatePct": 0,
    "dataQuality": "OK"
+  },
+  {
+   "date": "2026-09-29",
+   "status": "MISSING_SNAPSHOT",
+   "scanned": null,
+   "starting": null,
+   "confirmed": null,
+   "newDetections": null,
+   "repeats": null,
+   "confirmationRatePct": "DATA_INSUFFICIENT",
+   "dataQuality": "MISSING_SNAPSHOT"
+  },
+  {
+   "date": "2026-09-30",
+   "status": "MISSING_SNAPSHOT",
+   "scanned": null,
+   "starting": null,
+   "confirmed": null,
+   "newDetections": null,
+   "repeats": null,
+   "confirmationRatePct": "DATA_INSUFFICIENT",
+   "dataQuality": "MISSING_SNAPSHOT"
+  },
+  {
+   "date": "2026-10-01",
+   "status": "VERIFIED_CONFIRMATIONS",
+   "scanned": 2662,
+   "starting": 521,
+   "confirmed": 4,
+   "newDetections": "DATA_INSUFFICIENT",
+   "repeats": "DATA_INSUFFICIENT",
+   "confirmationRatePct": 0.15,
+   "dataQuality": "OK"
   }
  ],
  "weekly": [
@@ -243,26 +276,26 @@
   },
   {
    "period": "2026-W40",
-   "sessions": 1,
-   "verifiedSessions": 1,
-   "unverifiedSessions": 0,
-   "scanned": 2676,
-   "starting": 423,
-   "confirmed": 0,
-   "uniqueConfirmed": 0,
+   "sessions": 4,
+   "verifiedSessions": 2,
+   "unverifiedSessions": 2,
+   "scanned": 5338,
+   "starting": 944,
+   "confirmed": 4,
+   "uniqueConfirmed": 4,
    "repeats": 0,
-   "avgConfirmedPerSession": 0,
-   "confirmationRatePct": 0,
-   "trend": "FLAT",
-   "dataQuality": "COMPLETE"
+   "avgConfirmedPerSession": 2,
+   "confirmationRatePct": 0.07,
+   "trend": "UP",
+   "dataQuality": "PARTIAL (2 of 4 sessions verified)"
   }
  ],
  "monthly": [
   {
    "period": "2026-09",
-   "sessions": 16,
+   "sessions": 18,
    "verifiedSessions": 2,
-   "unverifiedSessions": 14,
+   "unverifiedSessions": 16,
    "scanned": 5336,
    "starting": 813,
    "confirmed": 0,
@@ -271,7 +304,22 @@
    "avgConfirmedPerSession": 0,
    "confirmationRatePct": 0,
    "trend": "DATA_INSUFFICIENT",
-   "dataQuality": "PARTIAL (2 of 16 sessions verified)"
+   "dataQuality": "PARTIAL (2 of 18 sessions verified)"
+  },
+  {
+   "period": "2026-10",
+   "sessions": 1,
+   "verifiedSessions": 1,
+   "unverifiedSessions": 0,
+   "scanned": 2662,
+   "starting": 521,
+   "confirmed": 4,
+   "uniqueConfirmed": 4,
+   "repeats": 0,
+   "avgConfirmedPerSession": 4,
+   "confirmationRatePct": 0.15,
+   "trend": "UP",
+   "dataQuality": "COMPLETE"
   }
  ]
 }
