@@ -1,17 +1,17 @@
 {
   "status": "VERIFIED",
-  "generatedAt": "2026-10-05T21:09:56.676Z",
+  "generatedAt": "2026-10-06T05:11:12.773Z",
   "source": "data/market-history/*.json (real NSE EOD bhavcopy-derived files)",
   "dateRange": {
     "first": "2025-09-02",
-    "last": "2026-10-01"
+    "last": "2026-10-05"
   },
-  "tradingSessions": 281,
+  "tradingSessions": 282,
   "cm": {
-    "daysWithData": 281,
+    "daysWithData": 282,
     "daysWithoutData": 0,
-    "totalRows": 677305,
-    "rowsWithDeliveryValuePresent": 677304,
+    "totalRows": 679983,
+    "rowsWithDeliveryValuePresent": 679982,
     "deliveryFieldCoveragePct": 100,
     "emptyDates": [],
     "suspectedDuplicateSessions": [
@@ -135,10 +135,10 @@
     ]
   },
   "fo": {
-    "daysWithData": 268,
+    "daysWithData": 269,
     "daysWithoutData": 13,
-    "totalRows": 167321,
-    "rowsWithOiPresent": 167321,
+    "totalRows": 167974,
+    "rowsWithOiPresent": 167974,
     "oiFieldCoveragePct": 100,
     "emptyDates": [
       "2025-10-22",
@@ -162,7 +162,8 @@
     "reason": "No NSE trading-holiday calendar exists in this repository, so a weekday with no stored file cannot be distinguished from a genuine market holiday. Listed for disclosure only — not asserted to be a gap or an error.",
     "dates": [
       "2025-10-02",
-      "2026-09-14"
+      "2026-09-14",
+      "2026-10-02"
     ]
   }
 }
