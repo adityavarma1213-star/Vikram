@@ -31,10 +31,16 @@
     return sortRows(rows).map((r, i, all) => {
       const close = num(r.close ?? r.last_price);
       const prev = num(i ? (all[i - 1].close ?? all[i - 1].last_price) : r.prev_close);
-      const volume = num(r.volume) || 0;
+      // num() maps a blank/whitespace-only string to 0 (Number('  ') === 0); treat that as missing here, OBV only.
+      const volume = typeof r.volume === 'string' && r.volume.trim() === '' ? null : num(r.volume);
       if (close !== null && prev !== null) {
-        if (close > prev) obv += volume;
-        else if (close < prev) obv -= volume;
+        // Missing volume must not become zero: when the price direction is known but volume is not,
+        // this row's OBV contribution is unknown, so cumulative OBV is unknown (null) from here on.
+        if (close !== prev && volume === null) obv = null;
+        else if (obv !== null) {
+          if (close > prev) obv += volume;
+          else if (close < prev) obv -= volume;
+        }
       }
       return { ...r, obv };
     });
