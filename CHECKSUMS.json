@@ -1,4 +1,6 @@
 {
+  "_note_obv_fix_authorized": "NOTE (OBV fix, authorized): this file is an older manifest of an uploaded ZIP and is not read by any test or workflow. The Vikram-main/accumulation/engine.js entry below is the PREVIOUS authorized baseline (hash ae6a8f1f..., commit 896047f, tag pre-obv-fix-baseline). The CURRENT authorized baseline after the approved OBV missing-volume fix (commit 298539c) is given in _current_authorized_engine_sha256. The enforced record is docs/recovery/frozen-hashes.json.",
+  "_current_authorized_engine_sha256": "124e5dd03cd66dd42208d22a41315a9df849edbb55b79fad80ed47617bd11dfb",
   "Vikram-main/ACCUMULATION_SCANNER_STATUS.md": "5cf4ab8db3287b6c57336b9d886f1cd96f11a936d3a801ea770b9e367155f0fe",
   "Vikram-main/analysis.html": "37aa40799a2a81ad6a5bd6970a1449ff51fa67250ac00b231c062b9667519917",
   "Vikram-main/sw.js": "c9a7b8093d4350303c5d2bc7573d506ead2c5a67923f83a01012a04b38058d60",
