@@ -297,6 +297,15 @@
    "snapshotHash": "37f5d4a4ee9205cfb6d9234eb68dde2f534817a97a118a0842b6027bbf8837b4",
    "prevChainHash": "291d2b14f5505880172b3697f9c67a1f15239c28935869c74e2ab9b33403af12",
    "chainHash": "5c8a08ff30f33927e20f7f0cce0e0b78801478de8dc11b66a56529eca874cb48"
+  },
+  {
+   "scanDate": "2026-10-07",
+   "scanTimestamp": "2026-10-07T19:40:27.846Z",
+   "file": "2026-10-07/20261007T194027846Z.json",
+   "classification": "VERIFIED_CONFIRMATIONS",
+   "snapshotHash": "be0cbf4342d384887188938b77ff28611a38643571b5ff7e2a12ecdfede0efb8",
+   "prevChainHash": "5c8a08ff30f33927e20f7f0cce0e0b78801478de8dc11b66a56529eca874cb48",
+   "chainHash": "36a8c1737c56e02366fceb599069da9e04025cb5c2475670abe4f4139b2ea6fc"
   }
  ]
 }

@@ -1,7 +1,7 @@
 {
  "schema": "v15-catch-frequency/1",
  "firstSnapshotDate": "2026-09-04",
- "sessions": 21,
+ "sessions": 22,
  "daily": [
   {
    "date": "2026-09-04",
@@ -233,6 +233,17 @@
    "repeats": 2,
    "confirmationRatePct": 0.49,
    "dataQuality": "OK"
+  },
+  {
+   "date": "2026-10-07",
+   "status": "VERIFIED_CONFIRMATIONS",
+   "scanned": 2678,
+   "starting": 421,
+   "confirmed": 4,
+   "newDetections": 3,
+   "repeats": 1,
+   "confirmationRatePct": 0.15,
+   "dataQuality": "OK"
   }
  ],
  "weekly": [
@@ -313,16 +324,16 @@
   },
   {
    "period": "2026-W41",
-   "sessions": 2,
-   "verifiedSessions": 2,
+   "sessions": 3,
+   "verifiedSessions": 3,
    "unverifiedSessions": 0,
-   "scanned": 5357,
-   "starting": 889,
-   "confirmed": 19,
-   "uniqueConfirmed": 17,
-   "repeats": 2,
-   "avgConfirmedPerSession": 9.5,
-   "confirmationRatePct": 0.35,
+   "scanned": 8035,
+   "starting": 1310,
+   "confirmed": 23,
+   "uniqueConfirmed": 20,
+   "repeats": 3,
+   "avgConfirmedPerSession": 7.67,
+   "confirmationRatePct": 0.29,
    "trend": "UP",
    "dataQuality": "COMPLETE"
   }
@@ -345,16 +356,16 @@
   },
   {
    "period": "2026-10",
-   "sessions": 3,
-   "verifiedSessions": 3,
+   "sessions": 4,
+   "verifiedSessions": 4,
    "unverifiedSessions": 0,
-   "scanned": 8019,
-   "starting": 1410,
-   "confirmed": 23,
-   "uniqueConfirmed": 21,
-   "repeats": 2,
-   "avgConfirmedPerSession": 7.67,
-   "confirmationRatePct": 0.29,
+   "scanned": 10697,
+   "starting": 1831,
+   "confirmed": 27,
+   "uniqueConfirmed": 24,
+   "repeats": 3,
+   "avgConfirmedPerSession": 6.75,
+   "confirmationRatePct": 0.25,
    "trend": "UP",
    "dataQuality": "COMPLETE"
   }
