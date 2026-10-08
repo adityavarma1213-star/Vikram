@@ -306,6 +306,15 @@
    "snapshotHash": "be0cbf4342d384887188938b77ff28611a38643571b5ff7e2a12ecdfede0efb8",
    "prevChainHash": "5c8a08ff30f33927e20f7f0cce0e0b78801478de8dc11b66a56529eca874cb48",
    "chainHash": "36a8c1737c56e02366fceb599069da9e04025cb5c2475670abe4f4139b2ea6fc"
+  },
+  {
+   "scanDate": "2026-10-08",
+   "scanTimestamp": "2026-10-08T19:34:53.854Z",
+   "file": "2026-10-08/20261008T193453854Z.json",
+   "classification": "VERIFIED_CONFIRMATIONS",
+   "snapshotHash": "feb66a6c423ee78969735c04cc6b9d1f7205bd84fe0efc3fb77c7a593ce2642b",
+   "prevChainHash": "36a8c1737c56e02366fceb599069da9e04025cb5c2475670abe4f4139b2ea6fc",
+   "chainHash": "1d89711da4007aace8a1e7f955e67200e2cd0ac25662d7a3918f83aff0eb057b"
   }
  ]
 }
