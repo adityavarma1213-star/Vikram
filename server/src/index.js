@@ -187,30 +187,15 @@ app.get('/api/research/coverage-report',(_req,res)=>{
   if (report.status !== 'VERIFIED') return res.status(503).json({ status: report.status, reason: report.reason });
   res.json(report.data);
 });
-// --- NSE Data Management (acquisition). Gated behind BOTH authentication (requireAuthMw) AND
-// server-side admin authorization (requireAdmin, backed by the ADMIN_EMAILS allowlist — see
-// server/src/adminAuth.js). Being logged in is NOT sufficient on its own: any visitor can create
-// an account through the same auto-register flow Alerts uses, so triggering a real NSE fetch +
-// database write requires being on the admin allowlist too. This calls the REAL, unmodified
-// ingestCm/ingestFo/materializeScannerResults functions in server/src/ingest.js — the same code
-// path the scheduled cron job uses — it does not simulate, mock, or fabricate a result. A
-// Postgres advisory lock inside runIncrementalIngest rejects a second concurrent run with
-// INGESTION_ALREADY_RUNNING rather than queuing or racing it.
-const { runIncrementalIngest } = require('./ingest');
+// --- NSE Data Management. The admin route that started a live NSE download
+// (POST /api/admin/ingest/run) was REMOVED together with the NSE acquisition code (see
+// docs/NSE_ACQUISITION_REMOVED.md). Only the read-only history of past ingestion runs remains,
+// gated behind authentication AND the ADMIN_EMAILS allowlist (server/src/adminAuth.js).
 const { requireAdmin } = require('./adminAuth');
-app.post('/api/admin/ingest/run',requireAuthMw,requireAdmin(pool),async(_req,res)=>{
-  try{
-    const result = await runIncrementalIngest();
-    const statusCode = { SUCCESS: 200, NO_NEW_DATA: 202, BLOCKED: 409, FAILED: 502 }[result.status] || 500;
-    res.status(statusCode).json(result);
-  }catch(e){
-    res.status(502).json({ status: 'ERROR', reason: e.message });
-  }
-});
 app.get('/api/admin/ingestion-runs',requireAuthMw,requireAdmin(pool),async(_req,res)=>{
   try{
     const q = await pool.query('SELECT id,segment,trade_date,status,row_count,invalid_count,schema_version,error,created_at FROM ingestion_runs ORDER BY created_at DESC LIMIT 30');
-    res.json({ runs: q.rows, note: 'CM/FO rows are only inserted on a successful write; segment=SYSTEM rows (status: blocked/no_new_data/failed) record acquisition attempts that did not result in a successful per-day ingestion.' });
+    res.json({ runs: q.rows, note: 'Read-only history of past ingestion runs. Direct NSE acquisition has been removed; no new runs can be started.' });
   }catch(e){
     res.status(503).json({ status: 'DATA_INSUFFICIENT', reason: e.message });
   }
