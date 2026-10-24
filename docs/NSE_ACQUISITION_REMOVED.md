@@ -26,6 +26,9 @@ a scheduled trigger for downloads, or a removed function returns.
 
 ## Not covered by this change
 - Previously acquired NSE-sourced data still in `data/` and still published. A separate decision is needed.
-- Other git branches still contain the old downloader code until separately handled.
-- Anything configured outside this repository (Render dashboard, GitHub settings, personal scripts).
+## Branch audit and verification (2026-10-24)
+- All 18 branches visible through the connected GitHub repository access were reviewed for the known acquisition entry points. The scheduled workflow and Render cron are absent on every branch checked; the identified downloader files and manual ingestion entry points were removed where present.
+- The main-branch offline guard `server/test/noDirectNseAcquisition.test.js` passed in GitHub Actions run 40144337776. The complete server test chain still fails earlier in `researchStatic.test.js`: the checked-in coverage report ends at 2026-10-07 while stored market history includes 2026-10-08. That is a stale derived report, not evidence of an NSE request.
+- The V15 release verification on `recovery/v15-pipeline-2026-10-03` confirms the frozen SHA-256 manifest, but its separate comparison against current `main` fails because `accumulation/engine.js` differs between those refs. This cleanup did not edit the V15 engine or other frozen V15 files; that pre-existing branch divergence remains unresolved and must not be hidden.
+- This is a documented audit of the known paths and files, not proof that no overlooked custom script exists. The live Render dashboard, other external schedulers, deployed copies, GitHub secrets/settings, and personal scripts cannot be verified from repository contents alone.
 - A future data provider needs separate authorization; none was added.
