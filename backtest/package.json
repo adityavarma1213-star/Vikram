@@ -7,7 +7,8 @@
   },
   "scripts": {
     "backtest": "node backtestRunner.js",
-    "report": "python3 reportGenerator.py"
+    "report": "python3 reportGenerator.py",
+    "test": "node test/validators.test.js && node test/manifest.test.js && node test/productionGate.test.js && node test/backtestRunner.test.js && node test/asm.test.js && node test/signalEventStore.test.js && node test/hiddenGemsBacktest.test.js && node test/dateNormalize.test.js && node test/manifestIntegrity.test.js && node test/corporateActions.test.js && node test/detectionEvents.test.js && node test/staleDuplicateDetector.test.js && node test/accumulationDNA.test.js && node test/soai.test.js && node test/falseAccumulationDetector.test.js && node test/accumulationIntelligence.test.js && node test/signalDNA.test.js && node test/historicalAnalogueEngine.test.js && node test/marketRegimeEngine.test.js && node test/sectorAccumulationEngine.test.js && node test/dataContract.test.js && node test/accumulationChain.test.js && node test/forensicSignalReplay.test.js && node test/telemetryRetention.test.js && node test/v15Frozen.test.js"
   },
   "dependencies": {
     "csv-parse": "^5.5.6",
