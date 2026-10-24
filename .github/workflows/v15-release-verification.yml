@@ -49,7 +49,7 @@ jobs:
       - name: Syntax check of new and changed modules
         run: |
           for f in server/src/dataQuality.js server/src/v15SnapshotStore.js server/src/catchFrequency.js \
-                   server/src/ingest.js server/src/staticSnapshot.js backtest/nseDownloader.js backtest/lib/validators.js \
+                   server/src/ingest.js server/src/staticSnapshot.js backtest/lib/validators.js \
                    backtest/lib/telemetrySchema.js backtest/lib/detectionEvents.js backtest/backtestRunner.js \
                    backtest/replayRecovered.js scripts/writeV15Snapshot.js scripts/buildCatchFrequency.js \
                    scripts/reconstructSnapshotsFromGit.js scripts/verifyV15SnapshotBehavior.js; do
@@ -89,12 +89,10 @@ jobs:
       - name: Previously BLOCKED tests, run explicitly (all seven; any failure fails the step)
         run: |
           fail=0
-          for t in backtest/test/downloaderResume.test.js \
-                   server/test/bhavcopyDateNormalization.test.js \
+          for t in server/test/bhavcopyDateNormalization.test.js \
                    server/test/deliveryColumnRequired.test.js \
                    server/test/detectionHistory.test.js \
                    server/test/indexUniverses.test.js \
-                   server/test/ingestRangeBackfill.test.js \
                    server/test/numericMissingValueCoercion.test.js; do
             echo "::group::$t"
             if (cd "$(dirname "$t")" && node "$(basename "$t")"); then echo "RESULT PASS $t"; else echo "RESULT FAIL $t"; fail=1; fi
@@ -111,12 +109,10 @@ jobs:
             echo "::endgroup::"
           done
           exit $fail
-      # liveNetworkProbe is excluded on purpose: it probes live NSE reachability, not the repair.
       - name: Every other test file not in either npm chain
         run: |
           fail=0
           for t in backtest/test/*.test.js server/test/*.test.js; do
-            case "$t" in *liveNetworkProbe*) continue;; esac
             d="$(dirname "$t")"; b="$(basename "$t")"
             if (cd "$d" && node "$b") >/tmp/t.log 2>&1; then echo "PASS $t"; else echo "FAIL $t"; tail -20 /tmp/t.log; fail=1; fi
           done
