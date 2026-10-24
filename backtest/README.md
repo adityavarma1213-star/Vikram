@@ -1,3 +1,8 @@
+> **NOTICE — DIRECT NSE ACQUISITION REMOVED.** `nseDownloader.js`, `lib/httpClient.js`, the `download`
+> and `test:live-network-probe` scripts and the NSE corporate-actions fetch were deleted from this
+> repository (see `docs/NSE_ACQUISITION_REMOVED.md`). The steps below describe the *former* workflow and are
+> kept only as historical documentation. Do not follow the download steps; they no longer exist.
+
 # VIKRAM 5-Year NSE Backtest Pipeline
 
 ## Current status (see `reports/FINAL_REPORT.json` / `.xlsx` for full detail)
