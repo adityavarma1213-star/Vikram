@@ -5,14 +5,7 @@
 // data/market-history files by scripts/buildNseCoverageReport.js. Nothing is recomputed or
 // estimated in the browser.
 //
-// Acquisition section is honest about what this page can and cannot do:
-//   - If no live backend is configured (the common case — see accumulation/api.js's own
-//     isStaticPages detection, reused here), the "Acquire Latest Available NSE Session" button is
-//     disabled and the
-//     page explains exactly why, plus the real manual command that would run it.
-//   - If a live backend IS configured, the button calls the real, unmodified
-//     POST /api/admin/ingest/run route, which runs the exact same server/src/ingest.js code the
-//     scheduled cron job uses. It is never a mock — a real result (or a real failure) comes back.
+// The former acquisition UI has been removed; this page only reads stored data and read-only history.
 (function () {
   'use strict';
 
@@ -129,53 +122,11 @@
   function renderAcquisitionControl() {
     const el = $('acquisitionControl');
     if (!LIVE_BACKEND_CONFIGURED) {
-      el.innerHTML = `
-        <button class="btn btn-primary acquire-btn" disabled title="No live backend configured on this deployment">Acquire Latest Available NSE Session</button>
-        <p class="text-muted" style="font-size:0.8rem;margin-top:10px">To run it manually against a deployment that has a database and the required environment variables: <code>DATABASE_URL=... AUTH_SECRET=... node server/src/ingest.js</code> (from the <code>server/</code> directory). This is the exact same code this button would call if a live backend were connected. It acquires only the single most recent not-yet-stored NSE trading day — there is no arbitrary historical backfill in this codebase.</p>`;
-      return;
-    }
-    el.innerHTML = `<button id="runIngestBtn" class="btn btn-primary acquire-btn">Acquire Latest Available NSE Session</button>
-      <p class="text-muted" style="font-size:0.8rem;margin-top:8px">Fetches the most recent not-yet-stored NSE trading day (CM + F&amp;O) and re-materializes scanner results. Requires signing in AND being on this deployment's admin allowlist (<code>ADMIN_EMAILS</code>) — a regular logged-in account is not sufficient. Only one acquisition can run at a time; a second attempt while one is in progress is rejected as <code>INGESTION_ALREADY_RUNNING</code>.</p>`;
-    $('runIngestBtn').addEventListener('click', runIngestion);
-  }
+      el.innerHTML   // ---------- Direct NSE acquisition removed ----------
+  function renderBackendStatusLine() { const line = $('backendStatusLine'); if (line) line.textContent = 'Direct NSE acquisition has been removed. This page displays previously stored data only.'; }
+  function renderAcquisitionControl() { const el = $('acquisitionControl'); if (el) el.textContent = 'NSE download and ingestion controls are no longer available.'; const result = $('acquisitionResult'); if (result) result.textContent = ''; }
 
-  async function runIngestion() {
-    const btn = $('runIngestBtn');
-    const resultEl = $('acquisitionResult');
-    btn.disabled = true;
-    btn.textContent = 'Running…';
-    resultEl.innerHTML = '<p class="text-muted">Contacting the live backend…</p>';
-    try {
-      const result = await authedFetch('/api/admin/ingest/run', { method: 'POST' });
-      const log = (result.attempts || []).map(a => a.status === 'INGESTED'
-        ? `INGESTED ${a.date}  CM=${a.cmRows}  FO=${a.foRows}  materialized=${a.materializedSymbols}`
-        : `SKIPPED ${a.date}: ${a.reason}`
-      ).join('\n');
-      if (result.status === 'SUCCESS') {
-        resultEl.innerHTML = `<p style="color:var(--color-green);font-weight:700">SUCCESS — ingested ${esc(result.ingestedDate)} (CM=${result.cmRows} rows, F&O=${result.foRows} rows), materialized ${result.materializedSymbols} symbol(s).</p><div class="acquisition-log">${esc(log)}</div>`;
-      } else if (result.status === 'BLOCKED') {
-        resultEl.innerHTML = `<p style="color:#f2c14e;font-weight:700">INGESTION_ALREADY_RUNNING — another acquisition is already in progress. Try again shortly.</p>`;
-      } else if (result.status === 'FAILED') {
-        resultEl.innerHTML = `<p style="color:var(--color-red);font-weight:700">FAILED — ${esc(result.reason)}</p>`;
-      } else {
-        resultEl.innerHTML = `<p style="color:#f2c14e;font-weight:700">NO NEW DATA — ${esc(result.reason)}</p><div class="acquisition-log">${esc(log)}</div>`;
-      }
-      loadIngestionRuns();
-    } catch (error) {
-      resultEl.innerHTML = `<p style="color:var(--color-red);font-weight:700">ERROR — ${esc(error.message)}</p>`;
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Acquire Latest Available NSE Session';
-    }
-  }
-
-  // Loading ingestion history is an admin-only action gated behind requireAdmin() on the
-  // server. It must NEVER trigger a credential prompt during normal, anonymous page load —
-  // only an explicit "Sign in" click may call ensureAuth() (and, transitively, window.prompt).
-  function renderIngestionSignInPrompt() {
-    const tbody = document.querySelector('#ingestionRunsTable tbody');
-    const lastRunGrid = $('lastRunGrid');
-    tbody.innerHTML = '<tr><td colspan="6" class="text-muted">Ingestion history requires an admin sign-in. <button id="ingestionSignInBtn" class="btn btn-secondary" style="margin-left:8px;padding:2px 10px">Sign in</button></td></tr>';
+n. <button id="ingestionSignInBtn" class="btn btn-secondary" style="margin-left:8px;padding:2px 10px">Sign in</button></td></tr>';
     lastRunGrid.innerHTML = '<p class="text-muted">Sign in as an admin to view the last successful run.</p>';
     const btn = document.getElementById('ingestionSignInBtn');
     if (btn) btn.addEventListener('click', () => loadIngestionRunsAuthenticated(), { once: true });
