@@ -86,7 +86,7 @@ jobs:
         working-directory: backtest
         run: npm test
 
-      - name: Previously BLOCKED tests, run explicitly (all seven; any failure fails the step)
+      - name: Previously BLOCKED tests, run explicitly (any failure fails the step)
         run: |
           fail=0
           for t in server/test/bhavcopyDateNormalization.test.js \
