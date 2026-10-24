@@ -1,3 +1,7 @@
+> **NOTICE — DIRECT NSE ACQUISITION REMOVED.** This repository no longer contains code, scripts, workflows,
+> admin routes or scheduled jobs that download or request data from NSE. Existing stored data and records are
+> preserved. See `docs/NSE_ACQUISITION_REMOVED.md`.
+
 # VIKRAM — Investor Operating System
 
 A five-pillar stock scoring system for NSE-listed companies, built to be honest about what it does and doesn't know.
