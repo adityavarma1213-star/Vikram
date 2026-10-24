@@ -187,9 +187,8 @@ app.get('/api/research/coverage-report',(_req,res)=>{
   if (report.status !== 'VERIFIED') return res.status(503).json({ status: report.status, reason: report.reason });
   res.json(report.data);
 });
-// --- NSE Data Management. The admin route that started a live NSE download
-// (POST /api/admin/ingest/run) was REMOVED together with the NSE acquisition code (see
-// docs/NSE_ACQUISITION_REMOVED.md). Only the read-only history of past ingestion runs remains,
+// --- NSE Data Management. The live acquisition route was removed together with the NSE
+// acquisition code (see docs/NSE_ACQUISITION_REMOVED.md). Only read-only history remains.
 // gated behind authentication AND the ADMIN_EMAILS allowlist (server/src/adminAuth.js).
 const { requireAdmin } = require('./adminAuth');
 app.get('/api/admin/ingestion-runs',requireAuthMw,requireAdmin(pool),async(_req,res)=>{
