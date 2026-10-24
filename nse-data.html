@@ -78,21 +78,9 @@
   </section>
 
   <section class="dashboard-card" id="acquisition">
-    <h2 class="card-headline">Acquire / Download NSE Data</h2>
-    <p id="backendStatusLine" class="text-muted" style="margin-top:-6px;font-weight:700">Checking backend status…</p>
-
-    <div class="grid-layout cols-2" style="margin-top:10px;gap:16px">
-      <div>
-        <h3 style="font-size:0.9rem;margin-bottom:6px">How acquisition actually works</h3>
-        <p class="text-muted" style="font-size:0.85rem">VIKRAM's real acquisition mechanism (<code>server/src/ingest.js</code>) fetches Cash Market and Futures &amp; Options end-of-day bhavcopy files directly from <code>nsearchives.nseindia.com</code>, one NSE trading day at a time. It searches backward from today for the most recent day not yet stored (up to 10 calendar days), ingests both CM and F&amp;O for that day, then re-materializes scanner results. It runs on a schedule server-side (see <code>render.yaml</code>'s <code>vikram-eod-ingestion</code> cron job) and requires a live Postgres database.</p>
-        <p class="text-muted" style="font-size:0.85rem"><strong>What date range can actually be acquired:</strong> only the most recent not-yet-stored trading day, one at a time. There is currently no bulk/arbitrary historical date-range acquisition (e.g. "fetch Jan 2022–Dec 2023") anywhere in this codebase, on the website or on the backend — building that would be a separate, larger project.</p>
-      </div>
-      <div>
-        <h3 style="font-size:0.9rem;margin-bottom:6px">Run it</h3>
-        <div id="acquisitionControl"></div>
-        <div id="acquisitionResult" style="margin-top:12px"></div>
-      </div>
-    </div>
+    <h2 class="card-headline">NSE Data Acquisition — Removed</h2>
+    <p id="backendStatusLine" class="text-muted" style="margin-top:-6px;font-weight:700">Direct NSE acquisition has been removed.</p>
+    <p class="text-muted" style="font-size:0.85rem">VIKRAM no longer downloads, requests or ingests data directly from NSE, automatically or manually. The data shown here was stored earlier and is retained as historical evidence.</p>
 
     <div style="margin-top:18px">
       <h3 style="font-size:0.9rem;margin-bottom:6px">Last Successful Acquisition (by segment)</h3>
