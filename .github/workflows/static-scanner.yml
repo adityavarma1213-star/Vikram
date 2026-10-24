@@ -1,36 +1,30 @@
-name: VIKRAM Free NSE EOD Scanner
-
-# Regeneration guard: scanner output must be rebuilt from the current canonical engine before Pages deployment.
-# Canonical Pages trigger marker: force regeneration after deployment-workflow consolidation.
+name: VIKRAM Static Site Deployment
 
 on:
   workflow_dispatch:
   push:
     branches: [main]
     paths:
-      - 'server/**'
-      - 'accumulation/**'
+      - 'index.html'
       - 'accumulation.html'
       - 'css/**'
       - 'js/**'
-      - 'index.html'
+      - 'icons/**'
+      - 'public/**'
       - 'data/**'
-      - 'tools/clean-market-history.js'
       - '.github/workflows/static-scanner.yml'
-  schedule:
-    - cron: '30 13 * * 1-5'
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
 concurrency:
-  group: pages-vikram-scanner
+  group: pages-vikram-static-site
   cancel-in-progress: true
 
 jobs:
-  ingest-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -38,52 +32,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install scanner dependencies
-        working-directory: server
-        run: npm install --no-audit --no-fund
-      - name: Validate source
-        run: |
-          node --check server/src/staticSnapshot.js
-          node --check server/src/backfillHistory.js
-          node --check server/src/scannerEngine.js
-          node --check server/src/scanMaterializer.js
-          node --check server/src/ingest.js
-          node --check js/app.js
-          node --check js/search.js
-          node --check js/dataEngine.js
-          node --check tools/clean-market-history.js
-      - name: Run scanner tests
-        working-directory: server
-        run: npm test
-      - name: Backfill up to one year of NSE EOD history
-        run: node server/src/backfillHistory.js
-      - name: Remove invalid weekend/mislabeled history before materialization
-        run: node tools/clean-market-history.js
-      - name: Fetch latest NSE EOD and build static scanner
-        run: node server/src/staticSnapshot.js
-      - name: Validate generated full-universe snapshot
-        run: npm --prefix server run validate:snapshot
-      - name: Persist verified market data
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/scanner.json data/market-history
-          if git diff --cached --quiet; then
-            echo 'No market-data changes to commit.'
-          else
-            git commit -m 'chore: refresh verified NSE EOD scanner data'
-            git push
-          fi
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
-      - name: Upload Pages artifact
+      - name: Upload existing static site files (no data acquisition)
         uses: actions/upload-pages-artifact@v4
         with:
           path: .
-      - name: Deploy to GitHub Pages
+      - name: Deploy static site
         id: deployment
         uses: actions/deploy-pages@v4
