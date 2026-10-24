@@ -5,14 +5,7 @@
 // data/market-history files by scripts/buildNseCoverageReport.js. Nothing is recomputed or
 // estimated in the browser.
 //
-// Acquisition section is honest about what this page can and cannot do:
-//   - If no live backend is configured (the common case — see accumulation/api.js's own
-//     isStaticPages detection, reused here), the "Acquire Latest Available NSE Session" button is
-//     disabled and the
-//     page explains exactly why, plus the real manual command that would run it.
-//   - If a live backend IS configured, the button calls the real, unmodified
-//     POST /api/admin/ingest/run route, which runs the exact same server/src/ingest.js code the
-//     scheduled cron job uses. It is never a mock — a real result (or a real failure) comes back.
+// The former acquisition UI has been removed. This page only reads stored data and read-only history.
 (function () {
   'use strict';
 
