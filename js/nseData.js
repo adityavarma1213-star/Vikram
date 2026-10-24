@@ -113,23 +113,17 @@
   }
 
   // ---------- Acquisition ----------
+  // Direct NSE acquisition is removed; this page only displays stored data and read-only history.
   function renderBackendStatusLine() {
-    $('backendStatusLine').textContent = LIVE_BACKEND_CONFIGURED
-      ? `Live backend detected at ${API_BASE} — acquisition can be triggered from this page.`
-      : 'No live backend is configured on this deployment (this is the static site) — acquisition cannot be triggered from here. See the manual command below.';
+    const line = $('backendStatusLine');
+    if (line) line.textContent = 'Direct NSE acquisition has been removed. This page displays previously stored data only.';
   }
 
   function renderAcquisitionControl() {
     const el = $('acquisitionControl');
-    if (!LIVE_BACKEND_CONFIGURED) {
-      el.innerHTML   // ---------- Direct NSE acquisition removed ----------
-  function renderBackendStatusLine() { const line = $('backendStatusLine'); if (line) line.textContent = 'Direct NSE acquisition has been removed. This page displays previously stored data only.'; }
-  function renderAcquisitionControl() { const el = $('acquisitionControl'); if (el) el.textContent = 'NSE download and ingestion controls are no longer available.'; const result = $('acquisitionResult'); if (result) result.textContent = ''; }
-
-n. <button id="ingestionSignInBtn" class="btn btn-secondary" style="margin-left:8px;padding:2px 10px">Sign in</button></td></tr>';
-    lastRunGrid.innerHTML = '<p class="text-muted">Sign in as an admin to view the last successful run.</p>';
-    const btn = document.getElementById('ingestionSignInBtn');
-    if (btn) btn.addEventListener('click', () => loadIngestionRunsAuthenticated(), { once: true });
+    if (el) el.textContent = 'NSE download and ingestion controls are no longer available.';
+    const result = $('acquisitionResult');
+    if (result) result.textContent = '';
   }
 
   async function loadIngestionRuns() {
