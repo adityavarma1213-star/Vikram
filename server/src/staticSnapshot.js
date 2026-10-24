@@ -1,107 +1,14 @@
+// Direct NSE acquisition removed. Read-only materialization of previously stored snapshots.
 const fs = require('fs');
 const path = require('path');
-const { parse } = require('csv-parse/sync');
-const unzipper = require('unzipper');
-const { toIstCalendarDate, addDays, formatYmd, formatDdMmYyyy, formatYmdCompact } = require('./istDate');
 const { buildScannerResults, buildPeriodResults, MATERIALIZE_LOOKBACK_DAYS } = require('./scanMaterializer');
-const { fetchIndexUniverses, membershipFor } = require('./indexUniverses');
 const { buildDetectionMap } = require('./detectionHistory');
-
 const ROOT = path.resolve(__dirname, '../..');
-const accumulationEngine = require(path.join(ROOT, 'accumulation', 'engine'));
 const DATA_DIR = path.join(ROOT, 'data');
 const HISTORY_DIR = path.join(DATA_DIR, 'market-history');
 const SNAPSHOT_FILE = path.join(DATA_DIR, 'scanner.json');
-const SEARCH_WINDOW_DAYS = 10;
-const NSE_HOME = 'https://www.nseindia.com';
-const NSE_EQUITY_UNIVERSE = 'https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv';
-const HEADERS = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/134.0 Safari/537.36', Accept: '*/*', 'Accept-Language': 'en-US,en;q=0.9', Referer: `${NSE_HOME}/` };
-function clean(v) { return v === undefined || v === null || String(v).trim() === '' ? null : String(v).trim(); }
-function num(v) { if (v === undefined || v === null || String(v).trim() === '') return null; const x = Number(String(v).replace(/,/g, '')); return Number.isFinite(x) ? x : null; }
-function parseCsv(buf) { return parse(buf.toString('utf8').replace(/^\uFEFF/, ''), { columns: true, skip_empty_lines: true, trim: true, relax_column_count: false, bom: true }); }
-function requireColumns(rows, source, columns) { if (!rows.length) throw new Error(`${source}: empty CSV`); const headers = new Set(Object.keys(rows[0])); const missing = columns.filter(column => !headers.has(column)); if (missing.length) throw new Error(`${source}: schema mismatch; missing columns: ${missing.join(', ')}`); }
-function sourceTradeDate(rows, requestedDate, source) { const actual = clean(rows.find(r => clean(r.TradDt))?.TradDt); if (!actual) throw new Error(`${source}: missing TradDt source date`); if (actual.slice(0, 10) !== formatYmd(requestedDate)) throw new Error(`${source}: archive returned ${actual.slice(0, 10)} while ${formatYmd(requestedDate)} was requested`); return actual.slice(0, 10); }
-// NSE's "Full Bhavcopy" (sec_bhavdata_full) source reports its DATE1 field as DD-Mon-YYYY
-// (e.g. "25-Sep-2026"), unlike the UDiFF source's ISO TradDt. Normalize to YYYY-MM-DD before
-// comparing against formatYmd(date) so a correctly-dated Full Bhavcopy file is accepted instead
-// of always being rejected and silently falling back to the UDiFF source, which has no delivery
-// columns at all. A value that isn't in this known DD-Mon-YYYY shape is returned unchanged, so a
-// genuinely mismatched or malformed date still fails validation as before.
-const BHAVCOPY_MONTHS = { Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06', Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12' };
-function normalizeBhavcopyDate(raw) { const s = clean(raw); if (!s) return s; const m = /^(\d{2})-([A-Za-z]{3})-(\d{4})$/.exec(s); if (!m) return s; const mon = BHAVCOPY_MONTHS[m[2]]; return mon ? `${m[3]}-${mon}-${m[1]}` : s; }
-async function get(url) { const response = await fetch(url, { headers: HEADERS }); if (!response.ok) throw new Error(`NSE ${response.status} for ${url}`); return Buffer.from(await response.arrayBuffer()); }
-
-// Raw-byte preservation (added 2026-09-16, investigating the recurring delivery=0% anomaly --
-// see REMEDIATION_STATUS.md). This is the ACTUAL live production path that produced the real
-// data/market-history/2026-09-07..15.json anomaly; it never had raw-byte capture before, unlike
-// backtest/nseDownloader.js and server/src/ingest.js which already do. The delivery-column
-// hardening added to this file in an earlier session did NOT resolve the anomaly (2026-09-15's
-// data was ingested after that fix went live and still shows it) -- proving the source columns
-// ARE present and the fix's hypothesis was wrong. This does not diagnose the true cause (this
-// sandbox has no live NSE network access to inspect a real response), but it means the NEXT
-// scheduled run -- which DOES run with real network access via GitHub Actions -- will capture
-// the actual bytes NSE returns, finally making a real diagnosis possible instead of guessing.
-const crypto = require('crypto');
-const RAW_ARCHIVE_DIR = path.join(DATA_DIR, 'raw-archive');
-function preserveRaw(segment, dateStr, url, buffer) {
-  try {
-    const dir = path.join(RAW_ARCHIVE_DIR, segment);
-    fs.mkdirSync(dir, { recursive: true });
-    const ext = url.endsWith('.zip') ? '.zip' : '.csv';
-    fs.writeFileSync(path.join(dir, `${dateStr}${ext}`), buffer);
-    const sha256 = crypto.createHash('sha256').update(buffer).digest('hex');
-    const manifestPath = path.join(RAW_ARCHIVE_DIR, 'manifest.json');
-    let manifest = [];
-    try { manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8')); } catch { /* first write */ }
-    manifest = manifest.filter(m => !(m.segment === segment && m.tradeDate === dateStr));
-    manifest.push({ segment, tradeDate: dateStr, sourceUrl: url, sha256, byteSize: buffer.length, acquiredAt: new Date().toISOString() });
-    fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
-  } catch (e) {
-    console.warn(`Raw-byte preservation failed for ${segment} ${dateStr} (non-fatal): ${e.message}`);
-  }
-}
-async function fetchUniverse() {
-  const rows = parseCsv(await get(NSE_EQUITY_UNIVERSE));
-  requireColumns(rows, 'NSE equity universe', ['SYMBOL', 'NAME OF COMPANY', 'SERIES']);
-  const map = new Map();
-  for (const row of rows) { const symbol = clean(row.SYMBOL); const name = clean(row['NAME OF COMPANY']); if (symbol && name && clean(row.SERIES) === 'EQ') map.set(symbol, name); }
-  return map;
-}
-async function fetchCm(date) {
-  const urls = [`https://nsearchives.nseindia.com/products/content/sec_bhavdata_full_${formatDdMmYyyy(date)}.csv`, `https://nsearchives.nseindia.com/content/cm/BhavCopy_NSE_CM_0_0_0_${formatYmdCompact(date)}_F_0000.csv.zip`];
-  for (const url of urls) {
-    try {
-      const buf = await get(url); let rows;
-      preserveRaw('CM', formatYmd(date), url, buf);
-      if (url.endsWith('.zip')) {
-        const zip = await unzipper.Open.buffer(buf); const file = zip.files.find(f => /\.csv$/i.test(f.path)); if (!file) throw new Error('No CSV found in CM archive'); rows = parseCsv(await file.buffer()); requireColumns(rows, 'NSE UDiFF CM', ['TradDt', 'TckrSymb', 'SctySrs', 'ClsPric', 'PrvsClsgPric', 'TtlTradgVol']);
-        const tradeDate = sourceTradeDate(rows, date, 'NSE UDiFF CM');
-        return rows.filter(r => clean(r.SctySrs) === 'EQ').map(r => ({ symbol: clean(r.TckrSymb), trade_date: tradeDate, close: num(r.ClsPric), last_price: num(r.LastPric), prev_close: num(r.PrvsClsgPric), volume: num(r.TtlTradgVol), deliv_qty: num(r.DlvryQty), deliv_per: num(r.DlvryPct) })).filter(r => r.symbol);
-      }
-      rows = parseCsv(buf); requireColumns(rows, 'NSE security-wise bhavcopy', ['SYMBOL', 'SERIES', 'CLOSE_PRICE', 'PREV_CLOSE', 'TTL_TRD_QNTY', 'DELIV_QTY', 'DELIV_PER']); // hardened: same fix as backtest/nseDownloader.js
-      const tradeDate = normalizeBhavcopyDate(rows.find(r => clean(r.DATE1 || r.TradeDate || r.TRADE_DATE))?.DATE1 || rows.find(r => clean(r.DATE1 || r.TradeDate || r.TRADE_DATE))?.TradeDate || rows.find(r => clean(r.DATE1 || r.TradeDate || r.TRADE_DATE))?.TRADE_DATE);
-      if (tradeDate && tradeDate.slice(0, 10) !== formatYmd(date)) throw new Error(`NSE security-wise bhavcopy: archive returned ${tradeDate.slice(0, 10)} while ${formatYmd(date)} was requested`);
-      return rows.filter(r => clean(r.SERIES) === 'EQ').map(r => ({ symbol: clean(r.SYMBOL), trade_date: formatYmd(date), close: num(r.CLOSE_PRICE), last_price: num(r.LAST_PRICE), prev_close: num(r.PREV_CLOSE), volume: num(r.TTL_TRD_QNTY), deliv_qty: num(r.DELIV_QTY), deliv_per: num(r.DELIV_PER) })).filter(r => r.symbol);
-    } catch (error) {
-      console.warn(`fetchCm: ${url} failed (${error.message}); trying next source`);
-      if (url === urls[urls.length - 1]) throw error;
-    }
-  }
-  throw new Error('No NSE CM file available');
-}
-async function fetchFo(date) {
-  const url = `https://nsearchives.nseindia.com/content/fo/BhavCopy_NSE_FO_0_0_0_${formatYmdCompact(date)}_F_0000.csv.zip`;
-  const rawBuf = await get(url);
-  preserveRaw('FO', formatYmd(date), url, rawBuf);
-  const zip = await unzipper.Open.buffer(rawBuf); const file = zip.files.find(f => /\.csv$/i.test(f.path)); if (!file) throw new Error('No CSV found in NSE F&O archive');
-  const rows = parseCsv(await file.buffer()); requireColumns(rows, 'NSE F&O UDiFF', ['TradDt', 'TckrSymb', 'Sgmt', 'FinInstrmTp', 'XpryDt', 'OpnIntrst', 'ChngInOpnIntrst']);
-  const tradeDate = sourceTradeDate(rows, date, 'NSE F&O UDiFF');
-  const futures = rows.filter(r => clean(r.Sgmt)?.toUpperCase() === 'FO').filter(r => ['STF', 'IDF'].includes(clean(r.FinInstrmTp)?.toUpperCase())).filter(r => ['XX', null].includes(clean(r.OptnTp)?.toUpperCase() || null)).map(r => ({ symbol: clean(r.TckrSymb), trade_date: tradeDate, expiry: clean(r.XpryDt), close: num(r.ClsPric), oi: num(r.OpnIntrst), change_oi: num(r.ChngInOpnIntrst), available: true })).filter(r => r.symbol && r.expiry);
-  if (!futures.length) throw new Error(`NSE F&O archive parsed successfully but produced 0 stock/index futures rows for ${tradeDate}`);
-  return futures;
-}
-function readHistory() { fs.mkdirSync(HISTORY_DIR, { recursive: true }); return fs.readdirSync(HISTORY_DIR).filter(name => /^\d{4}-\d{2}-\d{2}\.json$/.test(name)).sort().slice(-MATERIALIZE_LOOKBACK_DAYS).map(name => JSON.parse(fs.readFileSync(path.join(HISTORY_DIR, name), 'utf8'))); }
-function writeHistory(snapshot) { fs.mkdirSync(HISTORY_DIR, { recursive: true }); fs.writeFileSync(path.join(HISTORY_DIR, `${snapshot.tradeDate}.json`), `${JSON.stringify(snapshot)}\n`); const files = fs.readdirSync(HISTORY_DIR).filter(name => /^\d{4}-\d{2}-\d{2}\.json$/.test(name)).sort(); for (const name of files.slice(0, -MATERIALIZE_LOOKBACK_DAYS)) fs.unlinkSync(path.join(HISTORY_DIR, name)); }
+const accumulationEngine = require(path.join(ROOT, 'accumulation', 'engine'));
+function readHistory() { if (!fs.existsSync(HISTORY_DIR)) return []; return fs.readdirSync(HISTORY_DIR).filter(name => /^\d{4}-\d{2}-\d{2}\.json$/.test(name)).sort().slice(-MATERIALIZE_LOOKBACK_DAYS).map(name => JSON.parse(fs.readFileSync(path.join(HISTORY_DIR, name), 'utf8'))); }
 function materialize(historySnapshots) {
   const historyBySymbol = new Map(); const futuresBySymbolDate = new Map(); const derivativesSymbols = new Set();
   for (const day of historySnapshots) { for (const row of day.cm || []) { if (!historyBySymbol.has(row.symbol)) historyBySymbol.set(row.symbol, []); historyBySymbol.get(row.symbol).push(row); } for (const row of day.futures || []) { const key = `${row.symbol}|${row.trade_date}`; derivativesSymbols.add(String(row.symbol || '').toUpperCase()); const existing = futuresBySymbolDate.get(key); if (!existing || String(row.expiry) < String(existing.expiry)) futuresBySymbolDate.set(key, row); } }
@@ -117,14 +24,5 @@ function buildCurrentDetection(historySnapshots, currentResults) {
   // cannot silently drift out of feature parity with each other again.
   return buildDetectionMap(bySymbol, futures, derivativesSymbols, currentResults, accumulationEngine.evaluate);
 }
-async function ingestLatest() { const anchor = toIstCalendarDate(); let lastError = null; for (let i = 0; i < SEARCH_WINDOW_DAYS; i += 1) { const date = addDays(anchor, -i); try { const cm = await fetchCm(date); let futures = []; try { futures = await fetchFo(date); } catch (error) { console.warn(`F&O unavailable for ${formatYmd(date)}: ${error.message}`); } const snapshot = { tradeDate: formatYmd(date), cm, futures, generatedAt: new Date().toISOString() }; writeHistory(snapshot); return snapshot; } catch (error) { lastError = error; console.log(`SKIP ${formatYmd(date)}: ${error.message}`); } } throw new Error(`No recent NSE CM file was available in the last ${SEARCH_WINDOW_DAYS} calendar days: ${lastError?.message || 'unknown error'}`); }
-async function main() {
-  const latest = await ingestLatest(); const history = readHistory(); const materialized = materialize(history); let universe = new Map(); try { universe = await fetchUniverse(); } catch (error) { console.warn(`NSE company-name universe unavailable: ${error.message}`); }
-  let indexUniverses = null; try { indexUniverses = await fetchIndexUniverses(get); } catch (error) { console.warn(`Nifty index constituent data unavailable: ${error.message}`); }
-  const latestSymbols = new Set((latest.cm || []).map(row => String(row.symbol || '').toUpperCase())); const currentResults = materialized.results.filter(row => String(row.tradeDate || '') === latest.tradeDate && latestSymbols.has(String(row.symbol || '').toUpperCase()));
-  const detection = buildCurrentDetection(history, currentResults); const addNames = rows => rows.map(row => ({ ...row, companyName: universe.get(row.symbol) || null, indexMembership: indexUniverses ? membershipFor(row.symbol, indexUniverses.memberships) : null, detection: detection.get(String(row.symbol || '').toUpperCase()) || null }));
-  const tradingDays = history.map(day => day.tradeDate).filter(Boolean); const snapshot = { status: 'ok', dataStatus: 'EOD VERIFIED', asOf: latest.tradeDate, generatedAt: new Date().toISOString(), source: 'NSE EOD public archives', universeSource: NSE_EQUITY_UNIVERSE, indexUniverseStatus: indexUniverses?.status || 'DATA N/A', indexUniverseSources: indexUniverses?.sources || {}, historyDays: history.length, tradingDays, results: addNames(currentResults), periods: Object.fromEntries(Object.entries(materialized.periods).map(([key, rows]) => [key, addNames(rows)])) };
-  fs.mkdirSync(DATA_DIR, { recursive: true }); fs.writeFileSync(SNAPSHOT_FILE, `${JSON.stringify(snapshot)}\n`); console.log(`SNAPSHOT ${latest.tradeDate}: ${currentResults.length} current-date symbols from ${history.length} stored trading-day snapshot(s); confirmed streaks: ${detection.size}`);
-}
-if (require.main === module) main().catch(error => { console.error(error); process.exit(1); });
-module.exports = { fetchCm, fetchFo, fetchUniverse, readHistory, writeHistory, materialize, buildCurrentDetection, ingestLatest, parseCsv, requireColumns, sourceTradeDate, num };
+
+module.exports = { readHistory, materialize, buildCurrentDetection };
