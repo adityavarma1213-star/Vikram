@@ -35,13 +35,4 @@ async function materializeScannerResults(){
   return results.length;
 }
 
-async function main(){
-  const anchor=toIstCalendarDate();
-  const SEARCH_WINDOW_DAYS=10;
-  for(let i=0;i<SEARCH_WINDOW_DAYS;i++){const x=addDays(anchor,-i);try{const cm=await ingestCm(x);const fo=await ingestFo(x);console.log(`INGESTED ${formatYmd(x)} CM=${cm} FO=${fo}`);const materialized=await materializeScannerResults();console.log(`MATERIALIZED scanner_results for ${materialized} symbol(s)`);return;}catch(e){console.log(`SKIP ${formatYmd(x)}: ${e.message}`);}}
-  throw new Error(`No recent NSE trading-day file was available in the last ${SEARCH_WINDOW_DAYS} calendar days.`);
-}
-
-if(require.main===module)main().then(()=>pool.end()).catch(e=>{console.error(e);pool.end();process.exit(1)});
-
 module.exports = { materializeScannerResults };
