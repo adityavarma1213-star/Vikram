@@ -109,12 +109,10 @@ jobs:
             echo "::endgroup::"
           done
           exit $fail
-      # liveNetworkProbe is excluded on purpose: it probes live NSE reachability, not the repair.
       - name: Every other test file not in either npm chain
         run: |
           fail=0
           for t in backtest/test/*.test.js server/test/*.test.js; do
-            case "$t" in *liveNetworkProbe*) continue;; esac
             d="$(dirname "$t")"; b="$(basename "$t")"
             if (cd "$d" && node "$b") >/tmp/t.log 2>&1; then echo "PASS $t"; else echo "FAIL $t"; tail -20 /tmp/t.log; fail=1; fi
           done
