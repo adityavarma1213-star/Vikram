@@ -45,6 +45,8 @@ jobs:
       - run: node --check src/ruleEngine/indicators.js
       - run: node --check src/ruleEngine/ruleEvaluator.js
       - run: node --check src/ruleEngine/query.js
+      - name: Offline direct NSE acquisition guard
+        run: node test/noDirectNseAcquisition.test.js
       - name: Unit tests
         run: npm test
       - name: Apply schema against CI Postgres
