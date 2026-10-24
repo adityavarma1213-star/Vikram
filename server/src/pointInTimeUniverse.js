@@ -38,7 +38,7 @@ function isMemberOfIndexOn(symbol, indexName, date, membershipRows) {
   return membershipAsOf(symbol, date, membershipRows).includes(indexName);
 }
 
-// Turns a CURRENT constituent snapshot (e.g. from indexUniverses.fetchIndexUniverses) into
+// Turns a CURRENT constituent snapshot (e.g. a constituent list supplied by an authorized source) into
 // point-in-time rows effective from `snapshotDate` onward. This is real data (the actual
 // official constituent list on the day it was fetched) recorded honestly as a single dated
 // snapshot — it is NOT a claim about any earlier date. Call this once per real trading day (via
