@@ -187,6 +187,7 @@ app.get('/api/research/coverage-report',(_req,res)=>{
   if (report.status !== 'VERIFIED') return res.status(503).json({ status: report.status, reason: report.reason });
   res.json(report.data);
 });
+const { requireAdmin } = require('./adminAuth');
 // Direct NSE acquisition endpoint removed. Existing ingestion history remains read-only.
 app.get('/api/admin/ingestion-runs',requireAuthMw,requireAdmin(pool),async(_req,res)=>{
   try{
