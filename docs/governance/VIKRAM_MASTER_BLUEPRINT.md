@@ -24,7 +24,7 @@ its ONE canonical implementation path, so future work doesn't create a second co
 | Immutable signal events (Hidden Gems/backtest scope) | `backtest/lib/signalEventStore.js` |
 | ASM | `backtest/lib/asm.js` |
 | Backtest runner | `backtest/backtestRunner.js` (event-based signal grouping, real-engine-wired) |
-| Backtest downloader | `backtest/nseDownloader.js` |
+| Backtest downloader | REMOVED — direct NSE acquisition is prohibited (see `docs/NSE_ACQUISITION_REMOVED.md`) |
 | Backtest integrity/gate | `backtest/lib/manifest.js`, `backtest/lib/manifestIntegrity.js`, `backtest/lib/productionGate.js` |
 | Allocation | `server/src/allocation.js` (calculation framework, not a validated methodology) |
 | Live data | `server/src/liveData/*` (gate covers every network entry point) |

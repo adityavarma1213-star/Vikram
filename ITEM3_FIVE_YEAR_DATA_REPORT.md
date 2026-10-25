@@ -1,3 +1,5 @@
+> **HISTORICAL REPORT — CURRENT POLICY APPLIES.** This report was written when a direct NSE downloader existed. That code was deleted (see `docs/NSE_ACQUISITION_REMOVED.md`). Any command below that runs `nseDownloader.js`, `vikram-lite-downloader.js` or an NSE ingestion job can no longer be run and must not be recreated: VIKRAM must never download or scrape data from NSE-hosted sites. Owner-supplied files and properly licensed third-party data are allowed.
+
 # ITEM 3 — Five-Year Data Foundation (September 2021 → September 2026)
 
 ## STATUS: BLOCKED (data acquisition) / PARTIALLY FIXED (pipeline readiness + format research)
@@ -132,7 +134,7 @@ rather than glossed over.
 
 ## To actually complete this item (next steps, for an environment with real NSE network access)
 
-1. Run `node backtest/nseDownloader.js` (or `npm run download` in `backtest/`) with
+1. (HISTORICAL — no longer possible) Run `node backtest/nseDownloader.js` (or `npm run download` in `backtest/`) with
    `startDate = 2021-09-01`, `endDate = 2025-08-31` (the gap before the existing real year) — the
    code already supports this range; it has just never been run against it here.
 2. Watch specifically for the 2024-07-08 format-transition boundary in the resulting manifest —

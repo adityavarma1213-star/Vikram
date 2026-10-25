@@ -32,3 +32,18 @@ a scheduled trigger for downloads, or a removed function returns.
 - The V15 release verification on `recovery/v15-pipeline-2026-10-03` confirms the frozen SHA-256 manifest, but its separate comparison against current `main` fails because `accumulation/engine.js` differs between those refs. This cleanup did not edit the V15 engine or other frozen V15 files; that pre-existing branch divergence remains unresolved and must not be hidden.
 - This is a documented audit of the known paths and files, not proof that no overlooked custom script exists. The live Render dashboard, other external schedulers, deployed copies, GitHub secrets/settings, and personal scripts cannot be verified from repository contents alone.
 - A future data provider needs separate authorization; none was added.
+
+## Permanent rule (applies to every future change)
+
+VIKRAM and its associated services must **never** directly download, scrape, fetch or automatically acquire market data or files from NSE-hosted websites or endpoints. This covers frontend and backend code, Python/JavaScript/shell utilities, GitHub Actions and other CI/CD, Render services and cron jobs, Oracle VMs, cloud functions, external schedulers, backfill jobs, and fallback providers or renamed copies of the deleted downloaders. Do not bypass NSE authentication, access restrictions, rate limits or protections.
+
+**Allowed:** files the owner obtained manually and imports by hand; properly licensed third-party data (for example the gated, off-by-default `server/src/liveData/*` provider), subject to the licence; offline analysis of data already stored in `data/`.
+
+**How this is enforced (all offline, no network):**
+- `server/test/noDirectNseAcquisition.test.js` - NSE host names, removed file names, old function names, schedules, routes.
+- `server/test/noAcquisitionPaths.test.js` - banned dependencies, deploy docs, route table, frontend fetch targets, server call graph.
+- `server/test/nseProhibitionDeep.test.js` - deep scan of the real repository using `server/test/lib/nseProhibitionScanner.js` (split host names, every network/process primitive outside a reviewed allow-list, timers/services/crontab/render workers, workflow commands, provider switches).
+- `server/test/nseProhibitionFixtures.test.js` - 20 prohibited cases that must be caught, plus a clean baseline and legitimate offline cases that must not be flagged.
+- `server/test/serverBoots.test.js` - the server entry point must start.
+
+**Limits (honest):** these are static pattern checks. They cannot see live servers (Render, Oracle VM, external schedulers), and a request hidden by code downloaded at run time would need human review. A new legitimate network user must be added to `ALLOWED_NETWORK` in the scanner on purpose, in a reviewed change. Old downloader code still exists in Git history (for example the tag `pre-obv-fix-baseline`); history was not rewritten.

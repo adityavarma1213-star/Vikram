@@ -1,3 +1,5 @@
+> **HISTORICAL REPORT — CURRENT POLICY APPLIES.** This report was written when a direct NSE downloader existed. That code was deleted (see `docs/NSE_ACQUISITION_REMOVED.md`). Any command below that runs `nseDownloader.js`, `vikram-lite-downloader.js` or an NSE ingestion job can no longer be run and must not be recreated: VIKRAM must never download or scrape data from NSE-hosted sites. Owner-supplied files and properly licensed third-party data are allowed.
+
 # VIKRAM HIDDEN GEMS — OPEN DECISIONS
 
 Companion to `HIDDEN_GEMS_ALGORITHM_SPEC.md`. Nothing here is a final answer — it's the explicit

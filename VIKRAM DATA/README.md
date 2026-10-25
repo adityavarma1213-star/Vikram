@@ -13,22 +13,12 @@ This folder is the local, offline data store for official exchange files used by
 - `52 Week High Low/` — daily NSE 52-week high/low reports
 - `News/` — manually saved company news/announcements
 
-The downloader creates missing subfolders automatically.
+Create any missing subfolders yourself. VIKRAM does not download files for you.
 
 ## Official-source rule
 
 VIKRAM Lite is designed to use official exchange/company-published files. It does not silently replace missing official data with third-party market-data feeds.
 
-For NSE daily EOD data, run:
-
-```bash
-node tools/vikram-lite-downloader.js
-```
-
-Or specify a report date:
-
-```bash
-node tools/vikram-lite-downloader.js 2026-09-05
-```
+**VIKRAM never downloads data from NSE.** The former `tools/vikram-lite-downloader.js` was deleted (see `docs/NSE_ACQUISITION_REMOVED.md`). Put files here only if you obtained them yourself (for example, a manual download by the owner) or from a properly licensed source, and import them manually.
 
 NSE's current All Reports page lists the CM-UDiFF Common Bhavcopy Final, Full Bhavcopy and Security Deliverable data, Security-wise Delivery Positions, and 52 Week High Low Report. BSE files that require portal/date selection should be obtained from the official BSE Market Downloads page.

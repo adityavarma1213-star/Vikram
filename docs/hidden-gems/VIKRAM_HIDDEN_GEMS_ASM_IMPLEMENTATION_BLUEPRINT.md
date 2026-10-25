@@ -1,3 +1,5 @@
+> **HISTORICAL REPORT — CURRENT POLICY APPLIES.** This report was written when a direct NSE downloader existed. That code was deleted (see `docs/NSE_ACQUISITION_REMOVED.md`). Any command below that runs `nseDownloader.js`, `vikram-lite-downloader.js` or an NSE ingestion job can no longer be run and must not be recreated: VIKRAM must never download or scrape data from NSE-hosted sites. Owner-supplied files and properly licensed third-party data are allowed.
+
 # VIKRAM HIDDEN GEMS + ASM — IMPLEMENTATION BLUEPRINT
 
 Status: **RESEARCH / DESIGN — NOTHING IN THIS DOCUMENT IS IMPLEMENTED.**
@@ -464,8 +466,7 @@ real enhancements but are not required for the core claim ("VIKRAM detected this
 market's own price/volume behavior hadn't yet reacted") to be true and testable.
 
 ## Phase 0 — Prerequisite, blocking, no design work needed
-Run `backtest/nseDownloader.js` in an environment with NSE network egress enabled, so real 5-year
-CM/delivery/F&O data actually exists on disk. Nothing past this point can be validated without it.
+Obtain real 5-year CM/delivery/F&O data from an owner-supplied or properly licensed source (direct NSE downloading is prohibited; `backtest/nseDownloader.js` was deleted) and import it manually, so it exists on disk. Nothing past this point can be validated without it.
 (This is infrastructure/ops, not a design decision — flagged here because every later phase
 depends on it.)
 

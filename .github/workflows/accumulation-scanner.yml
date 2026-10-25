@@ -51,6 +51,10 @@ jobs:
         run: node test/noAcquisitionPaths.test.js
       - name: Server entry point loads (offline boot smoke test)
         run: node test/serverBoots.test.js
+      - name: Deep NSE prohibition guard (real repository)
+        run: node test/nseProhibitionDeep.test.js
+      - name: NSE guard regression fixtures (20 prohibited + clean cases)
+        run: node test/nseProhibitionFixtures.test.js
       - name: Unit tests
         run: npm test
       - name: Apply schema against CI Postgres

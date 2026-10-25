@@ -1,3 +1,5 @@
+> **HISTORICAL REPORT — CURRENT POLICY APPLIES.** This report was written when a direct NSE downloader existed. That code was deleted (see `docs/NSE_ACQUISITION_REMOVED.md`). Any command below that runs `nseDownloader.js`, `vikram-lite-downloader.js` or an NSE ingestion job can no longer be run and must not be recreated: VIKRAM must never download or scrape data from NSE-hosted sites. Owner-supplied files and properly licensed third-party data are allowed.
+
 # VIKRAM HIDDEN GEMS — ALGORITHM SPECIFICATION (RESEARCH DRAFT)
 
 Status: **RESEARCH / DESIGN DOCUMENT — NOTHING HERE IS IMPLEMENTED IN PRODUCTION**
@@ -934,7 +936,7 @@ Exact tier weights/thresholds: `REQUIRES BACKTESTING`.
 ## O.1 Precondition — restated from §A.4
 
 **None of the below can run until real NSE data is actually downloaded in an environment with
-NSE network egress enabled.** The existing `backtest/nseDownloader.js` → `backtest/data/manifest.json`
+NSE network egress enabled.** The former `backtest/nseDownloader.js` (deleted; direct NSE acquisition is prohibited) → `backtest/data/manifest.json`
 → `backtest/backtestRunner.js` chain is architecturally ready for this (correct provenance
 gating, correct no-look-ahead signal detection, correct horizon computation) and should be reused
 and extended, not replaced.

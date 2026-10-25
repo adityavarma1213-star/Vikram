@@ -48,7 +48,7 @@ servers were never contacted. Proof of this is captured in
 `nseDownloader.js` against a real 5-year date range, stopped at the very first candidate
 date per the "never substitute fake data" requirement).
 
-## How to actually run this for real
+## HISTORICAL — former workflow (do not follow: NSE acquisition is prohibited and the downloader no longer exists)
 
 1. Run this in an environment whose network egress allowlist includes
    `nsearchives.nseindia.com` and `www.nseindia.com` (no code changes should be required).
