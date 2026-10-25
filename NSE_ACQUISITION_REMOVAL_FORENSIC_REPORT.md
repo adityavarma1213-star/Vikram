@@ -15,7 +15,7 @@
   2. Ten GitHub pull-request refs still contain old acquisition code and `schedule:` workflows (Section 5b).
   3. One branch (`fix/live-data-website-integration`) has a leftover, non-functional `main()` (Section 6).
   4. Four DB-backed tests could not run (Section 7).
-  5. This work is **committed locally only**. It is not pushed, so `main` on GitHub does not yet contain the changes in Section 3.
+  5. The continuation changes (Section 11) are committed locally and exported as patches. They are **not pushed** (no authorized write access in this session).
 
 ## 2. Scope and limits
 - In scope: executable acquisition code, active acquisition configuration, acquisition UI, operator docs, acquisition-only dependencies.
@@ -187,5 +187,66 @@ Hashes were computed before any change and again after the last change. They did
 5. `data/` still publishes NSE-sourced files (policy decision).
 6. Fix or update the failing `researchStatic.test.js` date check separately; set up Postgres to run the 4 DB tests.
 
-## 10. Final commit
-See the repository's Git log for the commit titled "Final NSE acquisition audit: docs, unused dependency, offline audit test, forensic report". The commit is local. Remote status: **not pushed**. 
+## 10. First commit
+`c99d10a0b58f2d6f9ddb421c9d58bd389b1b0cb0` "Final NSE acquisition audit: docs, unused dependency, offline audit test, forensic report" — pushed to `main` and confirmed on a fresh clone of GitHub (fast-forward from `f2a8a4f`). The two `static`-only statements in sections 5-6 ("routes parsed", "call graph") were static checks; Section 11 records a startup crash they could not catch.
+
+## 11. Continuation (2026-10-25)
+
+### 11a. NEW FINDING — server crashed on startup (caused by an earlier cleanup commit, not by downloader code)
+- `server/src/index.js:191` calls `requireAdmin(pool)` but the import line `const { requireAdmin } = require('./adminAuth');` was deleted by commit `c67321b` "Remove manual NSE ingestion API endpoint" (2026-10-24, before this audit). Result: `ReferenceError: requireAdmin is not defined` on startup. Any deployment of `main` (Render runs `node server/src/migrate.js && node server/src/index.js`) would fail to start.
+- Why my first audit missed it: my route-table and call-graph checks were static and I did not boot the server. The existing DB tests `auth` and `fullUniverse` show it (they spawn the server) but were NOT RUN without a database.
+- Fix (1 line): restore the import above the route. `adminAuth.js` is not a frozen file; no V15 file touched.
+- Broken branches (verified by booting each): `main`, `backend-oracle-forensic`, `backend-oracle-hardening`, `fix/obv-missing-volume`, `recovery/v15-pipeline-2026-10-03`, `rsi-multi-timeframe`. The other 12 branches boot. A one-line patch per branch was made in a temporary worktree and boot-verified; patches only touch `server/src/index.js`.
+- New offline test `server/test/serverBoots.test.js`: starts the server entry point with a dummy DB URL on a random local port and fails on any load error. Verified to FAIL on the `origin/main` version (`ReferenceError`) and PASS with the fix. Added to the `npm test` chain and to the `accumulation-scanner.yml` CI.
+- Whether the live Render service is currently down: **NOT VERIFIED** (no access). If it was redeployed from `main` after `c67321b`, it would not start.
+
+### 11b. Pull-request refs `pr/6, 7, 9, 10, 11`
+| Ref | Head SHA | Result |
+|---|---|---|
+| `pr/6` | `2efbaad` "feat: add RSI multi-timeframe scanner support" | head commit is in `main` history; also on `rsi-multi-timeframe` and 6 other branches |
+| `pr/7` | `e5848c4` "docs: add Oracle Always Free backend deployment requirements" | in `main` history |
+| `pr/9` | `b1b02c7` "test(backtest): make downloaderResume session count relative…" | in `main` history |
+| `pr/10` | `75399ab` "ci: install server dependencies before data-surface tests" | in `main` history |
+| `pr/11` | `81e99be` "chore(v15): record authorized engine hash after OBV fix" | in `main` history |
+
+These commits are historical commits already merged into `main`; `refs/pull/N/head` refs are read-only and cannot be edited. The branches that contain them have already been cleaned (Section 5a). Nothing was changed. Open/closed/merged status via GitHub API: **NOT VERIFIED** (unauthenticated rate limit). Manual step: open `https://github.com/adityavarma1213-star/Vikram/pulls?q=is%3Apr` and confirm none of #6, #7, #9, #10, #11 is open; close any that are. The old downloader code remains in Git history by design.
+
+### 11c. `fix/live-data-website-integration`
+- Full-file review and caller search: `ingest.js` is referenced only by `server/test/integration.test.js` (`materializeScannerResults`) and a `node --check` line in a workflow. `main()` (lines 38-45 of base `5a41bd2`) called undefined `ingestCm/ingestFo/toIstCalendarDate/addDays`.
+- Removed: `main()` and the `require.main === module` line (9 lines deleted). Local commit `f8e614b516062dd48da07621017fb74db1bfa93f`, patch `fix-live-data-website-integration-dead-main.patch`. **Not pushed.**
+- Tests on that branch tree: server 10/10 files pass before and after; `integration.test.js` SKIP (no DB then); `asm.test.js` pass; python `backtest/tests` 3 passed (run from repo root). Boot smoke test passes.
+- Left in place on that older branch (inert): `backtest/config/download_manifest.json` (NSE host allowlist; read by no code; removed from `main` earlier in `1325392`), and an unused `unzipper` dependency. No HTTP client, scheduler or acquisition route exists on it.
+- Other branches scanned for network/process/scheduler code: no executable acquisition found (only `setInterval` polling of local `data/scanner.json` in `js/app.js` of that older UI lineage).
+
+### 11d. Workflows (all files on all 18 branches, `main`, and PR refs)
+- 20 unique workflow versions across 28 refs scanned for `schedule:`/cron, `curl`/`wget`, NSE hosts, and `node …ingest|backfill|download|staticSnapshot` (not `--check`): **none on any of the 18 branches or `main`**. Hits exist only on `pr/1-7, 9-11` (`static-scanner.yml`: cron `30 13 * * 1-5`, runs `staticSnapshot.js`/`backfillHistory.js`). Those are merged historical commits; scheduled workflows run only from the default branch.
+- `fix-column-filters.yml`: exists only on `ui/accumulation-table-readability-20260906` (and history); `push` to `main` trigger, edits `js/app.js`; no network/NSE. Not an acquisition workflow. It is absent from `main`, so it cannot trigger.
+- `apply-accumulation-ui-update.yml`: **not found in any branch, tag, PR ref or in history** (only mentioned in this report). GitHub's API listed it earlier as registered, so it is a stale registration. Cannot be read: **NOT VERIFIED**. Manual step: GitHub → Actions → select it → check "Disable workflow" or delete; confirm its source file.
+- `static-scanner.yml` status `disabled_manually` (API, 2026-10-24) — re-check in the Actions tab; the file on `main` is static deploy only, so enabling it does not acquire data.
+- Live enabled/disabled status for all workflows: API rate-limited this session; **NOT VERIFIED**.
+
+### 11e. Live services — NOT VERIFIED (no access; none attempted)
+- **Render:** Dashboard → Services: confirm there is no cron job `vikram-eod-ingestion` or background worker; open the web service → Events/Logs and confirm it started after the latest deploy (see 11a). CLI alternative: `render services list`.
+- **Oracle VM** (only if used): `crontab -l; sudo crontab -l; systemctl list-timers --all; systemctl list-units --type=service | grep -i vikram; grep -ri "ingest\|backfill" /etc/cron* /etc/systemd 2>/dev/null`.
+- **Other schedulers** (cron-job.org, UptimeRobot-type pingers, GitHub scheduled workflows in forks): check each for any URL ending in `/api/admin/ingest/run` or scripts named in Section 4.
+
+### 11f. Tests (Node v22.22.2; each file run as `cd <dir> && timeout 120 node test/<file>`)
+| Run | Result |
+|---|---|
+| `server`, with a local throwaway PostgreSQL 16 (migrated), 46 files | 44 pass, 2 fail, 0 skipped: `researchStatic.test.js`, `integration.test.js` |
+| `server`, offline (no DB), 46 files | 45 pass, 1 fail (`researchStatic`); DB tests print SKIP and are not counted as run |
+| `backtest`, 28 files | 28 pass |
+| `noAcquisitionPaths`, `noDirectNseAcquisition`, `serverBoots` | all pass (exit 0) |
+| `auth`, `fullUniverse`, `raceCondition` with DB | all PASS (`auth` and `fullUniverse` failed before the import fix) |
+
+- `researchStatic.test.js` — **diagnosed, data untouched:** `data/nse-coverage-report.json` says last date `2026-10-07`, 284 sessions, generated `2026-10-08T19:20Z`; `data/market-history/2026-10-08.json` was added in commit `66fba4a` at 19:34 the same day (285 files). The generated report is one day older than the data. Fix for the owner (not run, it rewrites a file under `data/`): `node scripts/buildNseCoverageReport.js` and commit the regenerated report.
+- `integration.test.js` — fails at `integration.test.js:45` (`bbb.metrics.oiExactDate` is `undefined`, expected `false`). **Identical failure on commit `86ce4a7`, before any NSE cleanup**; it concerns scanner metrics, not downloading. Not changed (the metrics come from frozen `scanMaterializer`).
+- CI on GitHub for these changes: not run.
+
+### 11g. V15 and dataset preservation
+- Frozen hashes re-checked after all continuation changes: `accumulation/engine.js`, `accumulation/config.js`, `server/src/scannerEngine.js`, `server/src/scanMaterializer.js`, `backtest/REAL_1YEAR_BACKTEST_RESULT.json` — all MATCH `docs/recovery/frozen-hashes.json`.
+- `git diff --name-status 86ce4a7 -- data "VIKRAM DATA"` and the same against `c99d10a`: **0 files changed or deleted**. `data/market-history/` has 285 files.
+- Read-only history route and existing-dataset downloads: code unchanged; `GET /api/admin/ingestion-runs` now starts again (it was unreachable due to 11a); `auth.test.js` passes with the DB.
+
+### 11h. Verdict after continuation
+**PARTIALLY COMPLETE.** In the audited repository code (default branch plus the 18 branches), no executable NSE acquisition path was found, datasets and V15 are intact, and a startup crash introduced by an earlier cleanup was found and fixed locally. It remains partial because: the continuation changes are not pushed; six branches (including `main`) still crash on startup until the one-line patches are applied; PR open/closed state, two workflow registrations, Render, the Oracle VM and external schedulers are NOT VERIFIED; and two server tests fail for pre-existing reasons.

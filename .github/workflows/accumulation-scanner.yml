@@ -49,6 +49,8 @@ jobs:
         run: node test/noDirectNseAcquisition.test.js
       - name: Offline acquisition-path audit (deps, docs, routes, frontend, call graph)
         run: node test/noAcquisitionPaths.test.js
+      - name: Server entry point loads (offline boot smoke test)
+        run: node test/serverBoots.test.js
       - name: Unit tests
         run: npm test
       - name: Apply schema against CI Postgres
