@@ -44,8 +44,8 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Confirm the previously blocked dependencies resolve
         run: |
-          cd server && node -e "for (const m of ['csv-parse/sync','pg','unzipper','express']) { require.resolve(m); console.log('resolved', m); }"
-          cd ../backtest && node -e "for (const m of ['csv-parse/sync','unzipper']) { require.resolve(m); console.log('resolved', m); }"
+          cd server && node -e "for (const m of ['csv-parse/sync','pg','express']) { require.resolve(m); console.log('resolved', m); }"
+          cd ../backtest && node -e "for (const m of ['csv-parse/sync']) { require.resolve(m); console.log('resolved', m); }"
       - name: Syntax check of new and changed modules
         run: |
           for f in server/src/dataQuality.js server/src/v15SnapshotStore.js server/src/catchFrequency.js \
