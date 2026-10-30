@@ -188,6 +188,9 @@ app.get('/api/research/coverage-report',(_req,res)=>{
   res.json(report.data);
 });
 const { requireAdmin } = require('./adminAuth');
+// Dhan historical-data downloader (isolated module; no scoring/engine code is touched).
+// Admin-only because it spends the operator's own Dhan Data API quota. Credentials stay server-side.
+app.use('/api/dhan/historical',requireAuthMw,requireAdmin(pool),require('./dhanHistorical/routes').createDhanHistoricalRouter());
 // Direct NSE acquisition endpoint removed. Existing ingestion history remains read-only.
 app.get('/api/admin/ingestion-runs',requireAuthMw,requireAdmin(pool),async(_req,res)=>{
   try{
