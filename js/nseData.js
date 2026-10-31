@@ -25,8 +25,8 @@
   async function ensureAuth() {
     const cached = localStorage.getItem(TOKEN_KEY);
     if (cached) return cached;
-    const email = (localStorage.getItem(EMAIL_KEY) || window.prompt('Email for VIKRAM (required to trigger acquisition):') || '').trim();
-    if (!email) throw new Error('Email is required to trigger acquisition.');
+    const email = (localStorage.getItem(EMAIL_KEY) || window.prompt('Email for VIKRAM (to view protected ingestion history):') || '').trim();
+    if (!email) throw new Error('Email is required to view protected ingestion history.');
     const password = window.prompt('Password (minimum 8 characters):') || '';
     if (password.length < 8) throw new Error('Password must be at least 8 characters.');
     localStorage.setItem(EMAIL_KEY, email);
