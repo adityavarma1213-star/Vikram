@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="js/runtimeConfig.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dhan Historical Data Download — VIKRAM</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/themes.css">
+<link rel="stylesheet" href="css/research.css">
+<link rel="stylesheet" href="css/aurora.css">
+<link rel="manifest" href="manifest.json">
+<script src="js/themeEngine.js"></script>
+</head>
+<body data-vikram-page="dhanHistorical">
+<header class="app-header">
+  <div class="header-container">
+    <div class="brand-identity"><span class="brand-logo">🧠</span><span class="brand-name">VIKRAM</span></div>
+    <nav class="app-navigation" aria-label="Main Navigation">
+      <ul class="nav-list">
+        <li><a class="nav-link" href="index.html#home">Home</a></li>
+        <li><a class="nav-link" href="accumulation.html">Accumulation Scanner</a></li>
+        <li><a class="nav-link" href="nse-data.html">NSE Data</a></li>
+        <li><a class="nav-link" href="research.html">1 Year Research</a></li>
+        <li><a class="nav-link active" href="dhan-historical.html" aria-current="page">Dhan Download</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="app-container" style="max-width:1100px;">
+  <section class="hero-section" style="padding:36px 32px;text-align:left">
+    <span class="eyebrow-tag">DHAN HISTORICAL DATA</span>
+    <h1 class="hero-title" style="font-size:2.1rem;margin:10px 0 6px">Download candles as CSV</h1>
+    <p class="hero-subtitle" style="font-size:1rem;margin-bottom:6px">Ask your own VIKRAM server for Dhan daily or 5-minute candles, then save the file with your browser. This page never scores or scans anything and never stores your file on the server.</p>
+  </section>
+
+  <section class="dashboard-card" id="backendNotice" hidden></section>
+
+  <section class="dashboard-card" id="statusCard">
+    <h2>Server status</h2>
+    <div id="statusBody">Checking…</div>
+  </section>
+
+  <section class="dashboard-card" id="formCard">
+    <h2>Request</h2>
+    <div class="research-controls" style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end">
+      <label class="filter-chip">Symbol (NSE equity)
+        <input id="symbolInput" list="symbolList" maxlength="30" autocomplete="off" placeholder="e.g. TESTCO" aria-label="Symbol">
+        <datalist id="symbolList"></datalist>
+      </label>
+      <label class="filter-chip">Interval
+        <select id="intervalSelect" aria-label="Interval"><option value="1d">Daily</option><option value="5m">5-minute</option></select>
+      </label>
+      <label class="filter-chip">Start date <input id="fromInput" type="date" aria-label="Start date"></label>
+      <label class="filter-chip">End date <input id="toInput" type="date" aria-label="End date"></label>
+      <button id="requestBtn" class="btn btn-primary" type="button">Request data</button>
+    </div>
+    <p id="limitHint" class="muted" style="margin-top:10px;font-size:.9rem"></p>
+    <p id="formError" role="alert" style="color:#f87171;margin-top:8px" hidden></p>
+  </section>
+
+  <section class="dashboard-card" id="resultCard" hidden>
+    <h2>Result</h2>
+    <div id="progressLine" aria-live="polite"></div>
+    <div id="resultBody"></div>
+    <div style="margin-top:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <button id="downloadBtn" class="btn btn-primary" type="button" hidden>Download CSV</button>
+      <label id="partialConfirmWrap" hidden><input type="checkbox" id="partialConfirm"> I understand this file is PARTIAL and incomplete</label>
+    </div>
+  </section>
+
+  <p class="muted" style="font-size:.85rem">Time zone: all timestamps in the file are IST (UTC+05:30). Requires a paid Dhan Data API subscription and a valid access token set on the server. Your browser saves the file to its normal Downloads folder.</p>
+</main>
+<script src="js/dhanHistorical.js"></script>
+</body>
+</html>

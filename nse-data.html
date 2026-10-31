@@ -41,7 +41,7 @@
   <section class="hero-section" style="padding:36px 32px;text-align:left">
     <span class="eyebrow-tag">NSE DATA MANAGEMENT</span>
     <h1 class="hero-title" style="font-size:2.1rem;margin:10px 0 6px">NSE Data &amp; Research</h1>
-    <p class="hero-subtitle" style="font-size:1rem;margin-bottom:6px">See exactly what real NSE data VIKRAM already has stored, and trigger the real backend acquisition process where it's actually available. Nothing here is estimated or simulated — including the acquisition status itself.</p>
+    <p class="hero-subtitle" style="font-size:1rem;margin-bottom:6px">See exactly what historical market data VIKRAM already has stored, review coverage gaps, and inspect available ingestion history. This page does not start new NSE data downloads.</p>
     <p class="research-workflow-trail" aria-label="Research workflow">
       <strong>NSE Data</strong> → <a href="research.html">1-Year Research</a> → <a href="index.html#scannerSurface">Accumulation Scanner</a> → <a href="index.html#opportunityRadar">Opportunity Radar</a> → <a href="research.html#asm">ASM / Special Situation</a> → <a href="index.html#hiddenGems">Hidden Gems</a>
     </p>
@@ -94,7 +94,7 @@
 
     <div style="margin-top:18px">
       <h3 style="font-size:0.9rem;margin-bottom:6px">Recent Ingestion History / Errors</h3>
-      <p class="text-muted" style="font-size:0.8rem">Note: <code>ingestion_runs</code> only ever records <em>successful</em> writes by design — a failed NSE fetch (file not yet published, network error, etc.) rolls back and is never inserted. Failed attempts are only visible in the live run result above, right after you click "Run Acquisition Now".</p>
+      <p class="text-muted" style="font-size:0.8rem">Note: <code>ingestion_runs</code> records successful writes by design. This page is read-only for ingestion history; it does not trigger new NSE fetches, so failed attempts from earlier runs may not be recorded here.</p>
       <div class="table-scroll" style="margin-top:8px">
         <table class="metric-table" id="ingestionRunsTable">
           <thead><tr><th>Segment</th><th>Trade Date</th><th>Status</th><th>Rows</th><th>Invalid Rows</th><th>Recorded At</th></tr></thead>

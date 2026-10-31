@@ -2,3 +2,9 @@ node_modules/
 .env
 .env.local
 *.log
+
+# Dhan downloader: local-only files (never commit)
+server/data-local/
+server/.env.dhan
+*.dhan.csv
+dhan_*.csv

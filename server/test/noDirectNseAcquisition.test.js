@@ -79,7 +79,9 @@ for (const pj of ['server/package.json', 'backtest/package.json', 'package.json'
 
 // 6. Source folders (excluding tests) must not call fetch/http(s) against a literal non-allowlisted URL.
 const SRC_DIRS = ['server/src', 'backtest', 'scripts', 'tools', 'accumulation'];
-const ALLOWED_NON_NSE_URL_FILES = new Set(['server/src/liveData/tokenManager.js', 'server/src/liveData/indstocksClient.js', 'server/src/alerts/providers/email.js', 'server/src/index.js']);
+const ALLOWED_NON_NSE_URL_FILES = new Set(['server/src/liveData/tokenManager.js', 'server/src/liveData/indstocksClient.js', 'server/src/alerts/providers/email.js', 'server/src/index.js',
+  // Dhan Historical downloader (explicitly requested, NOT an NSE source): the ONLY file holding the fixed api.dhan.co host constant.
+  'server/src/dhanHistorical/config.js']);
 for (const d of SRC_DIRS) {
   for (const f of walk(path.join(ROOT, d)).filter(f => /\.(js|mjs|cjs|py)$/.test(f) && !/[\\/]test[\\/]|\.test\./.test(f))) {
     const t = fs.readFileSync(f, 'utf8').split('\n').filter(l => !/^\s*(\/\/|#)/.test(l)).join('\n');

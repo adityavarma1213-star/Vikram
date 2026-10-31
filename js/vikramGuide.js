@@ -169,11 +169,11 @@
     },
     nseData: {
       title: 'NSE Data & Research',
-      description: 'What NSE data VIKRAM has stored — coverage, gaps, and real acquisition controls.',
+      description: 'What historical market data VIKRAM has stored — coverage, gaps, and read-only ingestion history.',
       suggestions: [
-        { label: 'Explain this page', answer: 'This page shows exactly what NSE data VIKRAM has stored — CM/F&O coverage, known gaps, and delivery/OI availability — plus controls to trigger real data acquisition.' },
+        { label: 'Explain this page', answer: 'This page shows what historical market data VIKRAM has stored — CM/F&O coverage, known gaps, and delivery/OI availability. It does not provide controls to trigger new NSE data acquisition.' },
         { label: 'What should I look at?', answer: 'Check the coverage/gap indicators for the segment you care about before relying on downstream scanner or research results for that name.' },
-        { label: 'What should I do next?', answer: 'If you find a gap for a company you\u2019re researching, use this page\u2019s acquisition controls, then revisit its Company Overview.', nav: 'companyOverview' }
+        { label: 'What should I do next?', answer: 'If you find a gap for a company you\u2019re researching, note the coverage limitation before relying on its Company Overview or downstream research.', nav: 'companyOverview' }
       ]
     },
     research: {
